@@ -1,6 +1,6 @@
 {
-  "name": "ggoop/gmf-laravel",
-  "description": "ggoop gmf laravel",
+  "name": "absuite/suite-ml",
+  "description": "absuite gmf laravel",
   "keywords": ["gmf", "framework", "laravel"],
   "license": "MIT",
   "type": "project",
