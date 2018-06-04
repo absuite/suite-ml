@@ -1,0 +1,12 @@
+@import "~gmf/theme/engine";
+
+@include md-register-theme("default", (
+  primary:#0f9d58,
+  accent:#db4437,
+  text-primary-on-primary:#fff,
+  background-variant:#f0f0f0,
+  primary-on-background:#0f9d58,
+  hue1-background:#8aadbf,
+  hue1-text:#fff
+));
+@import "./imports.scss";
