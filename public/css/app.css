@@ -7335,10 +7335,17 @@ body {
 .md-app-content {
   background-color: transparent !important;
   border: none !important;
-  padding: 0px;
+  padding: 0px !important;
 }
 .md-app-toolbar {
   z-index: 4;
+}
+.md-app-toolbar .md-title {
+    width: auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: center;
 }
 
 .md-svg-loader {
@@ -7662,14 +7669,6 @@ body {
   background-attachment: fixed;
   background-position: center;
   background-size: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-}
-
-.md-app-bottom-bar {
   position: fixed;
   top: 0;
   left: 0;
@@ -14210,6 +14209,7 @@ to {
   padding: 20px 10px;
   width: 33.33333333%;
   box-sizing: border-box;
+  text-decoration: none !important;
 }
 .md-layout-grid-item.md-layout-grid-item-no-border:before {
     display: none;

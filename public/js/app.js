@@ -1,4 +1,4 @@
-webpackJsonp([17],{
+webpackJsonp([20],{
 
 /***/ "./node_modules/@antv/f2/build/f2.js":
 /***/ (function(module, exports, __webpack_require__) {
@@ -48449,6 +48449,59 @@ _app2.default.run({ app: _AppRoot2.default, locale: 'enUS' });
 
 /***/ }),
 
+/***/ "./resources/assets/js/pages lazy recursive ^\\.\\/.*$":
+/***/ (function(module, exports, __webpack_require__) {
+
+var map = {
+	"./Messages/Message": [
+		"./resources/assets/js/pages/Messages/Message.vue",
+		3
+	],
+	"./Messages/Message.vue": [
+		"./resources/assets/js/pages/Messages/Message.vue",
+		3
+	],
+	"./Reports/Report": [
+		"./resources/assets/js/pages/Reports/Report.vue",
+		2
+	],
+	"./Reports/Report.vue": [
+		"./resources/assets/js/pages/Reports/Report.vue",
+		2
+	],
+	"./Settings/Setting": [
+		"./resources/assets/js/pages/Settings/Setting.vue",
+		1
+	],
+	"./Settings/Setting.vue": [
+		"./resources/assets/js/pages/Settings/Setting.vue",
+		1
+	],
+	"./Works/Work": [
+		"./resources/assets/js/pages/Works/Work.vue",
+		0
+	],
+	"./Works/Work.vue": [
+		"./resources/assets/js/pages/Works/Work.vue",
+		0
+	]
+};
+function webpackAsyncContext(req) {
+	var ids = map[req];
+	if(!ids)
+		return Promise.reject(new Error("Cannot find module '" + req + "'."));
+	return __webpack_require__.e(ids[1]).then(function() {
+		return __webpack_require__(ids[0]);
+	});
+};
+webpackAsyncContext.keys = function webpackAsyncContextKeys() {
+	return Object.keys(map);
+};
+webpackAsyncContext.id = "./resources/assets/js/pages lazy recursive ^\\.\\/.*$";
+module.exports = webpackAsyncContext;
+
+/***/ }),
+
 /***/ "./resources/assets/js/routes/web.js":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -48456,16 +48509,37 @@ _app2.default.run({ app: _AppRoot2.default, locale: 'enUS' });
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var routeList = [{
-    path: '/',
-    name: 'home',
-    component: function component() {
-        return __webpack_require__.e/* import() */(11).then(__webpack_require__.bind(null, "./resources/assets/js/pages/Home/Home.vue"));
-    }
+  path: '/m/messages',
+  name: 'messages',
+  page: 'Messages/Message.vue'
+}, {
+  path: '/m/reports',
+  name: 'reports',
+  page: 'Reports/Report.vue'
+}, {
+  path: '/m/settings',
+  name: 'settings',
+  page: 'Settings/Setting.vue'
+}, {
+  path: '/m/works',
+  name: 'works',
+  page: 'Works/Work.vue'
 }];
-exports.default = routeList;
+var mappedRoutes = routeList.map(function (route) {
+  return _extends({}, route, {
+    component: function component() {
+      return __webpack_require__("./resources/assets/js/pages lazy recursive ^\\.\\/.*$")("./" + route.page);
+    }
+  });
+});
+
+exports.default = mappedRoutes;
 
 /***/ }),
 
@@ -62140,100 +62214,100 @@ var routes = [{
   path: '/auth',
   name: 'auth',
   component: function component() {
-    return __webpack_require__.e/* import() */(12).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/App.vue"));
+    return __webpack_require__.e/* import() */(15).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/App.vue"));
   },
   children: [{
     path: 'login',
     name: 'auth.login',
     component: function component() {
-      return __webpack_require__.e/* import() */(13).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Login.vue"));
+      return __webpack_require__.e/* import() */(16).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Login.vue"));
     }
   }, {
     path: 'register',
     name: 'auth.register',
     component: function component() {
-      return __webpack_require__.e/* import() */(7).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Register.vue"));
+      return __webpack_require__.e/* import() */(11).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Register.vue"));
     }
   }, {
     path: 'password/find-sms/:id?',
     name: 'auth.password.find.sms',
     component: function component() {
-      return __webpack_require__.e/* import() */(4).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/PasswordFindSms.vue"));
+      return __webpack_require__.e/* import() */(8).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/PasswordFindSms.vue"));
     }
   }, {
     path: 'password/find-mail/:id?',
     name: 'auth.password.find.mail',
     component: function component() {
-      return __webpack_require__.e/* import() */(8).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/PasswordFindMail.vue"));
+      return __webpack_require__.e/* import() */(12).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/PasswordFindMail.vue"));
     }
   }, {
     path: 'password/find-word/:id?',
     name: 'auth.password.find.word',
     component: function component() {
-      return __webpack_require__.e/* import() */(3).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/PasswordFindWord.vue"));
+      return __webpack_require__.e/* import() */(7).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/PasswordFindWord.vue"));
     }
   }, {
     path: 'password/find/:id?',
     name: 'auth.password.find',
     component: function component() {
-      return __webpack_require__.e/* import() */(14).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/PasswordFind.vue"));
+      return __webpack_require__.e/* import() */(17).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/PasswordFind.vue"));
     }
   }, {
     path: 'password/:id?',
     name: 'auth.password',
     component: function component() {
-      return __webpack_require__.e/* import() */(2).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Password.vue"));
+      return __webpack_require__.e/* import() */(6).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Password.vue"));
     }
   }, {
     path: 'reset/:id/:token?',
     name: 'auth.reset',
     component: function component() {
-      return __webpack_require__.e/* import() */(6).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Reset.vue"));
+      return __webpack_require__.e/* import() */(10).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Reset.vue"));
     }
   }, {
     path: 'verify-mail',
     name: 'auth.verify.mail',
     component: function component() {
-      return __webpack_require__.e/* import() */(5).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/VerifyMail.vue"));
+      return __webpack_require__.e/* import() */(9).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/VerifyMail.vue"));
     },
     meta: { requiresAuth: true }
   }, {
     path: 'chooser',
     name: 'auth.chooser',
     component: function component() {
-      return __webpack_require__.e/* import() */(10).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Chooser.vue"));
+      return __webpack_require__.e/* import() */(14).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Chooser.vue"));
     }
   }, {
     path: 'identifier',
     name: 'auth.identifier',
     component: function component() {
-      return __webpack_require__.e/* import() */(0).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Identifier.vue"));
+      return __webpack_require__.e/* import() */(4).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Identifier.vue"));
     }
   }, {
     path: 'remove',
     name: 'auth.remove',
     component: function component() {
-      return __webpack_require__.e/* import() */(9).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Remove.vue"));
+      return __webpack_require__.e/* import() */(13).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Remove.vue"));
     }
   }, {
     path: 'logout',
     name: 'auth.logout',
     component: function component() {
-      return __webpack_require__.e/* import() */(15).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Logout.vue"));
+      return __webpack_require__.e/* import() */(18).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Logout.vue"));
     },
     meta: { requiresAuth: true }
   }, {
     path: 'account/join',
     name: 'auth.account.join',
     component: function component() {
-      return __webpack_require__.e/* import() */(1).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/AccountJoin.vue"));
+      return __webpack_require__.e/* import() */(5).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/AccountJoin.vue"));
     },
     meta: { requiresAuth: true }
   }, {
     path: 'account/dashboard',
     name: 'auth.account.dashboard',
     component: function component() {
-      return __webpack_require__.e/* import() */(16).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/AccountDashboard.vue"));
+      return __webpack_require__.e/* import() */(19).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/AccountDashboard.vue"));
     },
     meta: { requiresAuth: true }
   }]

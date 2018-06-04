@@ -1,9 +1,9 @@
 <template>
   <md-bottom-bar md-sync-route>
-    <md-bottom-bar-item to="/messages" md-label="消息" md-icon="speaker_notes"></md-bottom-bar-item>
-    <md-bottom-bar-item to="/works" md-label="工作" md-icon="dashboard"></md-bottom-bar-item>
-    <md-bottom-bar-item to="/reports" md-label="报表" md-icon="assessment"></md-bottom-bar-item>
-    <md-bottom-bar-item to="/settings" md-label="我的" md-icon="perm_identity"></md-bottom-bar-item>
+    <md-bottom-bar-item to="/m/messages" md-label="消息" md-icon="speaker_notes"></md-bottom-bar-item>
+    <md-bottom-bar-item to="/m/works" md-label="工作" md-icon="dashboard"></md-bottom-bar-item>
+    <md-bottom-bar-item to="/m/reports" md-label="报表" md-icon="assessment"></md-bottom-bar-item>
+    <md-bottom-bar-item to="/m/settings" md-label="我的" md-icon="perm_identity"></md-bottom-bar-item>
   </md-bottom-bar>
 </template>
 <script>

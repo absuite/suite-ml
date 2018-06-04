@@ -84,15 +84,21 @@ body {
     }
   }
 }
-
 .md-app-content {
   background-color: transparent !important;
   border: none!important;
-  padding: 0px;
+  padding: 0px!important;
 }
 
 .md-app-toolbar {
   z-index: 4;
+  .md-title{
+    width: auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: center;
+  }
 }
 
 </style>
