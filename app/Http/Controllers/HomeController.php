@@ -16,6 +16,7 @@ class HomeController extends Controller {
 	}
 	public function home(Request $request) {
 		$config = new Builder;
+		
 		return view('gmf::app');
 	}
 	public function getConfigs(Request $request) {

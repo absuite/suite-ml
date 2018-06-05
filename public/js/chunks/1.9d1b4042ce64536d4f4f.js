@@ -173,11 +173,7 @@ var render = function() {
     { attrs: { "md-sync-route": "" } },
     [
       _c("md-bottom-bar-item", {
-        attrs: {
-          to: "/m/messages",
-          "md-label": "消息",
-          "md-icon": "speaker_notes"
-        }
+        attrs: { to: "/", "md-label": "消息", "md-icon": "speaker_notes" }
       }),
       _vm._v(" "),
       _c("md-bottom-bar-item", {

@@ -49,9 +49,6 @@ export default {
 <style lang="scss">
 @import "~gmf/components/MdLayout/mixins";
 @import "./themes/default";
-@import "./themes/dark";
-@import "./themes/blue";
-@import "./themes/green";
 body {
   height: 100%;
   overflow-x: hidden;

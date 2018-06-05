@@ -34,6 +34,8 @@ gapp.config(function() {
       var url = new URL(window.location,true);
       http.get('/site/configs', { params:url.query }).then(res => {
         resolve(res.data.data);
+      },err=>{
+        console.log(err);
       });
     }
   })

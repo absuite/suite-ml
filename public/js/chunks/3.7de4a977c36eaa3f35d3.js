@@ -39,7 +39,7 @@ exports.default = {
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
 var _HomeBottomBar = __webpack_require__("./resources/assets/js/components/NavBar/HomeBottomBar.vue");
@@ -49,16 +49,32 @@ var _HomeBottomBar2 = _interopRequireDefault(_HomeBottomBar);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
-    name: "Home",
-    components: {
-        HomeBottomBar: _HomeBottomBar2.default
-    },
-    data: function data() {
-        return {
-            menuVisible: false
-        };
+  name: "Home",
+  components: {
+    HomeBottomBar: _HomeBottomBar2.default
+  },
+  data: function data() {
+    return {
+      menuVisible: false,
+      isLoading: false,
+      items: 10
+    };
+  },
+  methods: {
+    onLoad: function onLoad() {
+      var _this = this;
+
+      setTimeout(function () {
+        _this.items += 10;
+        console.log("onLoad");
+        _this.isLoading = false;
+      }, 500);
     }
+  }
 }; //
+//
+//
+//
 //
 //
 //
@@ -141,7 +157,19 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _c("md-app-content"),
+      _c(
+        "md-app-content",
+        [
+          _c(
+            "md-scroll-load",
+            { attrs: { loading: _vm.isLoading }, on: { load: _vm.onLoad } },
+            _vm._l(_vm.items, function(i) {
+              return _c("p", [_vm._v(_vm._s(i))])
+            })
+          )
+        ],
+        1
+      ),
       _vm._v(" "),
       _c("md-app-bottom-bar", [_c("home-bottom-bar")], 1)
     ],
@@ -172,11 +200,7 @@ var render = function() {
     { attrs: { "md-sync-route": "" } },
     [
       _c("md-bottom-bar-item", {
-        attrs: {
-          to: "/m/messages",
-          "md-label": "消息",
-          "md-icon": "speaker_notes"
-        }
+        attrs: { to: "/", "md-label": "消息", "md-icon": "speaker_notes" }
       }),
       _vm._v(" "),
       _c("md-bottom-bar-item", {

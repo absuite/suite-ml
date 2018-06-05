@@ -8,7 +8,10 @@
                 </div>    
             </div>    
         </md-app-toolbar>    
-        <md-app-content> 
+        <md-app-content>
+            <md-scroll-load :loading="isLoading" @load="onLoad">
+                <p v-for="i in items">{{i}}</p>
+            </md-scroll-load>
         </md-app-content>    
         <md-app-bottom-bar>    
             <home-bottom-bar></home-bottom-bar>    
@@ -16,21 +19,32 @@
     </md-app>
 </template>
 <script>
-    import HomeBottomBar from "../../components/NavBar/HomeBottomBar";    
-    export default {    
-        name: "Home",
-        components: {    
-            HomeBottomBar
-        },
-        data: () => ({    
-            menuVisible: false    
-        })    
-    };
+import HomeBottomBar from "../../components/NavBar/HomeBottomBar";
+export default {
+  name: "Home",
+  components: {
+    HomeBottomBar
+  },
+  data: () => ({
+    menuVisible: false,
+    isLoading: false,
+    items: 10
+  }),
+  methods: {
+    onLoad() {
+      setTimeout(() => {
+        this.items += 10;
+        console.log("onLoad");
+        this.isLoading = false;
+      }, 500);
+    }
+  }
+};
 </script>
 <style lang="scss" scoped>
-    .md-app {    
-        min-height: 100%;    
-        max-width: 100%;    
-        height: 100%;  
-    }
+.md-app {
+  min-height: 100%;
+  max-width: 100%;
+  height: 100%;
+}
 </style>
