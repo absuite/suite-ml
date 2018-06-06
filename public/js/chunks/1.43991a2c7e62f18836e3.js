@@ -39,7 +39,7 @@ exports.default = {
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
 var _HomeBottomBar = __webpack_require__("./resources/assets/js/components/NavBar/HomeBottomBar.vue");
@@ -49,16 +49,52 @@ var _HomeBottomBar2 = _interopRequireDefault(_HomeBottomBar);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
-    name: "Setting",
-    components: {
-        HomeBottomBar: _HomeBottomBar2.default
-    },
-    data: function data() {
-        return {
-            menuVisible: false
-        };
-    }
+  name: "Setting",
+  components: {
+    HomeBottomBar: _HomeBottomBar2.default
+  },
+  data: function data() {
+    return {};
+  }
 }; //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -87,7 +123,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n.md-app[data-v-134a906e] {\n  min-height: 100%;\n  max-width: 100%;\n  height: 100%;\n}\n", ""]);
+exports.push([module.i, "\n.md-app[data-v-134a906e] {\n  min-height: 100%;\n  max-width: 100%;\n  height: 100%;\n}\n.md-list[data-v-134a906e] {\n  margin-bottom: 10px;\n}\n.md-card[data-v-134a906e] {\n  margin-bottom: 10px;\n}\n", ""]);
 
 // exports
 
@@ -142,7 +178,119 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _c("md-app-content"),
+      _c(
+        "md-app-content",
+        [
+          _c(
+            "md-card",
+            [
+              _c("md-card-header", [
+                _c("div", { staticClass: "md-title" }, [
+                  _vm._v("Card with hover effect")
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "md-subhead" }, [
+                  _vm._v("It also have a ripple")
+                ])
+              ]),
+              _vm._v(" "),
+              _c("md-card-content", [
+                _vm._v(
+                  "\n        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio itaque ea, nostrum odio. Dolores, sed accusantium quasi non.\n      "
+                )
+              ])
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "md-list",
+            [
+              _c(
+                "md-list-item",
+                [
+                  _c("md-icon", { staticClass: "md-primary" }, [
+                    _vm._v("account_balance")
+                  ]),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "md-list-item-text" }, [
+                    _vm._v("企业")
+                  ])
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "md-list-item",
+                [
+                  _c("md-icon", [_vm._v("track_changes")]),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "md-list-item-text" }, [
+                    _vm._v("巴指数")
+                  ])
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "md-list",
+            [
+              _c(
+                "md-list-item",
+                [
+                  _c("md-icon", [_vm._v("account_circle")]),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "md-list-item-text" }, [
+                    _vm._v("账号")
+                  ])
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "md-list-item",
+                [
+                  _c("md-icon", [_vm._v("feedback")]),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "md-list-item-text" }, [
+                    _vm._v("意见反馈")
+                  ])
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "md-list-item",
+                [
+                  _c("md-icon", [_vm._v("assignment")]),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "md-list-item-text" }, [
+                    _vm._v("邀请")
+                  ])
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "md-list-item",
+                [
+                  _c("md-icon", [_vm._v("exit_to_app")]),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "md-list-item-text" }, [
+                    _vm._v("退出")
+                  ])
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      ),
       _vm._v(" "),
       _c("md-app-bottom-bar", [_c("home-bottom-bar")], 1)
     ],

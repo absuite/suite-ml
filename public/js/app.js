@@ -49370,31 +49370,31 @@ _app2.default.route(_web2.default);
 _app2.default.use(_component2.default);
 
 function getQueryString(name) {
-  var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-  var r = window.location.search.substr(1).match(reg);
-  if (r != null) return unescape(r[2]);
-  return null;
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) return unescape(r[2]);
+    return null;
 }
 _app2.default.config(function () {
-  return new Promise(function (resolve, reject) {
-    var vcode = getQueryString('vcode');
-    if (vcode) {
-      _http2.default.post('/api/sys/auth/login-vcode/' + vcode).then(function (res) {
-        getConfigs();
-      });
-    } else {
-      getConfigs();
-    }
+    return new Promise(function (resolve, reject) {
+        var vcode = getQueryString('vcode');
+        if (vcode) {
+            _http2.default.post('/api/sys/auth/login-vcode/' + vcode).then(function (res) {
+                getConfigs();
+            });
+        } else {
+            getConfigs();
+        }
 
-    function getConfigs() {
-      var url = new _MdURL2.default(window.location, true);
-      _http2.default.get('/site/configs', { params: url.query }).then(function (res) {
-        resolve(res.data.data);
-      }, function (err) {
-        console.log(err);
-      });
-    }
-  });
+        function getConfigs() {
+            var url = new _MdURL2.default(window.location, true);
+            _http2.default.get('/site/configs', { params: url.query }).then(function (res) {
+                resolve(res.data.data);
+            }, function (err) {
+                console.log(err);
+            });
+        }
+    });
 });
 _app2.default.run({ app: _AppRoot2.default, locale: 'enUS' });
 
