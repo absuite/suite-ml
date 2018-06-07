@@ -15,6 +15,7 @@ class HomeController extends Controller {
 		//$this->middleware('visitor');
 	}
 	public function home(Request $request) {
+		
 		$config = new Builder;
 		
 		return view('gmf::app');
