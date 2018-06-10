@@ -175,6 +175,8 @@ exports.default = {
 //
 //
 //
+//
+//
 
 /***/ }),
 
@@ -405,6 +407,10 @@ var render = function() {
                 { ref: "topChart", attrs: { "md-data": _vm.topChartData } },
                 [
                   _c("md-vbar"),
+                  _vm._v(" "),
+                  _c("md-vscale", { attrs: { x: "", field: "name" } }),
+                  _vm._v(" "),
+                  _c("md-vscale", { attrs: { y: "", field: "this_profit" } }),
                   _vm._v(" "),
                   _c("md-vtooltip", { attrs: { "show-item-marker": false } })
                 ],
