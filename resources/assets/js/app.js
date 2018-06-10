@@ -7,7 +7,7 @@ import routesAuth from 'gmf/routes/auth';
 import routesWeb from './routes/web';
 import gmfComponent from 'gmf/component'
 import URL from 'gmf/core/utils/MdURL';
-
+import Tip from 'gmf/components/MdTip'
 
 gapp.route(routesAuth);
 gapp.route(routesWeb);
@@ -19,24 +19,36 @@ function getQueryString(name) {
     if (r != null) return unescape(r[2]);
     return null;
 }
+
+function configHttp(config) {
+    http.defaults = http.defaults || {};
+    http.defaults.headers = http.defaults.headers || {};
+    http.defaults.headers.common = http.defaults.headers.common || {};
+
+    http.defaults.headers.common.Ent = config.ent ? config.ent.id : false;
+    if (config.token) {
+        http.defaults.headers.common.Authorization = (config.token.token_type ? config.token.token_type : "Bearer") + " " + config.token.access_token;
+    } else {
+        http.defaults.headers.common.Authorization = false;
+    }
+}
 gapp.config(function() {
     return new Promise(function(resolve, reject) {
-        const vcode = getQueryString('vcode');
-        if (vcode) {
-            http.post('/api/sys/auth/login-vcode/' + vcode).then(res => {
-                getConfigs();
-            });
-        } else {
-            getConfigs();
-        }
+        var url = new URL(window.location, true);
+        http.get('/site/configs', { params: url.query }).then(res => {
+            configHttp(res.data.data);
+            appConfig(res.data.data);
+        }, err => {
+            Tip('获取配置信息失败！');
+        });
 
-        function getConfigs() {
-            var url = new URL(window.location, true);
-            http.get('/site/configs', { params: url.query }).then(res => {
-                resolve(res.data.data);
-            }, err => {
-                console.log(err);
-            });
+        function appConfig(data) {
+            http.config({ name: "suite.cbo", appId: "suite.cbo" }).then(
+                res => {
+                    resolve(data)
+                },
+                err => { Tip('配置应用发现失败！'); }
+            );
         }
     })
 });

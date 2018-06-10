@@ -1,6 +1,6 @@
-webpackJsonp([3],{
+webpackJsonp([11],{
 
-/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/NavBar/HomeBottomBar.vue":
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/BottomBar/HomeBottomBar.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -42,7 +42,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _HomeBottomBar = __webpack_require__("./resources/assets/js/components/NavBar/HomeBottomBar.vue");
+var _HomeBottomBar = __webpack_require__("./resources/assets/js/components/BottomBar/HomeBottomBar.vue");
 
 var _HomeBottomBar2 = _interopRequireDefault(_HomeBottomBar);
 
@@ -60,6 +60,13 @@ exports.default = {
     };
   },
   methods: {
+    onClick: function onClick(item) {
+      //this.$tip('test');
+      // this.$tip.loading({ mask: true, message:  item.title });
+      // this.$tip.loading({ mask: true, message:  item.title });
+      this.$tip.success('成功文案');
+      this.$tip.fail('失败文案');
+    },
     onLoad: function onLoad() {
       var _this = this;
 
@@ -203,6 +210,52 @@ if(false) {
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-19b1930e\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/BottomBar/HomeBottomBar.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "md-bottom-bar",
+    { attrs: { "md-sync-route": "" } },
+    [
+      _c("md-bottom-bar-item", {
+        attrs: { to: "/", "md-label": "消息", "md-icon": "speaker_notes" }
+      }),
+      _vm._v(" "),
+      _c("md-bottom-bar-item", {
+        attrs: { to: "/m/works", "md-label": "工作", "md-icon": "dashboard" }
+      }),
+      _vm._v(" "),
+      _c("md-bottom-bar-item", {
+        attrs: { to: "/m/reports", "md-label": "报表", "md-icon": "assessment" }
+      }),
+      _vm._v(" "),
+      _c("md-bottom-bar-item", {
+        attrs: {
+          to: "/m/settings",
+          "md-label": "我的",
+          "md-icon": "perm_identity"
+        }
+      })
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-19b1930e", module.exports)
+  }
+}
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-1e379e4e\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/pages/Messages/Message.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -235,6 +288,13 @@ var render = function() {
                 return [
                   _c(
                     "md-list-item",
+                    {
+                      on: {
+                        click: function($event) {
+                          _vm.onClick(item)
+                        }
+                      }
+                    },
                     [
                       _c("md-avatar", [
                         _c("img", { attrs: { src: item.avatar } })
@@ -287,61 +347,15 @@ if (false) {
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-cc378b98\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/NavBar/HomeBottomBar.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "md-bottom-bar",
-    { attrs: { "md-sync-route": "" } },
-    [
-      _c("md-bottom-bar-item", {
-        attrs: { to: "/", "md-label": "消息", "md-icon": "speaker_notes" }
-      }),
-      _vm._v(" "),
-      _c("md-bottom-bar-item", {
-        attrs: { to: "/m/works", "md-label": "工作", "md-icon": "dashboard" }
-      }),
-      _vm._v(" "),
-      _c("md-bottom-bar-item", {
-        attrs: { to: "/m/reports", "md-label": "报表", "md-icon": "assessment" }
-      }),
-      _vm._v(" "),
-      _c("md-bottom-bar-item", {
-        attrs: {
-          to: "/m/settings",
-          "md-label": "我的",
-          "md-icon": "perm_identity"
-        }
-      })
-    ],
-    1
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-cc378b98", module.exports)
-  }
-}
-
-/***/ }),
-
-/***/ "./resources/assets/js/components/NavBar/HomeBottomBar.vue":
+/***/ "./resources/assets/js/components/BottomBar/HomeBottomBar.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
 /* script */
-var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/NavBar/HomeBottomBar.vue")
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/BottomBar/HomeBottomBar.vue")
 /* template */
-var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-cc378b98\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/NavBar/HomeBottomBar.vue")
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-19b1930e\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/BottomBar/HomeBottomBar.vue")
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -358,7 +372,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources\\assets\\js\\components\\NavBar\\HomeBottomBar.vue"
+Component.options.__file = "resources\\assets\\js\\components\\BottomBar\\HomeBottomBar.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -367,9 +381,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-cc378b98", Component.options)
+    hotAPI.createRecord("data-v-19b1930e", Component.options)
   } else {
-    hotAPI.reload("data-v-cc378b98", Component.options)
+    hotAPI.reload("data-v-19b1930e", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true

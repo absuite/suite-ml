@@ -10,7 +10,7 @@
     <md-app-content>
       <md-list class="md-triple-line">
         <template v-for="item in items">
-          <md-list-item>
+          <md-list-item @click="onClick(item)">
             <md-avatar>
               <img :src="item.avatar">
             </md-avatar>
@@ -32,7 +32,7 @@
   </md-app>
 </template>
 <script>
-  import HomeBottomBar from "../../components/NavBar/HomeBottomBar";
+  import HomeBottomBar from "../../components/BottomBar/HomeBottomBar";
   export default {
     name: "Home",
     components: {
@@ -43,6 +43,13 @@
       loading:false
     }),
     methods: {
+      onClick(item){
+        //this.$tip('test');
+        // this.$tip.loading({ mask: true, message:  item.title });
+        // this.$tip.loading({ mask: true, message:  item.title });
+        this.$tip.success('成功文案');
+        this.$tip.fail('失败文案');
+      },
       onLoad() {
         setTimeout(() => {
           this.items.push({

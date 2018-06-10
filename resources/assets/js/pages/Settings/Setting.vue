@@ -55,7 +55,7 @@
   </md-app>
 </template>
 <script>
-  import HomeBottomBar from "../../components/NavBar/HomeBottomBar";
+  import HomeBottomBar from "../../components/BottomBar/HomeBottomBar";
   export default {
     name: "Setting",
     components: {

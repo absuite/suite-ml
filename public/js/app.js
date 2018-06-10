@@ -1,4 +1,4 @@
-webpackJsonp([20],{
+webpackJsonp([28],{
 
 /***/ "./node_modules/@antv/f2/build/f2.js":
 /***/ (function(module, exports, __webpack_require__) {
@@ -13923,6 +13923,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
 
 var _vuex = __webpack_require__("./node_modules/vuex/dist/vuex.esm.js");
 
@@ -19819,6 +19822,7 @@ Object.defineProperty(exports, "__esModule", {
 //
 
 exports.default = {
+  name: 'MdLoading',
   props: {
     loading: Number
   },
@@ -19828,6 +19832,58 @@ exports.default = {
     };
   }
 };
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/vendor/gmf-sys/components/MdLoading/MdLoading2.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _MdBem = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/mixins/MdBem/MdBem.js");
+
+var _MdBem2 = _interopRequireDefault(_MdBem);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+  name: 'MdLoading2',
+  props: {
+    size: String,
+    type: {
+      type: String,
+      default: 'circular'
+    },
+    color: {
+      type: String,
+      default: 'black'
+    }
+  },
+  mixins: [_MdBem2.default],
+  computed: {
+    style: function style() {
+      return this.size ? {
+        width: this.size,
+        height: this.size
+      } : {};
+    }
+  }
+}; //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /***/ }),
 
@@ -21337,31 +21393,24 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = {
   name: "MdPullRefresh",
   mixins: [_MdTouch2.default],
-  model: {
-    prop: "loading"
-  },
   props: {
-    pullingText: String,
-    loosingText: String,
-    loadingText: String,
-    animationDuration: {
+    mdPullingText: String,
+    mdLoosingText: String,
+    mdLoadingText: String,
+    mdAnimationDuration: {
       type: Number,
       default: 300
     },
-    headHeight: {
+    mdHeadHeight: {
       type: Number,
       default: 50
-    },
-    loading: {
-      type: Boolean,
-      required: true
     }
   },
-
   data: function data() {
     return {
       status: "normal",
       height: 0,
+      value: true,
       duration: 0
     };
   },
@@ -21381,9 +21430,9 @@ exports.default = {
 
 
   watch: {
-    loading: function loading(val) {
-      this.duration = this.animationDuration;
-      this.getStatus(val ? this.headHeight : 0, val);
+    value: function value(val) {
+      this.duration = this.mdAnimationDuration;
+      this.getStatus(val ? this.mdHeadHeight : 0, val);
     }
   },
   methods: {
@@ -21420,31 +21469,33 @@ exports.default = {
       if (this.status === "loading") {
         return;
       }
-
       if (this.ceiling && this.deltaY) {
-        this.duration = this.animationDuration;
+        this.duration = this.mdAnimationDuration;
         if (this.status === "loosing") {
-          this.getStatus(this.headHeight, true);
-          this.$emit("input", true);
-          this.$emit("refresh");
+          this.getStatus(this.mdHeadHeight, true);
+          this.value = true;
+          this.$emit("refresh", this.refreshFinish);
         } else {
           this.getStatus(0);
         }
       }
+    },
+    refreshFinish: function refreshFinish() {
+      this.value = false;
     },
     getCeiling: function getCeiling() {
       this.ceiling = _MdScroll2.default.getScrollTop(this.scrollEl) === 0;
       return this.ceiling;
     },
     ease: function ease(height) {
-      var headHeight = this.headHeight;
+      var mdHeadHeight = this.mdHeadHeight;
 
-      return height < headHeight ? height : height < headHeight * 2 ? Math.round(headHeight + (height - headHeight) / 2) : Math.round(headHeight * 1.5 + (height - headHeight * 2) / 4);
+      return height < mdHeadHeight ? height : height < mdHeadHeight * 2 ? Math.round(mdHeadHeight + (height - mdHeadHeight) / 2) : Math.round(mdHeadHeight * 1.5 + (height - mdHeadHeight * 2) / 4);
     },
     getStatus: function getStatus(height, isLoading) {
       this.height = height;
 
-      var status = isLoading ? "loading" : height === 0 ? "normal" : height < this.headHeight ? "pulling" : "loosing";
+      var status = isLoading ? "loading" : height === 0 ? "normal" : height < this.mdHeadHeight ? "pulling" : "loosing";
 
       if (status !== this.status) {
         this.status = status;
@@ -21770,28 +21821,28 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.default = {
   name: 'MdScrollLoad',
-  model: {
-    prop: 'loading'
-  },
   props: {
-    loading: Boolean,
-    finished: Boolean,
-    immediateCheck: {
+    mdFinished: Boolean,
+    mdImmediateCheck: {
       type: Boolean,
       default: true
     },
-    offset: {
+    mdOffset: {
       type: Number,
       default: 300
     },
-    loadingText: String
+    mdLoadingText: String
   },
-
+  data: function data() {
+    return {
+      value: false
+    };
+  },
   mounted: function mounted() {
     this.scroller = _MdScroll2.default.getScrollEventTarget(this.$el);
     this.handler(true);
 
-    if (this.immediateCheck) {
+    if (this.mdImmediateCheck) {
       this.$nextTick(this.onScroll);
     }
   },
@@ -21807,17 +21858,20 @@ exports.default = {
 
 
   watch: {
-    loading: function loading() {
+    value: function value() {
       this.$nextTick(this.onScroll);
     },
-    finished: function finished() {
+    mdFinished: function mdFinished() {
       this.$nextTick(this.onScroll);
     }
   },
 
   methods: {
+    loadFinish: function loadFinish() {
+      this.value = false;
+    },
     onScroll: function onScroll() {
-      if (this.loading || this.finished) {
+      if (this.value || this.mdFinished) {
         return;
       }
 
@@ -21838,16 +21892,16 @@ exports.default = {
 
       /* istanbul ignore next */
       if (el === scroller) {
-        reachBottom = scroller.scrollHeight - targetBottom < this.offset;
+        reachBottom = scroller.scrollHeight - targetBottom < this.mdOffset;
       } else {
         var elBottom = _MdScroll2.default.getElementTop(el) - _MdScroll2.default.getElementTop(scroller) + _MdScroll2.default.getVisibleHeight(el);
-        reachBottom = elBottom - scrollerHeight < this.offset;
+        reachBottom = elBottom - scrollerHeight < this.mdOffset;
       }
 
       /* istanbul ignore else */
       if (reachBottom) {
-        this.$emit('input', true);
-        this.$emit('load');
+        this.value = true;
+        this.$emit('load', this.loadFinish);
       }
     },
     handler: function handler(bind) {
@@ -21870,375 +21924,6 @@ exports.default = {
 //
 //
 //
-
-/***/ }),
-
-/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/vendor/gmf-sys/components/MdScroller/MdScroller.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _MdObjectAssign = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/utils/MdObjectAssign.js");
-
-var _MdObjectAssign2 = _interopRequireDefault(_MdObjectAssign);
-
-var _xscroll = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/xscroll.js");
-
-var _xscroll2 = _interopRequireDefault(_xscroll);
-
-var _pulldown = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/plugins/pulldown.js");
-
-var _pulldown2 = _interopRequireDefault(_pulldown);
-
-var _pullup = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/plugins/pullup.js");
-
-var _pullup2 = _interopRequireDefault(_pullup);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-var pulldownDefaultConfig = function pulldownDefaultConfig() {
-  return {
-    content: 'Pull Down To Refresh',
-    height: 60,
-    autoRefresh: false,
-    downContent: 'Pull Down To Refresh',
-    upContent: 'Release To Refresh',
-    loadingContent: 'Loading...',
-    clsPrefix: 'md-scroller-plugin-pulldown-'
-  };
-};
-
-var pullupDefaultConfig = function pullupDefaultConfig() {
-  return {
-    content: 'Pull Up To Refresh',
-    pullUpHeight: 60,
-    height: 40,
-    autoRefresh: false,
-    downContent: 'Release To Refresh',
-    upContent: 'Pull Up To Refresh',
-    loadingContent: 'Loading...',
-    clsPrefix: 'md-scroller-pullup-'
-  };
-};
-
-exports.default = {
-  name: 'MdScroller',
-  props: {
-    value: {
-      type: Object,
-      default: function _default() {
-        return {
-          pulldownStatus: '',
-          pullupStatus: ''
-        };
-      }
-    },
-    height: String,
-    lockX: Boolean,
-    lockY: Boolean,
-    scrollbarX: Boolean,
-    scrollbarY: Boolean,
-    bounce: {
-      type: Boolean,
-      default: true
-    },
-    useOriginScroll: {
-      type: Boolean,
-      default: false
-    },
-    useTransition: {
-      type: Boolean,
-      default: true
-    },
-    preventDefault: {
-      type: Boolean,
-      default: false
-    },
-    stopPropagation: Boolean,
-    boundryCheck: {
-      type: Boolean,
-      default: true
-    },
-    gpuAcceleration: {
-      type: Boolean,
-      default: true
-    },
-    usePulldown: {
-      type: Boolean,
-      default: false
-    },
-    usePullup: {
-      type: Boolean,
-      default: false
-    },
-    /**
-    * refer to: http://xscroll.github.io/node_modules/xscroll/doc/PullDown.html
-    */
-    pulldownConfig: {
-      type: Object,
-      default: function _default() {
-        return {};
-      }
-    },
-    pullupConfig: {
-      type: Object,
-      default: function _default() {
-        return {};
-      }
-    },
-    enableHorizontalSwiping: {
-      type: Boolean,
-      default: false
-    },
-    scrollBottomOffset: {
-      type: Number,
-      default: 0
-    }
-  },
-  methods: {
-    reset: function reset(scrollPosition, duration, easing) {
-      if (scrollPosition) {
-        if (typeof scrollPosition.left !== 'undefined') {
-          this._xscroll.scrollLeft(scrollPosition.left, duration, easing);
-        }
-        if (typeof scrollPosition.top !== 'undefined') {
-          this._xscroll.scrollTop(scrollPosition.top, duration, easing);
-        }
-      }
-      this._xscroll && this._xscroll.resetSize();
-    },
-    donePulldown: function donePulldown() {
-      var _this = this;
-
-      this.pulldown.reset(function () {
-        // repaint
-        _this.reset();
-      });
-      this.currentValue.pulldownStatus = 'default';
-    },
-    disablePullup: function disablePullup() {
-      // this._xscroll.unplug(this.pullup)
-      this.pullup.stop();
-      this.currentValue.pullupStatus = 'disabled';
-    },
-    enablePullup: function enablePullup() {
-      this.currentValue.pullupStatus = 'default';
-      this.pullup.restart();
-    },
-    donePullup: function donePullup() {
-      this.pullup.complete();
-      this.reset();
-      this.currentValue.pullupStatus = 'default';
-    },
-    getStyles: function getStyles() {
-      var height = this.height;
-      if (!this.height && this.$el && !this.$el.style.height && this.lockX) {
-        height = document.documentElement.clientHeight + 'px';
-        this.reset();
-      }
-
-      if (this.height && this.height.indexOf('-') === 0) {
-        height = document.documentElement.clientHeight + parseInt(this.height) + 'px';
-      }
-      this.styles = {
-        height: '' + height
-      };
-    }
-  },
-  created: function created() {
-    var _this2 = this;
-
-    if (!this.value) {
-      this.currentValue = {
-        pulldownStatus: '',
-        pullupStatus: ''
-      };
-    } else {
-      this.currentValue = this.value;
-    }
-    this.handleOrientationchange = function () {
-      setTimeout(function () {
-        _this2.reset();
-      }, 100);
-    };
-  },
-  data: function data() {
-    return {
-      currentValue: {},
-      styles: {}
-    };
-  },
-
-  watch: {
-    currentValue: {
-      handler: function handler(val) {
-        this.$emit('input', pure(val));
-      },
-      deep: true
-    },
-    height: function height() {
-      this.getStyles();
-    },
-
-    value: {
-      handler: function handler(val) {
-        if (val.pullupStatus === 'default' && this.currentValue.pullupStatus !== 'default') {
-          this.donePullup();
-        }
-        if (val.pulldownStatus === 'default' && this.currentValue.pulldownStatus !== 'default') {
-          this.donePulldown();
-        }
-        if (val.pullupStatus === 'disabled' && this.currentValue.pullupStatus !== 'disabled') {
-          this.disablePullup();
-        }
-        if (val.pullupStatus === 'enabled' && this.currentValue.pullupStatus === 'disabled') {
-          this.enablePullup();
-        }
-      },
-      deep: true
-    }
-  },
-  mounted: function mounted() {
-    var _this3 = this;
-
-    this.uuid = Math.random().toString(36).substring(3, 8);
-    this.$nextTick(function () {
-      _this3.$el.setAttribute('id', 'vux-scroller-' + _this3.uuid);
-      var content = null;
-      if (_this3.$slots.default) {
-        content = _this3.$slots.default[0].elm;
-      }
-      if (!content) {
-        throw new Error('no content is found');
-      }
-
-      _this3._xscroll = new _xscroll2.default({
-        renderTo: '#vux-scroller-' + _this3.uuid,
-        lockX: _this3.lockX,
-        lockY: _this3.lockY,
-        scrollbarX: _this3.scrollbarX,
-        scrollbarY: _this3.scrollbarY,
-        content: content,
-        bounce: _this3.bounce,
-        useOriginScroll: _this3.useOriginScroll,
-        useTransition: _this3.useTransition,
-        preventDefault: _this3.preventDefault,
-        boundryCheck: _this3.boundryCheck,
-        gpuAcceleration: _this3.gpuAcceleration,
-        stopPropagation: _this3.stopPropagation
-      });
-
-      _this3._xscroll.on('scroll', function () {
-        if (_this3._xscroll) {
-          var top = _this3._xscroll.getScrollTop();
-          _this3.$emit('on-scroll', {
-            top: top,
-            left: _this3._xscroll.getScrollLeft()
-          });
-          var containerHeight = _this3._xscroll.containerHeight;
-          var scrollHeight = _this3._xscroll.height;
-          if (top >= containerHeight - scrollHeight - _this3.scrollBottomOffset) {
-            _this3.$emit('on-scroll-bottom');
-          }
-        }
-      });
-
-      if (_this3.usePulldown) {
-        // if use slot=pulldown
-        var container = _this3.$slots.pulldown;
-        var config = (0, _MdObjectAssign2.default)(pulldownDefaultConfig(), _this3.pulldownConfig);
-        if (container) {
-          config.container = container[0].elm;
-        }
-        _this3.pulldown = new _pulldown2.default(config);
-        _this3._xscroll.plug(_this3.pulldown);
-        _this3.pulldown.on('loading', function (e) {
-          _this3.$emit('on-pulldown-loading', _this3.uuid);
-        });
-        _this3.pulldown.on('statuschange', function (val) {
-          _this3.currentValue.pulldownStatus = val.newVal;
-        });
-      }
-
-      if (_this3.usePullup) {
-        // if use slot=pullup
-        var _container = _this3.$slots.pullup;
-        var _config = (0, _MdObjectAssign2.default)(pullupDefaultConfig(), _this3.pullupConfig);
-
-        if (_container) {
-          _config.container = _container[0].elm;
-        }
-        _this3.pullup = new _pullup2.default(_config);
-        _this3._xscroll.plug(_this3.pullup);
-        _this3.pullup.on('loading', function (e) {
-          _this3.$emit('on-pullup-loading', _this3.uuid);
-        });
-        _this3.pullup.on('statuschange', function (val) {
-          _this3.currentValue.pullupStatus = val.newVal;
-        });
-      }
-
-      if (_this3.enableHorizontalSwiping) {
-        _this3._xscroll.on('panstart', function (e) {
-          if (e.direction === 2 || e.direction === 4) {
-            e.preventDefault();
-            if (_this3.scrollbarY) {
-              _this3._xscroll.userConfig.scrollbarY = false;
-            }
-            _this3._xscroll.userConfig.lockY = true;
-          }
-        });
-        _this3._xscroll.on('panend', function () {
-          if (_this3.scrollbarY) {
-            _this3._xscroll.userConfig.scrollbarY = true;
-          }
-          _this3._xscroll.userConfig.lockY = false;
-        });
-      }
-
-      _this3._xscroll.render();
-      window.addEventListener('orientationchange', _this3.handleOrientationchange, false);
-    });
-    this.getStyles();
-  },
-  updated: function updated() {
-    this.reset();
-  },
-  beforeDestroy: function beforeDestroy() {
-    if (this.pullup) {
-      this._xscroll.unplug(this.pullup);
-      this.pullup.pluginDestructor();
-    }
-    if (this.pulldown) {
-      this._xscroll.unplug(this.pulldown);
-      this.pulldown.pluginDestructor();
-    }
-    window.removeEventListener('orientationchange', this.handleOrientationchange, false);
-    this._xscroll.destroy();
-    this._xscroll = null;
-  }
-};
-
-
-function pure(obj) {
-  return JSON.parse(JSON.stringify(obj));
-}
 
 /***/ }),
 
@@ -23071,7 +22756,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.default = {
   name: 'MdSticky',
-  props: ['scrollBox', 'offset', 'checkStickySupport', 'disabled'],
+  props: ['mdScrollBox', 'mdOffset', 'mdCheckStickySupport', 'disabled'],
   data: function data() {
     return {
       initTimes: 0
@@ -23102,9 +22787,9 @@ exports.default = {
       }
       this.$nextTick(function () {
         (0, _sticky2.default)(_this2.$el, {
-          scrollBox: _this2.scrollBox,
-          offset: _this2.offset,
-          checkStickySupport: typeof _this2.checkStickySupport === 'undefined' ? true : _this2.checkStickySupport
+          scrollBox: _this2.mdScrollBox,
+          offset: _this2.mdOffset,
+          checkStickySupport: typeof _this2.mdCheckStickySupport === 'undefined' ? true : _this2.mdCheckStickySupport
         });
       });
     }
@@ -25358,6 +25043,115 @@ exports.default = {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/vendor/gmf-sys/components/MdTip/MdTip.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _MdPopup = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/mixins/MdPopup/index.js");
+
+var _MdPopup2 = _interopRequireDefault(_MdPopup);
+
+var _MdComponent = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/MdComponent.js");
+
+var _MdComponent2 = _interopRequireDefault(_MdComponent);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+var STYLE_LIST = ['success', 'fail', 'loading'];
+
+exports.default = new _MdComponent2.default({
+  name: 'MdTip',
+  props: {
+    forbidClick: Boolean,
+    message: [String, Number],
+    type: {
+      type: String,
+      default: 'text'
+    },
+    loadingType: {
+      type: String,
+      default: 'circular'
+    },
+    position: {
+      type: String,
+      default: 'middle'
+    },
+    lockScroll: {
+      type: Boolean,
+      default: false
+    }
+  },
+  mixins: [_MdPopup2.default],
+  data: function data() {
+    return {
+      clickable: false
+    };
+  },
+
+
+  computed: {
+    style: function style() {
+      return STYLE_LIST.indexOf(this.type) !== -1 ? 'default' : this.type;
+    },
+    iconType: function iconType() {
+      if (this.type == 'success') return 'done';
+      if (this.type == 'fail') return 'done';
+      return this.type;
+    }
+  },
+
+  mounted: function mounted() {
+    this.toggleClickale();
+  },
+
+
+  watch: {
+    value: function value() {
+      this.toggleClickale();
+    },
+    forbidClick: function forbidClick() {
+      this.toggleClickale();
+    }
+  },
+
+  methods: {
+    toggleClickale: function toggleClickale() {
+      var clickable = this.value && this.forbidClick;
+      if (this.clickable !== clickable) {
+        this.clickable = clickable;
+        var action = clickable ? 'add' : 'remove';
+        document.body.classList[action]('md-tip-unclickable');
+      }
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/vendor/gmf-sys/components/MdToast/MdToast.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -27029,6 +26823,53 @@ exports.default = {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/vendor/gmf-sys/core/mixins/MdPopup/Modal.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+exports.default = {
+  name: 'modal',
+
+  props: {
+    visible: Boolean,
+    zIndex: Number,
+    className: String,
+    customStyle: Object
+  },
+
+  computed: {
+    style: function style() {
+      return _extends({
+        zIndex: this.zIndex
+      }, this.customStyle);
+    }
+  }
+};
+
+/***/ }),
+
 /***/ "./node_modules/babel-runtime/regenerator/index.js":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -27046,22 +26887,6 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 // module
 exports.push([module.i, "/**\r\n * The default transition, used when the element is visible\r\n * since the beginning of the animation\r\n * ---\r\n * @access private\r\n * @type transition\r\n * @group transition\r\n */\n/**\r\n * The enter transition, used when the element is not visible on the screen\r\n * since the beginning of the animation and become visible\r\n * ---\r\n * @access private\r\n * @type transition\r\n * @group transition\r\n */\n/**\r\n * The leave transition, used when the element is visible on the screen\r\n * since the beginning of the animation and is removed\r\n * ---\r\n * @access private\r\n * @type transition\r\n * @group transition\r\n */\n/**\r\n * The stand transition, used when the element is going to accelerate,\r\n * like movements from bottom to top\r\n * ---\r\n * @access private\r\n * @type transition\r\n * @group transition\r\n */\n/**\r\n * The out transition, used when the element is going to deaccelerate,\r\n * like movements from top to bottom\r\n * ---\r\n * @access private\r\n * @type transition\r\n * @group transition\r\n */\n/* Transitions - Based on Angular Material */\n/**\r\n * The elevation transition duration\r\n * ---\r\n * @access private\r\n * @type transition\r\n * @group transition\r\n */\n/**\r\n * The elevation transition duration\r\n * ---\r\n * @access private\r\n * @type transition\r\n * @group transition\r\n */\n.md-elevation-0 {\n  box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2), 0 0 0 0 rgba(0, 0, 0, 0.14), 0 0 0 0 rgba(0, 0, 0, 0.12); }\n\n.md-elevation-1 {\n  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12); }\n\n.md-elevation-2 {\n  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12); }\n\n.md-elevation-3 {\n  box-shadow: 0 3px 3px -2px rgba(0, 0, 0, 0.2), 0 3px 4px 0 rgba(0, 0, 0, 0.14), 0 1px 8px 0 rgba(0, 0, 0, 0.12); }\n\n.md-elevation-4 {\n  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12); }\n\n.md-elevation-5 {\n  box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 5px 8px 0 rgba(0, 0, 0, 0.14), 0 1px 14px 0 rgba(0, 0, 0, 0.12); }\n\n.md-elevation-6 {\n  box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12); }\n\n.md-elevation-7 {\n  box-shadow: 0 4px 5px -2px rgba(0, 0, 0, 0.2), 0 7px 10px 1px rgba(0, 0, 0, 0.14), 0 2px 16px 1px rgba(0, 0, 0, 0.12); }\n\n.md-elevation-8 {\n  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12); }\n\n.md-elevation-9 {\n  box-shadow: 0 5px 6px -3px rgba(0, 0, 0, 0.2), 0 9px 12px 1px rgba(0, 0, 0, 0.14), 0 3px 16px 2px rgba(0, 0, 0, 0.12); }\n\n.md-elevation-10 {\n  box-shadow: 0 6px 6px -3px rgba(0, 0, 0, 0.2), 0 10px 14px 1px rgba(0, 0, 0, 0.14), 0 4px 18px 3px rgba(0, 0, 0, 0.12); }\n\n.md-elevation-11 {\n  box-shadow: 0 6px 7px -4px rgba(0, 0, 0, 0.2), 0 11px 15px 1px rgba(0, 0, 0, 0.14), 0 4px 20px 3px rgba(0, 0, 0, 0.12); }\n\n.md-elevation-12 {\n  box-shadow: 0 7px 8px -4px rgba(0, 0, 0, 0.2), 0 12px 17px 2px rgba(0, 0, 0, 0.14), 0 5px 22px 4px rgba(0, 0, 0, 0.12); }\n\n.md-elevation-13 {\n  box-shadow: 0 7px 8px -4px rgba(0, 0, 0, 0.2), 0 13px 19px 2px rgba(0, 0, 0, 0.14), 0 5px 24px 4px rgba(0, 0, 0, 0.12); }\n\n.md-elevation-14 {\n  box-shadow: 0 7px 9px -4px rgba(0, 0, 0, 0.2), 0 14px 21px 2px rgba(0, 0, 0, 0.14), 0 5px 26px 4px rgba(0, 0, 0, 0.12); }\n\n.md-elevation-15 {\n  box-shadow: 0 8px 9px -5px rgba(0, 0, 0, 0.2), 0 15px 22px 2px rgba(0, 0, 0, 0.14), 0 6px 28px 5px rgba(0, 0, 0, 0.12); }\n\n.md-elevation-16 {\n  box-shadow: 0 8px 10px -5px rgba(0, 0, 0, 0.2), 0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12); }\n\n.md-elevation-17 {\n  box-shadow: 0 8px 11px -5px rgba(0, 0, 0, 0.2), 0 17px 26px 2px rgba(0, 0, 0, 0.14), 0 6px 32px 5px rgba(0, 0, 0, 0.12); }\n\n.md-elevation-18 {\n  box-shadow: 0 9px 11px -5px rgba(0, 0, 0, 0.2), 0 18px 28px 2px rgba(0, 0, 0, 0.14), 0 7px 34px 6px rgba(0, 0, 0, 0.12); }\n\n.md-elevation-19 {\n  box-shadow: 0 9px 12px -6px rgba(0, 0, 0, 0.2), 0 19px 29px 2px rgba(0, 0, 0, 0.14), 0 7px 36px 6px rgba(0, 0, 0, 0.12); }\n\n.md-elevation-20 {\n  box-shadow: 0 10px 13px -6px rgba(0, 0, 0, 0.2), 0 20px 31px 3px rgba(0, 0, 0, 0.14), 0 8px 38px 7px rgba(0, 0, 0, 0.12); }\n\n.md-elevation-21 {\n  box-shadow: 0 10px 13px -6px rgba(0, 0, 0, 0.2), 0 21px 33px 3px rgba(0, 0, 0, 0.14), 0 8px 40px 7px rgba(0, 0, 0, 0.12); }\n\n.md-elevation-22 {\n  box-shadow: 0 10px 14px -6px rgba(0, 0, 0, 0.2), 0 22px 35px 3px rgba(0, 0, 0, 0.14), 0 8px 42px 7px rgba(0, 0, 0, 0.12); }\n\n.md-elevation-23 {\n  box-shadow: 0 11px 14px -7px rgba(0, 0, 0, 0.2), 0 23px 36px 3px rgba(0, 0, 0, 0.14), 0 9px 44px 8px rgba(0, 0, 0, 0.12); }\n\n.md-elevation-24 {\n  box-shadow: 0 11px 15px -7px rgba(0, 0, 0, 0.2), 0 24px 38px 3px rgba(0, 0, 0, 0.14), 0 9px 46px 8px rgba(0, 0, 0, 0.12); }\n", ""]);
-
-// exports
-
-
-/***/ }),
-
-/***/ "./node_modules/css-loader/index.js!./node_modules/sass-loader/lib/loader.js!./resources/assets/js/vendor/gmf-sys/style/index.scss":
-/***/ (function(module, exports, __webpack_require__) {
-
-var escape = __webpack_require__("./node_modules/css-loader/lib/url/escape.js");
-exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(false);
-// imports
-
-
-// module
-exports.push([module.i, "@charset \"UTF-8\";\n/**\r\n * The default transition, used when the element is visible\r\n * since the beginning of the animation\r\n * ---\r\n * @access private\r\n * @type transition\r\n * @group transition\r\n */\n/**\r\n * The enter transition, used when the element is not visible on the screen\r\n * since the beginning of the animation and become visible\r\n * ---\r\n * @access private\r\n * @type transition\r\n * @group transition\r\n */\n/**\r\n * The leave transition, used when the element is visible on the screen\r\n * since the beginning of the animation and is removed\r\n * ---\r\n * @access private\r\n * @type transition\r\n * @group transition\r\n */\n/**\r\n * The stand transition, used when the element is going to accelerate,\r\n * like movements from bottom to top\r\n * ---\r\n * @access private\r\n * @type transition\r\n * @group transition\r\n */\n/**\r\n * The out transition, used when the element is going to deaccelerate,\r\n * like movements from top to bottom\r\n * ---\r\n * @access private\r\n * @type transition\r\n * @group transition\r\n */\n/* Transitions - Based on Angular Material */\n/**\r\n * The default transition, used when the element is visible\r\n * since the beginning of the animation\r\n * ---\r\n * @access private\r\n * @type transition\r\n * @group transition\r\n */\n/**\r\n * The enter transition, used when the element is not visible on the screen\r\n * since the beginning of the animation and become visible\r\n * ---\r\n * @access private\r\n * @type transition\r\n * @group transition\r\n */\n/**\r\n * The leave transition, used when the element is visible on the screen\r\n * since the beginning of the animation and is removed\r\n * ---\r\n * @access private\r\n * @type transition\r\n * @group transition\r\n */\n/**\r\n * The stand transition, used when the element is going to accelerate,\r\n * like movements from bottom to top\r\n * ---\r\n * @access private\r\n * @type transition\r\n * @group transition\r\n */\n/**\r\n * The out transition, used when the element is going to deaccelerate,\r\n * like movements from top to bottom\r\n * ---\r\n * @access private\r\n * @type transition\r\n * @group transition\r\n */\n/* Transitions - Based on Angular Material */\n/**\r\n * Structure - The main styles for html and body tags\r\n */\nhtml {\n  min-height: 100%;\n  height: 100%;\n  font-size: 62.5%;\n  box-sizing: border-box;\n  transition: background-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); }\n  html *,\n  html *:before,\n  html *:after {\n    box-sizing: inherit; }\n  html code[class*=\"language-\"],\n  html pre[class*=\"language-\"] {\n    white-space: normal;\n    word-spacing: normal;\n    word-break: normal;\n    word-wrap: normal; }\n\nbody {\n  min-height: 100%;\n  margin: 0;\n  position: relative;\n  -webkit-tap-highlight-color: transparent;\n  -webkit-touch-callout: none;\n  -webkit-text-size-adjust: 100%;\n  -ms-text-size-adjust: 100%;\n  -moz-osx-font-smoothing: grayscale;\n  -webkit-font-smoothing: antialiased;\n  font-family: Roboto, 'Noto Sans', -apple-system, BlinkMacSystemFont, sans-serif; }\n\n/*material-icons*/\n@font-face {\n  font-family: 'Material Icons';\n  font-style: normal;\n  font-weight: 400;\n  src: url(" + escape(__webpack_require__("./resources/assets/js/vendor/gmf-sys/fonts/materialIcon/MaterialIcons-Regular.eot")) + ");\n  /* For IE6-8 */\n  src: local(\"Material Icons\"), local(\"MaterialIcons-Regular\"), url(" + escape(__webpack_require__("./resources/assets/js/vendor/gmf-sys/fonts/materialIcon/MaterialIcons-Regular.woff2")) + ") format(\"woff2\"), url(" + escape(__webpack_require__("./resources/assets/js/vendor/gmf-sys/fonts/materialIcon/MaterialIcons-Regular.woff")) + ") format(\"woff\"), url(" + escape(__webpack_require__("./resources/assets/js/vendor/gmf-sys/fonts/materialIcon/MaterialIcons-Regular.ttf")) + ") format(\"truetype\"); }\n\n.material-icons {\n  font-family: 'Material Icons';\n  font-weight: normal;\n  font-style: normal;\n  font-size: 24px;\n  /* Preferred icon size */\n  display: inline-block;\n  line-height: 1;\n  text-transform: none;\n  letter-spacing: normal;\n  word-wrap: normal;\n  white-space: nowrap;\n  direction: ltr;\n  /* Support for all WebKit browsers. */\n  -webkit-font-smoothing: antialiased;\n  /* Support for Safari and Chrome. */\n  text-rendering: optimizeLegibility;\n  /* Support for Firefox. */\n  -moz-osx-font-smoothing: grayscale;\n  /* Support for IE. */\n  font-feature-settings: 'liga'; }\n\n/**\r\n * Overrides - Default buttons\r\n */\na {\n  cursor: pointer; }\n\na:not(.md-button) {\n  transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);\n  transition-property: color, background-color, opacity; }\n\ninput[type=\"search\"]::-webkit-search-cancel-button {\n  display: none;\n  -webkit-appearance: none; }\n\n/**\r\n * Overrides - Apply fluid media styles\r\n */\naudio,\nimg,\nobject,\nembed,\ncanvas,\nvideo,\niframe {\n  max-width: 100%;\n  font-style: italic;\n  vertical-align: middle; }\n  audio:not(.md-image),\n  img:not(.md-image),\n  object:not(.md-image),\n  embed:not(.md-image),\n  canvas:not(.md-image),\n  video:not(.md-image),\n  iframe:not(.md-image) {\n    height: auto; }\n\n/**\r\n * Suppress the focus outline on links that cannot be accessed via keyboard.\r\n * This prevents an unwanted focus outline from appearing around elements that\r\n * might still respond to pointer events.\r\n */\n/*\r\n   ========================================================================== */\n[tabindex=\"-1\"]:focus {\n  outline: none !important; }\n\n::-webkit-scrollbar-track {\n  background-clip: padding-box;\n  border: solid transparent;\n  border-width: 0 0 0 4px; }\n\n::-webkit-scrollbar-thumb {\n  background-color: rgba(0, 0, 0, 0.2);\n  background-clip: padding-box;\n  border: solid transparent;\n  border-width: 0px;\n  min-height: 28px;\n  padding: 100px 0 0;\n  -webkit-box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.1), inset 0 -1px 0 rgba(0, 0, 0, 0.07);\n  box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.1), inset 0 -1px 0 rgba(0, 0, 0, 0.07); }\n\n::-webkit-scrollbar-corner {\n  background: transparent; }\n\n::-webkit-scrollbar {\n  height: 8px;\n  overflow: visible;\n  width: 8px;\n  background-color: transparent; }\n\n:focus {\n  outline: none; }\n\n.clearfix {\n  clear: both; }\n\n.circle {\n  border-radius: 50%; }\n\n.truncate {\n  display: block;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis; }\n\n.no-padding {\n  padding: 0 !important; }\n\n.no-margin {\n  margin: 0 !important; }\n\n.no-scroll {\n  overflow: hidden !important; }\n\n.wrap {\n  flex-wrap: wrap;\n  white-space: normal;\n  word-break: break-all; }\n\n.nowrap {\n  white-space: nowrap;\n  flex-wrap: nowrap; }\n\n.md-indent-0 {\n  padding-left: 0px; }\n\n.md-indent-1 {\n  padding-left: 20px; }\n\n.md-indent-2 {\n  padding-left: 40px; }\n\n.md-indent-3 {\n  padding-left: 60px; }\n\n.md-indent-4 {\n  padding-left: 80px; }\n\n.md-indent-5 {\n  padding-left: 100px; }\n\n.md-indent-6 {\n  padding-left: 120px; }\n\n.md-indent-7 {\n  padding-left: 140px; }\n\n.md-indent-8 {\n  padding-left: 160px; }\n\n.md-indent-9 {\n  padding-left: 180px; }\n\n/**/\n@-moz-document url-prefix() {\n  .layout-fill {\n    margin: 0;\n    width: 100%;\n    min-height: 100%;\n    height: 100%; } }\n\n.flex-order {\n  order: 0; }\n\n.flex-order--20 {\n  order: -20; }\n\n.flex-order--19 {\n  order: -19; }\n\n.flex-order--18 {\n  order: -18; }\n\n.flex-order--17 {\n  order: -17; }\n\n.flex-order--16 {\n  order: -16; }\n\n.flex-order--15 {\n  order: -15; }\n\n.flex-order--14 {\n  order: -14; }\n\n.flex-order--13 {\n  order: -13; }\n\n.flex-order--12 {\n  order: -12; }\n\n.flex-order--11 {\n  order: -11; }\n\n.flex-order--10 {\n  order: -10; }\n\n.flex-order--9 {\n  order: -9; }\n\n.flex-order--8 {\n  order: -8; }\n\n.flex-order--7 {\n  order: -7; }\n\n.flex-order--6 {\n  order: -6; }\n\n.flex-order--5 {\n  order: -5; }\n\n.flex-order--4 {\n  order: -4; }\n\n.flex-order--3 {\n  order: -3; }\n\n.flex-order--2 {\n  order: -2; }\n\n.flex-order--1 {\n  order: -1; }\n\n.flex-order-0 {\n  order: 0; }\n\n.flex-order-1 {\n  order: 1; }\n\n.flex-order-2 {\n  order: 2; }\n\n.flex-order-3 {\n  order: 3; }\n\n.flex-order-4 {\n  order: 4; }\n\n.flex-order-5 {\n  order: 5; }\n\n.flex-order-6 {\n  order: 6; }\n\n.flex-order-7 {\n  order: 7; }\n\n.flex-order-8 {\n  order: 8; }\n\n.flex-order-9 {\n  order: 9; }\n\n.flex-order-10 {\n  order: 10; }\n\n.flex-order-11 {\n  order: 11; }\n\n.flex-order-12 {\n  order: 12; }\n\n.flex-order-13 {\n  order: 13; }\n\n.flex-order-14 {\n  order: 14; }\n\n.flex-order-15 {\n  order: 15; }\n\n.flex-order-16 {\n  order: 16; }\n\n.flex-order-17 {\n  order: 17; }\n\n.flex-order-18 {\n  order: 18; }\n\n.flex-order-19 {\n  order: 19; }\n\n.flex-order-20 {\n  order: 20; }\n\n.offset-0, .flex-offset-0 {\n  margin-left: 0; }\n  [dir=rtl] .offset-0, [dir=rtl] .flex-offset-0 {\n    margin-left: auto;\n    margin-right: 0; }\n\n.offset-5, .flex-offset-5 {\n  margin-left: 5%; }\n  [dir=rtl] .offset-5, [dir=rtl] .flex-offset-5 {\n    margin-left: auto;\n    margin-right: 5%; }\n\n.offset-10, .flex-offset-10 {\n  margin-left: 10%; }\n  [dir=rtl] .offset-10, [dir=rtl] .flex-offset-10 {\n    margin-left: auto;\n    margin-right: 10%; }\n\n.offset-15, .flex-offset-15 {\n  margin-left: 15%; }\n  [dir=rtl] .offset-15, [dir=rtl] .flex-offset-15 {\n    margin-left: auto;\n    margin-right: 15%; }\n\n.offset-20, .flex-offset-20 {\n  margin-left: 20%; }\n  [dir=rtl] .offset-20, [dir=rtl] .flex-offset-20 {\n    margin-left: auto;\n    margin-right: 20%; }\n\n.offset-25, .flex-offset-25 {\n  margin-left: 25%; }\n  [dir=rtl] .offset-25, [dir=rtl] .flex-offset-25 {\n    margin-left: auto;\n    margin-right: 25%; }\n\n.offset-30, .flex-offset-30 {\n  margin-left: 30%; }\n  [dir=rtl] .offset-30, [dir=rtl] .flex-offset-30 {\n    margin-left: auto;\n    margin-right: 30%; }\n\n.offset-35, .flex-offset-35 {\n  margin-left: 35%; }\n  [dir=rtl] .offset-35, [dir=rtl] .flex-offset-35 {\n    margin-left: auto;\n    margin-right: 35%; }\n\n.offset-40, .flex-offset-40 {\n  margin-left: 40%; }\n  [dir=rtl] .offset-40, [dir=rtl] .flex-offset-40 {\n    margin-left: auto;\n    margin-right: 40%; }\n\n.offset-45, .flex-offset-45 {\n  margin-left: 45%; }\n  [dir=rtl] .offset-45, [dir=rtl] .flex-offset-45 {\n    margin-left: auto;\n    margin-right: 45%; }\n\n.offset-50, .flex-offset-50 {\n  margin-left: 50%; }\n  [dir=rtl] .offset-50, [dir=rtl] .flex-offset-50 {\n    margin-left: auto;\n    margin-right: 50%; }\n\n.offset-55, .flex-offset-55 {\n  margin-left: 55%; }\n  [dir=rtl] .offset-55, [dir=rtl] .flex-offset-55 {\n    margin-left: auto;\n    margin-right: 55%; }\n\n.offset-60, .flex-offset-60 {\n  margin-left: 60%; }\n  [dir=rtl] .offset-60, [dir=rtl] .flex-offset-60 {\n    margin-left: auto;\n    margin-right: 60%; }\n\n.offset-65, .flex-offset-65 {\n  margin-left: 65%; }\n  [dir=rtl] .offset-65, [dir=rtl] .flex-offset-65 {\n    margin-left: auto;\n    margin-right: 65%; }\n\n.offset-70, .flex-offset-70 {\n  margin-left: 70%; }\n  [dir=rtl] .offset-70, [dir=rtl] .flex-offset-70 {\n    margin-left: auto;\n    margin-right: 70%; }\n\n.offset-75, .flex-offset-75 {\n  margin-left: 75%; }\n  [dir=rtl] .offset-75, [dir=rtl] .flex-offset-75 {\n    margin-left: auto;\n    margin-right: 75%; }\n\n.offset-80, .flex-offset-80 {\n  margin-left: 80%; }\n  [dir=rtl] .offset-80, [dir=rtl] .flex-offset-80 {\n    margin-left: auto;\n    margin-right: 80%; }\n\n.offset-85, .flex-offset-85 {\n  margin-left: 85%; }\n  [dir=rtl] .offset-85, [dir=rtl] .flex-offset-85 {\n    margin-left: auto;\n    margin-right: 85%; }\n\n.offset-90, .flex-offset-90 {\n  margin-left: 90%; }\n  [dir=rtl] .offset-90, [dir=rtl] .flex-offset-90 {\n    margin-left: auto;\n    margin-right: 90%; }\n\n.offset-95, .flex-offset-95 {\n  margin-left: 95%; }\n  [dir=rtl] .offset-95, [dir=rtl] .flex-offset-95 {\n    margin-left: auto;\n    margin-right: 95%; }\n\n.offset-33, .flex-offset-33 {\n  margin-left: calc(100% / 3); }\n\n.offset-66, .flex-offset-66 {\n  margin-left: calc(200% / 3); }\n  [dir=rtl] .offset-66, [dir=rtl] .flex-offset-66 {\n    margin-left: auto;\n    margin-right: calc(200% / 3); }\n\n.layout-align,\n.layout-align-start-stretch {\n  justify-content: flex-start;\n  align-content: stretch;\n  align-items: stretch; }\n\n.layout-align-start,\n.layout-align-start-start,\n.layout-align-start-center,\n.layout-align-start-end,\n.layout-align-start-stretch {\n  justify-content: flex-start; }\n\n.layout-align-center,\n.layout-align-center-start,\n.layout-align-center-center,\n.layout-align-center-end,\n.layout-align-center-stretch {\n  justify-content: center; }\n\n.layout-align-end,\n.layout-align-end-start,\n.layout-align-end-center,\n.layout-align-end-end,\n.layout-align-end-stretch {\n  justify-content: flex-end; }\n\n.layout-align-space-around,\n.layout-align-space-around-center,\n.layout-align-space-around-start,\n.layout-align-space-around-end,\n.layout-align-space-around-stretch {\n  justify-content: space-around; }\n\n.layout-align-space-between,\n.layout-align-space-between-center,\n.layout-align-space-between-start,\n.layout-align-space-between-end,\n.layout-align-space-between-stretch {\n  justify-content: space-between; }\n\n.layout-align-start-start,\n.layout-align-center-start,\n.layout-align-end-start,\n.layout-align-space-between-start,\n.layout-align-space-around-start {\n  align-items: flex-start;\n  align-content: flex-start; }\n\n.layout-align-start-center,\n.layout-align-center-center,\n.layout-align-end-center,\n.layout-align-space-between-center,\n.layout-align-space-around-center {\n  align-items: center;\n  align-content: center;\n  max-width: 100%; }\n\n.layout-align-start-center > *,\n.layout-align-center-center > *,\n.layout-align-end-center > *,\n.layout-align-space-between-center > *,\n.layout-align-space-around-center > * {\n  max-width: 100%;\n  box-sizing: border-box; }\n\n.layout-align-start-end,\n.layout-align-center-end,\n.layout-align-end-end,\n.layout-align-space-between-end,\n.layout-align-space-around-end {\n  align-items: flex-end;\n  align-content: flex-end; }\n\n.layout-align-start-stretch,\n.layout-align-center-stretch,\n.layout-align-end-stretch,\n.layout-align-space-between-stretch,\n.layout-align-space-around-stretch {\n  align-items: stretch;\n  align-content: stretch; }\n\n.flex {\n  flex: 1;\n  box-sizing: border-box; }\n\n.flex-grow {\n  flex: 1 1 100%;\n  box-sizing: border-box; }\n\n.flex-initial {\n  flex: 0 1 auto;\n  box-sizing: border-box; }\n\n.flex-auto {\n  flex: 1 1 auto;\n  box-sizing: border-box; }\n\n.flex-none {\n  flex: 0 0 auto;\n  box-sizing: border-box; }\n\n.flex-noshrink {\n  flex: 1 0 auto;\n  box-sizing: border-box; }\n\n.flex-nogrow {\n  flex: 0 1 auto;\n  box-sizing: border-box; }\n\n.flex-0 {\n  flex: 1 1 100%;\n  max-width: 0%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-row > .flex-0 {\n  flex: 1 1 100%;\n  max-width: 0%;\n  max-height: 100%;\n  box-sizing: border-box;\n  min-width: 0; }\n\n.layout-column > .flex-0 {\n  flex: 1 1 100%;\n  max-width: 100%;\n  max-height: 0%;\n  box-sizing: border-box; }\n\n.flex-5 {\n  flex: 1 1 100%;\n  max-width: 5%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-row > .flex-5 {\n  flex: 1 1 100%;\n  max-width: 5%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-column > .flex-5 {\n  flex: 1 1 100%;\n  max-width: 100%;\n  max-height: 5%;\n  box-sizing: border-box; }\n\n.flex-10 {\n  flex: 1 1 100%;\n  max-width: 10%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-row > .flex-10 {\n  flex: 1 1 100%;\n  max-width: 10%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-column > .flex-10 {\n  flex: 1 1 100%;\n  max-width: 100%;\n  max-height: 10%;\n  box-sizing: border-box; }\n\n.flex-15 {\n  flex: 1 1 100%;\n  max-width: 15%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-row > .flex-15 {\n  flex: 1 1 100%;\n  max-width: 15%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-column > .flex-15 {\n  flex: 1 1 100%;\n  max-width: 100%;\n  max-height: 15%;\n  box-sizing: border-box; }\n\n.flex-20 {\n  flex: 1 1 100%;\n  max-width: 20%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-row > .flex-20 {\n  flex: 1 1 100%;\n  max-width: 20%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-column > .flex-20 {\n  flex: 1 1 100%;\n  max-width: 100%;\n  max-height: 20%;\n  box-sizing: border-box; }\n\n.flex-25 {\n  flex: 1 1 100%;\n  max-width: 25%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-row > .flex-25 {\n  flex: 1 1 100%;\n  max-width: 25%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-column > .flex-25 {\n  flex: 1 1 100%;\n  max-width: 100%;\n  max-height: 25%;\n  box-sizing: border-box; }\n\n.flex-30 {\n  flex: 1 1 100%;\n  max-width: 30%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-row > .flex-30 {\n  flex: 1 1 100%;\n  max-width: 30%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-column > .flex-30 {\n  flex: 1 1 100%;\n  max-width: 100%;\n  max-height: 30%;\n  box-sizing: border-box; }\n\n.flex-35 {\n  flex: 1 1 100%;\n  max-width: 35%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-row > .flex-35 {\n  flex: 1 1 100%;\n  max-width: 35%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-column > .flex-35 {\n  flex: 1 1 100%;\n  max-width: 100%;\n  max-height: 35%;\n  box-sizing: border-box; }\n\n.flex-40 {\n  flex: 1 1 100%;\n  max-width: 40%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-row > .flex-40 {\n  flex: 1 1 100%;\n  max-width: 40%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-column > .flex-40 {\n  flex: 1 1 100%;\n  max-width: 100%;\n  max-height: 40%;\n  box-sizing: border-box; }\n\n.flex-45 {\n  flex: 1 1 100%;\n  max-width: 45%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-row > .flex-45 {\n  flex: 1 1 100%;\n  max-width: 45%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-column > .flex-45 {\n  flex: 1 1 100%;\n  max-width: 100%;\n  max-height: 45%;\n  box-sizing: border-box; }\n\n.flex-50 {\n  flex: 1 1 100%;\n  max-width: 50%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-row > .flex-50 {\n  flex: 1 1 100%;\n  max-width: 50%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-column > .flex-50 {\n  flex: 1 1 100%;\n  max-width: 100%;\n  max-height: 50%;\n  box-sizing: border-box; }\n\n.flex-55 {\n  flex: 1 1 100%;\n  max-width: 55%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-row > .flex-55 {\n  flex: 1 1 100%;\n  max-width: 55%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-column > .flex-55 {\n  flex: 1 1 100%;\n  max-width: 100%;\n  max-height: 55%;\n  box-sizing: border-box; }\n\n.flex-60 {\n  flex: 1 1 100%;\n  max-width: 60%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-row > .flex-60 {\n  flex: 1 1 100%;\n  max-width: 60%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-column > .flex-60 {\n  flex: 1 1 100%;\n  max-width: 100%;\n  max-height: 60%;\n  box-sizing: border-box; }\n\n.flex-65 {\n  flex: 1 1 100%;\n  max-width: 65%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-row > .flex-65 {\n  flex: 1 1 100%;\n  max-width: 65%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-column > .flex-65 {\n  flex: 1 1 100%;\n  max-width: 100%;\n  max-height: 65%;\n  box-sizing: border-box; }\n\n.flex-70 {\n  flex: 1 1 100%;\n  max-width: 70%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-row > .flex-70 {\n  flex: 1 1 100%;\n  max-width: 70%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-column > .flex-70 {\n  flex: 1 1 100%;\n  max-width: 100%;\n  max-height: 70%;\n  box-sizing: border-box; }\n\n.flex-75 {\n  flex: 1 1 100%;\n  max-width: 75%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-row > .flex-75 {\n  flex: 1 1 100%;\n  max-width: 75%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-column > .flex-75 {\n  flex: 1 1 100%;\n  max-width: 100%;\n  max-height: 75%;\n  box-sizing: border-box; }\n\n.flex-80 {\n  flex: 1 1 100%;\n  max-width: 80%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-row > .flex-80 {\n  flex: 1 1 100%;\n  max-width: 80%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-column > .flex-80 {\n  flex: 1 1 100%;\n  max-width: 100%;\n  max-height: 80%;\n  box-sizing: border-box; }\n\n.flex-85 {\n  flex: 1 1 100%;\n  max-width: 85%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-row > .flex-85 {\n  flex: 1 1 100%;\n  max-width: 85%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-column > .flex-85 {\n  flex: 1 1 100%;\n  max-width: 100%;\n  max-height: 85%;\n  box-sizing: border-box; }\n\n.flex-90 {\n  flex: 1 1 100%;\n  max-width: 90%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-row > .flex-90 {\n  flex: 1 1 100%;\n  max-width: 90%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-column > .flex-90 {\n  flex: 1 1 100%;\n  max-width: 100%;\n  max-height: 90%;\n  box-sizing: border-box; }\n\n.flex-95 {\n  flex: 1 1 100%;\n  max-width: 95%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-row > .flex-95 {\n  flex: 1 1 100%;\n  max-width: 95%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-column > .flex-95 {\n  flex: 1 1 100%;\n  max-width: 100%;\n  max-height: 95%;\n  box-sizing: border-box; }\n\n.flex-100 {\n  flex: 1 1 100%;\n  max-width: 100%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-row > .flex-100 {\n  flex: 1 1 100%;\n  max-width: 100%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-column > .flex-100 {\n  flex: 1 1 100%;\n  max-width: 100%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-row > .flex-33 {\n  flex: 1 1 33.33%;\n  max-width: 33.33%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-row > .flex-66 {\n  flex: 1 1 66.66%;\n  max-width: 66.66%;\n  max-height: 100%;\n  box-sizing: border-box; }\n\n.layout-column > .flex-33 {\n  flex: 1 1 33.33%;\n  max-width: 100%;\n  max-height: 33.33%;\n  box-sizing: border-box; }\n\n.layout-column > .flex-66 {\n  flex: 1 1 66.66%;\n  max-width: 100%;\n  max-height: 66.66%;\n  box-sizing: border-box; }\n\n.layout,\n.layout-column,\n.layout-row {\n  box-sizing: border-box;\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: -moz-box;\n  display: -ms-flexbox;\n  display: flex; }\n\n.layout-column {\n  flex-direction: column; }\n\n.layout-row {\n  flex-direction: row; }\n\n.layout-padding-sm > *,\n.layout-padding > .flex-sm {\n  padding: 4px; }\n\n.layout-padding,\n.layout-padding-gt-sm,\n.layout-padding-md,\n.layout-padding > *,\n.layout-padding-gt-sm > *,\n.layout-padding-md > *,\n.layout-padding > .flex,\n.layout-padding > .flex-gt-sm,\n.layout-padding > .flex-md {\n  padding: 8px; }\n\n.layout-padding-gt-md > *,\n.layout-padding-lg > *,\n.layout-padding-gt-lg > *,\n.layout-padding > .flex-gt-md,\n.layout-padding > .flex-lg,\n.layout-padding > .flex-lg,\n.layout-padding > .flex-gt-lg {\n  padding: 16px; }\n\n.layout-margin-sm > *,\n.layout-margin > .flex-sm {\n  margin: 4px; }\n\n.layout-margin,\n.layout-margin-gt-sm,\n.layout-margin-md,\n.layout-margin > *,\n.layout-margin-gt-sm > *,\n.layout-margin-md > *,\n.layout-margin > .flex,\n.layout-margin > .flex-gt-sm,\n.layout-margin > .flex-md {\n  margin: 8px; }\n\n.layout-margin-gt-md > *,\n.layout-margin-lg > *,\n.layout-margin-gt-lg > *,\n.layout-margin > .flex-gt-md,\n.layout-margin > .flex-lg,\n.layout-margin > .flex-gt-lg {\n  margin: 16px; }\n\n.layout-wrap {\n  flex-wrap: wrap; }\n\n.layout-nowrap {\n  flex-wrap: nowrap; }\n\n.layout-fill {\n  margin: 0;\n  width: 100%;\n  min-height: 100%;\n  height: 100%; }\n\n.layout-gutter {\n  margin-right: -16px;\n  margin-left: -16px; }\n  .layout-gutter > * {\n    padding-right: 16px;\n    padding-left: 16px; }\n\n@media (max-width: 599px) {\n  .hide-xs:not(.show-xs):not(.show),\n  .hide:not(.show-xs):not(.show) {\n    display: none; }\n  .flex-order-xs--20 {\n    order: -20; }\n  .flex-order-xs--19 {\n    order: -19; }\n  .flex-order-xs--18 {\n    order: -18; }\n  .flex-order-xs--17 {\n    order: -17; }\n  .flex-order-xs--16 {\n    order: -16; }\n  .flex-order-xs--15 {\n    order: -15; }\n  .flex-order-xs--14 {\n    order: -14; }\n  .flex-order-xs--13 {\n    order: -13; }\n  .flex-order-xs--12 {\n    order: -12; }\n  .flex-order-xs--11 {\n    order: -11; }\n  .flex-order-xs--10 {\n    order: -10; }\n  .flex-order-xs--9 {\n    order: -9; }\n  .flex-order-xs--8 {\n    order: -8; }\n  .flex-order-xs--7 {\n    order: -7; }\n  .flex-order-xs--6 {\n    order: -6; }\n  .flex-order-xs--5 {\n    order: -5; }\n  .flex-order-xs--4 {\n    order: -4; }\n  .flex-order-xs--3 {\n    order: -3; }\n  .flex-order-xs--2 {\n    order: -2; }\n  .flex-order-xs--1 {\n    order: -1; }\n  .flex-order-xs-0 {\n    order: 0; }\n  .flex-order-xs-1 {\n    order: 1; }\n  .flex-order-xs-2 {\n    order: 2; }\n  .flex-order-xs-3 {\n    order: 3; }\n  .flex-order-xs-4 {\n    order: 4; }\n  .flex-order-xs-5 {\n    order: 5; }\n  .flex-order-xs-6 {\n    order: 6; }\n  .flex-order-xs-7 {\n    order: 7; }\n  .flex-order-xs-8 {\n    order: 8; }\n  .flex-order-xs-9 {\n    order: 9; }\n  .flex-order-xs-10 {\n    order: 10; }\n  .flex-order-xs-11 {\n    order: 11; }\n  .flex-order-xs-12 {\n    order: 12; }\n  .flex-order-xs-13 {\n    order: 13; }\n  .flex-order-xs-14 {\n    order: 14; }\n  .flex-order-xs-15 {\n    order: 15; }\n  .flex-order-xs-16 {\n    order: 16; }\n  .flex-order-xs-17 {\n    order: 17; }\n  .flex-order-xs-18 {\n    order: 18; }\n  .flex-order-xs-19 {\n    order: 19; }\n  .flex-order-xs-20 {\n    order: 20; }\n  .offset-xs-0, .flex-offset-xs-0 {\n    margin-left: 0; }\n    [dir=rtl] .offset-xs-0, [dir=rtl] .flex-offset-xs-0 {\n      margin-left: auto;\n      margin-right: 0; }\n  .offset-xs-5, .flex-offset-xs-5 {\n    margin-left: 5%; }\n    [dir=rtl] .offset-xs-5, [dir=rtl] .flex-offset-xs-5 {\n      margin-left: auto;\n      margin-right: 5%; }\n  .offset-xs-10, .flex-offset-xs-10 {\n    margin-left: 10%; }\n    [dir=rtl] .offset-xs-10, [dir=rtl] .flex-offset-xs-10 {\n      margin-left: auto;\n      margin-right: 10%; }\n  .offset-xs-15, .flex-offset-xs-15 {\n    margin-left: 15%; }\n    [dir=rtl] .offset-xs-15, [dir=rtl] .flex-offset-xs-15 {\n      margin-left: auto;\n      margin-right: 15%; }\n  .offset-xs-20, .flex-offset-xs-20 {\n    margin-left: 20%; }\n    [dir=rtl] .offset-xs-20, [dir=rtl] .flex-offset-xs-20 {\n      margin-left: auto;\n      margin-right: 20%; }\n  .offset-xs-25, .flex-offset-xs-25 {\n    margin-left: 25%; }\n    [dir=rtl] .offset-xs-25, [dir=rtl] .flex-offset-xs-25 {\n      margin-left: auto;\n      margin-right: 25%; }\n  .offset-xs-30, .flex-offset-xs-30 {\n    margin-left: 30%; }\n    [dir=rtl] .offset-xs-30, [dir=rtl] .flex-offset-xs-30 {\n      margin-left: auto;\n      margin-right: 30%; }\n  .offset-xs-35, .flex-offset-xs-35 {\n    margin-left: 35%; }\n    [dir=rtl] .offset-xs-35, [dir=rtl] .flex-offset-xs-35 {\n      margin-left: auto;\n      margin-right: 35%; }\n  .offset-xs-40, .flex-offset-xs-40 {\n    margin-left: 40%; }\n    [dir=rtl] .offset-xs-40, [dir=rtl] .flex-offset-xs-40 {\n      margin-left: auto;\n      margin-right: 40%; }\n  .offset-xs-45, .flex-offset-xs-45 {\n    margin-left: 45%; }\n    [dir=rtl] .offset-xs-45, [dir=rtl] .flex-offset-xs-45 {\n      margin-left: auto;\n      margin-right: 45%; }\n  .offset-xs-50, .flex-offset-xs-50 {\n    margin-left: 50%; }\n    [dir=rtl] .offset-xs-50, [dir=rtl] .flex-offset-xs-50 {\n      margin-left: auto;\n      margin-right: 50%; }\n  .offset-xs-55, .flex-offset-xs-55 {\n    margin-left: 55%; }\n    [dir=rtl] .offset-xs-55, [dir=rtl] .flex-offset-xs-55 {\n      margin-left: auto;\n      margin-right: 55%; }\n  .offset-xs-60, .flex-offset-xs-60 {\n    margin-left: 60%; }\n    [dir=rtl] .offset-xs-60, [dir=rtl] .flex-offset-xs-60 {\n      margin-left: auto;\n      margin-right: 60%; }\n  .offset-xs-65, .flex-offset-xs-65 {\n    margin-left: 65%; }\n    [dir=rtl] .offset-xs-65, [dir=rtl] .flex-offset-xs-65 {\n      margin-left: auto;\n      margin-right: 65%; }\n  .offset-xs-70, .flex-offset-xs-70 {\n    margin-left: 70%; }\n    [dir=rtl] .offset-xs-70, [dir=rtl] .flex-offset-xs-70 {\n      margin-left: auto;\n      margin-right: 70%; }\n  .offset-xs-75, .flex-offset-xs-75 {\n    margin-left: 75%; }\n    [dir=rtl] .offset-xs-75, [dir=rtl] .flex-offset-xs-75 {\n      margin-left: auto;\n      margin-right: 75%; }\n  .offset-xs-80, .flex-offset-xs-80 {\n    margin-left: 80%; }\n    [dir=rtl] .offset-xs-80, [dir=rtl] .flex-offset-xs-80 {\n      margin-left: auto;\n      margin-right: 80%; }\n  .offset-xs-85, .flex-offset-xs-85 {\n    margin-left: 85%; }\n    [dir=rtl] .offset-xs-85, [dir=rtl] .flex-offset-xs-85 {\n      margin-left: auto;\n      margin-right: 85%; }\n  .offset-xs-90, .flex-offset-xs-90 {\n    margin-left: 90%; }\n    [dir=rtl] .offset-xs-90, [dir=rtl] .flex-offset-xs-90 {\n      margin-left: auto;\n      margin-right: 90%; }\n  .offset-xs-95, .flex-offset-xs-95 {\n    margin-left: 95%; }\n    [dir=rtl] .offset-xs-95, [dir=rtl] .flex-offset-xs-95 {\n      margin-left: auto;\n      margin-right: 95%; }\n  .offset-xs-33, .flex-offset-xs-33 {\n    margin-left: calc(100% / 3); }\n  .offset-xs-66, .flex-offset-xs-66 {\n    margin-left: calc(200% / 3); }\n    [dir=rtl] .offset-xs-66, [dir=rtl] .flex-offset-xs-66 {\n      margin-left: auto;\n      margin-right: calc(200% / 3); }\n  .layout-align-xs,\n  .layout-align-xs-start-stretch {\n    justify-content: flex-start;\n    align-content: stretch;\n    align-items: stretch; }\n  .layout-align-xs-start,\n  .layout-align-xs-start-start,\n  .layout-align-xs-start-center,\n  .layout-align-xs-start-end,\n  .layout-align-xs-start-stretch {\n    justify-content: flex-start; }\n  .layout-align-xs-center,\n  .layout-align-xs-center-start,\n  .layout-align-xs-center-center,\n  .layout-align-xs-center-end,\n  .layout-align-xs-center-stretch {\n    justify-content: center; }\n  .layout-align-xs-end,\n  .layout-align-xs-end-start,\n  .layout-align-xs-end-center,\n  .layout-align-xs-end-end,\n  .layout-align-xs-end-stretch {\n    justify-content: flex-end; }\n  .layout-align-xs-space-around,\n  .layout-align-xs-space-around-center,\n  .layout-align-xs-space-around-start,\n  .layout-align-xs-space-around-end,\n  .layout-align-xs-space-around-stretch {\n    justify-content: space-around; }\n  .layout-align-xs-space-between,\n  .layout-align-xs-space-between-center,\n  .layout-align-xs-space-between-start,\n  .layout-align-xs-space-between-end,\n  .layout-align-xs-space-between-stretch {\n    justify-content: space-between; }\n  .layout-align-xs-start-start,\n  .layout-align-xs-center-start,\n  .layout-align-xs-end-start,\n  .layout-align-xs-space-between-start,\n  .layout-align-xs-space-around-start {\n    align-items: flex-start;\n    align-content: flex-start; }\n  .layout-align-xs-start-center,\n  .layout-align-xs-center-center,\n  .layout-align-xs-end-center,\n  .layout-align-xs-space-between-center,\n  .layout-align-xs-space-around-center {\n    align-items: center;\n    align-content: center;\n    max-width: 100%; }\n  .layout-align-xs-start-center > *,\n  .layout-align-xs-center-center > *,\n  .layout-align-xs-end-center > *,\n  .layout-align-xs-space-between-center > *,\n  .layout-align-xs-space-around-center > * {\n    max-width: 100%;\n    box-sizing: border-box; }\n  .layout-align-xs-start-end,\n  .layout-align-xs-center-end,\n  .layout-align-xs-end-end,\n  .layout-align-xs-space-between-end,\n  .layout-align-xs-space-around-end {\n    align-items: flex-end;\n    align-content: flex-end; }\n  .layout-align-xs-start-stretch,\n  .layout-align-xs-center-stretch,\n  .layout-align-xs-end-stretch,\n  .layout-align-xs-space-between-stretch,\n  .layout-align-xs-space-around-stretch {\n    align-items: stretch;\n    align-content: stretch; }\n  .flex-xs {\n    flex: 1;\n    box-sizing: border-box; }\n  .flex-xs-grow {\n    flex: 1 1 100%;\n    box-sizing: border-box; }\n  .flex-xs-initial {\n    flex: 0 1 auto;\n    box-sizing: border-box; }\n  .flex-xs-auto {\n    flex: 1 1 auto;\n    box-sizing: border-box; }\n  .flex-xs-none {\n    flex: 0 0 auto;\n    box-sizing: border-box; }\n  .flex-xs-noshrink {\n    flex: 1 0 auto;\n    box-sizing: border-box; }\n  .flex-xs-nogrow {\n    flex: 0 1 auto;\n    box-sizing: border-box; }\n  .flex-xs-0 {\n    flex: 1 1 100%;\n    max-width: 0%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xs-0 {\n    flex: 1 1 100%;\n    max-width: 0%;\n    max-height: 100%;\n    box-sizing: border-box;\n    min-width: 0; }\n  .layout-column > .flex-xs-0 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 0%;\n    box-sizing: border-box; }\n  .layout-xs-row > .flex-xs-0 {\n    flex: 1 1 100%;\n    max-width: 0%;\n    max-height: 100%;\n    box-sizing: border-box;\n    min-width: 0; }\n  .layout-xs-column > .flex-xs-0 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 0%;\n    box-sizing: border-box;\n    min-height: 0; }\n  .flex-xs-5 {\n    flex: 1 1 100%;\n    max-width: 5%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xs-5 {\n    flex: 1 1 100%;\n    max-width: 5%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xs-5 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 5%;\n    box-sizing: border-box; }\n  .layout-xs-row > .flex-xs-5 {\n    flex: 1 1 100%;\n    max-width: 5%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xs-column > .flex-xs-5 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 5%;\n    box-sizing: border-box; }\n  .flex-xs-10 {\n    flex: 1 1 100%;\n    max-width: 10%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xs-10 {\n    flex: 1 1 100%;\n    max-width: 10%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xs-10 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 10%;\n    box-sizing: border-box; }\n  .layout-xs-row > .flex-xs-10 {\n    flex: 1 1 100%;\n    max-width: 10%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xs-column > .flex-xs-10 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 10%;\n    box-sizing: border-box; }\n  .flex-xs-15 {\n    flex: 1 1 100%;\n    max-width: 15%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xs-15 {\n    flex: 1 1 100%;\n    max-width: 15%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xs-15 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 15%;\n    box-sizing: border-box; }\n  .layout-xs-row > .flex-xs-15 {\n    flex: 1 1 100%;\n    max-width: 15%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xs-column > .flex-xs-15 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 15%;\n    box-sizing: border-box; }\n  .flex-xs-20 {\n    flex: 1 1 100%;\n    max-width: 20%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xs-20 {\n    flex: 1 1 100%;\n    max-width: 20%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xs-20 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 20%;\n    box-sizing: border-box; }\n  .layout-xs-row > .flex-xs-20 {\n    flex: 1 1 100%;\n    max-width: 20%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xs-column > .flex-xs-20 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 20%;\n    box-sizing: border-box; }\n  .flex-xs-25 {\n    flex: 1 1 100%;\n    max-width: 25%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xs-25 {\n    flex: 1 1 100%;\n    max-width: 25%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xs-25 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 25%;\n    box-sizing: border-box; }\n  .layout-xs-row > .flex-xs-25 {\n    flex: 1 1 100%;\n    max-width: 25%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xs-column > .flex-xs-25 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 25%;\n    box-sizing: border-box; }\n  .flex-xs-30 {\n    flex: 1 1 100%;\n    max-width: 30%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xs-30 {\n    flex: 1 1 100%;\n    max-width: 30%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xs-30 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 30%;\n    box-sizing: border-box; }\n  .layout-xs-row > .flex-xs-30 {\n    flex: 1 1 100%;\n    max-width: 30%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xs-column > .flex-xs-30 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 30%;\n    box-sizing: border-box; }\n  .flex-xs-35 {\n    flex: 1 1 100%;\n    max-width: 35%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xs-35 {\n    flex: 1 1 100%;\n    max-width: 35%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xs-35 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 35%;\n    box-sizing: border-box; }\n  .layout-xs-row > .flex-xs-35 {\n    flex: 1 1 100%;\n    max-width: 35%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xs-column > .flex-xs-35 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 35%;\n    box-sizing: border-box; }\n  .flex-xs-40 {\n    flex: 1 1 100%;\n    max-width: 40%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xs-40 {\n    flex: 1 1 100%;\n    max-width: 40%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xs-40 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 40%;\n    box-sizing: border-box; }\n  .layout-xs-row > .flex-xs-40 {\n    flex: 1 1 100%;\n    max-width: 40%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xs-column > .flex-xs-40 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 40%;\n    box-sizing: border-box; }\n  .flex-xs-45 {\n    flex: 1 1 100%;\n    max-width: 45%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xs-45 {\n    flex: 1 1 100%;\n    max-width: 45%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xs-45 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 45%;\n    box-sizing: border-box; }\n  .layout-xs-row > .flex-xs-45 {\n    flex: 1 1 100%;\n    max-width: 45%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xs-column > .flex-xs-45 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 45%;\n    box-sizing: border-box; }\n  .flex-xs-50 {\n    flex: 1 1 100%;\n    max-width: 50%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xs-50 {\n    flex: 1 1 100%;\n    max-width: 50%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xs-50 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 50%;\n    box-sizing: border-box; }\n  .layout-xs-row > .flex-xs-50 {\n    flex: 1 1 100%;\n    max-width: 50%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xs-column > .flex-xs-50 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 50%;\n    box-sizing: border-box; }\n  .flex-xs-55 {\n    flex: 1 1 100%;\n    max-width: 55%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xs-55 {\n    flex: 1 1 100%;\n    max-width: 55%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xs-55 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 55%;\n    box-sizing: border-box; }\n  .layout-xs-row > .flex-xs-55 {\n    flex: 1 1 100%;\n    max-width: 55%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xs-column > .flex-xs-55 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 55%;\n    box-sizing: border-box; }\n  .flex-xs-60 {\n    flex: 1 1 100%;\n    max-width: 60%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xs-60 {\n    flex: 1 1 100%;\n    max-width: 60%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xs-60 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 60%;\n    box-sizing: border-box; }\n  .layout-xs-row > .flex-xs-60 {\n    flex: 1 1 100%;\n    max-width: 60%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xs-column > .flex-xs-60 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 60%;\n    box-sizing: border-box; }\n  .flex-xs-65 {\n    flex: 1 1 100%;\n    max-width: 65%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xs-65 {\n    flex: 1 1 100%;\n    max-width: 65%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xs-65 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 65%;\n    box-sizing: border-box; }\n  .layout-xs-row > .flex-xs-65 {\n    flex: 1 1 100%;\n    max-width: 65%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xs-column > .flex-xs-65 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 65%;\n    box-sizing: border-box; }\n  .flex-xs-70 {\n    flex: 1 1 100%;\n    max-width: 70%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xs-70 {\n    flex: 1 1 100%;\n    max-width: 70%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xs-70 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 70%;\n    box-sizing: border-box; }\n  .layout-xs-row > .flex-xs-70 {\n    flex: 1 1 100%;\n    max-width: 70%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xs-column > .flex-xs-70 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 70%;\n    box-sizing: border-box; }\n  .flex-xs-75 {\n    flex: 1 1 100%;\n    max-width: 75%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xs-75 {\n    flex: 1 1 100%;\n    max-width: 75%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xs-75 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 75%;\n    box-sizing: border-box; }\n  .layout-xs-row > .flex-xs-75 {\n    flex: 1 1 100%;\n    max-width: 75%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xs-column > .flex-xs-75 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 75%;\n    box-sizing: border-box; }\n  .flex-xs-80 {\n    flex: 1 1 100%;\n    max-width: 80%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xs-80 {\n    flex: 1 1 100%;\n    max-width: 80%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xs-80 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 80%;\n    box-sizing: border-box; }\n  .layout-xs-row > .flex-xs-80 {\n    flex: 1 1 100%;\n    max-width: 80%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xs-column > .flex-xs-80 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 80%;\n    box-sizing: border-box; }\n  .flex-xs-85 {\n    flex: 1 1 100%;\n    max-width: 85%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xs-85 {\n    flex: 1 1 100%;\n    max-width: 85%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xs-85 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 85%;\n    box-sizing: border-box; }\n  .layout-xs-row > .flex-xs-85 {\n    flex: 1 1 100%;\n    max-width: 85%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xs-column > .flex-xs-85 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 85%;\n    box-sizing: border-box; }\n  .flex-xs-90 {\n    flex: 1 1 100%;\n    max-width: 90%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xs-90 {\n    flex: 1 1 100%;\n    max-width: 90%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xs-90 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 90%;\n    box-sizing: border-box; }\n  .layout-xs-row > .flex-xs-90 {\n    flex: 1 1 100%;\n    max-width: 90%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xs-column > .flex-xs-90 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 90%;\n    box-sizing: border-box; }\n  .flex-xs-95 {\n    flex: 1 1 100%;\n    max-width: 95%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xs-95 {\n    flex: 1 1 100%;\n    max-width: 95%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xs-95 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 95%;\n    box-sizing: border-box; }\n  .layout-xs-row > .flex-xs-95 {\n    flex: 1 1 100%;\n    max-width: 95%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xs-column > .flex-xs-95 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 95%;\n    box-sizing: border-box; }\n  .flex-xs-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xs-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xs-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xs-row > .flex-xs-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xs-column > .flex-xs-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xs-33 {\n    flex: 1 1 33.33%;\n    max-width: 33.33%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xs-66 {\n    flex: 1 1 66.66%;\n    max-width: 66.66%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xs-33 {\n    flex: 1 1 33.33%;\n    max-width: 100%;\n    max-height: 33.33%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xs-66 {\n    flex: 1 1 66.66%;\n    max-width: 100%;\n    max-height: 66.66%;\n    box-sizing: border-box; }\n  .layout-xs-row > .flex-xs-33 {\n    flex: 1 1 100%;\n    max-width: 33.33%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xs-row > .flex-xs-66 {\n    flex: 1 1 100%;\n    max-width: 66.66%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xs-row > .flex {\n    min-width: 0; }\n  .layout-xs-column > .flex-xs-33 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 33.33%;\n    box-sizing: border-box; }\n  .layout-xs-column > .flex-xs-66 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 66.66%;\n    box-sizing: border-box; }\n  .layout-xs-column > .flex {\n    min-height: 0; }\n  .layout-xs,\n  .layout-xs-column,\n  .layout-xs-row {\n    box-sizing: border-box;\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -moz-box;\n    display: -ms-flexbox;\n    display: flex; }\n  .layout-xs-column {\n    flex-direction: column; }\n  .layout-xs-row {\n    flex-direction: row; }\n  .layout-gutter {\n    margin-right: -8px;\n    margin-left: -8px; }\n    .layout-gutter > * {\n      padding-right: 8px;\n      padding-left: 8px; } }\n\n@media (min-width: 600px) {\n  .flex-order-gt-xs--20 {\n    order: -20; }\n  .flex-order-gt-xs--19 {\n    order: -19; }\n  .flex-order-gt-xs--18 {\n    order: -18; }\n  .flex-order-gt-xs--17 {\n    order: -17; }\n  .flex-order-gt-xs--16 {\n    order: -16; }\n  .flex-order-gt-xs--15 {\n    order: -15; }\n  .flex-order-gt-xs--14 {\n    order: -14; }\n  .flex-order-gt-xs--13 {\n    order: -13; }\n  .flex-order-gt-xs--12 {\n    order: -12; }\n  .flex-order-gt-xs--11 {\n    order: -11; }\n  .flex-order-gt-xs--10 {\n    order: -10; }\n  .flex-order-gt-xs--9 {\n    order: -9; }\n  .flex-order-gt-xs--8 {\n    order: -8; }\n  .flex-order-gt-xs--7 {\n    order: -7; }\n  .flex-order-gt-xs--6 {\n    order: -6; }\n  .flex-order-gt-xs--5 {\n    order: -5; }\n  .flex-order-gt-xs--4 {\n    order: -4; }\n  .flex-order-gt-xs--3 {\n    order: -3; }\n  .flex-order-gt-xs--2 {\n    order: -2; }\n  .flex-order-gt-xs--1 {\n    order: -1; }\n  .flex-order-gt-xs-0 {\n    order: 0; }\n  .flex-order-gt-xs-1 {\n    order: 1; }\n  .flex-order-gt-xs-2 {\n    order: 2; }\n  .flex-order-gt-xs-3 {\n    order: 3; }\n  .flex-order-gt-xs-4 {\n    order: 4; }\n  .flex-order-gt-xs-5 {\n    order: 5; }\n  .flex-order-gt-xs-6 {\n    order: 6; }\n  .flex-order-gt-xs-7 {\n    order: 7; }\n  .flex-order-gt-xs-8 {\n    order: 8; }\n  .flex-order-gt-xs-9 {\n    order: 9; }\n  .flex-order-gt-xs-10 {\n    order: 10; }\n  .flex-order-gt-xs-11 {\n    order: 11; }\n  .flex-order-gt-xs-12 {\n    order: 12; }\n  .flex-order-gt-xs-13 {\n    order: 13; }\n  .flex-order-gt-xs-14 {\n    order: 14; }\n  .flex-order-gt-xs-15 {\n    order: 15; }\n  .flex-order-gt-xs-16 {\n    order: 16; }\n  .flex-order-gt-xs-17 {\n    order: 17; }\n  .flex-order-gt-xs-18 {\n    order: 18; }\n  .flex-order-gt-xs-19 {\n    order: 19; }\n  .flex-order-gt-xs-20 {\n    order: 20; }\n  .offset-gt-xs-0, .flex-offset-gt-xs-0 {\n    margin-left: 0; }\n    [dir=rtl] .offset-gt-xs-0, [dir=rtl] .flex-offset-gt-xs-0 {\n      margin-left: auto;\n      margin-right: 0; }\n  .offset-gt-xs-5, .flex-offset-gt-xs-5 {\n    margin-left: 5%; }\n    [dir=rtl] .offset-gt-xs-5, [dir=rtl] .flex-offset-gt-xs-5 {\n      margin-left: auto;\n      margin-right: 5%; }\n  .offset-gt-xs-10, .flex-offset-gt-xs-10 {\n    margin-left: 10%; }\n    [dir=rtl] .offset-gt-xs-10, [dir=rtl] .flex-offset-gt-xs-10 {\n      margin-left: auto;\n      margin-right: 10%; }\n  .offset-gt-xs-15, .flex-offset-gt-xs-15 {\n    margin-left: 15%; }\n    [dir=rtl] .offset-gt-xs-15, [dir=rtl] .flex-offset-gt-xs-15 {\n      margin-left: auto;\n      margin-right: 15%; }\n  .offset-gt-xs-20, .flex-offset-gt-xs-20 {\n    margin-left: 20%; }\n    [dir=rtl] .offset-gt-xs-20, [dir=rtl] .flex-offset-gt-xs-20 {\n      margin-left: auto;\n      margin-right: 20%; }\n  .offset-gt-xs-25, .flex-offset-gt-xs-25 {\n    margin-left: 25%; }\n    [dir=rtl] .offset-gt-xs-25, [dir=rtl] .flex-offset-gt-xs-25 {\n      margin-left: auto;\n      margin-right: 25%; }\n  .offset-gt-xs-30, .flex-offset-gt-xs-30 {\n    margin-left: 30%; }\n    [dir=rtl] .offset-gt-xs-30, [dir=rtl] .flex-offset-gt-xs-30 {\n      margin-left: auto;\n      margin-right: 30%; }\n  .offset-gt-xs-35, .flex-offset-gt-xs-35 {\n    margin-left: 35%; }\n    [dir=rtl] .offset-gt-xs-35, [dir=rtl] .flex-offset-gt-xs-35 {\n      margin-left: auto;\n      margin-right: 35%; }\n  .offset-gt-xs-40, .flex-offset-gt-xs-40 {\n    margin-left: 40%; }\n    [dir=rtl] .offset-gt-xs-40, [dir=rtl] .flex-offset-gt-xs-40 {\n      margin-left: auto;\n      margin-right: 40%; }\n  .offset-gt-xs-45, .flex-offset-gt-xs-45 {\n    margin-left: 45%; }\n    [dir=rtl] .offset-gt-xs-45, [dir=rtl] .flex-offset-gt-xs-45 {\n      margin-left: auto;\n      margin-right: 45%; }\n  .offset-gt-xs-50, .flex-offset-gt-xs-50 {\n    margin-left: 50%; }\n    [dir=rtl] .offset-gt-xs-50, [dir=rtl] .flex-offset-gt-xs-50 {\n      margin-left: auto;\n      margin-right: 50%; }\n  .offset-gt-xs-55, .flex-offset-gt-xs-55 {\n    margin-left: 55%; }\n    [dir=rtl] .offset-gt-xs-55, [dir=rtl] .flex-offset-gt-xs-55 {\n      margin-left: auto;\n      margin-right: 55%; }\n  .offset-gt-xs-60, .flex-offset-gt-xs-60 {\n    margin-left: 60%; }\n    [dir=rtl] .offset-gt-xs-60, [dir=rtl] .flex-offset-gt-xs-60 {\n      margin-left: auto;\n      margin-right: 60%; }\n  .offset-gt-xs-65, .flex-offset-gt-xs-65 {\n    margin-left: 65%; }\n    [dir=rtl] .offset-gt-xs-65, [dir=rtl] .flex-offset-gt-xs-65 {\n      margin-left: auto;\n      margin-right: 65%; }\n  .offset-gt-xs-70, .flex-offset-gt-xs-70 {\n    margin-left: 70%; }\n    [dir=rtl] .offset-gt-xs-70, [dir=rtl] .flex-offset-gt-xs-70 {\n      margin-left: auto;\n      margin-right: 70%; }\n  .offset-gt-xs-75, .flex-offset-gt-xs-75 {\n    margin-left: 75%; }\n    [dir=rtl] .offset-gt-xs-75, [dir=rtl] .flex-offset-gt-xs-75 {\n      margin-left: auto;\n      margin-right: 75%; }\n  .offset-gt-xs-80, .flex-offset-gt-xs-80 {\n    margin-left: 80%; }\n    [dir=rtl] .offset-gt-xs-80, [dir=rtl] .flex-offset-gt-xs-80 {\n      margin-left: auto;\n      margin-right: 80%; }\n  .offset-gt-xs-85, .flex-offset-gt-xs-85 {\n    margin-left: 85%; }\n    [dir=rtl] .offset-gt-xs-85, [dir=rtl] .flex-offset-gt-xs-85 {\n      margin-left: auto;\n      margin-right: 85%; }\n  .offset-gt-xs-90, .flex-offset-gt-xs-90 {\n    margin-left: 90%; }\n    [dir=rtl] .offset-gt-xs-90, [dir=rtl] .flex-offset-gt-xs-90 {\n      margin-left: auto;\n      margin-right: 90%; }\n  .offset-gt-xs-95, .flex-offset-gt-xs-95 {\n    margin-left: 95%; }\n    [dir=rtl] .offset-gt-xs-95, [dir=rtl] .flex-offset-gt-xs-95 {\n      margin-left: auto;\n      margin-right: 95%; }\n  .offset-gt-xs-33, .flex-offset-gt-xs-33 {\n    margin-left: calc(100% / 3); }\n  .offset-gt-xs-66, .flex-offset-gt-xs-66 {\n    margin-left: calc(200% / 3); }\n    [dir=rtl] .offset-gt-xs-66, [dir=rtl] .flex-offset-gt-xs-66 {\n      margin-left: auto;\n      margin-right: calc(200% / 3); }\n  .layout-align-gt-xs,\n  .layout-align-gt-xs-start-stretch {\n    justify-content: flex-start;\n    align-content: stretch;\n    align-items: stretch; }\n  .layout-align-gt-xs-start,\n  .layout-align-gt-xs-start-start,\n  .layout-align-gt-xs-start-center,\n  .layout-align-gt-xs-start-end,\n  .layout-align-gt-xs-start-stretch {\n    justify-content: flex-start; }\n  .layout-align-gt-xs-center,\n  .layout-align-gt-xs-center-start,\n  .layout-align-gt-xs-center-center,\n  .layout-align-gt-xs-center-end,\n  .layout-align-gt-xs-center-stretch {\n    justify-content: center; }\n  .layout-align-gt-xs-end,\n  .layout-align-gt-xs-end-start,\n  .layout-align-gt-xs-end-center,\n  .layout-align-gt-xs-end-end,\n  .layout-align-gt-xs-end-stretch {\n    justify-content: flex-end; }\n  .layout-align-gt-xs-space-around,\n  .layout-align-gt-xs-space-around-center,\n  .layout-align-gt-xs-space-around-start,\n  .layout-align-gt-xs-space-around-end,\n  .layout-align-gt-xs-space-around-stretch {\n    justify-content: space-around; }\n  .layout-align-gt-xs-space-between,\n  .layout-align-gt-xs-space-between-center,\n  .layout-align-gt-xs-space-between-start,\n  .layout-align-gt-xs-space-between-end,\n  .layout-align-gt-xs-space-between-stretch {\n    justify-content: space-between; }\n  .layout-align-gt-xs-start-start,\n  .layout-align-gt-xs-center-start,\n  .layout-align-gt-xs-end-start,\n  .layout-align-gt-xs-space-between-start,\n  .layout-align-gt-xs-space-around-start {\n    align-items: flex-start;\n    align-content: flex-start; }\n  .layout-align-gt-xs-start-center,\n  .layout-align-gt-xs-center-center,\n  .layout-align-gt-xs-end-center,\n  .layout-align-gt-xs-space-between-center,\n  .layout-align-gt-xs-space-around-center {\n    align-items: center;\n    align-content: center;\n    max-width: 100%; }\n  .layout-align-gt-xs-start-center > *,\n  .layout-align-gt-xs-center-center > *,\n  .layout-align-gt-xs-end-center > *,\n  .layout-align-gt-xs-space-between-center > *,\n  .layout-align-gt-xs-space-around-center > * {\n    max-width: 100%;\n    box-sizing: border-box; }\n  .layout-align-gt-xs-start-end,\n  .layout-align-gt-xs-center-end,\n  .layout-align-gt-xs-end-end,\n  .layout-align-gt-xs-space-between-end,\n  .layout-align-gt-xs-space-around-end {\n    align-items: flex-end;\n    align-content: flex-end; }\n  .layout-align-gt-xs-start-stretch,\n  .layout-align-gt-xs-center-stretch,\n  .layout-align-gt-xs-end-stretch,\n  .layout-align-gt-xs-space-between-stretch,\n  .layout-align-gt-xs-space-around-stretch {\n    align-items: stretch;\n    align-content: stretch; }\n  .flex-gt-xs {\n    flex: 1;\n    box-sizing: border-box; }\n  .flex-gt-xs-grow {\n    flex: 1 1 100%;\n    box-sizing: border-box; }\n  .flex-gt-xs-initial {\n    flex: 0 1 auto;\n    box-sizing: border-box; }\n  .flex-gt-xs-auto {\n    flex: 1 1 auto;\n    box-sizing: border-box; }\n  .flex-gt-xs-none {\n    flex: 0 0 auto;\n    box-sizing: border-box; }\n  .flex-gt-xs-noshrink {\n    flex: 1 0 auto;\n    box-sizing: border-box; }\n  .flex-gt-xs-nogrow {\n    flex: 0 1 auto;\n    box-sizing: border-box; }\n  .flex-gt-xs-0 {\n    flex: 1 1 100%;\n    max-width: 0%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-xs-0 {\n    flex: 1 1 100%;\n    max-width: 0%;\n    max-height: 100%;\n    box-sizing: border-box;\n    min-width: 0; }\n  .layout-column > .flex-gt-xs-0 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 0%;\n    box-sizing: border-box; }\n  .layout-gt-xs-row > .flex-gt-xs-0 {\n    flex: 1 1 100%;\n    max-width: 0%;\n    max-height: 100%;\n    box-sizing: border-box;\n    min-width: 0; }\n  .layout-gt-xs-column > .flex-gt-xs-0 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 0%;\n    box-sizing: border-box;\n    min-height: 0; }\n  .flex-gt-xs-5 {\n    flex: 1 1 100%;\n    max-width: 5%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-xs-5 {\n    flex: 1 1 100%;\n    max-width: 5%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-xs-5 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 5%;\n    box-sizing: border-box; }\n  .layout-gt-xs-row > .flex-gt-xs-5 {\n    flex: 1 1 100%;\n    max-width: 5%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-xs-column > .flex-gt-xs-5 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 5%;\n    box-sizing: border-box; }\n  .flex-gt-xs-10 {\n    flex: 1 1 100%;\n    max-width: 10%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-xs-10 {\n    flex: 1 1 100%;\n    max-width: 10%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-xs-10 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 10%;\n    box-sizing: border-box; }\n  .layout-gt-xs-row > .flex-gt-xs-10 {\n    flex: 1 1 100%;\n    max-width: 10%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-xs-column > .flex-gt-xs-10 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 10%;\n    box-sizing: border-box; }\n  .flex-gt-xs-15 {\n    flex: 1 1 100%;\n    max-width: 15%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-xs-15 {\n    flex: 1 1 100%;\n    max-width: 15%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-xs-15 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 15%;\n    box-sizing: border-box; }\n  .layout-gt-xs-row > .flex-gt-xs-15 {\n    flex: 1 1 100%;\n    max-width: 15%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-xs-column > .flex-gt-xs-15 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 15%;\n    box-sizing: border-box; }\n  .flex-gt-xs-20 {\n    flex: 1 1 100%;\n    max-width: 20%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-xs-20 {\n    flex: 1 1 100%;\n    max-width: 20%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-xs-20 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 20%;\n    box-sizing: border-box; }\n  .layout-gt-xs-row > .flex-gt-xs-20 {\n    flex: 1 1 100%;\n    max-width: 20%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-xs-column > .flex-gt-xs-20 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 20%;\n    box-sizing: border-box; }\n  .flex-gt-xs-25 {\n    flex: 1 1 100%;\n    max-width: 25%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-xs-25 {\n    flex: 1 1 100%;\n    max-width: 25%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-xs-25 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 25%;\n    box-sizing: border-box; }\n  .layout-gt-xs-row > .flex-gt-xs-25 {\n    flex: 1 1 100%;\n    max-width: 25%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-xs-column > .flex-gt-xs-25 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 25%;\n    box-sizing: border-box; }\n  .flex-gt-xs-30 {\n    flex: 1 1 100%;\n    max-width: 30%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-xs-30 {\n    flex: 1 1 100%;\n    max-width: 30%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-xs-30 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 30%;\n    box-sizing: border-box; }\n  .layout-gt-xs-row > .flex-gt-xs-30 {\n    flex: 1 1 100%;\n    max-width: 30%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-xs-column > .flex-gt-xs-30 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 30%;\n    box-sizing: border-box; }\n  .flex-gt-xs-35 {\n    flex: 1 1 100%;\n    max-width: 35%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-xs-35 {\n    flex: 1 1 100%;\n    max-width: 35%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-xs-35 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 35%;\n    box-sizing: border-box; }\n  .layout-gt-xs-row > .flex-gt-xs-35 {\n    flex: 1 1 100%;\n    max-width: 35%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-xs-column > .flex-gt-xs-35 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 35%;\n    box-sizing: border-box; }\n  .flex-gt-xs-40 {\n    flex: 1 1 100%;\n    max-width: 40%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-xs-40 {\n    flex: 1 1 100%;\n    max-width: 40%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-xs-40 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 40%;\n    box-sizing: border-box; }\n  .layout-gt-xs-row > .flex-gt-xs-40 {\n    flex: 1 1 100%;\n    max-width: 40%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-xs-column > .flex-gt-xs-40 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 40%;\n    box-sizing: border-box; }\n  .flex-gt-xs-45 {\n    flex: 1 1 100%;\n    max-width: 45%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-xs-45 {\n    flex: 1 1 100%;\n    max-width: 45%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-xs-45 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 45%;\n    box-sizing: border-box; }\n  .layout-gt-xs-row > .flex-gt-xs-45 {\n    flex: 1 1 100%;\n    max-width: 45%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-xs-column > .flex-gt-xs-45 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 45%;\n    box-sizing: border-box; }\n  .flex-gt-xs-50 {\n    flex: 1 1 100%;\n    max-width: 50%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-xs-50 {\n    flex: 1 1 100%;\n    max-width: 50%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-xs-50 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 50%;\n    box-sizing: border-box; }\n  .layout-gt-xs-row > .flex-gt-xs-50 {\n    flex: 1 1 100%;\n    max-width: 50%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-xs-column > .flex-gt-xs-50 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 50%;\n    box-sizing: border-box; }\n  .flex-gt-xs-55 {\n    flex: 1 1 100%;\n    max-width: 55%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-xs-55 {\n    flex: 1 1 100%;\n    max-width: 55%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-xs-55 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 55%;\n    box-sizing: border-box; }\n  .layout-gt-xs-row > .flex-gt-xs-55 {\n    flex: 1 1 100%;\n    max-width: 55%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-xs-column > .flex-gt-xs-55 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 55%;\n    box-sizing: border-box; }\n  .flex-gt-xs-60 {\n    flex: 1 1 100%;\n    max-width: 60%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-xs-60 {\n    flex: 1 1 100%;\n    max-width: 60%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-xs-60 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 60%;\n    box-sizing: border-box; }\n  .layout-gt-xs-row > .flex-gt-xs-60 {\n    flex: 1 1 100%;\n    max-width: 60%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-xs-column > .flex-gt-xs-60 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 60%;\n    box-sizing: border-box; }\n  .flex-gt-xs-65 {\n    flex: 1 1 100%;\n    max-width: 65%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-xs-65 {\n    flex: 1 1 100%;\n    max-width: 65%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-xs-65 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 65%;\n    box-sizing: border-box; }\n  .layout-gt-xs-row > .flex-gt-xs-65 {\n    flex: 1 1 100%;\n    max-width: 65%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-xs-column > .flex-gt-xs-65 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 65%;\n    box-sizing: border-box; }\n  .flex-gt-xs-70 {\n    flex: 1 1 100%;\n    max-width: 70%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-xs-70 {\n    flex: 1 1 100%;\n    max-width: 70%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-xs-70 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 70%;\n    box-sizing: border-box; }\n  .layout-gt-xs-row > .flex-gt-xs-70 {\n    flex: 1 1 100%;\n    max-width: 70%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-xs-column > .flex-gt-xs-70 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 70%;\n    box-sizing: border-box; }\n  .flex-gt-xs-75 {\n    flex: 1 1 100%;\n    max-width: 75%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-xs-75 {\n    flex: 1 1 100%;\n    max-width: 75%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-xs-75 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 75%;\n    box-sizing: border-box; }\n  .layout-gt-xs-row > .flex-gt-xs-75 {\n    flex: 1 1 100%;\n    max-width: 75%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-xs-column > .flex-gt-xs-75 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 75%;\n    box-sizing: border-box; }\n  .flex-gt-xs-80 {\n    flex: 1 1 100%;\n    max-width: 80%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-xs-80 {\n    flex: 1 1 100%;\n    max-width: 80%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-xs-80 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 80%;\n    box-sizing: border-box; }\n  .layout-gt-xs-row > .flex-gt-xs-80 {\n    flex: 1 1 100%;\n    max-width: 80%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-xs-column > .flex-gt-xs-80 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 80%;\n    box-sizing: border-box; }\n  .flex-gt-xs-85 {\n    flex: 1 1 100%;\n    max-width: 85%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-xs-85 {\n    flex: 1 1 100%;\n    max-width: 85%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-xs-85 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 85%;\n    box-sizing: border-box; }\n  .layout-gt-xs-row > .flex-gt-xs-85 {\n    flex: 1 1 100%;\n    max-width: 85%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-xs-column > .flex-gt-xs-85 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 85%;\n    box-sizing: border-box; }\n  .flex-gt-xs-90 {\n    flex: 1 1 100%;\n    max-width: 90%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-xs-90 {\n    flex: 1 1 100%;\n    max-width: 90%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-xs-90 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 90%;\n    box-sizing: border-box; }\n  .layout-gt-xs-row > .flex-gt-xs-90 {\n    flex: 1 1 100%;\n    max-width: 90%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-xs-column > .flex-gt-xs-90 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 90%;\n    box-sizing: border-box; }\n  .flex-gt-xs-95 {\n    flex: 1 1 100%;\n    max-width: 95%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-xs-95 {\n    flex: 1 1 100%;\n    max-width: 95%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-xs-95 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 95%;\n    box-sizing: border-box; }\n  .layout-gt-xs-row > .flex-gt-xs-95 {\n    flex: 1 1 100%;\n    max-width: 95%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-xs-column > .flex-gt-xs-95 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 95%;\n    box-sizing: border-box; }\n  .flex-gt-xs-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-xs-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-xs-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-xs-row > .flex-gt-xs-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-xs-column > .flex-gt-xs-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-xs-33 {\n    flex: 1 1 33.33%;\n    max-width: 33.33%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-xs-66 {\n    flex: 1 1 66.66%;\n    max-width: 66.66%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-xs-33 {\n    flex: 1 1 33.33%;\n    max-width: 100%;\n    max-height: 33.33%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-xs-66 {\n    flex: 1 1 66.66%;\n    max-width: 100%;\n    max-height: 66.66%;\n    box-sizing: border-box; }\n  .layout-gt-xs-row > .flex-gt-xs-33 {\n    flex: 1 1 100%;\n    max-width: 33.33%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-xs-row > .flex-gt-xs-66 {\n    flex: 1 1 100%;\n    max-width: 66.66%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-xs-row > .flex {\n    min-width: 0; }\n  .layout-gt-xs-column > .flex-gt-xs-33 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 33.33%;\n    box-sizing: border-box; }\n  .layout-gt-xs-column > .flex-gt-xs-66 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 66.66%;\n    box-sizing: border-box; }\n  .layout-gt-xs-column > .flex {\n    min-height: 0; }\n  .layout-gt-xs,\n  .layout-gt-xs-column,\n  .layout-gt-xs-row {\n    box-sizing: border-box;\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -moz-box;\n    display: -ms-flexbox;\n    display: flex; }\n  .layout-gt-xs-column {\n    flex-direction: column; }\n  .layout-gt-xs-row {\n    flex-direction: row; }\n  .layout-gutter {\n    margin-right: -16px;\n    margin-left: -16px; }\n    .layout-gutter > * {\n      padding-right: 16px;\n      padding-left: 16px; } }\n\n@media (min-width: 600px) and (max-width: 959px) {\n  .hide:not(.show-gt-xs):not(.show-sm):not(.show),\n  .hide-gt-xs:not(.show-gt-xs):not(.show-sm):not(.show) {\n    display: none; }\n  .hide-sm:not(.show-gt-xs):not(.show-sm):not(.show) {\n    display: none; }\n  .flex-order-sm--20 {\n    order: -20; }\n  .flex-order-sm--19 {\n    order: -19; }\n  .flex-order-sm--18 {\n    order: -18; }\n  .flex-order-sm--17 {\n    order: -17; }\n  .flex-order-sm--16 {\n    order: -16; }\n  .flex-order-sm--15 {\n    order: -15; }\n  .flex-order-sm--14 {\n    order: -14; }\n  .flex-order-sm--13 {\n    order: -13; }\n  .flex-order-sm--12 {\n    order: -12; }\n  .flex-order-sm--11 {\n    order: -11; }\n  .flex-order-sm--10 {\n    order: -10; }\n  .flex-order-sm--9 {\n    order: -9; }\n  .flex-order-sm--8 {\n    order: -8; }\n  .flex-order-sm--7 {\n    order: -7; }\n  .flex-order-sm--6 {\n    order: -6; }\n  .flex-order-sm--5 {\n    order: -5; }\n  .flex-order-sm--4 {\n    order: -4; }\n  .flex-order-sm--3 {\n    order: -3; }\n  .flex-order-sm--2 {\n    order: -2; }\n  .flex-order-sm--1 {\n    order: -1; }\n  .flex-order-sm-0 {\n    order: 0; }\n  .flex-order-sm-1 {\n    order: 1; }\n  .flex-order-sm-2 {\n    order: 2; }\n  .flex-order-sm-3 {\n    order: 3; }\n  .flex-order-sm-4 {\n    order: 4; }\n  .flex-order-sm-5 {\n    order: 5; }\n  .flex-order-sm-6 {\n    order: 6; }\n  .flex-order-sm-7 {\n    order: 7; }\n  .flex-order-sm-8 {\n    order: 8; }\n  .flex-order-sm-9 {\n    order: 9; }\n  .flex-order-sm-10 {\n    order: 10; }\n  .flex-order-sm-11 {\n    order: 11; }\n  .flex-order-sm-12 {\n    order: 12; }\n  .flex-order-sm-13 {\n    order: 13; }\n  .flex-order-sm-14 {\n    order: 14; }\n  .flex-order-sm-15 {\n    order: 15; }\n  .flex-order-sm-16 {\n    order: 16; }\n  .flex-order-sm-17 {\n    order: 17; }\n  .flex-order-sm-18 {\n    order: 18; }\n  .flex-order-sm-19 {\n    order: 19; }\n  .flex-order-sm-20 {\n    order: 20; }\n  .offset-sm-0, .flex-offset-sm-0 {\n    margin-left: 0; }\n    [dir=rtl] .offset-sm-0, [dir=rtl] .flex-offset-sm-0 {\n      margin-left: auto;\n      margin-right: 0; }\n  .offset-sm-5, .flex-offset-sm-5 {\n    margin-left: 5%; }\n    [dir=rtl] .offset-sm-5, [dir=rtl] .flex-offset-sm-5 {\n      margin-left: auto;\n      margin-right: 5%; }\n  .offset-sm-10, .flex-offset-sm-10 {\n    margin-left: 10%; }\n    [dir=rtl] .offset-sm-10, [dir=rtl] .flex-offset-sm-10 {\n      margin-left: auto;\n      margin-right: 10%; }\n  .offset-sm-15, .flex-offset-sm-15 {\n    margin-left: 15%; }\n    [dir=rtl] .offset-sm-15, [dir=rtl] .flex-offset-sm-15 {\n      margin-left: auto;\n      margin-right: 15%; }\n  .offset-sm-20, .flex-offset-sm-20 {\n    margin-left: 20%; }\n    [dir=rtl] .offset-sm-20, [dir=rtl] .flex-offset-sm-20 {\n      margin-left: auto;\n      margin-right: 20%; }\n  .offset-sm-25, .flex-offset-sm-25 {\n    margin-left: 25%; }\n    [dir=rtl] .offset-sm-25, [dir=rtl] .flex-offset-sm-25 {\n      margin-left: auto;\n      margin-right: 25%; }\n  .offset-sm-30, .flex-offset-sm-30 {\n    margin-left: 30%; }\n    [dir=rtl] .offset-sm-30, [dir=rtl] .flex-offset-sm-30 {\n      margin-left: auto;\n      margin-right: 30%; }\n  .offset-sm-35, .flex-offset-sm-35 {\n    margin-left: 35%; }\n    [dir=rtl] .offset-sm-35, [dir=rtl] .flex-offset-sm-35 {\n      margin-left: auto;\n      margin-right: 35%; }\n  .offset-sm-40, .flex-offset-sm-40 {\n    margin-left: 40%; }\n    [dir=rtl] .offset-sm-40, [dir=rtl] .flex-offset-sm-40 {\n      margin-left: auto;\n      margin-right: 40%; }\n  .offset-sm-45, .flex-offset-sm-45 {\n    margin-left: 45%; }\n    [dir=rtl] .offset-sm-45, [dir=rtl] .flex-offset-sm-45 {\n      margin-left: auto;\n      margin-right: 45%; }\n  .offset-sm-50, .flex-offset-sm-50 {\n    margin-left: 50%; }\n    [dir=rtl] .offset-sm-50, [dir=rtl] .flex-offset-sm-50 {\n      margin-left: auto;\n      margin-right: 50%; }\n  .offset-sm-55, .flex-offset-sm-55 {\n    margin-left: 55%; }\n    [dir=rtl] .offset-sm-55, [dir=rtl] .flex-offset-sm-55 {\n      margin-left: auto;\n      margin-right: 55%; }\n  .offset-sm-60, .flex-offset-sm-60 {\n    margin-left: 60%; }\n    [dir=rtl] .offset-sm-60, [dir=rtl] .flex-offset-sm-60 {\n      margin-left: auto;\n      margin-right: 60%; }\n  .offset-sm-65, .flex-offset-sm-65 {\n    margin-left: 65%; }\n    [dir=rtl] .offset-sm-65, [dir=rtl] .flex-offset-sm-65 {\n      margin-left: auto;\n      margin-right: 65%; }\n  .offset-sm-70, .flex-offset-sm-70 {\n    margin-left: 70%; }\n    [dir=rtl] .offset-sm-70, [dir=rtl] .flex-offset-sm-70 {\n      margin-left: auto;\n      margin-right: 70%; }\n  .offset-sm-75, .flex-offset-sm-75 {\n    margin-left: 75%; }\n    [dir=rtl] .offset-sm-75, [dir=rtl] .flex-offset-sm-75 {\n      margin-left: auto;\n      margin-right: 75%; }\n  .offset-sm-80, .flex-offset-sm-80 {\n    margin-left: 80%; }\n    [dir=rtl] .offset-sm-80, [dir=rtl] .flex-offset-sm-80 {\n      margin-left: auto;\n      margin-right: 80%; }\n  .offset-sm-85, .flex-offset-sm-85 {\n    margin-left: 85%; }\n    [dir=rtl] .offset-sm-85, [dir=rtl] .flex-offset-sm-85 {\n      margin-left: auto;\n      margin-right: 85%; }\n  .offset-sm-90, .flex-offset-sm-90 {\n    margin-left: 90%; }\n    [dir=rtl] .offset-sm-90, [dir=rtl] .flex-offset-sm-90 {\n      margin-left: auto;\n      margin-right: 90%; }\n  .offset-sm-95, .flex-offset-sm-95 {\n    margin-left: 95%; }\n    [dir=rtl] .offset-sm-95, [dir=rtl] .flex-offset-sm-95 {\n      margin-left: auto;\n      margin-right: 95%; }\n  .offset-sm-33, .flex-offset-sm-33 {\n    margin-left: calc(100% / 3); }\n  .offset-sm-66, .flex-offset-sm-66 {\n    margin-left: calc(200% / 3); }\n    [dir=rtl] .offset-sm-66, [dir=rtl] .flex-offset-sm-66 {\n      margin-left: auto;\n      margin-right: calc(200% / 3); }\n  .layout-align-sm,\n  .layout-align-sm-start-stretch {\n    justify-content: flex-start;\n    align-content: stretch;\n    align-items: stretch; }\n  .layout-align-sm-start,\n  .layout-align-sm-start-start,\n  .layout-align-sm-start-center,\n  .layout-align-sm-start-end,\n  .layout-align-sm-start-stretch {\n    justify-content: flex-start; }\n  .layout-align-sm-center,\n  .layout-align-sm-center-start,\n  .layout-align-sm-center-center,\n  .layout-align-sm-center-end,\n  .layout-align-sm-center-stretch {\n    justify-content: center; }\n  .layout-align-sm-end,\n  .layout-align-sm-end-start,\n  .layout-align-sm-end-center,\n  .layout-align-sm-end-end,\n  .layout-align-sm-end-stretch {\n    justify-content: flex-end; }\n  .layout-align-sm-space-around,\n  .layout-align-sm-space-around-center,\n  .layout-align-sm-space-around-start,\n  .layout-align-sm-space-around-end,\n  .layout-align-sm-space-around-stretch {\n    justify-content: space-around; }\n  .layout-align-sm-space-between,\n  .layout-align-sm-space-between-center,\n  .layout-align-sm-space-between-start,\n  .layout-align-sm-space-between-end,\n  .layout-align-sm-space-between-stretch {\n    justify-content: space-between; }\n  .layout-align-sm-start-start,\n  .layout-align-sm-center-start,\n  .layout-align-sm-end-start,\n  .layout-align-sm-space-between-start,\n  .layout-align-sm-space-around-start {\n    align-items: flex-start;\n    align-content: flex-start; }\n  .layout-align-sm-start-center,\n  .layout-align-sm-center-center,\n  .layout-align-sm-end-center,\n  .layout-align-sm-space-between-center,\n  .layout-align-sm-space-around-center {\n    align-items: center;\n    align-content: center;\n    max-width: 100%; }\n  .layout-align-sm-start-center > *,\n  .layout-align-sm-center-center > *,\n  .layout-align-sm-end-center > *,\n  .layout-align-sm-space-between-center > *,\n  .layout-align-sm-space-around-center > * {\n    max-width: 100%;\n    box-sizing: border-box; }\n  .layout-align-sm-start-end,\n  .layout-align-sm-center-end,\n  .layout-align-sm-end-end,\n  .layout-align-sm-space-between-end,\n  .layout-align-sm-space-around-end {\n    align-items: flex-end;\n    align-content: flex-end; }\n  .layout-align-sm-start-stretch,\n  .layout-align-sm-center-stretch,\n  .layout-align-sm-end-stretch,\n  .layout-align-sm-space-between-stretch,\n  .layout-align-sm-space-around-stretch {\n    align-items: stretch;\n    align-content: stretch; }\n  .flex-sm {\n    flex: 1;\n    box-sizing: border-box; }\n  .flex-sm-grow {\n    flex: 1 1 100%;\n    box-sizing: border-box; }\n  .flex-sm-initial {\n    flex: 0 1 auto;\n    box-sizing: border-box; }\n  .flex-sm-auto {\n    flex: 1 1 auto;\n    box-sizing: border-box; }\n  .flex-sm-none {\n    flex: 0 0 auto;\n    box-sizing: border-box; }\n  .flex-sm-noshrink {\n    flex: 1 0 auto;\n    box-sizing: border-box; }\n  .flex-sm-nogrow {\n    flex: 0 1 auto;\n    box-sizing: border-box; }\n  .flex-sm-0 {\n    flex: 1 1 100%;\n    max-width: 0%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-sm-0 {\n    flex: 1 1 100%;\n    max-width: 0%;\n    max-height: 100%;\n    box-sizing: border-box;\n    min-width: 0; }\n  .layout-column > .flex-sm-0 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 0%;\n    box-sizing: border-box; }\n  .layout-sm-row > .flex-sm-0 {\n    flex: 1 1 100%;\n    max-width: 0%;\n    max-height: 100%;\n    box-sizing: border-box;\n    min-width: 0; }\n  .layout-sm-column > .flex-sm-0 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 0%;\n    box-sizing: border-box;\n    min-height: 0; }\n  .flex-sm-5 {\n    flex: 1 1 100%;\n    max-width: 5%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-sm-5 {\n    flex: 1 1 100%;\n    max-width: 5%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-sm-5 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 5%;\n    box-sizing: border-box; }\n  .layout-sm-row > .flex-sm-5 {\n    flex: 1 1 100%;\n    max-width: 5%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-sm-column > .flex-sm-5 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 5%;\n    box-sizing: border-box; }\n  .flex-sm-10 {\n    flex: 1 1 100%;\n    max-width: 10%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-sm-10 {\n    flex: 1 1 100%;\n    max-width: 10%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-sm-10 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 10%;\n    box-sizing: border-box; }\n  .layout-sm-row > .flex-sm-10 {\n    flex: 1 1 100%;\n    max-width: 10%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-sm-column > .flex-sm-10 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 10%;\n    box-sizing: border-box; }\n  .flex-sm-15 {\n    flex: 1 1 100%;\n    max-width: 15%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-sm-15 {\n    flex: 1 1 100%;\n    max-width: 15%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-sm-15 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 15%;\n    box-sizing: border-box; }\n  .layout-sm-row > .flex-sm-15 {\n    flex: 1 1 100%;\n    max-width: 15%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-sm-column > .flex-sm-15 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 15%;\n    box-sizing: border-box; }\n  .flex-sm-20 {\n    flex: 1 1 100%;\n    max-width: 20%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-sm-20 {\n    flex: 1 1 100%;\n    max-width: 20%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-sm-20 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 20%;\n    box-sizing: border-box; }\n  .layout-sm-row > .flex-sm-20 {\n    flex: 1 1 100%;\n    max-width: 20%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-sm-column > .flex-sm-20 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 20%;\n    box-sizing: border-box; }\n  .flex-sm-25 {\n    flex: 1 1 100%;\n    max-width: 25%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-sm-25 {\n    flex: 1 1 100%;\n    max-width: 25%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-sm-25 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 25%;\n    box-sizing: border-box; }\n  .layout-sm-row > .flex-sm-25 {\n    flex: 1 1 100%;\n    max-width: 25%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-sm-column > .flex-sm-25 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 25%;\n    box-sizing: border-box; }\n  .flex-sm-30 {\n    flex: 1 1 100%;\n    max-width: 30%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-sm-30 {\n    flex: 1 1 100%;\n    max-width: 30%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-sm-30 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 30%;\n    box-sizing: border-box; }\n  .layout-sm-row > .flex-sm-30 {\n    flex: 1 1 100%;\n    max-width: 30%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-sm-column > .flex-sm-30 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 30%;\n    box-sizing: border-box; }\n  .flex-sm-35 {\n    flex: 1 1 100%;\n    max-width: 35%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-sm-35 {\n    flex: 1 1 100%;\n    max-width: 35%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-sm-35 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 35%;\n    box-sizing: border-box; }\n  .layout-sm-row > .flex-sm-35 {\n    flex: 1 1 100%;\n    max-width: 35%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-sm-column > .flex-sm-35 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 35%;\n    box-sizing: border-box; }\n  .flex-sm-40 {\n    flex: 1 1 100%;\n    max-width: 40%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-sm-40 {\n    flex: 1 1 100%;\n    max-width: 40%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-sm-40 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 40%;\n    box-sizing: border-box; }\n  .layout-sm-row > .flex-sm-40 {\n    flex: 1 1 100%;\n    max-width: 40%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-sm-column > .flex-sm-40 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 40%;\n    box-sizing: border-box; }\n  .flex-sm-45 {\n    flex: 1 1 100%;\n    max-width: 45%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-sm-45 {\n    flex: 1 1 100%;\n    max-width: 45%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-sm-45 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 45%;\n    box-sizing: border-box; }\n  .layout-sm-row > .flex-sm-45 {\n    flex: 1 1 100%;\n    max-width: 45%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-sm-column > .flex-sm-45 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 45%;\n    box-sizing: border-box; }\n  .flex-sm-50 {\n    flex: 1 1 100%;\n    max-width: 50%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-sm-50 {\n    flex: 1 1 100%;\n    max-width: 50%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-sm-50 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 50%;\n    box-sizing: border-box; }\n  .layout-sm-row > .flex-sm-50 {\n    flex: 1 1 100%;\n    max-width: 50%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-sm-column > .flex-sm-50 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 50%;\n    box-sizing: border-box; }\n  .flex-sm-55 {\n    flex: 1 1 100%;\n    max-width: 55%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-sm-55 {\n    flex: 1 1 100%;\n    max-width: 55%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-sm-55 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 55%;\n    box-sizing: border-box; }\n  .layout-sm-row > .flex-sm-55 {\n    flex: 1 1 100%;\n    max-width: 55%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-sm-column > .flex-sm-55 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 55%;\n    box-sizing: border-box; }\n  .flex-sm-60 {\n    flex: 1 1 100%;\n    max-width: 60%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-sm-60 {\n    flex: 1 1 100%;\n    max-width: 60%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-sm-60 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 60%;\n    box-sizing: border-box; }\n  .layout-sm-row > .flex-sm-60 {\n    flex: 1 1 100%;\n    max-width: 60%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-sm-column > .flex-sm-60 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 60%;\n    box-sizing: border-box; }\n  .flex-sm-65 {\n    flex: 1 1 100%;\n    max-width: 65%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-sm-65 {\n    flex: 1 1 100%;\n    max-width: 65%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-sm-65 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 65%;\n    box-sizing: border-box; }\n  .layout-sm-row > .flex-sm-65 {\n    flex: 1 1 100%;\n    max-width: 65%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-sm-column > .flex-sm-65 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 65%;\n    box-sizing: border-box; }\n  .flex-sm-70 {\n    flex: 1 1 100%;\n    max-width: 70%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-sm-70 {\n    flex: 1 1 100%;\n    max-width: 70%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-sm-70 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 70%;\n    box-sizing: border-box; }\n  .layout-sm-row > .flex-sm-70 {\n    flex: 1 1 100%;\n    max-width: 70%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-sm-column > .flex-sm-70 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 70%;\n    box-sizing: border-box; }\n  .flex-sm-75 {\n    flex: 1 1 100%;\n    max-width: 75%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-sm-75 {\n    flex: 1 1 100%;\n    max-width: 75%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-sm-75 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 75%;\n    box-sizing: border-box; }\n  .layout-sm-row > .flex-sm-75 {\n    flex: 1 1 100%;\n    max-width: 75%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-sm-column > .flex-sm-75 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 75%;\n    box-sizing: border-box; }\n  .flex-sm-80 {\n    flex: 1 1 100%;\n    max-width: 80%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-sm-80 {\n    flex: 1 1 100%;\n    max-width: 80%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-sm-80 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 80%;\n    box-sizing: border-box; }\n  .layout-sm-row > .flex-sm-80 {\n    flex: 1 1 100%;\n    max-width: 80%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-sm-column > .flex-sm-80 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 80%;\n    box-sizing: border-box; }\n  .flex-sm-85 {\n    flex: 1 1 100%;\n    max-width: 85%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-sm-85 {\n    flex: 1 1 100%;\n    max-width: 85%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-sm-85 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 85%;\n    box-sizing: border-box; }\n  .layout-sm-row > .flex-sm-85 {\n    flex: 1 1 100%;\n    max-width: 85%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-sm-column > .flex-sm-85 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 85%;\n    box-sizing: border-box; }\n  .flex-sm-90 {\n    flex: 1 1 100%;\n    max-width: 90%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-sm-90 {\n    flex: 1 1 100%;\n    max-width: 90%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-sm-90 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 90%;\n    box-sizing: border-box; }\n  .layout-sm-row > .flex-sm-90 {\n    flex: 1 1 100%;\n    max-width: 90%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-sm-column > .flex-sm-90 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 90%;\n    box-sizing: border-box; }\n  .flex-sm-95 {\n    flex: 1 1 100%;\n    max-width: 95%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-sm-95 {\n    flex: 1 1 100%;\n    max-width: 95%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-sm-95 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 95%;\n    box-sizing: border-box; }\n  .layout-sm-row > .flex-sm-95 {\n    flex: 1 1 100%;\n    max-width: 95%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-sm-column > .flex-sm-95 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 95%;\n    box-sizing: border-box; }\n  .flex-sm-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-sm-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-sm-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-sm-row > .flex-sm-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-sm-column > .flex-sm-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-sm-33 {\n    flex: 1 1 33.33%;\n    max-width: 33.33%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-sm-66 {\n    flex: 1 1 66.66%;\n    max-width: 66.66%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-sm-33 {\n    flex: 1 1 33.33%;\n    max-width: 100%;\n    max-height: 33.33%;\n    box-sizing: border-box; }\n  .layout-column > .flex-sm-66 {\n    flex: 1 1 66.66%;\n    max-width: 100%;\n    max-height: 66.66%;\n    box-sizing: border-box; }\n  .layout-sm-row > .flex-sm-33 {\n    flex: 1 1 100%;\n    max-width: 33.33%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-sm-row > .flex-sm-66 {\n    flex: 1 1 100%;\n    max-width: 66.66%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-sm-row > .flex {\n    min-width: 0; }\n  .layout-sm-column > .flex-sm-33 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 33.33%;\n    box-sizing: border-box; }\n  .layout-sm-column > .flex-sm-66 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 66.66%;\n    box-sizing: border-box; }\n  .layout-sm-column > .flex {\n    min-height: 0; }\n  .layout-sm,\n  .layout-sm-column,\n  .layout-sm-row {\n    box-sizing: border-box;\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -moz-box;\n    display: -ms-flexbox;\n    display: flex; }\n  .layout-sm-column {\n    flex-direction: column; }\n  .layout-sm-row {\n    flex-direction: row; } }\n\n@media (min-width: 960px) {\n  .flex-order-gt-sm--20 {\n    order: -20; }\n  .flex-order-gt-sm--19 {\n    order: -19; }\n  .flex-order-gt-sm--18 {\n    order: -18; }\n  .flex-order-gt-sm--17 {\n    order: -17; }\n  .flex-order-gt-sm--16 {\n    order: -16; }\n  .flex-order-gt-sm--15 {\n    order: -15; }\n  .flex-order-gt-sm--14 {\n    order: -14; }\n  .flex-order-gt-sm--13 {\n    order: -13; }\n  .flex-order-gt-sm--12 {\n    order: -12; }\n  .flex-order-gt-sm--11 {\n    order: -11; }\n  .flex-order-gt-sm--10 {\n    order: -10; }\n  .flex-order-gt-sm--9 {\n    order: -9; }\n  .flex-order-gt-sm--8 {\n    order: -8; }\n  .flex-order-gt-sm--7 {\n    order: -7; }\n  .flex-order-gt-sm--6 {\n    order: -6; }\n  .flex-order-gt-sm--5 {\n    order: -5; }\n  .flex-order-gt-sm--4 {\n    order: -4; }\n  .flex-order-gt-sm--3 {\n    order: -3; }\n  .flex-order-gt-sm--2 {\n    order: -2; }\n  .flex-order-gt-sm--1 {\n    order: -1; }\n  .flex-order-gt-sm-0 {\n    order: 0; }\n  .flex-order-gt-sm-1 {\n    order: 1; }\n  .flex-order-gt-sm-2 {\n    order: 2; }\n  .flex-order-gt-sm-3 {\n    order: 3; }\n  .flex-order-gt-sm-4 {\n    order: 4; }\n  .flex-order-gt-sm-5 {\n    order: 5; }\n  .flex-order-gt-sm-6 {\n    order: 6; }\n  .flex-order-gt-sm-7 {\n    order: 7; }\n  .flex-order-gt-sm-8 {\n    order: 8; }\n  .flex-order-gt-sm-9 {\n    order: 9; }\n  .flex-order-gt-sm-10 {\n    order: 10; }\n  .flex-order-gt-sm-11 {\n    order: 11; }\n  .flex-order-gt-sm-12 {\n    order: 12; }\n  .flex-order-gt-sm-13 {\n    order: 13; }\n  .flex-order-gt-sm-14 {\n    order: 14; }\n  .flex-order-gt-sm-15 {\n    order: 15; }\n  .flex-order-gt-sm-16 {\n    order: 16; }\n  .flex-order-gt-sm-17 {\n    order: 17; }\n  .flex-order-gt-sm-18 {\n    order: 18; }\n  .flex-order-gt-sm-19 {\n    order: 19; }\n  .flex-order-gt-sm-20 {\n    order: 20; }\n  .offset-gt-sm-0, .flex-offset-gt-sm-0 {\n    margin-left: 0; }\n    [dir=rtl] .offset-gt-sm-0, [dir=rtl] .flex-offset-gt-sm-0 {\n      margin-left: auto;\n      margin-right: 0; }\n  .offset-gt-sm-5, .flex-offset-gt-sm-5 {\n    margin-left: 5%; }\n    [dir=rtl] .offset-gt-sm-5, [dir=rtl] .flex-offset-gt-sm-5 {\n      margin-left: auto;\n      margin-right: 5%; }\n  .offset-gt-sm-10, .flex-offset-gt-sm-10 {\n    margin-left: 10%; }\n    [dir=rtl] .offset-gt-sm-10, [dir=rtl] .flex-offset-gt-sm-10 {\n      margin-left: auto;\n      margin-right: 10%; }\n  .offset-gt-sm-15, .flex-offset-gt-sm-15 {\n    margin-left: 15%; }\n    [dir=rtl] .offset-gt-sm-15, [dir=rtl] .flex-offset-gt-sm-15 {\n      margin-left: auto;\n      margin-right: 15%; }\n  .offset-gt-sm-20, .flex-offset-gt-sm-20 {\n    margin-left: 20%; }\n    [dir=rtl] .offset-gt-sm-20, [dir=rtl] .flex-offset-gt-sm-20 {\n      margin-left: auto;\n      margin-right: 20%; }\n  .offset-gt-sm-25, .flex-offset-gt-sm-25 {\n    margin-left: 25%; }\n    [dir=rtl] .offset-gt-sm-25, [dir=rtl] .flex-offset-gt-sm-25 {\n      margin-left: auto;\n      margin-right: 25%; }\n  .offset-gt-sm-30, .flex-offset-gt-sm-30 {\n    margin-left: 30%; }\n    [dir=rtl] .offset-gt-sm-30, [dir=rtl] .flex-offset-gt-sm-30 {\n      margin-left: auto;\n      margin-right: 30%; }\n  .offset-gt-sm-35, .flex-offset-gt-sm-35 {\n    margin-left: 35%; }\n    [dir=rtl] .offset-gt-sm-35, [dir=rtl] .flex-offset-gt-sm-35 {\n      margin-left: auto;\n      margin-right: 35%; }\n  .offset-gt-sm-40, .flex-offset-gt-sm-40 {\n    margin-left: 40%; }\n    [dir=rtl] .offset-gt-sm-40, [dir=rtl] .flex-offset-gt-sm-40 {\n      margin-left: auto;\n      margin-right: 40%; }\n  .offset-gt-sm-45, .flex-offset-gt-sm-45 {\n    margin-left: 45%; }\n    [dir=rtl] .offset-gt-sm-45, [dir=rtl] .flex-offset-gt-sm-45 {\n      margin-left: auto;\n      margin-right: 45%; }\n  .offset-gt-sm-50, .flex-offset-gt-sm-50 {\n    margin-left: 50%; }\n    [dir=rtl] .offset-gt-sm-50, [dir=rtl] .flex-offset-gt-sm-50 {\n      margin-left: auto;\n      margin-right: 50%; }\n  .offset-gt-sm-55, .flex-offset-gt-sm-55 {\n    margin-left: 55%; }\n    [dir=rtl] .offset-gt-sm-55, [dir=rtl] .flex-offset-gt-sm-55 {\n      margin-left: auto;\n      margin-right: 55%; }\n  .offset-gt-sm-60, .flex-offset-gt-sm-60 {\n    margin-left: 60%; }\n    [dir=rtl] .offset-gt-sm-60, [dir=rtl] .flex-offset-gt-sm-60 {\n      margin-left: auto;\n      margin-right: 60%; }\n  .offset-gt-sm-65, .flex-offset-gt-sm-65 {\n    margin-left: 65%; }\n    [dir=rtl] .offset-gt-sm-65, [dir=rtl] .flex-offset-gt-sm-65 {\n      margin-left: auto;\n      margin-right: 65%; }\n  .offset-gt-sm-70, .flex-offset-gt-sm-70 {\n    margin-left: 70%; }\n    [dir=rtl] .offset-gt-sm-70, [dir=rtl] .flex-offset-gt-sm-70 {\n      margin-left: auto;\n      margin-right: 70%; }\n  .offset-gt-sm-75, .flex-offset-gt-sm-75 {\n    margin-left: 75%; }\n    [dir=rtl] .offset-gt-sm-75, [dir=rtl] .flex-offset-gt-sm-75 {\n      margin-left: auto;\n      margin-right: 75%; }\n  .offset-gt-sm-80, .flex-offset-gt-sm-80 {\n    margin-left: 80%; }\n    [dir=rtl] .offset-gt-sm-80, [dir=rtl] .flex-offset-gt-sm-80 {\n      margin-left: auto;\n      margin-right: 80%; }\n  .offset-gt-sm-85, .flex-offset-gt-sm-85 {\n    margin-left: 85%; }\n    [dir=rtl] .offset-gt-sm-85, [dir=rtl] .flex-offset-gt-sm-85 {\n      margin-left: auto;\n      margin-right: 85%; }\n  .offset-gt-sm-90, .flex-offset-gt-sm-90 {\n    margin-left: 90%; }\n    [dir=rtl] .offset-gt-sm-90, [dir=rtl] .flex-offset-gt-sm-90 {\n      margin-left: auto;\n      margin-right: 90%; }\n  .offset-gt-sm-95, .flex-offset-gt-sm-95 {\n    margin-left: 95%; }\n    [dir=rtl] .offset-gt-sm-95, [dir=rtl] .flex-offset-gt-sm-95 {\n      margin-left: auto;\n      margin-right: 95%; }\n  .offset-gt-sm-33, .flex-offset-gt-sm-33 {\n    margin-left: calc(100% / 3); }\n  .offset-gt-sm-66, .flex-offset-gt-sm-66 {\n    margin-left: calc(200% / 3); }\n    [dir=rtl] .offset-gt-sm-66, [dir=rtl] .flex-offset-gt-sm-66 {\n      margin-left: auto;\n      margin-right: calc(200% / 3); }\n  .layout-align-gt-sm,\n  .layout-align-gt-sm-start-stretch {\n    justify-content: flex-start;\n    align-content: stretch;\n    align-items: stretch; }\n  .layout-align-gt-sm-start,\n  .layout-align-gt-sm-start-start,\n  .layout-align-gt-sm-start-center,\n  .layout-align-gt-sm-start-end,\n  .layout-align-gt-sm-start-stretch {\n    justify-content: flex-start; }\n  .layout-align-gt-sm-center,\n  .layout-align-gt-sm-center-start,\n  .layout-align-gt-sm-center-center,\n  .layout-align-gt-sm-center-end,\n  .layout-align-gt-sm-center-stretch {\n    justify-content: center; }\n  .layout-align-gt-sm-end,\n  .layout-align-gt-sm-end-start,\n  .layout-align-gt-sm-end-center,\n  .layout-align-gt-sm-end-end,\n  .layout-align-gt-sm-end-stretch {\n    justify-content: flex-end; }\n  .layout-align-gt-sm-space-around,\n  .layout-align-gt-sm-space-around-center,\n  .layout-align-gt-sm-space-around-start,\n  .layout-align-gt-sm-space-around-end,\n  .layout-align-gt-sm-space-around-stretch {\n    justify-content: space-around; }\n  .layout-align-gt-sm-space-between,\n  .layout-align-gt-sm-space-between-center,\n  .layout-align-gt-sm-space-between-start,\n  .layout-align-gt-sm-space-between-end,\n  .layout-align-gt-sm-space-between-stretch {\n    justify-content: space-between; }\n  .layout-align-gt-sm-start-start,\n  .layout-align-gt-sm-center-start,\n  .layout-align-gt-sm-end-start,\n  .layout-align-gt-sm-space-between-start,\n  .layout-align-gt-sm-space-around-start {\n    align-items: flex-start;\n    align-content: flex-start; }\n  .layout-align-gt-sm-start-center,\n  .layout-align-gt-sm-center-center,\n  .layout-align-gt-sm-end-center,\n  .layout-align-gt-sm-space-between-center,\n  .layout-align-gt-sm-space-around-center {\n    align-items: center;\n    align-content: center;\n    max-width: 100%; }\n  .layout-align-gt-sm-start-center > *,\n  .layout-align-gt-sm-center-center > *,\n  .layout-align-gt-sm-end-center > *,\n  .layout-align-gt-sm-space-between-center > *,\n  .layout-align-gt-sm-space-around-center > * {\n    max-width: 100%;\n    box-sizing: border-box; }\n  .layout-align-gt-sm-start-end,\n  .layout-align-gt-sm-center-end,\n  .layout-align-gt-sm-end-end,\n  .layout-align-gt-sm-space-between-end,\n  .layout-align-gt-sm-space-around-end {\n    align-items: flex-end;\n    align-content: flex-end; }\n  .layout-align-gt-sm-start-stretch,\n  .layout-align-gt-sm-center-stretch,\n  .layout-align-gt-sm-end-stretch,\n  .layout-align-gt-sm-space-between-stretch,\n  .layout-align-gt-sm-space-around-stretch {\n    align-items: stretch;\n    align-content: stretch; }\n  .flex-gt-sm {\n    flex: 1;\n    box-sizing: border-box; }\n  .flex-gt-sm-grow {\n    flex: 1 1 100%;\n    box-sizing: border-box; }\n  .flex-gt-sm-initial {\n    flex: 0 1 auto;\n    box-sizing: border-box; }\n  .flex-gt-sm-auto {\n    flex: 1 1 auto;\n    box-sizing: border-box; }\n  .flex-gt-sm-none {\n    flex: 0 0 auto;\n    box-sizing: border-box; }\n  .flex-gt-sm-noshrink {\n    flex: 1 0 auto;\n    box-sizing: border-box; }\n  .flex-gt-sm-nogrow {\n    flex: 0 1 auto;\n    box-sizing: border-box; }\n  .flex-gt-sm-0 {\n    flex: 1 1 100%;\n    max-width: 0%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-sm-0 {\n    flex: 1 1 100%;\n    max-width: 0%;\n    max-height: 100%;\n    box-sizing: border-box;\n    min-width: 0; }\n  .layout-column > .flex-gt-sm-0 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 0%;\n    box-sizing: border-box; }\n  .layout-gt-sm-row > .flex-gt-sm-0 {\n    flex: 1 1 100%;\n    max-width: 0%;\n    max-height: 100%;\n    box-sizing: border-box;\n    min-width: 0; }\n  .layout-gt-sm-column > .flex-gt-sm-0 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 0%;\n    box-sizing: border-box;\n    min-height: 0; }\n  .flex-gt-sm-5 {\n    flex: 1 1 100%;\n    max-width: 5%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-sm-5 {\n    flex: 1 1 100%;\n    max-width: 5%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-sm-5 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 5%;\n    box-sizing: border-box; }\n  .layout-gt-sm-row > .flex-gt-sm-5 {\n    flex: 1 1 100%;\n    max-width: 5%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-sm-column > .flex-gt-sm-5 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 5%;\n    box-sizing: border-box; }\n  .flex-gt-sm-10 {\n    flex: 1 1 100%;\n    max-width: 10%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-sm-10 {\n    flex: 1 1 100%;\n    max-width: 10%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-sm-10 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 10%;\n    box-sizing: border-box; }\n  .layout-gt-sm-row > .flex-gt-sm-10 {\n    flex: 1 1 100%;\n    max-width: 10%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-sm-column > .flex-gt-sm-10 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 10%;\n    box-sizing: border-box; }\n  .flex-gt-sm-15 {\n    flex: 1 1 100%;\n    max-width: 15%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-sm-15 {\n    flex: 1 1 100%;\n    max-width: 15%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-sm-15 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 15%;\n    box-sizing: border-box; }\n  .layout-gt-sm-row > .flex-gt-sm-15 {\n    flex: 1 1 100%;\n    max-width: 15%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-sm-column > .flex-gt-sm-15 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 15%;\n    box-sizing: border-box; }\n  .flex-gt-sm-20 {\n    flex: 1 1 100%;\n    max-width: 20%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-sm-20 {\n    flex: 1 1 100%;\n    max-width: 20%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-sm-20 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 20%;\n    box-sizing: border-box; }\n  .layout-gt-sm-row > .flex-gt-sm-20 {\n    flex: 1 1 100%;\n    max-width: 20%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-sm-column > .flex-gt-sm-20 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 20%;\n    box-sizing: border-box; }\n  .flex-gt-sm-25 {\n    flex: 1 1 100%;\n    max-width: 25%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-sm-25 {\n    flex: 1 1 100%;\n    max-width: 25%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-sm-25 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 25%;\n    box-sizing: border-box; }\n  .layout-gt-sm-row > .flex-gt-sm-25 {\n    flex: 1 1 100%;\n    max-width: 25%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-sm-column > .flex-gt-sm-25 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 25%;\n    box-sizing: border-box; }\n  .flex-gt-sm-30 {\n    flex: 1 1 100%;\n    max-width: 30%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-sm-30 {\n    flex: 1 1 100%;\n    max-width: 30%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-sm-30 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 30%;\n    box-sizing: border-box; }\n  .layout-gt-sm-row > .flex-gt-sm-30 {\n    flex: 1 1 100%;\n    max-width: 30%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-sm-column > .flex-gt-sm-30 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 30%;\n    box-sizing: border-box; }\n  .flex-gt-sm-35 {\n    flex: 1 1 100%;\n    max-width: 35%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-sm-35 {\n    flex: 1 1 100%;\n    max-width: 35%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-sm-35 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 35%;\n    box-sizing: border-box; }\n  .layout-gt-sm-row > .flex-gt-sm-35 {\n    flex: 1 1 100%;\n    max-width: 35%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-sm-column > .flex-gt-sm-35 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 35%;\n    box-sizing: border-box; }\n  .flex-gt-sm-40 {\n    flex: 1 1 100%;\n    max-width: 40%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-sm-40 {\n    flex: 1 1 100%;\n    max-width: 40%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-sm-40 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 40%;\n    box-sizing: border-box; }\n  .layout-gt-sm-row > .flex-gt-sm-40 {\n    flex: 1 1 100%;\n    max-width: 40%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-sm-column > .flex-gt-sm-40 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 40%;\n    box-sizing: border-box; }\n  .flex-gt-sm-45 {\n    flex: 1 1 100%;\n    max-width: 45%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-sm-45 {\n    flex: 1 1 100%;\n    max-width: 45%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-sm-45 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 45%;\n    box-sizing: border-box; }\n  .layout-gt-sm-row > .flex-gt-sm-45 {\n    flex: 1 1 100%;\n    max-width: 45%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-sm-column > .flex-gt-sm-45 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 45%;\n    box-sizing: border-box; }\n  .flex-gt-sm-50 {\n    flex: 1 1 100%;\n    max-width: 50%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-sm-50 {\n    flex: 1 1 100%;\n    max-width: 50%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-sm-50 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 50%;\n    box-sizing: border-box; }\n  .layout-gt-sm-row > .flex-gt-sm-50 {\n    flex: 1 1 100%;\n    max-width: 50%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-sm-column > .flex-gt-sm-50 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 50%;\n    box-sizing: border-box; }\n  .flex-gt-sm-55 {\n    flex: 1 1 100%;\n    max-width: 55%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-sm-55 {\n    flex: 1 1 100%;\n    max-width: 55%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-sm-55 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 55%;\n    box-sizing: border-box; }\n  .layout-gt-sm-row > .flex-gt-sm-55 {\n    flex: 1 1 100%;\n    max-width: 55%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-sm-column > .flex-gt-sm-55 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 55%;\n    box-sizing: border-box; }\n  .flex-gt-sm-60 {\n    flex: 1 1 100%;\n    max-width: 60%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-sm-60 {\n    flex: 1 1 100%;\n    max-width: 60%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-sm-60 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 60%;\n    box-sizing: border-box; }\n  .layout-gt-sm-row > .flex-gt-sm-60 {\n    flex: 1 1 100%;\n    max-width: 60%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-sm-column > .flex-gt-sm-60 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 60%;\n    box-sizing: border-box; }\n  .flex-gt-sm-65 {\n    flex: 1 1 100%;\n    max-width: 65%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-sm-65 {\n    flex: 1 1 100%;\n    max-width: 65%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-sm-65 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 65%;\n    box-sizing: border-box; }\n  .layout-gt-sm-row > .flex-gt-sm-65 {\n    flex: 1 1 100%;\n    max-width: 65%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-sm-column > .flex-gt-sm-65 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 65%;\n    box-sizing: border-box; }\n  .flex-gt-sm-70 {\n    flex: 1 1 100%;\n    max-width: 70%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-sm-70 {\n    flex: 1 1 100%;\n    max-width: 70%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-sm-70 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 70%;\n    box-sizing: border-box; }\n  .layout-gt-sm-row > .flex-gt-sm-70 {\n    flex: 1 1 100%;\n    max-width: 70%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-sm-column > .flex-gt-sm-70 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 70%;\n    box-sizing: border-box; }\n  .flex-gt-sm-75 {\n    flex: 1 1 100%;\n    max-width: 75%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-sm-75 {\n    flex: 1 1 100%;\n    max-width: 75%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-sm-75 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 75%;\n    box-sizing: border-box; }\n  .layout-gt-sm-row > .flex-gt-sm-75 {\n    flex: 1 1 100%;\n    max-width: 75%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-sm-column > .flex-gt-sm-75 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 75%;\n    box-sizing: border-box; }\n  .flex-gt-sm-80 {\n    flex: 1 1 100%;\n    max-width: 80%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-sm-80 {\n    flex: 1 1 100%;\n    max-width: 80%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-sm-80 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 80%;\n    box-sizing: border-box; }\n  .layout-gt-sm-row > .flex-gt-sm-80 {\n    flex: 1 1 100%;\n    max-width: 80%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-sm-column > .flex-gt-sm-80 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 80%;\n    box-sizing: border-box; }\n  .flex-gt-sm-85 {\n    flex: 1 1 100%;\n    max-width: 85%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-sm-85 {\n    flex: 1 1 100%;\n    max-width: 85%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-sm-85 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 85%;\n    box-sizing: border-box; }\n  .layout-gt-sm-row > .flex-gt-sm-85 {\n    flex: 1 1 100%;\n    max-width: 85%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-sm-column > .flex-gt-sm-85 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 85%;\n    box-sizing: border-box; }\n  .flex-gt-sm-90 {\n    flex: 1 1 100%;\n    max-width: 90%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-sm-90 {\n    flex: 1 1 100%;\n    max-width: 90%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-sm-90 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 90%;\n    box-sizing: border-box; }\n  .layout-gt-sm-row > .flex-gt-sm-90 {\n    flex: 1 1 100%;\n    max-width: 90%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-sm-column > .flex-gt-sm-90 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 90%;\n    box-sizing: border-box; }\n  .flex-gt-sm-95 {\n    flex: 1 1 100%;\n    max-width: 95%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-sm-95 {\n    flex: 1 1 100%;\n    max-width: 95%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-sm-95 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 95%;\n    box-sizing: border-box; }\n  .layout-gt-sm-row > .flex-gt-sm-95 {\n    flex: 1 1 100%;\n    max-width: 95%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-sm-column > .flex-gt-sm-95 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 95%;\n    box-sizing: border-box; }\n  .flex-gt-sm-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-sm-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-sm-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-sm-row > .flex-gt-sm-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-sm-column > .flex-gt-sm-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-sm-33 {\n    flex: 1 1 33.33%;\n    max-width: 33.33%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-sm-66 {\n    flex: 1 1 66.66%;\n    max-width: 66.66%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-sm-33 {\n    flex: 1 1 33.33%;\n    max-width: 100%;\n    max-height: 33.33%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-sm-66 {\n    flex: 1 1 66.66%;\n    max-width: 100%;\n    max-height: 66.66%;\n    box-sizing: border-box; }\n  .layout-gt-sm-row > .flex-gt-sm-33 {\n    flex: 1 1 100%;\n    max-width: 33.33%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-sm-row > .flex-gt-sm-66 {\n    flex: 1 1 100%;\n    max-width: 66.66%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-sm-row > .flex {\n    min-width: 0; }\n  .layout-gt-sm-column > .flex-gt-sm-33 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 33.33%;\n    box-sizing: border-box; }\n  .layout-gt-sm-column > .flex-gt-sm-66 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 66.66%;\n    box-sizing: border-box; }\n  .layout-gt-sm-column > .flex {\n    min-height: 0; }\n  .layout-gt-sm,\n  .layout-gt-sm-column,\n  .layout-gt-sm-row {\n    box-sizing: border-box;\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -moz-box;\n    display: -ms-flexbox;\n    display: flex; }\n  .layout-gt-sm-column {\n    flex-direction: column; }\n  .layout-gt-sm-row {\n    flex-direction: row; } }\n\n@media (min-width: 960px) and (max-width: 1279px) {\n  .hide:not(.show-gt-xs):not(.show-gt-sm):not(.show-md):not(.show),\n  .hide-gt-xs:not(.show-gt-xs):not(.show-gt-sm):not(.show-md):not(.show),\n  .hide-gt-sm:not(.show-gt-xs):not(.show-gt-sm):not(.show-md):not(.show) {\n    display: none; }\n  .hide-md:not(.show-md):not(.show-gt-sm):not(.show-gt-xs):not(.show) {\n    display: none; }\n  .flex-order-md--20 {\n    order: -20; }\n  .flex-order-md--19 {\n    order: -19; }\n  .flex-order-md--18 {\n    order: -18; }\n  .flex-order-md--17 {\n    order: -17; }\n  .flex-order-md--16 {\n    order: -16; }\n  .flex-order-md--15 {\n    order: -15; }\n  .flex-order-md--14 {\n    order: -14; }\n  .flex-order-md--13 {\n    order: -13; }\n  .flex-order-md--12 {\n    order: -12; }\n  .flex-order-md--11 {\n    order: -11; }\n  .flex-order-md--10 {\n    order: -10; }\n  .flex-order-md--9 {\n    order: -9; }\n  .flex-order-md--8 {\n    order: -8; }\n  .flex-order-md--7 {\n    order: -7; }\n  .flex-order-md--6 {\n    order: -6; }\n  .flex-order-md--5 {\n    order: -5; }\n  .flex-order-md--4 {\n    order: -4; }\n  .flex-order-md--3 {\n    order: -3; }\n  .flex-order-md--2 {\n    order: -2; }\n  .flex-order-md--1 {\n    order: -1; }\n  .flex-order-md-0 {\n    order: 0; }\n  .flex-order-md-1 {\n    order: 1; }\n  .flex-order-md-2 {\n    order: 2; }\n  .flex-order-md-3 {\n    order: 3; }\n  .flex-order-md-4 {\n    order: 4; }\n  .flex-order-md-5 {\n    order: 5; }\n  .flex-order-md-6 {\n    order: 6; }\n  .flex-order-md-7 {\n    order: 7; }\n  .flex-order-md-8 {\n    order: 8; }\n  .flex-order-md-9 {\n    order: 9; }\n  .flex-order-md-10 {\n    order: 10; }\n  .flex-order-md-11 {\n    order: 11; }\n  .flex-order-md-12 {\n    order: 12; }\n  .flex-order-md-13 {\n    order: 13; }\n  .flex-order-md-14 {\n    order: 14; }\n  .flex-order-md-15 {\n    order: 15; }\n  .flex-order-md-16 {\n    order: 16; }\n  .flex-order-md-17 {\n    order: 17; }\n  .flex-order-md-18 {\n    order: 18; }\n  .flex-order-md-19 {\n    order: 19; }\n  .flex-order-md-20 {\n    order: 20; }\n  .offset-md-0, .flex-offset-md-0 {\n    margin-left: 0; }\n    [dir=rtl] .offset-md-0, [dir=rtl] .flex-offset-md-0 {\n      margin-left: auto;\n      margin-right: 0; }\n  .offset-md-5, .flex-offset-md-5 {\n    margin-left: 5%; }\n    [dir=rtl] .offset-md-5, [dir=rtl] .flex-offset-md-5 {\n      margin-left: auto;\n      margin-right: 5%; }\n  .offset-md-10, .flex-offset-md-10 {\n    margin-left: 10%; }\n    [dir=rtl] .offset-md-10, [dir=rtl] .flex-offset-md-10 {\n      margin-left: auto;\n      margin-right: 10%; }\n  .offset-md-15, .flex-offset-md-15 {\n    margin-left: 15%; }\n    [dir=rtl] .offset-md-15, [dir=rtl] .flex-offset-md-15 {\n      margin-left: auto;\n      margin-right: 15%; }\n  .offset-md-20, .flex-offset-md-20 {\n    margin-left: 20%; }\n    [dir=rtl] .offset-md-20, [dir=rtl] .flex-offset-md-20 {\n      margin-left: auto;\n      margin-right: 20%; }\n  .offset-md-25, .flex-offset-md-25 {\n    margin-left: 25%; }\n    [dir=rtl] .offset-md-25, [dir=rtl] .flex-offset-md-25 {\n      margin-left: auto;\n      margin-right: 25%; }\n  .offset-md-30, .flex-offset-md-30 {\n    margin-left: 30%; }\n    [dir=rtl] .offset-md-30, [dir=rtl] .flex-offset-md-30 {\n      margin-left: auto;\n      margin-right: 30%; }\n  .offset-md-35, .flex-offset-md-35 {\n    margin-left: 35%; }\n    [dir=rtl] .offset-md-35, [dir=rtl] .flex-offset-md-35 {\n      margin-left: auto;\n      margin-right: 35%; }\n  .offset-md-40, .flex-offset-md-40 {\n    margin-left: 40%; }\n    [dir=rtl] .offset-md-40, [dir=rtl] .flex-offset-md-40 {\n      margin-left: auto;\n      margin-right: 40%; }\n  .offset-md-45, .flex-offset-md-45 {\n    margin-left: 45%; }\n    [dir=rtl] .offset-md-45, [dir=rtl] .flex-offset-md-45 {\n      margin-left: auto;\n      margin-right: 45%; }\n  .offset-md-50, .flex-offset-md-50 {\n    margin-left: 50%; }\n    [dir=rtl] .offset-md-50, [dir=rtl] .flex-offset-md-50 {\n      margin-left: auto;\n      margin-right: 50%; }\n  .offset-md-55, .flex-offset-md-55 {\n    margin-left: 55%; }\n    [dir=rtl] .offset-md-55, [dir=rtl] .flex-offset-md-55 {\n      margin-left: auto;\n      margin-right: 55%; }\n  .offset-md-60, .flex-offset-md-60 {\n    margin-left: 60%; }\n    [dir=rtl] .offset-md-60, [dir=rtl] .flex-offset-md-60 {\n      margin-left: auto;\n      margin-right: 60%; }\n  .offset-md-65, .flex-offset-md-65 {\n    margin-left: 65%; }\n    [dir=rtl] .offset-md-65, [dir=rtl] .flex-offset-md-65 {\n      margin-left: auto;\n      margin-right: 65%; }\n  .offset-md-70, .flex-offset-md-70 {\n    margin-left: 70%; }\n    [dir=rtl] .offset-md-70, [dir=rtl] .flex-offset-md-70 {\n      margin-left: auto;\n      margin-right: 70%; }\n  .offset-md-75, .flex-offset-md-75 {\n    margin-left: 75%; }\n    [dir=rtl] .offset-md-75, [dir=rtl] .flex-offset-md-75 {\n      margin-left: auto;\n      margin-right: 75%; }\n  .offset-md-80, .flex-offset-md-80 {\n    margin-left: 80%; }\n    [dir=rtl] .offset-md-80, [dir=rtl] .flex-offset-md-80 {\n      margin-left: auto;\n      margin-right: 80%; }\n  .offset-md-85, .flex-offset-md-85 {\n    margin-left: 85%; }\n    [dir=rtl] .offset-md-85, [dir=rtl] .flex-offset-md-85 {\n      margin-left: auto;\n      margin-right: 85%; }\n  .offset-md-90, .flex-offset-md-90 {\n    margin-left: 90%; }\n    [dir=rtl] .offset-md-90, [dir=rtl] .flex-offset-md-90 {\n      margin-left: auto;\n      margin-right: 90%; }\n  .offset-md-95, .flex-offset-md-95 {\n    margin-left: 95%; }\n    [dir=rtl] .offset-md-95, [dir=rtl] .flex-offset-md-95 {\n      margin-left: auto;\n      margin-right: 95%; }\n  .offset-md-33, .flex-offset-md-33 {\n    margin-left: calc(100% / 3); }\n  .offset-md-66, .flex-offset-md-66 {\n    margin-left: calc(200% / 3); }\n    [dir=rtl] .offset-md-66, [dir=rtl] .flex-offset-md-66 {\n      margin-left: auto;\n      margin-right: calc(200% / 3); }\n  .layout-align-md,\n  .layout-align-md-start-stretch {\n    justify-content: flex-start;\n    align-content: stretch;\n    align-items: stretch; }\n  .layout-align-md-start,\n  .layout-align-md-start-start,\n  .layout-align-md-start-center,\n  .layout-align-md-start-end,\n  .layout-align-md-start-stretch {\n    justify-content: flex-start; }\n  .layout-align-md-center,\n  .layout-align-md-center-start,\n  .layout-align-md-center-center,\n  .layout-align-md-center-end,\n  .layout-align-md-center-stretch {\n    justify-content: center; }\n  .layout-align-md-end,\n  .layout-align-md-end-start,\n  .layout-align-md-end-center,\n  .layout-align-md-end-end,\n  .layout-align-md-end-stretch {\n    justify-content: flex-end; }\n  .layout-align-md-space-around,\n  .layout-align-md-space-around-center,\n  .layout-align-md-space-around-start,\n  .layout-align-md-space-around-end,\n  .layout-align-md-space-around-stretch {\n    justify-content: space-around; }\n  .layout-align-md-space-between,\n  .layout-align-md-space-between-center,\n  .layout-align-md-space-between-start,\n  .layout-align-md-space-between-end,\n  .layout-align-md-space-between-stretch {\n    justify-content: space-between; }\n  .layout-align-md-start-start,\n  .layout-align-md-center-start,\n  .layout-align-md-end-start,\n  .layout-align-md-space-between-start,\n  .layout-align-md-space-around-start {\n    align-items: flex-start;\n    align-content: flex-start; }\n  .layout-align-md-start-center,\n  .layout-align-md-center-center,\n  .layout-align-md-end-center,\n  .layout-align-md-space-between-center,\n  .layout-align-md-space-around-center {\n    align-items: center;\n    align-content: center;\n    max-width: 100%; }\n  .layout-align-md-start-center > *,\n  .layout-align-md-center-center > *,\n  .layout-align-md-end-center > *,\n  .layout-align-md-space-between-center > *,\n  .layout-align-md-space-around-center > * {\n    max-width: 100%;\n    box-sizing: border-box; }\n  .layout-align-md-start-end,\n  .layout-align-md-center-end,\n  .layout-align-md-end-end,\n  .layout-align-md-space-between-end,\n  .layout-align-md-space-around-end {\n    align-items: flex-end;\n    align-content: flex-end; }\n  .layout-align-md-start-stretch,\n  .layout-align-md-center-stretch,\n  .layout-align-md-end-stretch,\n  .layout-align-md-space-between-stretch,\n  .layout-align-md-space-around-stretch {\n    align-items: stretch;\n    align-content: stretch; }\n  .flex-md {\n    flex: 1;\n    box-sizing: border-box; }\n  .flex-md-grow {\n    flex: 1 1 100%;\n    box-sizing: border-box; }\n  .flex-md-initial {\n    flex: 0 1 auto;\n    box-sizing: border-box; }\n  .flex-md-auto {\n    flex: 1 1 auto;\n    box-sizing: border-box; }\n  .flex-md-none {\n    flex: 0 0 auto;\n    box-sizing: border-box; }\n  .flex-md-noshrink {\n    flex: 1 0 auto;\n    box-sizing: border-box; }\n  .flex-md-nogrow {\n    flex: 0 1 auto;\n    box-sizing: border-box; }\n  .flex-md-0 {\n    flex: 1 1 100%;\n    max-width: 0%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-md-0 {\n    flex: 1 1 100%;\n    max-width: 0%;\n    max-height: 100%;\n    box-sizing: border-box;\n    min-width: 0; }\n  .layout-column > .flex-md-0 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 0%;\n    box-sizing: border-box; }\n  .layout-md-row > .flex-md-0 {\n    flex: 1 1 100%;\n    max-width: 0%;\n    max-height: 100%;\n    box-sizing: border-box;\n    min-width: 0; }\n  .layout-md-column > .flex-md-0 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 0%;\n    box-sizing: border-box;\n    min-height: 0; }\n  .flex-md-5 {\n    flex: 1 1 100%;\n    max-width: 5%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-md-5 {\n    flex: 1 1 100%;\n    max-width: 5%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-md-5 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 5%;\n    box-sizing: border-box; }\n  .layout-md-row > .flex-md-5 {\n    flex: 1 1 100%;\n    max-width: 5%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-md-column > .flex-md-5 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 5%;\n    box-sizing: border-box; }\n  .flex-md-10 {\n    flex: 1 1 100%;\n    max-width: 10%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-md-10 {\n    flex: 1 1 100%;\n    max-width: 10%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-md-10 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 10%;\n    box-sizing: border-box; }\n  .layout-md-row > .flex-md-10 {\n    flex: 1 1 100%;\n    max-width: 10%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-md-column > .flex-md-10 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 10%;\n    box-sizing: border-box; }\n  .flex-md-15 {\n    flex: 1 1 100%;\n    max-width: 15%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-md-15 {\n    flex: 1 1 100%;\n    max-width: 15%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-md-15 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 15%;\n    box-sizing: border-box; }\n  .layout-md-row > .flex-md-15 {\n    flex: 1 1 100%;\n    max-width: 15%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-md-column > .flex-md-15 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 15%;\n    box-sizing: border-box; }\n  .flex-md-20 {\n    flex: 1 1 100%;\n    max-width: 20%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-md-20 {\n    flex: 1 1 100%;\n    max-width: 20%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-md-20 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 20%;\n    box-sizing: border-box; }\n  .layout-md-row > .flex-md-20 {\n    flex: 1 1 100%;\n    max-width: 20%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-md-column > .flex-md-20 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 20%;\n    box-sizing: border-box; }\n  .flex-md-25 {\n    flex: 1 1 100%;\n    max-width: 25%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-md-25 {\n    flex: 1 1 100%;\n    max-width: 25%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-md-25 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 25%;\n    box-sizing: border-box; }\n  .layout-md-row > .flex-md-25 {\n    flex: 1 1 100%;\n    max-width: 25%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-md-column > .flex-md-25 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 25%;\n    box-sizing: border-box; }\n  .flex-md-30 {\n    flex: 1 1 100%;\n    max-width: 30%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-md-30 {\n    flex: 1 1 100%;\n    max-width: 30%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-md-30 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 30%;\n    box-sizing: border-box; }\n  .layout-md-row > .flex-md-30 {\n    flex: 1 1 100%;\n    max-width: 30%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-md-column > .flex-md-30 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 30%;\n    box-sizing: border-box; }\n  .flex-md-35 {\n    flex: 1 1 100%;\n    max-width: 35%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-md-35 {\n    flex: 1 1 100%;\n    max-width: 35%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-md-35 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 35%;\n    box-sizing: border-box; }\n  .layout-md-row > .flex-md-35 {\n    flex: 1 1 100%;\n    max-width: 35%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-md-column > .flex-md-35 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 35%;\n    box-sizing: border-box; }\n  .flex-md-40 {\n    flex: 1 1 100%;\n    max-width: 40%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-md-40 {\n    flex: 1 1 100%;\n    max-width: 40%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-md-40 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 40%;\n    box-sizing: border-box; }\n  .layout-md-row > .flex-md-40 {\n    flex: 1 1 100%;\n    max-width: 40%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-md-column > .flex-md-40 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 40%;\n    box-sizing: border-box; }\n  .flex-md-45 {\n    flex: 1 1 100%;\n    max-width: 45%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-md-45 {\n    flex: 1 1 100%;\n    max-width: 45%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-md-45 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 45%;\n    box-sizing: border-box; }\n  .layout-md-row > .flex-md-45 {\n    flex: 1 1 100%;\n    max-width: 45%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-md-column > .flex-md-45 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 45%;\n    box-sizing: border-box; }\n  .flex-md-50 {\n    flex: 1 1 100%;\n    max-width: 50%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-md-50 {\n    flex: 1 1 100%;\n    max-width: 50%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-md-50 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 50%;\n    box-sizing: border-box; }\n  .layout-md-row > .flex-md-50 {\n    flex: 1 1 100%;\n    max-width: 50%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-md-column > .flex-md-50 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 50%;\n    box-sizing: border-box; }\n  .flex-md-55 {\n    flex: 1 1 100%;\n    max-width: 55%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-md-55 {\n    flex: 1 1 100%;\n    max-width: 55%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-md-55 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 55%;\n    box-sizing: border-box; }\n  .layout-md-row > .flex-md-55 {\n    flex: 1 1 100%;\n    max-width: 55%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-md-column > .flex-md-55 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 55%;\n    box-sizing: border-box; }\n  .flex-md-60 {\n    flex: 1 1 100%;\n    max-width: 60%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-md-60 {\n    flex: 1 1 100%;\n    max-width: 60%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-md-60 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 60%;\n    box-sizing: border-box; }\n  .layout-md-row > .flex-md-60 {\n    flex: 1 1 100%;\n    max-width: 60%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-md-column > .flex-md-60 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 60%;\n    box-sizing: border-box; }\n  .flex-md-65 {\n    flex: 1 1 100%;\n    max-width: 65%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-md-65 {\n    flex: 1 1 100%;\n    max-width: 65%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-md-65 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 65%;\n    box-sizing: border-box; }\n  .layout-md-row > .flex-md-65 {\n    flex: 1 1 100%;\n    max-width: 65%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-md-column > .flex-md-65 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 65%;\n    box-sizing: border-box; }\n  .flex-md-70 {\n    flex: 1 1 100%;\n    max-width: 70%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-md-70 {\n    flex: 1 1 100%;\n    max-width: 70%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-md-70 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 70%;\n    box-sizing: border-box; }\n  .layout-md-row > .flex-md-70 {\n    flex: 1 1 100%;\n    max-width: 70%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-md-column > .flex-md-70 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 70%;\n    box-sizing: border-box; }\n  .flex-md-75 {\n    flex: 1 1 100%;\n    max-width: 75%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-md-75 {\n    flex: 1 1 100%;\n    max-width: 75%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-md-75 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 75%;\n    box-sizing: border-box; }\n  .layout-md-row > .flex-md-75 {\n    flex: 1 1 100%;\n    max-width: 75%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-md-column > .flex-md-75 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 75%;\n    box-sizing: border-box; }\n  .flex-md-80 {\n    flex: 1 1 100%;\n    max-width: 80%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-md-80 {\n    flex: 1 1 100%;\n    max-width: 80%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-md-80 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 80%;\n    box-sizing: border-box; }\n  .layout-md-row > .flex-md-80 {\n    flex: 1 1 100%;\n    max-width: 80%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-md-column > .flex-md-80 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 80%;\n    box-sizing: border-box; }\n  .flex-md-85 {\n    flex: 1 1 100%;\n    max-width: 85%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-md-85 {\n    flex: 1 1 100%;\n    max-width: 85%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-md-85 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 85%;\n    box-sizing: border-box; }\n  .layout-md-row > .flex-md-85 {\n    flex: 1 1 100%;\n    max-width: 85%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-md-column > .flex-md-85 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 85%;\n    box-sizing: border-box; }\n  .flex-md-90 {\n    flex: 1 1 100%;\n    max-width: 90%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-md-90 {\n    flex: 1 1 100%;\n    max-width: 90%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-md-90 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 90%;\n    box-sizing: border-box; }\n  .layout-md-row > .flex-md-90 {\n    flex: 1 1 100%;\n    max-width: 90%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-md-column > .flex-md-90 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 90%;\n    box-sizing: border-box; }\n  .flex-md-95 {\n    flex: 1 1 100%;\n    max-width: 95%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-md-95 {\n    flex: 1 1 100%;\n    max-width: 95%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-md-95 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 95%;\n    box-sizing: border-box; }\n  .layout-md-row > .flex-md-95 {\n    flex: 1 1 100%;\n    max-width: 95%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-md-column > .flex-md-95 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 95%;\n    box-sizing: border-box; }\n  .flex-md-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-md-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-md-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-md-row > .flex-md-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-md-column > .flex-md-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-md-33 {\n    flex: 1 1 33.33%;\n    max-width: 33.33%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-md-66 {\n    flex: 1 1 66.66%;\n    max-width: 66.66%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-md-33 {\n    flex: 1 1 33.33%;\n    max-width: 100%;\n    max-height: 33.33%;\n    box-sizing: border-box; }\n  .layout-column > .flex-md-66 {\n    flex: 1 1 66.66%;\n    max-width: 100%;\n    max-height: 66.66%;\n    box-sizing: border-box; }\n  .layout-md-row > .flex-md-33 {\n    flex: 1 1 100%;\n    max-width: 33.33%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-md-row > .flex-md-66 {\n    flex: 1 1 100%;\n    max-width: 66.66%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-md-row > .flex {\n    min-width: 0; }\n  .layout-md-column > .flex-md-33 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 33.33%;\n    box-sizing: border-box; }\n  .layout-md-column > .flex-md-66 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 66.66%;\n    box-sizing: border-box; }\n  .layout-md-column > .flex {\n    min-height: 0; }\n  .layout-md,\n  .layout-md-column,\n  .layout-md-row {\n    box-sizing: border-box;\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -moz-box;\n    display: -ms-flexbox;\n    display: flex; }\n  .layout-md-column {\n    flex-direction: column; }\n  .layout-md-row {\n    flex-direction: row; } }\n\n@media (min-width: 1280px) {\n  .flex-order-gt-md--20 {\n    order: -20; }\n  .flex-order-gt-md--19 {\n    order: -19; }\n  .flex-order-gt-md--18 {\n    order: -18; }\n  .flex-order-gt-md--17 {\n    order: -17; }\n  .flex-order-gt-md--16 {\n    order: -16; }\n  .flex-order-gt-md--15 {\n    order: -15; }\n  .flex-order-gt-md--14 {\n    order: -14; }\n  .flex-order-gt-md--13 {\n    order: -13; }\n  .flex-order-gt-md--12 {\n    order: -12; }\n  .flex-order-gt-md--11 {\n    order: -11; }\n  .flex-order-gt-md--10 {\n    order: -10; }\n  .flex-order-gt-md--9 {\n    order: -9; }\n  .flex-order-gt-md--8 {\n    order: -8; }\n  .flex-order-gt-md--7 {\n    order: -7; }\n  .flex-order-gt-md--6 {\n    order: -6; }\n  .flex-order-gt-md--5 {\n    order: -5; }\n  .flex-order-gt-md--4 {\n    order: -4; }\n  .flex-order-gt-md--3 {\n    order: -3; }\n  .flex-order-gt-md--2 {\n    order: -2; }\n  .flex-order-gt-md--1 {\n    order: -1; }\n  .flex-order-gt-md-0 {\n    order: 0; }\n  .flex-order-gt-md-1 {\n    order: 1; }\n  .flex-order-gt-md-2 {\n    order: 2; }\n  .flex-order-gt-md-3 {\n    order: 3; }\n  .flex-order-gt-md-4 {\n    order: 4; }\n  .flex-order-gt-md-5 {\n    order: 5; }\n  .flex-order-gt-md-6 {\n    order: 6; }\n  .flex-order-gt-md-7 {\n    order: 7; }\n  .flex-order-gt-md-8 {\n    order: 8; }\n  .flex-order-gt-md-9 {\n    order: 9; }\n  .flex-order-gt-md-10 {\n    order: 10; }\n  .flex-order-gt-md-11 {\n    order: 11; }\n  .flex-order-gt-md-12 {\n    order: 12; }\n  .flex-order-gt-md-13 {\n    order: 13; }\n  .flex-order-gt-md-14 {\n    order: 14; }\n  .flex-order-gt-md-15 {\n    order: 15; }\n  .flex-order-gt-md-16 {\n    order: 16; }\n  .flex-order-gt-md-17 {\n    order: 17; }\n  .flex-order-gt-md-18 {\n    order: 18; }\n  .flex-order-gt-md-19 {\n    order: 19; }\n  .flex-order-gt-md-20 {\n    order: 20; }\n  .offset-gt-md-0, .flex-offset-gt-md-0 {\n    margin-left: 0; }\n    [dir=rtl] .offset-gt-md-0, [dir=rtl] .flex-offset-gt-md-0 {\n      margin-left: auto;\n      margin-right: 0; }\n  .offset-gt-md-5, .flex-offset-gt-md-5 {\n    margin-left: 5%; }\n    [dir=rtl] .offset-gt-md-5, [dir=rtl] .flex-offset-gt-md-5 {\n      margin-left: auto;\n      margin-right: 5%; }\n  .offset-gt-md-10, .flex-offset-gt-md-10 {\n    margin-left: 10%; }\n    [dir=rtl] .offset-gt-md-10, [dir=rtl] .flex-offset-gt-md-10 {\n      margin-left: auto;\n      margin-right: 10%; }\n  .offset-gt-md-15, .flex-offset-gt-md-15 {\n    margin-left: 15%; }\n    [dir=rtl] .offset-gt-md-15, [dir=rtl] .flex-offset-gt-md-15 {\n      margin-left: auto;\n      margin-right: 15%; }\n  .offset-gt-md-20, .flex-offset-gt-md-20 {\n    margin-left: 20%; }\n    [dir=rtl] .offset-gt-md-20, [dir=rtl] .flex-offset-gt-md-20 {\n      margin-left: auto;\n      margin-right: 20%; }\n  .offset-gt-md-25, .flex-offset-gt-md-25 {\n    margin-left: 25%; }\n    [dir=rtl] .offset-gt-md-25, [dir=rtl] .flex-offset-gt-md-25 {\n      margin-left: auto;\n      margin-right: 25%; }\n  .offset-gt-md-30, .flex-offset-gt-md-30 {\n    margin-left: 30%; }\n    [dir=rtl] .offset-gt-md-30, [dir=rtl] .flex-offset-gt-md-30 {\n      margin-left: auto;\n      margin-right: 30%; }\n  .offset-gt-md-35, .flex-offset-gt-md-35 {\n    margin-left: 35%; }\n    [dir=rtl] .offset-gt-md-35, [dir=rtl] .flex-offset-gt-md-35 {\n      margin-left: auto;\n      margin-right: 35%; }\n  .offset-gt-md-40, .flex-offset-gt-md-40 {\n    margin-left: 40%; }\n    [dir=rtl] .offset-gt-md-40, [dir=rtl] .flex-offset-gt-md-40 {\n      margin-left: auto;\n      margin-right: 40%; }\n  .offset-gt-md-45, .flex-offset-gt-md-45 {\n    margin-left: 45%; }\n    [dir=rtl] .offset-gt-md-45, [dir=rtl] .flex-offset-gt-md-45 {\n      margin-left: auto;\n      margin-right: 45%; }\n  .offset-gt-md-50, .flex-offset-gt-md-50 {\n    margin-left: 50%; }\n    [dir=rtl] .offset-gt-md-50, [dir=rtl] .flex-offset-gt-md-50 {\n      margin-left: auto;\n      margin-right: 50%; }\n  .offset-gt-md-55, .flex-offset-gt-md-55 {\n    margin-left: 55%; }\n    [dir=rtl] .offset-gt-md-55, [dir=rtl] .flex-offset-gt-md-55 {\n      margin-left: auto;\n      margin-right: 55%; }\n  .offset-gt-md-60, .flex-offset-gt-md-60 {\n    margin-left: 60%; }\n    [dir=rtl] .offset-gt-md-60, [dir=rtl] .flex-offset-gt-md-60 {\n      margin-left: auto;\n      margin-right: 60%; }\n  .offset-gt-md-65, .flex-offset-gt-md-65 {\n    margin-left: 65%; }\n    [dir=rtl] .offset-gt-md-65, [dir=rtl] .flex-offset-gt-md-65 {\n      margin-left: auto;\n      margin-right: 65%; }\n  .offset-gt-md-70, .flex-offset-gt-md-70 {\n    margin-left: 70%; }\n    [dir=rtl] .offset-gt-md-70, [dir=rtl] .flex-offset-gt-md-70 {\n      margin-left: auto;\n      margin-right: 70%; }\n  .offset-gt-md-75, .flex-offset-gt-md-75 {\n    margin-left: 75%; }\n    [dir=rtl] .offset-gt-md-75, [dir=rtl] .flex-offset-gt-md-75 {\n      margin-left: auto;\n      margin-right: 75%; }\n  .offset-gt-md-80, .flex-offset-gt-md-80 {\n    margin-left: 80%; }\n    [dir=rtl] .offset-gt-md-80, [dir=rtl] .flex-offset-gt-md-80 {\n      margin-left: auto;\n      margin-right: 80%; }\n  .offset-gt-md-85, .flex-offset-gt-md-85 {\n    margin-left: 85%; }\n    [dir=rtl] .offset-gt-md-85, [dir=rtl] .flex-offset-gt-md-85 {\n      margin-left: auto;\n      margin-right: 85%; }\n  .offset-gt-md-90, .flex-offset-gt-md-90 {\n    margin-left: 90%; }\n    [dir=rtl] .offset-gt-md-90, [dir=rtl] .flex-offset-gt-md-90 {\n      margin-left: auto;\n      margin-right: 90%; }\n  .offset-gt-md-95, .flex-offset-gt-md-95 {\n    margin-left: 95%; }\n    [dir=rtl] .offset-gt-md-95, [dir=rtl] .flex-offset-gt-md-95 {\n      margin-left: auto;\n      margin-right: 95%; }\n  .offset-gt-md-33, .flex-offset-gt-md-33 {\n    margin-left: calc(100% / 3); }\n  .offset-gt-md-66, .flex-offset-gt-md-66 {\n    margin-left: calc(200% / 3); }\n    [dir=rtl] .offset-gt-md-66, [dir=rtl] .flex-offset-gt-md-66 {\n      margin-left: auto;\n      margin-right: calc(200% / 3); }\n  .layout-align-gt-md,\n  .layout-align-gt-md-start-stretch {\n    justify-content: flex-start;\n    align-content: stretch;\n    align-items: stretch; }\n  .layout-align-gt-md-start,\n  .layout-align-gt-md-start-start,\n  .layout-align-gt-md-start-center,\n  .layout-align-gt-md-start-end,\n  .layout-align-gt-md-start-stretch {\n    justify-content: flex-start; }\n  .layout-align-gt-md-center,\n  .layout-align-gt-md-center-start,\n  .layout-align-gt-md-center-center,\n  .layout-align-gt-md-center-end,\n  .layout-align-gt-md-center-stretch {\n    justify-content: center; }\n  .layout-align-gt-md-end,\n  .layout-align-gt-md-end-start,\n  .layout-align-gt-md-end-center,\n  .layout-align-gt-md-end-end,\n  .layout-align-gt-md-end-stretch {\n    justify-content: flex-end; }\n  .layout-align-gt-md-space-around,\n  .layout-align-gt-md-space-around-center,\n  .layout-align-gt-md-space-around-start,\n  .layout-align-gt-md-space-around-end,\n  .layout-align-gt-md-space-around-stretch {\n    justify-content: space-around; }\n  .layout-align-gt-md-space-between,\n  .layout-align-gt-md-space-between-center,\n  .layout-align-gt-md-space-between-start,\n  .layout-align-gt-md-space-between-end,\n  .layout-align-gt-md-space-between-stretch {\n    justify-content: space-between; }\n  .layout-align-gt-md-start-start,\n  .layout-align-gt-md-center-start,\n  .layout-align-gt-md-end-start,\n  .layout-align-gt-md-space-between-start,\n  .layout-align-gt-md-space-around-start {\n    align-items: flex-start;\n    align-content: flex-start; }\n  .layout-align-gt-md-start-center,\n  .layout-align-gt-md-center-center,\n  .layout-align-gt-md-end-center,\n  .layout-align-gt-md-space-between-center,\n  .layout-align-gt-md-space-around-center {\n    align-items: center;\n    align-content: center;\n    max-width: 100%; }\n  .layout-align-gt-md-start-center > *,\n  .layout-align-gt-md-center-center > *,\n  .layout-align-gt-md-end-center > *,\n  .layout-align-gt-md-space-between-center > *,\n  .layout-align-gt-md-space-around-center > * {\n    max-width: 100%;\n    box-sizing: border-box; }\n  .layout-align-gt-md-start-end,\n  .layout-align-gt-md-center-end,\n  .layout-align-gt-md-end-end,\n  .layout-align-gt-md-space-between-end,\n  .layout-align-gt-md-space-around-end {\n    align-items: flex-end;\n    align-content: flex-end; }\n  .layout-align-gt-md-start-stretch,\n  .layout-align-gt-md-center-stretch,\n  .layout-align-gt-md-end-stretch,\n  .layout-align-gt-md-space-between-stretch,\n  .layout-align-gt-md-space-around-stretch {\n    align-items: stretch;\n    align-content: stretch; }\n  .flex-gt-md {\n    flex: 1;\n    box-sizing: border-box; }\n  .flex-gt-md-grow {\n    flex: 1 1 100%;\n    box-sizing: border-box; }\n  .flex-gt-md-initial {\n    flex: 0 1 auto;\n    box-sizing: border-box; }\n  .flex-gt-md-auto {\n    flex: 1 1 auto;\n    box-sizing: border-box; }\n  .flex-gt-md-none {\n    flex: 0 0 auto;\n    box-sizing: border-box; }\n  .flex-gt-md-noshrink {\n    flex: 1 0 auto;\n    box-sizing: border-box; }\n  .flex-gt-md-nogrow {\n    flex: 0 1 auto;\n    box-sizing: border-box; }\n  .flex-gt-md-0 {\n    flex: 1 1 100%;\n    max-width: 0%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-md-0 {\n    flex: 1 1 100%;\n    max-width: 0%;\n    max-height: 100%;\n    box-sizing: border-box;\n    min-width: 0; }\n  .layout-column > .flex-gt-md-0 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 0%;\n    box-sizing: border-box; }\n  .layout-gt-md-row > .flex-gt-md-0 {\n    flex: 1 1 100%;\n    max-width: 0%;\n    max-height: 100%;\n    box-sizing: border-box;\n    min-width: 0; }\n  .layout-gt-md-column > .flex-gt-md-0 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 0%;\n    box-sizing: border-box;\n    min-height: 0; }\n  .flex-gt-md-5 {\n    flex: 1 1 100%;\n    max-width: 5%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-md-5 {\n    flex: 1 1 100%;\n    max-width: 5%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-md-5 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 5%;\n    box-sizing: border-box; }\n  .layout-gt-md-row > .flex-gt-md-5 {\n    flex: 1 1 100%;\n    max-width: 5%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-md-column > .flex-gt-md-5 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 5%;\n    box-sizing: border-box; }\n  .flex-gt-md-10 {\n    flex: 1 1 100%;\n    max-width: 10%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-md-10 {\n    flex: 1 1 100%;\n    max-width: 10%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-md-10 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 10%;\n    box-sizing: border-box; }\n  .layout-gt-md-row > .flex-gt-md-10 {\n    flex: 1 1 100%;\n    max-width: 10%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-md-column > .flex-gt-md-10 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 10%;\n    box-sizing: border-box; }\n  .flex-gt-md-15 {\n    flex: 1 1 100%;\n    max-width: 15%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-md-15 {\n    flex: 1 1 100%;\n    max-width: 15%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-md-15 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 15%;\n    box-sizing: border-box; }\n  .layout-gt-md-row > .flex-gt-md-15 {\n    flex: 1 1 100%;\n    max-width: 15%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-md-column > .flex-gt-md-15 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 15%;\n    box-sizing: border-box; }\n  .flex-gt-md-20 {\n    flex: 1 1 100%;\n    max-width: 20%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-md-20 {\n    flex: 1 1 100%;\n    max-width: 20%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-md-20 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 20%;\n    box-sizing: border-box; }\n  .layout-gt-md-row > .flex-gt-md-20 {\n    flex: 1 1 100%;\n    max-width: 20%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-md-column > .flex-gt-md-20 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 20%;\n    box-sizing: border-box; }\n  .flex-gt-md-25 {\n    flex: 1 1 100%;\n    max-width: 25%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-md-25 {\n    flex: 1 1 100%;\n    max-width: 25%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-md-25 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 25%;\n    box-sizing: border-box; }\n  .layout-gt-md-row > .flex-gt-md-25 {\n    flex: 1 1 100%;\n    max-width: 25%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-md-column > .flex-gt-md-25 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 25%;\n    box-sizing: border-box; }\n  .flex-gt-md-30 {\n    flex: 1 1 100%;\n    max-width: 30%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-md-30 {\n    flex: 1 1 100%;\n    max-width: 30%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-md-30 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 30%;\n    box-sizing: border-box; }\n  .layout-gt-md-row > .flex-gt-md-30 {\n    flex: 1 1 100%;\n    max-width: 30%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-md-column > .flex-gt-md-30 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 30%;\n    box-sizing: border-box; }\n  .flex-gt-md-35 {\n    flex: 1 1 100%;\n    max-width: 35%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-md-35 {\n    flex: 1 1 100%;\n    max-width: 35%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-md-35 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 35%;\n    box-sizing: border-box; }\n  .layout-gt-md-row > .flex-gt-md-35 {\n    flex: 1 1 100%;\n    max-width: 35%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-md-column > .flex-gt-md-35 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 35%;\n    box-sizing: border-box; }\n  .flex-gt-md-40 {\n    flex: 1 1 100%;\n    max-width: 40%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-md-40 {\n    flex: 1 1 100%;\n    max-width: 40%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-md-40 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 40%;\n    box-sizing: border-box; }\n  .layout-gt-md-row > .flex-gt-md-40 {\n    flex: 1 1 100%;\n    max-width: 40%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-md-column > .flex-gt-md-40 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 40%;\n    box-sizing: border-box; }\n  .flex-gt-md-45 {\n    flex: 1 1 100%;\n    max-width: 45%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-md-45 {\n    flex: 1 1 100%;\n    max-width: 45%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-md-45 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 45%;\n    box-sizing: border-box; }\n  .layout-gt-md-row > .flex-gt-md-45 {\n    flex: 1 1 100%;\n    max-width: 45%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-md-column > .flex-gt-md-45 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 45%;\n    box-sizing: border-box; }\n  .flex-gt-md-50 {\n    flex: 1 1 100%;\n    max-width: 50%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-md-50 {\n    flex: 1 1 100%;\n    max-width: 50%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-md-50 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 50%;\n    box-sizing: border-box; }\n  .layout-gt-md-row > .flex-gt-md-50 {\n    flex: 1 1 100%;\n    max-width: 50%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-md-column > .flex-gt-md-50 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 50%;\n    box-sizing: border-box; }\n  .flex-gt-md-55 {\n    flex: 1 1 100%;\n    max-width: 55%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-md-55 {\n    flex: 1 1 100%;\n    max-width: 55%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-md-55 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 55%;\n    box-sizing: border-box; }\n  .layout-gt-md-row > .flex-gt-md-55 {\n    flex: 1 1 100%;\n    max-width: 55%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-md-column > .flex-gt-md-55 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 55%;\n    box-sizing: border-box; }\n  .flex-gt-md-60 {\n    flex: 1 1 100%;\n    max-width: 60%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-md-60 {\n    flex: 1 1 100%;\n    max-width: 60%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-md-60 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 60%;\n    box-sizing: border-box; }\n  .layout-gt-md-row > .flex-gt-md-60 {\n    flex: 1 1 100%;\n    max-width: 60%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-md-column > .flex-gt-md-60 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 60%;\n    box-sizing: border-box; }\n  .flex-gt-md-65 {\n    flex: 1 1 100%;\n    max-width: 65%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-md-65 {\n    flex: 1 1 100%;\n    max-width: 65%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-md-65 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 65%;\n    box-sizing: border-box; }\n  .layout-gt-md-row > .flex-gt-md-65 {\n    flex: 1 1 100%;\n    max-width: 65%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-md-column > .flex-gt-md-65 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 65%;\n    box-sizing: border-box; }\n  .flex-gt-md-70 {\n    flex: 1 1 100%;\n    max-width: 70%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-md-70 {\n    flex: 1 1 100%;\n    max-width: 70%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-md-70 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 70%;\n    box-sizing: border-box; }\n  .layout-gt-md-row > .flex-gt-md-70 {\n    flex: 1 1 100%;\n    max-width: 70%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-md-column > .flex-gt-md-70 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 70%;\n    box-sizing: border-box; }\n  .flex-gt-md-75 {\n    flex: 1 1 100%;\n    max-width: 75%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-md-75 {\n    flex: 1 1 100%;\n    max-width: 75%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-md-75 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 75%;\n    box-sizing: border-box; }\n  .layout-gt-md-row > .flex-gt-md-75 {\n    flex: 1 1 100%;\n    max-width: 75%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-md-column > .flex-gt-md-75 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 75%;\n    box-sizing: border-box; }\n  .flex-gt-md-80 {\n    flex: 1 1 100%;\n    max-width: 80%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-md-80 {\n    flex: 1 1 100%;\n    max-width: 80%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-md-80 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 80%;\n    box-sizing: border-box; }\n  .layout-gt-md-row > .flex-gt-md-80 {\n    flex: 1 1 100%;\n    max-width: 80%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-md-column > .flex-gt-md-80 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 80%;\n    box-sizing: border-box; }\n  .flex-gt-md-85 {\n    flex: 1 1 100%;\n    max-width: 85%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-md-85 {\n    flex: 1 1 100%;\n    max-width: 85%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-md-85 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 85%;\n    box-sizing: border-box; }\n  .layout-gt-md-row > .flex-gt-md-85 {\n    flex: 1 1 100%;\n    max-width: 85%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-md-column > .flex-gt-md-85 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 85%;\n    box-sizing: border-box; }\n  .flex-gt-md-90 {\n    flex: 1 1 100%;\n    max-width: 90%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-md-90 {\n    flex: 1 1 100%;\n    max-width: 90%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-md-90 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 90%;\n    box-sizing: border-box; }\n  .layout-gt-md-row > .flex-gt-md-90 {\n    flex: 1 1 100%;\n    max-width: 90%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-md-column > .flex-gt-md-90 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 90%;\n    box-sizing: border-box; }\n  .flex-gt-md-95 {\n    flex: 1 1 100%;\n    max-width: 95%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-md-95 {\n    flex: 1 1 100%;\n    max-width: 95%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-md-95 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 95%;\n    box-sizing: border-box; }\n  .layout-gt-md-row > .flex-gt-md-95 {\n    flex: 1 1 100%;\n    max-width: 95%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-md-column > .flex-gt-md-95 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 95%;\n    box-sizing: border-box; }\n  .flex-gt-md-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-md-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-md-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-md-row > .flex-gt-md-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-md-column > .flex-gt-md-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-md-33 {\n    flex: 1 1 33.33%;\n    max-width: 33.33%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-md-66 {\n    flex: 1 1 66.66%;\n    max-width: 66.66%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-md-33 {\n    flex: 1 1 33.33%;\n    max-width: 100%;\n    max-height: 33.33%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-md-66 {\n    flex: 1 1 66.66%;\n    max-width: 100%;\n    max-height: 66.66%;\n    box-sizing: border-box; }\n  .layout-gt-md-row > .flex-gt-md-33 {\n    flex: 1 1 100%;\n    max-width: 33.33%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-md-row > .flex-gt-md-66 {\n    flex: 1 1 100%;\n    max-width: 66.66%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-md-row > .flex {\n    min-width: 0; }\n  .layout-gt-md-column > .flex-gt-md-33 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 33.33%;\n    box-sizing: border-box; }\n  .layout-gt-md-column > .flex-gt-md-66 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 66.66%;\n    box-sizing: border-box; }\n  .layout-gt-md-column > .flex {\n    min-height: 0; }\n  .layout-gt-md,\n  .layout-gt-md-column,\n  .layout-gt-md-row {\n    box-sizing: border-box;\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -moz-box;\n    display: -ms-flexbox;\n    display: flex; }\n  .layout-gt-md-column {\n    flex-direction: column; }\n  .layout-gt-md-row {\n    flex-direction: row; } }\n\n@media (min-width: 1280px) and (max-width: 1919px) {\n  .hide:not(.show-gt-xs):not(.show-gt-sm):not(.show-gt-md):not(.show-lg):not(.show),\n  .hide-gt-xs:not(.show-gt-xs):not(.show-gt-sm):not(.show-gt-md):not(.show-lg):not(.show),\n  .hide-gt-sm:not(.show-gt-xs):not(.show-gt-sm):not(.show-gt-md):not(.show-lg):not(.show),\n  .hide-gt-md:not(.show-gt-xs):not(.show-gt-sm):not(.show-gt-md):not(.show-lg):not(.show) {\n    display: none; }\n  .hide-lg:not(.show-lg):not(.show-gt-md):not(.show-gt-sm):not(.show-gt-xs):not(.show) {\n    display: none; }\n  .flex-order-lg--20 {\n    order: -20; }\n  .flex-order-lg--19 {\n    order: -19; }\n  .flex-order-lg--18 {\n    order: -18; }\n  .flex-order-lg--17 {\n    order: -17; }\n  .flex-order-lg--16 {\n    order: -16; }\n  .flex-order-lg--15 {\n    order: -15; }\n  .flex-order-lg--14 {\n    order: -14; }\n  .flex-order-lg--13 {\n    order: -13; }\n  .flex-order-lg--12 {\n    order: -12; }\n  .flex-order-lg--11 {\n    order: -11; }\n  .flex-order-lg--10 {\n    order: -10; }\n  .flex-order-lg--9 {\n    order: -9; }\n  .flex-order-lg--8 {\n    order: -8; }\n  .flex-order-lg--7 {\n    order: -7; }\n  .flex-order-lg--6 {\n    order: -6; }\n  .flex-order-lg--5 {\n    order: -5; }\n  .flex-order-lg--4 {\n    order: -4; }\n  .flex-order-lg--3 {\n    order: -3; }\n  .flex-order-lg--2 {\n    order: -2; }\n  .flex-order-lg--1 {\n    order: -1; }\n  .flex-order-lg-0 {\n    order: 0; }\n  .flex-order-lg-1 {\n    order: 1; }\n  .flex-order-lg-2 {\n    order: 2; }\n  .flex-order-lg-3 {\n    order: 3; }\n  .flex-order-lg-4 {\n    order: 4; }\n  .flex-order-lg-5 {\n    order: 5; }\n  .flex-order-lg-6 {\n    order: 6; }\n  .flex-order-lg-7 {\n    order: 7; }\n  .flex-order-lg-8 {\n    order: 8; }\n  .flex-order-lg-9 {\n    order: 9; }\n  .flex-order-lg-10 {\n    order: 10; }\n  .flex-order-lg-11 {\n    order: 11; }\n  .flex-order-lg-12 {\n    order: 12; }\n  .flex-order-lg-13 {\n    order: 13; }\n  .flex-order-lg-14 {\n    order: 14; }\n  .flex-order-lg-15 {\n    order: 15; }\n  .flex-order-lg-16 {\n    order: 16; }\n  .flex-order-lg-17 {\n    order: 17; }\n  .flex-order-lg-18 {\n    order: 18; }\n  .flex-order-lg-19 {\n    order: 19; }\n  .flex-order-lg-20 {\n    order: 20; }\n  .offset-lg-0, .flex-offset-lg-0 {\n    margin-left: 0; }\n    [dir=rtl] .offset-lg-0, [dir=rtl] .flex-offset-lg-0 {\n      margin-left: auto;\n      margin-right: 0; }\n  .offset-lg-5, .flex-offset-lg-5 {\n    margin-left: 5%; }\n    [dir=rtl] .offset-lg-5, [dir=rtl] .flex-offset-lg-5 {\n      margin-left: auto;\n      margin-right: 5%; }\n  .offset-lg-10, .flex-offset-lg-10 {\n    margin-left: 10%; }\n    [dir=rtl] .offset-lg-10, [dir=rtl] .flex-offset-lg-10 {\n      margin-left: auto;\n      margin-right: 10%; }\n  .offset-lg-15, .flex-offset-lg-15 {\n    margin-left: 15%; }\n    [dir=rtl] .offset-lg-15, [dir=rtl] .flex-offset-lg-15 {\n      margin-left: auto;\n      margin-right: 15%; }\n  .offset-lg-20, .flex-offset-lg-20 {\n    margin-left: 20%; }\n    [dir=rtl] .offset-lg-20, [dir=rtl] .flex-offset-lg-20 {\n      margin-left: auto;\n      margin-right: 20%; }\n  .offset-lg-25, .flex-offset-lg-25 {\n    margin-left: 25%; }\n    [dir=rtl] .offset-lg-25, [dir=rtl] .flex-offset-lg-25 {\n      margin-left: auto;\n      margin-right: 25%; }\n  .offset-lg-30, .flex-offset-lg-30 {\n    margin-left: 30%; }\n    [dir=rtl] .offset-lg-30, [dir=rtl] .flex-offset-lg-30 {\n      margin-left: auto;\n      margin-right: 30%; }\n  .offset-lg-35, .flex-offset-lg-35 {\n    margin-left: 35%; }\n    [dir=rtl] .offset-lg-35, [dir=rtl] .flex-offset-lg-35 {\n      margin-left: auto;\n      margin-right: 35%; }\n  .offset-lg-40, .flex-offset-lg-40 {\n    margin-left: 40%; }\n    [dir=rtl] .offset-lg-40, [dir=rtl] .flex-offset-lg-40 {\n      margin-left: auto;\n      margin-right: 40%; }\n  .offset-lg-45, .flex-offset-lg-45 {\n    margin-left: 45%; }\n    [dir=rtl] .offset-lg-45, [dir=rtl] .flex-offset-lg-45 {\n      margin-left: auto;\n      margin-right: 45%; }\n  .offset-lg-50, .flex-offset-lg-50 {\n    margin-left: 50%; }\n    [dir=rtl] .offset-lg-50, [dir=rtl] .flex-offset-lg-50 {\n      margin-left: auto;\n      margin-right: 50%; }\n  .offset-lg-55, .flex-offset-lg-55 {\n    margin-left: 55%; }\n    [dir=rtl] .offset-lg-55, [dir=rtl] .flex-offset-lg-55 {\n      margin-left: auto;\n      margin-right: 55%; }\n  .offset-lg-60, .flex-offset-lg-60 {\n    margin-left: 60%; }\n    [dir=rtl] .offset-lg-60, [dir=rtl] .flex-offset-lg-60 {\n      margin-left: auto;\n      margin-right: 60%; }\n  .offset-lg-65, .flex-offset-lg-65 {\n    margin-left: 65%; }\n    [dir=rtl] .offset-lg-65, [dir=rtl] .flex-offset-lg-65 {\n      margin-left: auto;\n      margin-right: 65%; }\n  .offset-lg-70, .flex-offset-lg-70 {\n    margin-left: 70%; }\n    [dir=rtl] .offset-lg-70, [dir=rtl] .flex-offset-lg-70 {\n      margin-left: auto;\n      margin-right: 70%; }\n  .offset-lg-75, .flex-offset-lg-75 {\n    margin-left: 75%; }\n    [dir=rtl] .offset-lg-75, [dir=rtl] .flex-offset-lg-75 {\n      margin-left: auto;\n      margin-right: 75%; }\n  .offset-lg-80, .flex-offset-lg-80 {\n    margin-left: 80%; }\n    [dir=rtl] .offset-lg-80, [dir=rtl] .flex-offset-lg-80 {\n      margin-left: auto;\n      margin-right: 80%; }\n  .offset-lg-85, .flex-offset-lg-85 {\n    margin-left: 85%; }\n    [dir=rtl] .offset-lg-85, [dir=rtl] .flex-offset-lg-85 {\n      margin-left: auto;\n      margin-right: 85%; }\n  .offset-lg-90, .flex-offset-lg-90 {\n    margin-left: 90%; }\n    [dir=rtl] .offset-lg-90, [dir=rtl] .flex-offset-lg-90 {\n      margin-left: auto;\n      margin-right: 90%; }\n  .offset-lg-95, .flex-offset-lg-95 {\n    margin-left: 95%; }\n    [dir=rtl] .offset-lg-95, [dir=rtl] .flex-offset-lg-95 {\n      margin-left: auto;\n      margin-right: 95%; }\n  .offset-lg-33, .flex-offset-lg-33 {\n    margin-left: calc(100% / 3); }\n  .offset-lg-66, .flex-offset-lg-66 {\n    margin-left: calc(200% / 3); }\n    [dir=rtl] .offset-lg-66, [dir=rtl] .flex-offset-lg-66 {\n      margin-left: auto;\n      margin-right: calc(200% / 3); }\n  .layout-align-lg,\n  .layout-align-lg-start-stretch {\n    justify-content: flex-start;\n    align-content: stretch;\n    align-items: stretch; }\n  .layout-align-lg-start,\n  .layout-align-lg-start-start,\n  .layout-align-lg-start-center,\n  .layout-align-lg-start-end,\n  .layout-align-lg-start-stretch {\n    justify-content: flex-start; }\n  .layout-align-lg-center,\n  .layout-align-lg-center-start,\n  .layout-align-lg-center-center,\n  .layout-align-lg-center-end,\n  .layout-align-lg-center-stretch {\n    justify-content: center; }\n  .layout-align-lg-end,\n  .layout-align-lg-end-start,\n  .layout-align-lg-end-center,\n  .layout-align-lg-end-end,\n  .layout-align-lg-end-stretch {\n    justify-content: flex-end; }\n  .layout-align-lg-space-around,\n  .layout-align-lg-space-around-center,\n  .layout-align-lg-space-around-start,\n  .layout-align-lg-space-around-end,\n  .layout-align-lg-space-around-stretch {\n    justify-content: space-around; }\n  .layout-align-lg-space-between,\n  .layout-align-lg-space-between-center,\n  .layout-align-lg-space-between-start,\n  .layout-align-lg-space-between-end,\n  .layout-align-lg-space-between-stretch {\n    justify-content: space-between; }\n  .layout-align-lg-start-start,\n  .layout-align-lg-center-start,\n  .layout-align-lg-end-start,\n  .layout-align-lg-space-between-start,\n  .layout-align-lg-space-around-start {\n    align-items: flex-start;\n    align-content: flex-start; }\n  .layout-align-lg-start-center,\n  .layout-align-lg-center-center,\n  .layout-align-lg-end-center,\n  .layout-align-lg-space-between-center,\n  .layout-align-lg-space-around-center {\n    align-items: center;\n    align-content: center;\n    max-width: 100%; }\n  .layout-align-lg-start-center > *,\n  .layout-align-lg-center-center > *,\n  .layout-align-lg-end-center > *,\n  .layout-align-lg-space-between-center > *,\n  .layout-align-lg-space-around-center > * {\n    max-width: 100%;\n    box-sizing: border-box; }\n  .layout-align-lg-start-end,\n  .layout-align-lg-center-end,\n  .layout-align-lg-end-end,\n  .layout-align-lg-space-between-end,\n  .layout-align-lg-space-around-end {\n    align-items: flex-end;\n    align-content: flex-end; }\n  .layout-align-lg-start-stretch,\n  .layout-align-lg-center-stretch,\n  .layout-align-lg-end-stretch,\n  .layout-align-lg-space-between-stretch,\n  .layout-align-lg-space-around-stretch {\n    align-items: stretch;\n    align-content: stretch; }\n  .flex-lg {\n    flex: 1;\n    box-sizing: border-box; }\n  .flex-lg-grow {\n    flex: 1 1 100%;\n    box-sizing: border-box; }\n  .flex-lg-initial {\n    flex: 0 1 auto;\n    box-sizing: border-box; }\n  .flex-lg-auto {\n    flex: 1 1 auto;\n    box-sizing: border-box; }\n  .flex-lg-none {\n    flex: 0 0 auto;\n    box-sizing: border-box; }\n  .flex-lg-noshrink {\n    flex: 1 0 auto;\n    box-sizing: border-box; }\n  .flex-lg-nogrow {\n    flex: 0 1 auto;\n    box-sizing: border-box; }\n  .flex-lg-0 {\n    flex: 1 1 100%;\n    max-width: 0%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-lg-0 {\n    flex: 1 1 100%;\n    max-width: 0%;\n    max-height: 100%;\n    box-sizing: border-box;\n    min-width: 0; }\n  .layout-column > .flex-lg-0 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 0%;\n    box-sizing: border-box; }\n  .layout-lg-row > .flex-lg-0 {\n    flex: 1 1 100%;\n    max-width: 0%;\n    max-height: 100%;\n    box-sizing: border-box;\n    min-width: 0; }\n  .layout-lg-column > .flex-lg-0 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 0%;\n    box-sizing: border-box;\n    min-height: 0; }\n  .flex-lg-5 {\n    flex: 1 1 100%;\n    max-width: 5%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-lg-5 {\n    flex: 1 1 100%;\n    max-width: 5%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-lg-5 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 5%;\n    box-sizing: border-box; }\n  .layout-lg-row > .flex-lg-5 {\n    flex: 1 1 100%;\n    max-width: 5%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-lg-column > .flex-lg-5 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 5%;\n    box-sizing: border-box; }\n  .flex-lg-10 {\n    flex: 1 1 100%;\n    max-width: 10%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-lg-10 {\n    flex: 1 1 100%;\n    max-width: 10%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-lg-10 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 10%;\n    box-sizing: border-box; }\n  .layout-lg-row > .flex-lg-10 {\n    flex: 1 1 100%;\n    max-width: 10%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-lg-column > .flex-lg-10 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 10%;\n    box-sizing: border-box; }\n  .flex-lg-15 {\n    flex: 1 1 100%;\n    max-width: 15%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-lg-15 {\n    flex: 1 1 100%;\n    max-width: 15%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-lg-15 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 15%;\n    box-sizing: border-box; }\n  .layout-lg-row > .flex-lg-15 {\n    flex: 1 1 100%;\n    max-width: 15%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-lg-column > .flex-lg-15 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 15%;\n    box-sizing: border-box; }\n  .flex-lg-20 {\n    flex: 1 1 100%;\n    max-width: 20%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-lg-20 {\n    flex: 1 1 100%;\n    max-width: 20%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-lg-20 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 20%;\n    box-sizing: border-box; }\n  .layout-lg-row > .flex-lg-20 {\n    flex: 1 1 100%;\n    max-width: 20%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-lg-column > .flex-lg-20 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 20%;\n    box-sizing: border-box; }\n  .flex-lg-25 {\n    flex: 1 1 100%;\n    max-width: 25%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-lg-25 {\n    flex: 1 1 100%;\n    max-width: 25%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-lg-25 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 25%;\n    box-sizing: border-box; }\n  .layout-lg-row > .flex-lg-25 {\n    flex: 1 1 100%;\n    max-width: 25%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-lg-column > .flex-lg-25 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 25%;\n    box-sizing: border-box; }\n  .flex-lg-30 {\n    flex: 1 1 100%;\n    max-width: 30%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-lg-30 {\n    flex: 1 1 100%;\n    max-width: 30%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-lg-30 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 30%;\n    box-sizing: border-box; }\n  .layout-lg-row > .flex-lg-30 {\n    flex: 1 1 100%;\n    max-width: 30%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-lg-column > .flex-lg-30 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 30%;\n    box-sizing: border-box; }\n  .flex-lg-35 {\n    flex: 1 1 100%;\n    max-width: 35%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-lg-35 {\n    flex: 1 1 100%;\n    max-width: 35%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-lg-35 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 35%;\n    box-sizing: border-box; }\n  .layout-lg-row > .flex-lg-35 {\n    flex: 1 1 100%;\n    max-width: 35%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-lg-column > .flex-lg-35 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 35%;\n    box-sizing: border-box; }\n  .flex-lg-40 {\n    flex: 1 1 100%;\n    max-width: 40%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-lg-40 {\n    flex: 1 1 100%;\n    max-width: 40%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-lg-40 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 40%;\n    box-sizing: border-box; }\n  .layout-lg-row > .flex-lg-40 {\n    flex: 1 1 100%;\n    max-width: 40%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-lg-column > .flex-lg-40 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 40%;\n    box-sizing: border-box; }\n  .flex-lg-45 {\n    flex: 1 1 100%;\n    max-width: 45%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-lg-45 {\n    flex: 1 1 100%;\n    max-width: 45%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-lg-45 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 45%;\n    box-sizing: border-box; }\n  .layout-lg-row > .flex-lg-45 {\n    flex: 1 1 100%;\n    max-width: 45%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-lg-column > .flex-lg-45 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 45%;\n    box-sizing: border-box; }\n  .flex-lg-50 {\n    flex: 1 1 100%;\n    max-width: 50%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-lg-50 {\n    flex: 1 1 100%;\n    max-width: 50%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-lg-50 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 50%;\n    box-sizing: border-box; }\n  .layout-lg-row > .flex-lg-50 {\n    flex: 1 1 100%;\n    max-width: 50%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-lg-column > .flex-lg-50 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 50%;\n    box-sizing: border-box; }\n  .flex-lg-55 {\n    flex: 1 1 100%;\n    max-width: 55%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-lg-55 {\n    flex: 1 1 100%;\n    max-width: 55%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-lg-55 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 55%;\n    box-sizing: border-box; }\n  .layout-lg-row > .flex-lg-55 {\n    flex: 1 1 100%;\n    max-width: 55%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-lg-column > .flex-lg-55 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 55%;\n    box-sizing: border-box; }\n  .flex-lg-60 {\n    flex: 1 1 100%;\n    max-width: 60%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-lg-60 {\n    flex: 1 1 100%;\n    max-width: 60%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-lg-60 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 60%;\n    box-sizing: border-box; }\n  .layout-lg-row > .flex-lg-60 {\n    flex: 1 1 100%;\n    max-width: 60%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-lg-column > .flex-lg-60 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 60%;\n    box-sizing: border-box; }\n  .flex-lg-65 {\n    flex: 1 1 100%;\n    max-width: 65%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-lg-65 {\n    flex: 1 1 100%;\n    max-width: 65%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-lg-65 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 65%;\n    box-sizing: border-box; }\n  .layout-lg-row > .flex-lg-65 {\n    flex: 1 1 100%;\n    max-width: 65%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-lg-column > .flex-lg-65 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 65%;\n    box-sizing: border-box; }\n  .flex-lg-70 {\n    flex: 1 1 100%;\n    max-width: 70%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-lg-70 {\n    flex: 1 1 100%;\n    max-width: 70%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-lg-70 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 70%;\n    box-sizing: border-box; }\n  .layout-lg-row > .flex-lg-70 {\n    flex: 1 1 100%;\n    max-width: 70%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-lg-column > .flex-lg-70 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 70%;\n    box-sizing: border-box; }\n  .flex-lg-75 {\n    flex: 1 1 100%;\n    max-width: 75%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-lg-75 {\n    flex: 1 1 100%;\n    max-width: 75%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-lg-75 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 75%;\n    box-sizing: border-box; }\n  .layout-lg-row > .flex-lg-75 {\n    flex: 1 1 100%;\n    max-width: 75%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-lg-column > .flex-lg-75 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 75%;\n    box-sizing: border-box; }\n  .flex-lg-80 {\n    flex: 1 1 100%;\n    max-width: 80%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-lg-80 {\n    flex: 1 1 100%;\n    max-width: 80%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-lg-80 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 80%;\n    box-sizing: border-box; }\n  .layout-lg-row > .flex-lg-80 {\n    flex: 1 1 100%;\n    max-width: 80%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-lg-column > .flex-lg-80 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 80%;\n    box-sizing: border-box; }\n  .flex-lg-85 {\n    flex: 1 1 100%;\n    max-width: 85%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-lg-85 {\n    flex: 1 1 100%;\n    max-width: 85%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-lg-85 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 85%;\n    box-sizing: border-box; }\n  .layout-lg-row > .flex-lg-85 {\n    flex: 1 1 100%;\n    max-width: 85%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-lg-column > .flex-lg-85 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 85%;\n    box-sizing: border-box; }\n  .flex-lg-90 {\n    flex: 1 1 100%;\n    max-width: 90%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-lg-90 {\n    flex: 1 1 100%;\n    max-width: 90%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-lg-90 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 90%;\n    box-sizing: border-box; }\n  .layout-lg-row > .flex-lg-90 {\n    flex: 1 1 100%;\n    max-width: 90%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-lg-column > .flex-lg-90 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 90%;\n    box-sizing: border-box; }\n  .flex-lg-95 {\n    flex: 1 1 100%;\n    max-width: 95%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-lg-95 {\n    flex: 1 1 100%;\n    max-width: 95%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-lg-95 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 95%;\n    box-sizing: border-box; }\n  .layout-lg-row > .flex-lg-95 {\n    flex: 1 1 100%;\n    max-width: 95%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-lg-column > .flex-lg-95 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 95%;\n    box-sizing: border-box; }\n  .flex-lg-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-lg-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-lg-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-lg-row > .flex-lg-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-lg-column > .flex-lg-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-lg-33 {\n    flex: 1 1 33.33%;\n    max-width: 33.33%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-lg-66 {\n    flex: 1 1 66.66%;\n    max-width: 66.66%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-lg-33 {\n    flex: 1 1 33.33%;\n    max-width: 100%;\n    max-height: 33.33%;\n    box-sizing: border-box; }\n  .layout-column > .flex-lg-66 {\n    flex: 1 1 66.66%;\n    max-width: 100%;\n    max-height: 66.66%;\n    box-sizing: border-box; }\n  .layout-lg-row > .flex-lg-33 {\n    flex: 1 1 100%;\n    max-width: 33.33%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-lg-row > .flex-lg-66 {\n    flex: 1 1 100%;\n    max-width: 66.66%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-lg-row > .flex {\n    min-width: 0; }\n  .layout-lg-column > .flex-lg-33 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 33.33%;\n    box-sizing: border-box; }\n  .layout-lg-column > .flex-lg-66 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 66.66%;\n    box-sizing: border-box; }\n  .layout-lg-column > .flex {\n    min-height: 0; }\n  .layout-lg,\n  .layout-lg-column,\n  .layout-lg-row {\n    box-sizing: border-box;\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -moz-box;\n    display: -ms-flexbox;\n    display: flex; }\n  .layout-lg-column {\n    flex-direction: column; }\n  .layout-lg-row {\n    flex-direction: row; } }\n\n@media (min-width: 1920px) {\n  .flex-order-gt-lg--20 {\n    order: -20; }\n  .flex-order-gt-lg--19 {\n    order: -19; }\n  .flex-order-gt-lg--18 {\n    order: -18; }\n  .flex-order-gt-lg--17 {\n    order: -17; }\n  .flex-order-gt-lg--16 {\n    order: -16; }\n  .flex-order-gt-lg--15 {\n    order: -15; }\n  .flex-order-gt-lg--14 {\n    order: -14; }\n  .flex-order-gt-lg--13 {\n    order: -13; }\n  .flex-order-gt-lg--12 {\n    order: -12; }\n  .flex-order-gt-lg--11 {\n    order: -11; }\n  .flex-order-gt-lg--10 {\n    order: -10; }\n  .flex-order-gt-lg--9 {\n    order: -9; }\n  .flex-order-gt-lg--8 {\n    order: -8; }\n  .flex-order-gt-lg--7 {\n    order: -7; }\n  .flex-order-gt-lg--6 {\n    order: -6; }\n  .flex-order-gt-lg--5 {\n    order: -5; }\n  .flex-order-gt-lg--4 {\n    order: -4; }\n  .flex-order-gt-lg--3 {\n    order: -3; }\n  .flex-order-gt-lg--2 {\n    order: -2; }\n  .flex-order-gt-lg--1 {\n    order: -1; }\n  .flex-order-gt-lg-0 {\n    order: 0; }\n  .flex-order-gt-lg-1 {\n    order: 1; }\n  .flex-order-gt-lg-2 {\n    order: 2; }\n  .flex-order-gt-lg-3 {\n    order: 3; }\n  .flex-order-gt-lg-4 {\n    order: 4; }\n  .flex-order-gt-lg-5 {\n    order: 5; }\n  .flex-order-gt-lg-6 {\n    order: 6; }\n  .flex-order-gt-lg-7 {\n    order: 7; }\n  .flex-order-gt-lg-8 {\n    order: 8; }\n  .flex-order-gt-lg-9 {\n    order: 9; }\n  .flex-order-gt-lg-10 {\n    order: 10; }\n  .flex-order-gt-lg-11 {\n    order: 11; }\n  .flex-order-gt-lg-12 {\n    order: 12; }\n  .flex-order-gt-lg-13 {\n    order: 13; }\n  .flex-order-gt-lg-14 {\n    order: 14; }\n  .flex-order-gt-lg-15 {\n    order: 15; }\n  .flex-order-gt-lg-16 {\n    order: 16; }\n  .flex-order-gt-lg-17 {\n    order: 17; }\n  .flex-order-gt-lg-18 {\n    order: 18; }\n  .flex-order-gt-lg-19 {\n    order: 19; }\n  .flex-order-gt-lg-20 {\n    order: 20; }\n  .offset-gt-lg-0, .flex-offset-gt-lg-0 {\n    margin-left: 0; }\n    [dir=rtl] .offset-gt-lg-0, [dir=rtl] .flex-offset-gt-lg-0 {\n      margin-left: auto;\n      margin-right: 0; }\n  .offset-gt-lg-5, .flex-offset-gt-lg-5 {\n    margin-left: 5%; }\n    [dir=rtl] .offset-gt-lg-5, [dir=rtl] .flex-offset-gt-lg-5 {\n      margin-left: auto;\n      margin-right: 5%; }\n  .offset-gt-lg-10, .flex-offset-gt-lg-10 {\n    margin-left: 10%; }\n    [dir=rtl] .offset-gt-lg-10, [dir=rtl] .flex-offset-gt-lg-10 {\n      margin-left: auto;\n      margin-right: 10%; }\n  .offset-gt-lg-15, .flex-offset-gt-lg-15 {\n    margin-left: 15%; }\n    [dir=rtl] .offset-gt-lg-15, [dir=rtl] .flex-offset-gt-lg-15 {\n      margin-left: auto;\n      margin-right: 15%; }\n  .offset-gt-lg-20, .flex-offset-gt-lg-20 {\n    margin-left: 20%; }\n    [dir=rtl] .offset-gt-lg-20, [dir=rtl] .flex-offset-gt-lg-20 {\n      margin-left: auto;\n      margin-right: 20%; }\n  .offset-gt-lg-25, .flex-offset-gt-lg-25 {\n    margin-left: 25%; }\n    [dir=rtl] .offset-gt-lg-25, [dir=rtl] .flex-offset-gt-lg-25 {\n      margin-left: auto;\n      margin-right: 25%; }\n  .offset-gt-lg-30, .flex-offset-gt-lg-30 {\n    margin-left: 30%; }\n    [dir=rtl] .offset-gt-lg-30, [dir=rtl] .flex-offset-gt-lg-30 {\n      margin-left: auto;\n      margin-right: 30%; }\n  .offset-gt-lg-35, .flex-offset-gt-lg-35 {\n    margin-left: 35%; }\n    [dir=rtl] .offset-gt-lg-35, [dir=rtl] .flex-offset-gt-lg-35 {\n      margin-left: auto;\n      margin-right: 35%; }\n  .offset-gt-lg-40, .flex-offset-gt-lg-40 {\n    margin-left: 40%; }\n    [dir=rtl] .offset-gt-lg-40, [dir=rtl] .flex-offset-gt-lg-40 {\n      margin-left: auto;\n      margin-right: 40%; }\n  .offset-gt-lg-45, .flex-offset-gt-lg-45 {\n    margin-left: 45%; }\n    [dir=rtl] .offset-gt-lg-45, [dir=rtl] .flex-offset-gt-lg-45 {\n      margin-left: auto;\n      margin-right: 45%; }\n  .offset-gt-lg-50, .flex-offset-gt-lg-50 {\n    margin-left: 50%; }\n    [dir=rtl] .offset-gt-lg-50, [dir=rtl] .flex-offset-gt-lg-50 {\n      margin-left: auto;\n      margin-right: 50%; }\n  .offset-gt-lg-55, .flex-offset-gt-lg-55 {\n    margin-left: 55%; }\n    [dir=rtl] .offset-gt-lg-55, [dir=rtl] .flex-offset-gt-lg-55 {\n      margin-left: auto;\n      margin-right: 55%; }\n  .offset-gt-lg-60, .flex-offset-gt-lg-60 {\n    margin-left: 60%; }\n    [dir=rtl] .offset-gt-lg-60, [dir=rtl] .flex-offset-gt-lg-60 {\n      margin-left: auto;\n      margin-right: 60%; }\n  .offset-gt-lg-65, .flex-offset-gt-lg-65 {\n    margin-left: 65%; }\n    [dir=rtl] .offset-gt-lg-65, [dir=rtl] .flex-offset-gt-lg-65 {\n      margin-left: auto;\n      margin-right: 65%; }\n  .offset-gt-lg-70, .flex-offset-gt-lg-70 {\n    margin-left: 70%; }\n    [dir=rtl] .offset-gt-lg-70, [dir=rtl] .flex-offset-gt-lg-70 {\n      margin-left: auto;\n      margin-right: 70%; }\n  .offset-gt-lg-75, .flex-offset-gt-lg-75 {\n    margin-left: 75%; }\n    [dir=rtl] .offset-gt-lg-75, [dir=rtl] .flex-offset-gt-lg-75 {\n      margin-left: auto;\n      margin-right: 75%; }\n  .offset-gt-lg-80, .flex-offset-gt-lg-80 {\n    margin-left: 80%; }\n    [dir=rtl] .offset-gt-lg-80, [dir=rtl] .flex-offset-gt-lg-80 {\n      margin-left: auto;\n      margin-right: 80%; }\n  .offset-gt-lg-85, .flex-offset-gt-lg-85 {\n    margin-left: 85%; }\n    [dir=rtl] .offset-gt-lg-85, [dir=rtl] .flex-offset-gt-lg-85 {\n      margin-left: auto;\n      margin-right: 85%; }\n  .offset-gt-lg-90, .flex-offset-gt-lg-90 {\n    margin-left: 90%; }\n    [dir=rtl] .offset-gt-lg-90, [dir=rtl] .flex-offset-gt-lg-90 {\n      margin-left: auto;\n      margin-right: 90%; }\n  .offset-gt-lg-95, .flex-offset-gt-lg-95 {\n    margin-left: 95%; }\n    [dir=rtl] .offset-gt-lg-95, [dir=rtl] .flex-offset-gt-lg-95 {\n      margin-left: auto;\n      margin-right: 95%; }\n  .offset-gt-lg-33, .flex-offset-gt-lg-33 {\n    margin-left: calc(100% / 3); }\n  .offset-gt-lg-66, .flex-offset-gt-lg-66 {\n    margin-left: calc(200% / 3); }\n    [dir=rtl] .offset-gt-lg-66, [dir=rtl] .flex-offset-gt-lg-66 {\n      margin-left: auto;\n      margin-right: calc(200% / 3); }\n  .layout-align-gt-lg,\n  .layout-align-gt-lg-start-stretch {\n    justify-content: flex-start;\n    align-content: stretch;\n    align-items: stretch; }\n  .layout-align-gt-lg-start,\n  .layout-align-gt-lg-start-start,\n  .layout-align-gt-lg-start-center,\n  .layout-align-gt-lg-start-end,\n  .layout-align-gt-lg-start-stretch {\n    justify-content: flex-start; }\n  .layout-align-gt-lg-center,\n  .layout-align-gt-lg-center-start,\n  .layout-align-gt-lg-center-center,\n  .layout-align-gt-lg-center-end,\n  .layout-align-gt-lg-center-stretch {\n    justify-content: center; }\n  .layout-align-gt-lg-end,\n  .layout-align-gt-lg-end-start,\n  .layout-align-gt-lg-end-center,\n  .layout-align-gt-lg-end-end,\n  .layout-align-gt-lg-end-stretch {\n    justify-content: flex-end; }\n  .layout-align-gt-lg-space-around,\n  .layout-align-gt-lg-space-around-center,\n  .layout-align-gt-lg-space-around-start,\n  .layout-align-gt-lg-space-around-end,\n  .layout-align-gt-lg-space-around-stretch {\n    justify-content: space-around; }\n  .layout-align-gt-lg-space-between,\n  .layout-align-gt-lg-space-between-center,\n  .layout-align-gt-lg-space-between-start,\n  .layout-align-gt-lg-space-between-end,\n  .layout-align-gt-lg-space-between-stretch {\n    justify-content: space-between; }\n  .layout-align-gt-lg-start-start,\n  .layout-align-gt-lg-center-start,\n  .layout-align-gt-lg-end-start,\n  .layout-align-gt-lg-space-between-start,\n  .layout-align-gt-lg-space-around-start {\n    align-items: flex-start;\n    align-content: flex-start; }\n  .layout-align-gt-lg-start-center,\n  .layout-align-gt-lg-center-center,\n  .layout-align-gt-lg-end-center,\n  .layout-align-gt-lg-space-between-center,\n  .layout-align-gt-lg-space-around-center {\n    align-items: center;\n    align-content: center;\n    max-width: 100%; }\n  .layout-align-gt-lg-start-center > *,\n  .layout-align-gt-lg-center-center > *,\n  .layout-align-gt-lg-end-center > *,\n  .layout-align-gt-lg-space-between-center > *,\n  .layout-align-gt-lg-space-around-center > * {\n    max-width: 100%;\n    box-sizing: border-box; }\n  .layout-align-gt-lg-start-end,\n  .layout-align-gt-lg-center-end,\n  .layout-align-gt-lg-end-end,\n  .layout-align-gt-lg-space-between-end,\n  .layout-align-gt-lg-space-around-end {\n    align-items: flex-end;\n    align-content: flex-end; }\n  .layout-align-gt-lg-start-stretch,\n  .layout-align-gt-lg-center-stretch,\n  .layout-align-gt-lg-end-stretch,\n  .layout-align-gt-lg-space-between-stretch,\n  .layout-align-gt-lg-space-around-stretch {\n    align-items: stretch;\n    align-content: stretch; }\n  .flex-gt-lg {\n    flex: 1;\n    box-sizing: border-box; }\n  .flex-gt-lg-grow {\n    flex: 1 1 100%;\n    box-sizing: border-box; }\n  .flex-gt-lg-initial {\n    flex: 0 1 auto;\n    box-sizing: border-box; }\n  .flex-gt-lg-auto {\n    flex: 1 1 auto;\n    box-sizing: border-box; }\n  .flex-gt-lg-none {\n    flex: 0 0 auto;\n    box-sizing: border-box; }\n  .flex-gt-lg-noshrink {\n    flex: 1 0 auto;\n    box-sizing: border-box; }\n  .flex-gt-lg-nogrow {\n    flex: 0 1 auto;\n    box-sizing: border-box; }\n  .flex-gt-lg-0 {\n    flex: 1 1 100%;\n    max-width: 0%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-lg-0 {\n    flex: 1 1 100%;\n    max-width: 0%;\n    max-height: 100%;\n    box-sizing: border-box;\n    min-width: 0; }\n  .layout-column > .flex-gt-lg-0 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 0%;\n    box-sizing: border-box; }\n  .layout-gt-lg-row > .flex-gt-lg-0 {\n    flex: 1 1 100%;\n    max-width: 0%;\n    max-height: 100%;\n    box-sizing: border-box;\n    min-width: 0; }\n  .layout-gt-lg-column > .flex-gt-lg-0 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 0%;\n    box-sizing: border-box;\n    min-height: 0; }\n  .flex-gt-lg-5 {\n    flex: 1 1 100%;\n    max-width: 5%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-lg-5 {\n    flex: 1 1 100%;\n    max-width: 5%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-lg-5 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 5%;\n    box-sizing: border-box; }\n  .layout-gt-lg-row > .flex-gt-lg-5 {\n    flex: 1 1 100%;\n    max-width: 5%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-lg-column > .flex-gt-lg-5 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 5%;\n    box-sizing: border-box; }\n  .flex-gt-lg-10 {\n    flex: 1 1 100%;\n    max-width: 10%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-lg-10 {\n    flex: 1 1 100%;\n    max-width: 10%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-lg-10 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 10%;\n    box-sizing: border-box; }\n  .layout-gt-lg-row > .flex-gt-lg-10 {\n    flex: 1 1 100%;\n    max-width: 10%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-lg-column > .flex-gt-lg-10 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 10%;\n    box-sizing: border-box; }\n  .flex-gt-lg-15 {\n    flex: 1 1 100%;\n    max-width: 15%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-lg-15 {\n    flex: 1 1 100%;\n    max-width: 15%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-lg-15 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 15%;\n    box-sizing: border-box; }\n  .layout-gt-lg-row > .flex-gt-lg-15 {\n    flex: 1 1 100%;\n    max-width: 15%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-lg-column > .flex-gt-lg-15 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 15%;\n    box-sizing: border-box; }\n  .flex-gt-lg-20 {\n    flex: 1 1 100%;\n    max-width: 20%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-lg-20 {\n    flex: 1 1 100%;\n    max-width: 20%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-lg-20 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 20%;\n    box-sizing: border-box; }\n  .layout-gt-lg-row > .flex-gt-lg-20 {\n    flex: 1 1 100%;\n    max-width: 20%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-lg-column > .flex-gt-lg-20 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 20%;\n    box-sizing: border-box; }\n  .flex-gt-lg-25 {\n    flex: 1 1 100%;\n    max-width: 25%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-lg-25 {\n    flex: 1 1 100%;\n    max-width: 25%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-lg-25 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 25%;\n    box-sizing: border-box; }\n  .layout-gt-lg-row > .flex-gt-lg-25 {\n    flex: 1 1 100%;\n    max-width: 25%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-lg-column > .flex-gt-lg-25 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 25%;\n    box-sizing: border-box; }\n  .flex-gt-lg-30 {\n    flex: 1 1 100%;\n    max-width: 30%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-lg-30 {\n    flex: 1 1 100%;\n    max-width: 30%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-lg-30 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 30%;\n    box-sizing: border-box; }\n  .layout-gt-lg-row > .flex-gt-lg-30 {\n    flex: 1 1 100%;\n    max-width: 30%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-lg-column > .flex-gt-lg-30 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 30%;\n    box-sizing: border-box; }\n  .flex-gt-lg-35 {\n    flex: 1 1 100%;\n    max-width: 35%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-lg-35 {\n    flex: 1 1 100%;\n    max-width: 35%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-lg-35 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 35%;\n    box-sizing: border-box; }\n  .layout-gt-lg-row > .flex-gt-lg-35 {\n    flex: 1 1 100%;\n    max-width: 35%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-lg-column > .flex-gt-lg-35 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 35%;\n    box-sizing: border-box; }\n  .flex-gt-lg-40 {\n    flex: 1 1 100%;\n    max-width: 40%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-lg-40 {\n    flex: 1 1 100%;\n    max-width: 40%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-lg-40 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 40%;\n    box-sizing: border-box; }\n  .layout-gt-lg-row > .flex-gt-lg-40 {\n    flex: 1 1 100%;\n    max-width: 40%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-lg-column > .flex-gt-lg-40 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 40%;\n    box-sizing: border-box; }\n  .flex-gt-lg-45 {\n    flex: 1 1 100%;\n    max-width: 45%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-lg-45 {\n    flex: 1 1 100%;\n    max-width: 45%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-lg-45 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 45%;\n    box-sizing: border-box; }\n  .layout-gt-lg-row > .flex-gt-lg-45 {\n    flex: 1 1 100%;\n    max-width: 45%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-lg-column > .flex-gt-lg-45 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 45%;\n    box-sizing: border-box; }\n  .flex-gt-lg-50 {\n    flex: 1 1 100%;\n    max-width: 50%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-lg-50 {\n    flex: 1 1 100%;\n    max-width: 50%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-lg-50 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 50%;\n    box-sizing: border-box; }\n  .layout-gt-lg-row > .flex-gt-lg-50 {\n    flex: 1 1 100%;\n    max-width: 50%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-lg-column > .flex-gt-lg-50 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 50%;\n    box-sizing: border-box; }\n  .flex-gt-lg-55 {\n    flex: 1 1 100%;\n    max-width: 55%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-lg-55 {\n    flex: 1 1 100%;\n    max-width: 55%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-lg-55 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 55%;\n    box-sizing: border-box; }\n  .layout-gt-lg-row > .flex-gt-lg-55 {\n    flex: 1 1 100%;\n    max-width: 55%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-lg-column > .flex-gt-lg-55 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 55%;\n    box-sizing: border-box; }\n  .flex-gt-lg-60 {\n    flex: 1 1 100%;\n    max-width: 60%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-lg-60 {\n    flex: 1 1 100%;\n    max-width: 60%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-lg-60 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 60%;\n    box-sizing: border-box; }\n  .layout-gt-lg-row > .flex-gt-lg-60 {\n    flex: 1 1 100%;\n    max-width: 60%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-lg-column > .flex-gt-lg-60 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 60%;\n    box-sizing: border-box; }\n  .flex-gt-lg-65 {\n    flex: 1 1 100%;\n    max-width: 65%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-lg-65 {\n    flex: 1 1 100%;\n    max-width: 65%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-lg-65 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 65%;\n    box-sizing: border-box; }\n  .layout-gt-lg-row > .flex-gt-lg-65 {\n    flex: 1 1 100%;\n    max-width: 65%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-lg-column > .flex-gt-lg-65 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 65%;\n    box-sizing: border-box; }\n  .flex-gt-lg-70 {\n    flex: 1 1 100%;\n    max-width: 70%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-lg-70 {\n    flex: 1 1 100%;\n    max-width: 70%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-lg-70 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 70%;\n    box-sizing: border-box; }\n  .layout-gt-lg-row > .flex-gt-lg-70 {\n    flex: 1 1 100%;\n    max-width: 70%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-lg-column > .flex-gt-lg-70 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 70%;\n    box-sizing: border-box; }\n  .flex-gt-lg-75 {\n    flex: 1 1 100%;\n    max-width: 75%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-lg-75 {\n    flex: 1 1 100%;\n    max-width: 75%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-lg-75 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 75%;\n    box-sizing: border-box; }\n  .layout-gt-lg-row > .flex-gt-lg-75 {\n    flex: 1 1 100%;\n    max-width: 75%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-lg-column > .flex-gt-lg-75 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 75%;\n    box-sizing: border-box; }\n  .flex-gt-lg-80 {\n    flex: 1 1 100%;\n    max-width: 80%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-lg-80 {\n    flex: 1 1 100%;\n    max-width: 80%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-lg-80 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 80%;\n    box-sizing: border-box; }\n  .layout-gt-lg-row > .flex-gt-lg-80 {\n    flex: 1 1 100%;\n    max-width: 80%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-lg-column > .flex-gt-lg-80 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 80%;\n    box-sizing: border-box; }\n  .flex-gt-lg-85 {\n    flex: 1 1 100%;\n    max-width: 85%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-lg-85 {\n    flex: 1 1 100%;\n    max-width: 85%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-lg-85 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 85%;\n    box-sizing: border-box; }\n  .layout-gt-lg-row > .flex-gt-lg-85 {\n    flex: 1 1 100%;\n    max-width: 85%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-lg-column > .flex-gt-lg-85 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 85%;\n    box-sizing: border-box; }\n  .flex-gt-lg-90 {\n    flex: 1 1 100%;\n    max-width: 90%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-lg-90 {\n    flex: 1 1 100%;\n    max-width: 90%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-lg-90 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 90%;\n    box-sizing: border-box; }\n  .layout-gt-lg-row > .flex-gt-lg-90 {\n    flex: 1 1 100%;\n    max-width: 90%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-lg-column > .flex-gt-lg-90 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 90%;\n    box-sizing: border-box; }\n  .flex-gt-lg-95 {\n    flex: 1 1 100%;\n    max-width: 95%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-lg-95 {\n    flex: 1 1 100%;\n    max-width: 95%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-lg-95 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 95%;\n    box-sizing: border-box; }\n  .layout-gt-lg-row > .flex-gt-lg-95 {\n    flex: 1 1 100%;\n    max-width: 95%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-lg-column > .flex-gt-lg-95 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 95%;\n    box-sizing: border-box; }\n  .flex-gt-lg-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-lg-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-lg-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-lg-row > .flex-gt-lg-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-lg-column > .flex-gt-lg-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-lg-33 {\n    flex: 1 1 33.33%;\n    max-width: 33.33%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-gt-lg-66 {\n    flex: 1 1 66.66%;\n    max-width: 66.66%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-lg-33 {\n    flex: 1 1 33.33%;\n    max-width: 100%;\n    max-height: 33.33%;\n    box-sizing: border-box; }\n  .layout-column > .flex-gt-lg-66 {\n    flex: 1 1 66.66%;\n    max-width: 100%;\n    max-height: 66.66%;\n    box-sizing: border-box; }\n  .layout-gt-lg-row > .flex-gt-lg-33 {\n    flex: 1 1 100%;\n    max-width: 33.33%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-lg-row > .flex-gt-lg-66 {\n    flex: 1 1 100%;\n    max-width: 66.66%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-gt-lg-row > .flex {\n    min-width: 0; }\n  .layout-gt-lg-column > .flex-gt-lg-33 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 33.33%;\n    box-sizing: border-box; }\n  .layout-gt-lg-column > .flex-gt-lg-66 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 66.66%;\n    box-sizing: border-box; }\n  .layout-gt-lg-column > .flex {\n    min-height: 0; }\n  .layout-gt-lg,\n  .layout-gt-lg-column,\n  .layout-gt-lg-row {\n    box-sizing: border-box;\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -moz-box;\n    display: -ms-flexbox;\n    display: flex; }\n  .layout-gt-lg-column {\n    flex-direction: column; }\n  .layout-gt-lg-row {\n    flex-direction: row; }\n  .flex-order-xl--20 {\n    order: -20; }\n  .flex-order-xl--19 {\n    order: -19; }\n  .flex-order-xl--18 {\n    order: -18; }\n  .flex-order-xl--17 {\n    order: -17; }\n  .flex-order-xl--16 {\n    order: -16; }\n  .flex-order-xl--15 {\n    order: -15; }\n  .flex-order-xl--14 {\n    order: -14; }\n  .flex-order-xl--13 {\n    order: -13; }\n  .flex-order-xl--12 {\n    order: -12; }\n  .flex-order-xl--11 {\n    order: -11; }\n  .flex-order-xl--10 {\n    order: -10; }\n  .flex-order-xl--9 {\n    order: -9; }\n  .flex-order-xl--8 {\n    order: -8; }\n  .flex-order-xl--7 {\n    order: -7; }\n  .flex-order-xl--6 {\n    order: -6; }\n  .flex-order-xl--5 {\n    order: -5; }\n  .flex-order-xl--4 {\n    order: -4; }\n  .flex-order-xl--3 {\n    order: -3; }\n  .flex-order-xl--2 {\n    order: -2; }\n  .flex-order-xl--1 {\n    order: -1; }\n  .flex-order-xl-0 {\n    order: 0; }\n  .flex-order-xl-1 {\n    order: 1; }\n  .flex-order-xl-2 {\n    order: 2; }\n  .flex-order-xl-3 {\n    order: 3; }\n  .flex-order-xl-4 {\n    order: 4; }\n  .flex-order-xl-5 {\n    order: 5; }\n  .flex-order-xl-6 {\n    order: 6; }\n  .flex-order-xl-7 {\n    order: 7; }\n  .flex-order-xl-8 {\n    order: 8; }\n  .flex-order-xl-9 {\n    order: 9; }\n  .flex-order-xl-10 {\n    order: 10; }\n  .flex-order-xl-11 {\n    order: 11; }\n  .flex-order-xl-12 {\n    order: 12; }\n  .flex-order-xl-13 {\n    order: 13; }\n  .flex-order-xl-14 {\n    order: 14; }\n  .flex-order-xl-15 {\n    order: 15; }\n  .flex-order-xl-16 {\n    order: 16; }\n  .flex-order-xl-17 {\n    order: 17; }\n  .flex-order-xl-18 {\n    order: 18; }\n  .flex-order-xl-19 {\n    order: 19; }\n  .flex-order-xl-20 {\n    order: 20; }\n  .offset-xl-0, .flex-offset-xl-0 {\n    margin-left: 0; }\n    [dir=rtl] .offset-xl-0, [dir=rtl] .flex-offset-xl-0 {\n      margin-left: auto;\n      margin-right: 0; }\n  .offset-xl-5, .flex-offset-xl-5 {\n    margin-left: 5%; }\n    [dir=rtl] .offset-xl-5, [dir=rtl] .flex-offset-xl-5 {\n      margin-left: auto;\n      margin-right: 5%; }\n  .offset-xl-10, .flex-offset-xl-10 {\n    margin-left: 10%; }\n    [dir=rtl] .offset-xl-10, [dir=rtl] .flex-offset-xl-10 {\n      margin-left: auto;\n      margin-right: 10%; }\n  .offset-xl-15, .flex-offset-xl-15 {\n    margin-left: 15%; }\n    [dir=rtl] .offset-xl-15, [dir=rtl] .flex-offset-xl-15 {\n      margin-left: auto;\n      margin-right: 15%; }\n  .offset-xl-20, .flex-offset-xl-20 {\n    margin-left: 20%; }\n    [dir=rtl] .offset-xl-20, [dir=rtl] .flex-offset-xl-20 {\n      margin-left: auto;\n      margin-right: 20%; }\n  .offset-xl-25, .flex-offset-xl-25 {\n    margin-left: 25%; }\n    [dir=rtl] .offset-xl-25, [dir=rtl] .flex-offset-xl-25 {\n      margin-left: auto;\n      margin-right: 25%; }\n  .offset-xl-30, .flex-offset-xl-30 {\n    margin-left: 30%; }\n    [dir=rtl] .offset-xl-30, [dir=rtl] .flex-offset-xl-30 {\n      margin-left: auto;\n      margin-right: 30%; }\n  .offset-xl-35, .flex-offset-xl-35 {\n    margin-left: 35%; }\n    [dir=rtl] .offset-xl-35, [dir=rtl] .flex-offset-xl-35 {\n      margin-left: auto;\n      margin-right: 35%; }\n  .offset-xl-40, .flex-offset-xl-40 {\n    margin-left: 40%; }\n    [dir=rtl] .offset-xl-40, [dir=rtl] .flex-offset-xl-40 {\n      margin-left: auto;\n      margin-right: 40%; }\n  .offset-xl-45, .flex-offset-xl-45 {\n    margin-left: 45%; }\n    [dir=rtl] .offset-xl-45, [dir=rtl] .flex-offset-xl-45 {\n      margin-left: auto;\n      margin-right: 45%; }\n  .offset-xl-50, .flex-offset-xl-50 {\n    margin-left: 50%; }\n    [dir=rtl] .offset-xl-50, [dir=rtl] .flex-offset-xl-50 {\n      margin-left: auto;\n      margin-right: 50%; }\n  .offset-xl-55, .flex-offset-xl-55 {\n    margin-left: 55%; }\n    [dir=rtl] .offset-xl-55, [dir=rtl] .flex-offset-xl-55 {\n      margin-left: auto;\n      margin-right: 55%; }\n  .offset-xl-60, .flex-offset-xl-60 {\n    margin-left: 60%; }\n    [dir=rtl] .offset-xl-60, [dir=rtl] .flex-offset-xl-60 {\n      margin-left: auto;\n      margin-right: 60%; }\n  .offset-xl-65, .flex-offset-xl-65 {\n    margin-left: 65%; }\n    [dir=rtl] .offset-xl-65, [dir=rtl] .flex-offset-xl-65 {\n      margin-left: auto;\n      margin-right: 65%; }\n  .offset-xl-70, .flex-offset-xl-70 {\n    margin-left: 70%; }\n    [dir=rtl] .offset-xl-70, [dir=rtl] .flex-offset-xl-70 {\n      margin-left: auto;\n      margin-right: 70%; }\n  .offset-xl-75, .flex-offset-xl-75 {\n    margin-left: 75%; }\n    [dir=rtl] .offset-xl-75, [dir=rtl] .flex-offset-xl-75 {\n      margin-left: auto;\n      margin-right: 75%; }\n  .offset-xl-80, .flex-offset-xl-80 {\n    margin-left: 80%; }\n    [dir=rtl] .offset-xl-80, [dir=rtl] .flex-offset-xl-80 {\n      margin-left: auto;\n      margin-right: 80%; }\n  .offset-xl-85, .flex-offset-xl-85 {\n    margin-left: 85%; }\n    [dir=rtl] .offset-xl-85, [dir=rtl] .flex-offset-xl-85 {\n      margin-left: auto;\n      margin-right: 85%; }\n  .offset-xl-90, .flex-offset-xl-90 {\n    margin-left: 90%; }\n    [dir=rtl] .offset-xl-90, [dir=rtl] .flex-offset-xl-90 {\n      margin-left: auto;\n      margin-right: 90%; }\n  .offset-xl-95, .flex-offset-xl-95 {\n    margin-left: 95%; }\n    [dir=rtl] .offset-xl-95, [dir=rtl] .flex-offset-xl-95 {\n      margin-left: auto;\n      margin-right: 95%; }\n  .offset-xl-33, .flex-offset-xl-33 {\n    margin-left: calc(100% / 3); }\n  .offset-xl-66, .flex-offset-xl-66 {\n    margin-left: calc(200% / 3); }\n    [dir=rtl] .offset-xl-66, [dir=rtl] .flex-offset-xl-66 {\n      margin-left: auto;\n      margin-right: calc(200% / 3); }\n  .layout-align-xl,\n  .layout-align-xl-start-stretch {\n    justify-content: flex-start;\n    align-content: stretch;\n    align-items: stretch; }\n  .layout-align-xl-start,\n  .layout-align-xl-start-start,\n  .layout-align-xl-start-center,\n  .layout-align-xl-start-end,\n  .layout-align-xl-start-stretch {\n    justify-content: flex-start; }\n  .layout-align-xl-center,\n  .layout-align-xl-center-start,\n  .layout-align-xl-center-center,\n  .layout-align-xl-center-end,\n  .layout-align-xl-center-stretch {\n    justify-content: center; }\n  .layout-align-xl-end,\n  .layout-align-xl-end-start,\n  .layout-align-xl-end-center,\n  .layout-align-xl-end-end,\n  .layout-align-xl-end-stretch {\n    justify-content: flex-end; }\n  .layout-align-xl-space-around,\n  .layout-align-xl-space-around-center,\n  .layout-align-xl-space-around-start,\n  .layout-align-xl-space-around-end,\n  .layout-align-xl-space-around-stretch {\n    justify-content: space-around; }\n  .layout-align-xl-space-between,\n  .layout-align-xl-space-between-center,\n  .layout-align-xl-space-between-start,\n  .layout-align-xl-space-between-end,\n  .layout-align-xl-space-between-stretch {\n    justify-content: space-between; }\n  .layout-align-xl-start-start,\n  .layout-align-xl-center-start,\n  .layout-align-xl-end-start,\n  .layout-align-xl-space-between-start,\n  .layout-align-xl-space-around-start {\n    align-items: flex-start;\n    align-content: flex-start; }\n  .layout-align-xl-start-center,\n  .layout-align-xl-center-center,\n  .layout-align-xl-end-center,\n  .layout-align-xl-space-between-center,\n  .layout-align-xl-space-around-center {\n    align-items: center;\n    align-content: center;\n    max-width: 100%; }\n  .layout-align-xl-start-center > *,\n  .layout-align-xl-center-center > *,\n  .layout-align-xl-end-center > *,\n  .layout-align-xl-space-between-center > *,\n  .layout-align-xl-space-around-center > * {\n    max-width: 100%;\n    box-sizing: border-box; }\n  .layout-align-xl-start-end,\n  .layout-align-xl-center-end,\n  .layout-align-xl-end-end,\n  .layout-align-xl-space-between-end,\n  .layout-align-xl-space-around-end {\n    align-items: flex-end;\n    align-content: flex-end; }\n  .layout-align-xl-start-stretch,\n  .layout-align-xl-center-stretch,\n  .layout-align-xl-end-stretch,\n  .layout-align-xl-space-between-stretch,\n  .layout-align-xl-space-around-stretch {\n    align-items: stretch;\n    align-content: stretch; }\n  .flex-xl {\n    flex: 1;\n    box-sizing: border-box; }\n  .flex-xl-grow {\n    flex: 1 1 100%;\n    box-sizing: border-box; }\n  .flex-xl-initial {\n    flex: 0 1 auto;\n    box-sizing: border-box; }\n  .flex-xl-auto {\n    flex: 1 1 auto;\n    box-sizing: border-box; }\n  .flex-xl-none {\n    flex: 0 0 auto;\n    box-sizing: border-box; }\n  .flex-xl-noshrink {\n    flex: 1 0 auto;\n    box-sizing: border-box; }\n  .flex-xl-nogrow {\n    flex: 0 1 auto;\n    box-sizing: border-box; }\n  .flex-xl-0 {\n    flex: 1 1 100%;\n    max-width: 0%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xl-0 {\n    flex: 1 1 100%;\n    max-width: 0%;\n    max-height: 100%;\n    box-sizing: border-box;\n    min-width: 0; }\n  .layout-column > .flex-xl-0 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 0%;\n    box-sizing: border-box; }\n  .layout-xl-row > .flex-xl-0 {\n    flex: 1 1 100%;\n    max-width: 0%;\n    max-height: 100%;\n    box-sizing: border-box;\n    min-width: 0; }\n  .layout-xl-column > .flex-xl-0 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 0%;\n    box-sizing: border-box;\n    min-height: 0; }\n  .flex-xl-5 {\n    flex: 1 1 100%;\n    max-width: 5%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xl-5 {\n    flex: 1 1 100%;\n    max-width: 5%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xl-5 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 5%;\n    box-sizing: border-box; }\n  .layout-xl-row > .flex-xl-5 {\n    flex: 1 1 100%;\n    max-width: 5%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xl-column > .flex-xl-5 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 5%;\n    box-sizing: border-box; }\n  .flex-xl-10 {\n    flex: 1 1 100%;\n    max-width: 10%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xl-10 {\n    flex: 1 1 100%;\n    max-width: 10%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xl-10 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 10%;\n    box-sizing: border-box; }\n  .layout-xl-row > .flex-xl-10 {\n    flex: 1 1 100%;\n    max-width: 10%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xl-column > .flex-xl-10 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 10%;\n    box-sizing: border-box; }\n  .flex-xl-15 {\n    flex: 1 1 100%;\n    max-width: 15%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xl-15 {\n    flex: 1 1 100%;\n    max-width: 15%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xl-15 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 15%;\n    box-sizing: border-box; }\n  .layout-xl-row > .flex-xl-15 {\n    flex: 1 1 100%;\n    max-width: 15%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xl-column > .flex-xl-15 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 15%;\n    box-sizing: border-box; }\n  .flex-xl-20 {\n    flex: 1 1 100%;\n    max-width: 20%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xl-20 {\n    flex: 1 1 100%;\n    max-width: 20%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xl-20 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 20%;\n    box-sizing: border-box; }\n  .layout-xl-row > .flex-xl-20 {\n    flex: 1 1 100%;\n    max-width: 20%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xl-column > .flex-xl-20 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 20%;\n    box-sizing: border-box; }\n  .flex-xl-25 {\n    flex: 1 1 100%;\n    max-width: 25%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xl-25 {\n    flex: 1 1 100%;\n    max-width: 25%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xl-25 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 25%;\n    box-sizing: border-box; }\n  .layout-xl-row > .flex-xl-25 {\n    flex: 1 1 100%;\n    max-width: 25%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xl-column > .flex-xl-25 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 25%;\n    box-sizing: border-box; }\n  .flex-xl-30 {\n    flex: 1 1 100%;\n    max-width: 30%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xl-30 {\n    flex: 1 1 100%;\n    max-width: 30%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xl-30 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 30%;\n    box-sizing: border-box; }\n  .layout-xl-row > .flex-xl-30 {\n    flex: 1 1 100%;\n    max-width: 30%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xl-column > .flex-xl-30 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 30%;\n    box-sizing: border-box; }\n  .flex-xl-35 {\n    flex: 1 1 100%;\n    max-width: 35%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xl-35 {\n    flex: 1 1 100%;\n    max-width: 35%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xl-35 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 35%;\n    box-sizing: border-box; }\n  .layout-xl-row > .flex-xl-35 {\n    flex: 1 1 100%;\n    max-width: 35%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xl-column > .flex-xl-35 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 35%;\n    box-sizing: border-box; }\n  .flex-xl-40 {\n    flex: 1 1 100%;\n    max-width: 40%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xl-40 {\n    flex: 1 1 100%;\n    max-width: 40%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xl-40 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 40%;\n    box-sizing: border-box; }\n  .layout-xl-row > .flex-xl-40 {\n    flex: 1 1 100%;\n    max-width: 40%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xl-column > .flex-xl-40 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 40%;\n    box-sizing: border-box; }\n  .flex-xl-45 {\n    flex: 1 1 100%;\n    max-width: 45%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xl-45 {\n    flex: 1 1 100%;\n    max-width: 45%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xl-45 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 45%;\n    box-sizing: border-box; }\n  .layout-xl-row > .flex-xl-45 {\n    flex: 1 1 100%;\n    max-width: 45%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xl-column > .flex-xl-45 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 45%;\n    box-sizing: border-box; }\n  .flex-xl-50 {\n    flex: 1 1 100%;\n    max-width: 50%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xl-50 {\n    flex: 1 1 100%;\n    max-width: 50%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xl-50 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 50%;\n    box-sizing: border-box; }\n  .layout-xl-row > .flex-xl-50 {\n    flex: 1 1 100%;\n    max-width: 50%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xl-column > .flex-xl-50 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 50%;\n    box-sizing: border-box; }\n  .flex-xl-55 {\n    flex: 1 1 100%;\n    max-width: 55%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xl-55 {\n    flex: 1 1 100%;\n    max-width: 55%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xl-55 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 55%;\n    box-sizing: border-box; }\n  .layout-xl-row > .flex-xl-55 {\n    flex: 1 1 100%;\n    max-width: 55%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xl-column > .flex-xl-55 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 55%;\n    box-sizing: border-box; }\n  .flex-xl-60 {\n    flex: 1 1 100%;\n    max-width: 60%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xl-60 {\n    flex: 1 1 100%;\n    max-width: 60%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xl-60 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 60%;\n    box-sizing: border-box; }\n  .layout-xl-row > .flex-xl-60 {\n    flex: 1 1 100%;\n    max-width: 60%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xl-column > .flex-xl-60 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 60%;\n    box-sizing: border-box; }\n  .flex-xl-65 {\n    flex: 1 1 100%;\n    max-width: 65%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xl-65 {\n    flex: 1 1 100%;\n    max-width: 65%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xl-65 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 65%;\n    box-sizing: border-box; }\n  .layout-xl-row > .flex-xl-65 {\n    flex: 1 1 100%;\n    max-width: 65%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xl-column > .flex-xl-65 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 65%;\n    box-sizing: border-box; }\n  .flex-xl-70 {\n    flex: 1 1 100%;\n    max-width: 70%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xl-70 {\n    flex: 1 1 100%;\n    max-width: 70%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xl-70 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 70%;\n    box-sizing: border-box; }\n  .layout-xl-row > .flex-xl-70 {\n    flex: 1 1 100%;\n    max-width: 70%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xl-column > .flex-xl-70 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 70%;\n    box-sizing: border-box; }\n  .flex-xl-75 {\n    flex: 1 1 100%;\n    max-width: 75%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xl-75 {\n    flex: 1 1 100%;\n    max-width: 75%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xl-75 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 75%;\n    box-sizing: border-box; }\n  .layout-xl-row > .flex-xl-75 {\n    flex: 1 1 100%;\n    max-width: 75%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xl-column > .flex-xl-75 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 75%;\n    box-sizing: border-box; }\n  .flex-xl-80 {\n    flex: 1 1 100%;\n    max-width: 80%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xl-80 {\n    flex: 1 1 100%;\n    max-width: 80%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xl-80 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 80%;\n    box-sizing: border-box; }\n  .layout-xl-row > .flex-xl-80 {\n    flex: 1 1 100%;\n    max-width: 80%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xl-column > .flex-xl-80 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 80%;\n    box-sizing: border-box; }\n  .flex-xl-85 {\n    flex: 1 1 100%;\n    max-width: 85%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xl-85 {\n    flex: 1 1 100%;\n    max-width: 85%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xl-85 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 85%;\n    box-sizing: border-box; }\n  .layout-xl-row > .flex-xl-85 {\n    flex: 1 1 100%;\n    max-width: 85%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xl-column > .flex-xl-85 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 85%;\n    box-sizing: border-box; }\n  .flex-xl-90 {\n    flex: 1 1 100%;\n    max-width: 90%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xl-90 {\n    flex: 1 1 100%;\n    max-width: 90%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xl-90 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 90%;\n    box-sizing: border-box; }\n  .layout-xl-row > .flex-xl-90 {\n    flex: 1 1 100%;\n    max-width: 90%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xl-column > .flex-xl-90 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 90%;\n    box-sizing: border-box; }\n  .flex-xl-95 {\n    flex: 1 1 100%;\n    max-width: 95%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xl-95 {\n    flex: 1 1 100%;\n    max-width: 95%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xl-95 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 95%;\n    box-sizing: border-box; }\n  .layout-xl-row > .flex-xl-95 {\n    flex: 1 1 100%;\n    max-width: 95%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xl-column > .flex-xl-95 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 95%;\n    box-sizing: border-box; }\n  .flex-xl-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xl-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xl-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xl-row > .flex-xl-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xl-column > .flex-xl-100 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xl-33 {\n    flex: 1 1 33.33%;\n    max-width: 33.33%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-row > .flex-xl-66 {\n    flex: 1 1 66.66%;\n    max-width: 66.66%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xl-33 {\n    flex: 1 1 33.33%;\n    max-width: 100%;\n    max-height: 33.33%;\n    box-sizing: border-box; }\n  .layout-column > .flex-xl-66 {\n    flex: 1 1 66.66%;\n    max-width: 100%;\n    max-height: 66.66%;\n    box-sizing: border-box; }\n  .layout-xl-row > .flex-xl-33 {\n    flex: 1 1 100%;\n    max-width: 33.33%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xl-row > .flex-xl-66 {\n    flex: 1 1 100%;\n    max-width: 66.66%;\n    max-height: 100%;\n    box-sizing: border-box; }\n  .layout-xl-row > .flex {\n    min-width: 0; }\n  .layout-xl-column > .flex-xl-33 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 33.33%;\n    box-sizing: border-box; }\n  .layout-xl-column > .flex-xl-66 {\n    flex: 1 1 100%;\n    max-width: 100%;\n    max-height: 66.66%;\n    box-sizing: border-box; }\n  .layout-xl-column > .flex {\n    min-height: 0; }\n  .layout-xl,\n  .layout-xl-column,\n  .layout-xl-row {\n    box-sizing: border-box;\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -moz-box;\n    display: -ms-flexbox;\n    display: flex; }\n  .layout-xl-column {\n    flex-direction: column; }\n  .layout-xl-row {\n    flex-direction: row; }\n  .layout-gutter {\n    margin-right: -24px;\n    margin-left: -24px; }\n    .layout-gutter > * {\n      padding-right: 24px;\n      padding-left: 24px; }\n  .hide:not(.show-gt-xs):not(.show-gt-sm):not(.show-gt-md):not(.show-gt-lg):not(.show-xl):not(.show),\n  .hide-gt-xs:not(.show-gt-xs):not(.show-gt-sm):not(.show-gt-md):not(.show-gt-lg):not(.show-xl):not(.show),\n  .hide-gt-sm:not(.show-gt-xs):not(.show-gt-sm):not(.show-gt-md):not(.show-gt-lg):not(.show-xl):not(.show),\n  .hide-gt-md:not(.show-gt-xs):not(.show-gt-sm):not(.show-gt-md):not(.show-gt-lg):not(.show-xl):not(.show),\n  .hide-gt-lg:not(.show-gt-xs):not(.show-gt-sm):not(.show-gt-md):not(.show-gt-lg):not(.show-xl):not(.show) {\n    display: none; }\n  .hide-xl:not(.show-xl):not(.show-gt-lg):not(.show-gt-md):not(.show-gt-sm):not(.show-gt-xs):not(.show) {\n    display: none; } }\n\n@media print {\n  .hide-print:not(.show-print):not(.show) {\n    display: none !important; } }\n\n.md-scrollbar::-webkit-scrollbar-button {\n  display: none; }\n\n.md-scrollbar::-webkit-scrollbar-track {\n  background-clip: padding-box;\n  border: solid transparent;\n  border-width: 0 0 0 4px; }\n\n.md-scrollbar::-webkit-scrollbar-thumb {\n  background-color: rgba(0, 0, 0, 0.2);\n  background-clip: padding-box;\n  border: solid transparent;\n  border-width: 0px;\n  min-height: 28px;\n  padding: 100px 0 0;\n  -webkit-box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.1), inset 0 -1px 0 rgba(0, 0, 0, 0.07);\n  box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.1), inset 0 -1px 0 rgba(0, 0, 0, 0.07); }\n\n.md-scrollbar::-webkit-scrollbar-corner {\n  background: transparent; }\n\n.md-scrollbar::-webkit-scrollbar {\n  height: 8px;\n  overflow: visible;\n  width: 8px;\n  background-color: transparent; }\n\n/**\r\n * The complete material palette\r\n * ---\r\n * @access public\r\n * @type map\r\n * @group themes\r\n */\n/**\r\n * Theme any css property based on the current palette, accepting a themable\r\n * value that will give an contrasted\r\n * ---\r\n * Usage example:\r\n *\r\n * $foo-palette: (\r\n *   primary: md-get-palette-color(indigo, 500),\r\n *   accent: md-get-palette-color(pink, 500),\r\n *   theme: \"light\"\r\n * );\r\n *\r\n * ---\r\n * @access public\r\n * ---\r\n * @param {color} $type —  The desired color based on material palette\r\n * @param {string} $type —  A valid hue\r\n */\n/**\r\n * Get the current theme mode from the current theme\r\n * ---\r\n * Usage example:\r\n *\r\n * $theme-mode: md-get-theme-mode()\r\n *\r\n * ---\r\n * @access private\r\n */\n/**\r\n * Theme any css property based on the current palette, accepting a themable\r\n * value that will give an contrasted\r\n * ---\r\n * Usage example:\r\n *\r\n * .md-foo {\r\n *   min-width: 88px;\r\n *   height: 40px;\r\n *   background: md-theme(primary);\r\n * }\r\n *\r\n * ---\r\n * @access public\r\n * ---\r\n * @param {string} $type —  The themable value\r\n */\n/**\r\n * Get a color based on type by theme\r\n * ---\r\n * Usage example:\r\n *\r\n * $color: md-get-color-by-theme(dark, primary)\r\n *\r\n * ---\r\n * @access public\r\n * ---\r\n * @param {string} $color-theme —  The theme color | Accepts dark or light\r\n * @param {string} $type —  The color type\r\n */\n/**\r\n * Get a color based on type only\r\n * ---\r\n * Usage example:\r\n *\r\n * $color1: md-get-color-by-type(background, dark)\r\n * $color1: md-get-color-by-type(accent)\r\n *\r\n * ---\r\n * @access public\r\n * ---\r\n * @param {string} $type —  The color type\r\n * @param {string} $theme —  The fallback theme\r\n */\n/**\r\n * The default theme palette\r\n * primary: indigo 500 #3f51b5\r\n * accent: pink 500 #e91e63\r\n * theme: light\r\n *\r\n * It can be used just before importing the Vue Material stylesheet\r\n *\r\n * ---\r\n * @access public\r\n * @type colormap\r\n * @group themes\r\n */\n/**\r\n * Temporary variable to store all themable values\r\n * ---\r\n * @access private\r\n * @type map\r\n * @group themes\r\n */\n/**\r\n * Map variable to store all themes to be processed by each component\r\n * ---\r\n * @access private\r\n * @type map\r\n * @group themes\r\n */\n/**\r\n * Store the current theme name\r\n * ---\r\n * @access private\r\n * @type string\r\n * @group themes\r\n */\n/**\r\n * The color contrast values\r\n * ---\r\n * @access private\r\n * @type map\r\n * @group themes\r\n */\n/**\r\n * Hightly based on: \"Using Sass to automatically pick text colors\"\r\n * https://medium.com/dev-channel/using-sass-to-automatically-pick-text-colors-4ba7645d2796\r\n */\n/**\r\n * Precomputed linear color channel values, for use in contrast calculations.\r\n * See https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests\r\n * ---\r\n *\r\n *  Algorithm, for c in 0 to 255:\r\n *  f(c) {\r\n *    c = c / 255;\r\n *    return c < 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);\r\n *  }\r\n *\r\n *  This lookup table is needed since there is no `pow` in SASS.\r\n *\r\n * ---\r\n * @access private\r\n * @type Map\r\n * @group themes\r\n */\n/**\r\n * Calculate the luminance for a color.\r\n * ---\r\n * @access private\r\n * ---\r\n * @param {string} $color —  The color to be analysed\r\n */\n/**\r\n * Calculate the contrast ratio between two colors.\r\n * ---\r\n * @access private\r\n * ---\r\n * @param {string} $bg —  The bg color\r\n * @param {string} $fg —  The fg color to be compared\r\n */\n/**\r\n * Determine whether to use dark or light text on top of given color.\r\n * Returns dark or light depending on the contrast ratio.\r\n * ---\r\n * @access private\r\n * ---\r\n * @param {string} $color —  The desired color to be compared\r\n */\n/**\r\n * Override extending the default palette giving new values. It will extend\r\n * the default values of the palette if has a property missing.\r\n * ---\r\n * Usage example:\r\n *\r\n * @include md-override-palette ((\r\n *   accent: blue,\r\n *   theme: \"dark\"\r\n * ))\r\n *\r\n * ---\r\n * @access public\r\n * @param {map} $palette —  The new palette\r\n */\n/**\r\n * Create a new theme based on a given palette. It will extend the default\r\n * values of the palette if has a property missing.\r\n * ---\r\n * Usage example:\r\n *\r\n * @include md-register-theme(\"alternative\", (\r\n *   primary: #212121,\r\n *   accent: #CDDC39,\r\n *   theme: dark\r\n * ));\r\n *\r\n * ---\r\n * @access public\r\n * @param {string} $name —  The theme name to be used with the Vue Material\r\n * @param {map} $palette [$md-default-palette] —  The theme palette\r\n */\n/**\r\n * Theme pieces of a given scss code for all pre registered themes.\r\n * ---\r\n * Usage example:\r\n *\r\n * .md-button {\r\n *   min-width: 88px;\r\n *   height: 40px;\r\n *   display: inline-block;\r\n *   border-radius: 2px;\r\n *   transition: .3s ease;\r\n *\r\n *   @include md-theme-component() {\r\n *     background: md-theme(primary);\r\n *     color: md-theme(text-primary);\r\n *   }\r\n *\r\n *   &.md-accent {\r\n *     @include md-theme-component() {\r\n *       background: md-theme(accent);\r\n *       color: md-theme(text-accent);\r\n *     };\r\n *   }\r\n * }\r\n */\n/**\r\n * Theme pieces of a given scss code for all pre registered themes based on parent.\r\n * ---\r\n * Usage example:\r\n *\r\n * .md-foo {\r\n *   @include md-theme-component-relative() {\r\n *     @include md-theme-property(background, primary);\r\n *   }\r\n * }\r\n */\n/**\r\n * Theme a single css property\r\n * ---\r\n * Usage example:\r\n *\r\n * .md-button {\r\n *   min-width: 88px;\r\n *   height: 40px;\r\n *   display: inline-block;\r\n *   border-radius: 2px;\r\n *   transition: .3s ease;\r\n *\r\n *   @include md-theme-component() {\r\n *     @include md-theme-property(background, primary);\r\n *     @include md-theme-property(color, text-primary, primary);\r\n *   }\r\n *\r\n *   &.md-accent {\r\n *     @include md-theme-component() {\r\n *       @include md-theme-property(background, accent);\r\n *       @include md-theme-property(color, text-primary, accent);\r\n *     }\r\n *   }\r\n * }\r\n *\r\n * ---\r\n * @access public\r\n * @param {string} $property —  The css property\r\n * @param {string} $type —  A palette type\r\n * @param {string} $background —  The background color to analyse contrast\r\n * @param {number} $opacity —  The opacity amount\r\n */\n/**\r\n * Theme a single css property darkening the color by a certain amount\r\n * ---\r\n * Usage example:\r\n *\r\n * .md-button {\r\n *   min-width: 88px;\r\n *   height: 40px;\r\n *   display: inline-block;\r\n *   border-radius: 2px;\r\n *   transition: .3s ease;\r\n *\r\n *   @include md-theme-component() {\r\n *     @include md-theme-property-darken(background, primary, background, 10%);\r\n *     @include md-theme-property(color, text-primary, primary);\r\n *   }\r\n * }\r\n *\r\n * ---\r\n * @access public\r\n * @param {string} $property —  The css property\r\n * @param {string} $type —  A palette type\r\n * @param {string} $background —  The background color to analyse contrast\r\n * @param {string} $darken —  The darken amount to apply to the color\r\n */\n/**\r\n * Theme a single css property by\r\n * ---\r\n * Usage example:\r\n *\r\n * .md-button {\r\n *   min-width: 88px;\r\n *   height: 40px;\r\n *   display: inline-block;\r\n *   border-radius: 2px;\r\n *   transition: .3s ease;\r\n *\r\n *   @include md-theme-component() {\r\n *     @include md-theme-property-by-hue(background, grey, 100, toolbar, background);\r\n *     @include md-theme-property(color, text-primary, background);\r\n *   }\r\n * }\r\n *\r\n * ---\r\n * @access public\r\n * @param {string} $property —  The css property\r\n * @param {string} $color —  A valid material palette color name\r\n * @param {string} $hue —  The hue amount to get the hex color\r\n * @param {string} $type —  The type of variable\r\n * @param {string} $variant —  The type of constrasted variable\r\n */\n/**\r\n * Text and Titles - Implement all guidelines for text content\r\n */\n.md-caption {\n  font-size: 12px;\n  font-weight: 400;\n  letter-spacing: .02em;\n  line-height: 17px; }\n\n.md-body-1, body {\n  font-size: 14px;\n  font-weight: 400;\n  letter-spacing: .01em;\n  line-height: 20px; }\n\n.md-body-2 {\n  font-size: 14px;\n  font-weight: 500;\n  letter-spacing: .01em;\n  line-height: 24px; }\n\n.md-subheading {\n  font-size: 16px;\n  font-weight: 400;\n  letter-spacing: .01em;\n  line-height: 24px; }\n\n.md-title {\n  font-size: 20px;\n  font-weight: 500;\n  letter-spacing: .005em;\n  line-height: 26px; }\n\n.md-headline {\n  font-size: 24px;\n  font-weight: 400;\n  letter-spacing: 0;\n  line-height: 32px; }\n\n.md-display-1 {\n  font-size: 34px;\n  font-weight: 400;\n  letter-spacing: 0;\n  line-height: 40px; }\n\n.md-display-2 {\n  font-size: 45px;\n  font-weight: 400;\n  letter-spacing: 0;\n  line-height: 48px; }\n\n.md-display-3 {\n  font-size: 56px;\n  font-weight: 400;\n  letter-spacing: -.005em;\n  line-height: 58px; }\n\n.md-display-4 {\n  font-size: 112px;\n  font-weight: 300;\n  letter-spacing: -.01em;\n  line-height: 112px; }\n\n/**\r\n * Links and Buttons - Create consise links across all the application\r\n */\n/*\r\n   ========================================================================== */\na:not(.md-button) {\n  text-decoration: none; }\n  a:not(.md-button):hover {\n    text-decoration: underline; }\n\nbutton:focus {\n  outline: none; }\n\n.md-1px,\n.md-1px-t,\n.md-1px-b,\n.md-1px-tb,\n.md-1px-l,\n.md-1px-r {\n  position: relative; }\n\n.md-1px:before {\n  content: \" \";\n  position: absolute;\n  left: 0;\n  top: 0;\n  width: 200%;\n  border: 1px solid #C7C7C7;\n  color: #C7C7C7;\n  height: 200%;\n  transform-origin: left top;\n  transform: scale(0.5); }\n\n.md-1px-t:before {\n  content: \" \";\n  position: absolute;\n  left: 0;\n  top: 0;\n  right: 0;\n  height: 1px;\n  border-top: 1px solid #C7C7C7;\n  color: #C7C7C7;\n  transform-origin: 0 0;\n  transform: scaleY(0.5); }\n\n.md-1px-b:after {\n  content: \" \";\n  position: absolute;\n  left: 0;\n  bottom: 0;\n  right: 0;\n  height: 1px;\n  border-bottom: 1px solid #C7C7C7;\n  color: #C7C7C7;\n  transform-origin: 0 100%;\n  transform: scaleY(0.5); }\n\n.md-1px-tb:before {\n  content: \" \";\n  position: absolute;\n  left: 0;\n  top: 0;\n  right: 0;\n  height: 1px;\n  border-top: 1px solid #C7C7C7;\n  color: #C7C7C7;\n  transform-origin: 0 0;\n  transform: scaleY(0.5); }\n\n.md-1px-tb:after {\n  content: \" \";\n  position: absolute;\n  left: 0;\n  bottom: 0;\n  right: 0;\n  height: 1px;\n  border-bottom: 1px solid #C7C7C7;\n  color: #C7C7C7;\n  transform-origin: 0 100%;\n  transform: scaleY(0.5); }\n\n.md-1px-l:before {\n  content: \" \";\n  position: absolute;\n  left: 0;\n  top: 0;\n  width: 1px;\n  bottom: 0;\n  border-left: 1px solid #C7C7C7;\n  color: #C7C7C7;\n  transform-origin: 0 0;\n  transform: scaleX(0.5); }\n\n.md-1px-r:after {\n  content: \" \";\n  position: absolute;\n  right: 0;\n  top: 0;\n  width: 1px;\n  bottom: 0;\n  border-right: 1px solid #C7C7C7;\n  color: #C7C7C7;\n  transform-origin: 100% 0;\n  transform: scaleX(0.5); }\n\n/**\r\n * The layout system breakpoints\r\n * ---\r\n * @access private\r\n * @type layout\r\n * @group layout\r\n */\n/**\r\n * The available gutter sizes\r\n * ---\r\n * @access private\r\n * @type layout\r\n * @group layout\r\n */\n/**\r\n * Breakpoint\r\n */\n/**\r\n * Base\r\n */\n/**\r\n * Layout Item\r\n */\n/**\r\n * Hide Element\r\n */\n.md-speed-dial {\n  justify-content: center;\n  align-items: center;\n  align-content: center; }\n\n.md-tabs.md-dense .md-tabs-navigation .md-button {\n  height: 40px; }\n\n.md-toolbar.md-dense .md-toolbar-row {\n  min-height: 40px; }\n\n.md-app .md-app-container {\n  overflow-x: hidden; }\n\n.md-toolbar.md-fixed-last-active .md-toolbar-row:last-child .md-flexible {\n  transform: translate3d(0%, 100%, 0px); }\n  .md-toolbar.md-fixed-last-active .md-toolbar-row:last-child .md-flexible.md-toolbar-section-start {\n    transform: translate3d(-120%, 0px, 0px); }\n  .md-toolbar.md-fixed-last-active .md-toolbar-row:last-child .md-flexible.md-toolbar-section-end {\n    transform: translate3d(120%, 0px, 0px); }\n\n.md-dialog {\n  overflow: inherit !important; }\n  .md-dialog .md-dialog-button-close {\n    position: absolute;\n    left: 100%;\n    color: #fff;\n    margin-left: 30px !important;\n    top: 6px; }\n    .md-dialog .md-dialog-button-close .md-icon {\n      color: rgba(255, 255, 255, 0.83) !important;\n      font-size: 30px; }\n  @media (max-width: 600px) {\n    .md-dialog .md-toolbar .md-dialog-button-close {\n      position: relative;\n      left: auto;\n      top: auto;\n      margin-left: 10px !important; } }\n  .md-dialog .md-dialog-content .md-tabs .md-tabs-content {\n    display: flex;\n    flex: 1;\n    box-sizing: border-box;\n    max-width: 100%; }\n    .md-dialog .md-dialog-content .md-tabs .md-tabs-content .md-tabs-container {\n      max-width: 100%;\n      width: 100%; }\n    .md-dialog .md-dialog-content .md-tabs .md-tabs-content .md-tab {\n      min-height: 100%;\n      height: 100%; }\n\n.md-select-menu.md-menu-content {\n  z-index: 131; }\n\n.md-list-item.md-active > .md-list-item-expand .md-list-expand {\n  height: auto;\n  opacity: 1;\n  transform: translate3D(0, 0, 0); }\n\n.md-card .md-card-header .md-card-media {\n  margin-left: 0px; }\n\n.md-card .md-card-header .md-card-media + .md-card-header-text {\n  margin-left: 16px; }\n\n.md-card .md-card-header .md-card-header-text + .md-card-media {\n  margin-left: 16px; }\n\n.md-checkbox .md-checkbox-label {\n  font-size: 16px; }\n\n.md-field.md-theme-default.md-disabled:after {\n  background-color: transparent; }\n", ""]);
 
 // exports
 
@@ -27146,29 +26971,6 @@ function toComment(sourceMap) {
 	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
 
 	return '/*# ' + data + ' */';
-}
-
-
-/***/ }),
-
-/***/ "./node_modules/css-loader/lib/url/escape.js":
-/***/ (function(module, exports) {
-
-module.exports = function escape(url) {
-    if (typeof url !== 'string') {
-        return url
-    }
-    // If url is already wrapped in quotes, remove them
-    if (/^['"].*['"]$/.test(url)) {
-        url = url.slice(1, -1);
-    }
-    // Should url be wrapped?
-    // See https://drafts.csswg.org/css-values-3/#urls
-    if (/["'() \t\n]/.test(url)) {
-        return '"' + url.replace(/"/g, '\\"').replace(/\n/g, '\\n') + '"'
-    }
-
-    return url
 }
 
 
@@ -29206,6 +29008,13 @@ var deepmerge_1 = deepmerge;
 
 /***/ }),
 
+/***/ "./node_modules/extract-text-webpack-plugin/dist/loader.js?{\"id\":1,\"omit\":1,\"remove\":true}!./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1769d1e7\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/vendor/gmf-sys/components/MdTip/MdTip.vue":
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
 /***/ "./node_modules/extract-text-webpack-plugin/dist/loader.js?{\"id\":1,\"omit\":1,\"remove\":true}!./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-17ffa8f7\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/vendor/gmf-sys/components/MdDatepicker/MdDatepicker.vue":
 /***/ (function(module, exports) {
 
@@ -29283,6 +29092,13 @@ var deepmerge_1 = deepmerge;
 
 /***/ }),
 
+/***/ "./node_modules/extract-text-webpack-plugin/dist/loader.js?{\"id\":1,\"omit\":1,\"remove\":true}!./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2924a999\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/vendor/gmf-sys/components/MdLoading/MdLoading2.vue":
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
 /***/ "./node_modules/extract-text-webpack-plugin/dist/loader.js?{\"id\":1,\"omit\":1,\"remove\":true}!./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-29541cff\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/vendor/gmf-sys/components/MdToast/MdToast.vue":
 /***/ (function(module, exports) {
 
@@ -29304,13 +29120,6 @@ var deepmerge_1 = deepmerge;
 
 /***/ }),
 
-/***/ "./node_modules/extract-text-webpack-plugin/dist/loader.js?{\"id\":1,\"omit\":1,\"remove\":true}!./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-304685f7\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/vendor/gmf-sys/components/MdScroller/MdScroller.vue":
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-
 /***/ "./node_modules/extract-text-webpack-plugin/dist/loader.js?{\"id\":1,\"omit\":1,\"remove\":true}!./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-31ad524a\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/vendor/gmf-sys/components/MdTable/MdTableAlternateHeader.vue":
 /***/ (function(module, exports) {
 
@@ -29326,6 +29135,13 @@ var deepmerge_1 = deepmerge;
 /***/ }),
 
 /***/ "./node_modules/extract-text-webpack-plugin/dist/loader.js?{\"id\":1,\"omit\":1,\"remove\":true}!./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-35dd040e\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/vendor/gmf-sys/components/MdField/MdSelect/MdOptgroup.vue":
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
+/***/ "./node_modules/extract-text-webpack-plugin/dist/loader.js?{\"id\":1,\"omit\":1,\"remove\":true}!./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-36c446de\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/vendor/gmf-sys/style/MdStyle.vue":
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
@@ -29389,6 +29205,13 @@ var deepmerge_1 = deepmerge;
 /***/ }),
 
 /***/ "./node_modules/extract-text-webpack-plugin/dist/loader.js?{\"id\":1,\"omit\":1,\"remove\":true}!./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-424d9917\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/vendor/gmf-sys/components/MdSnackbar/MdSnackbar.vue":
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
+/***/ "./node_modules/extract-text-webpack-plugin/dist/loader.js?{\"id\":1,\"omit\":1,\"remove\":true}!./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-43816b48\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/vendor/gmf-sys/core/mixins/MdPopup/Modal.vue":
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
@@ -42830,7 +42653,17 @@ var render = function() {
       class: _vm.containerClass,
       attrs: { id: "gmfApp" }
     },
-    [_c("router-view"), _vm._v(" "), _c("md-toast", { ref: "rootToast" })],
+    [
+      _c(
+        "keep-alive",
+        [_vm.$route.meta.keepAlive ? _c("router-view") : _vm._e()],
+        1
+      ),
+      _vm._v(" "),
+      !_vm.$route.meta.keepAlive ? _c("router-view") : _vm._e(),
+      _vm._v(" "),
+      _c("md-toast", { ref: "rootToast" })
+    ],
     1
   )
 }
@@ -43042,6 +42875,75 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-1448a7b0", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-1769d1e7\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/vendor/gmf-sys/components/MdTip/MdTip.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("transition", { attrs: { name: "md-fade" } }, [
+    _c(
+      "div",
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.value,
+            expression: "value"
+          }
+        ],
+        class: _vm.b([_vm.style, _vm.position])
+      },
+      [
+        _vm.style === "text"
+          ? _c("div", [_vm._v(_vm._s(_vm.message))])
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.style === "html"
+          ? _c("div", { domProps: { innerHTML: _vm._s(_vm.message) } })
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.style === "default"
+          ? [
+              _vm.type === "loading"
+                ? _c("md-loading2", {
+                    attrs: { color: "white", type: _vm.loadingType }
+                  })
+                : _c(
+                    "i",
+                    {
+                      staticClass: "md-icon md-icon-font",
+                      class: _vm.b("icon")
+                    },
+                    [_vm._v(_vm._s(_vm.iconType))]
+                  ),
+              _vm._v(" "),
+              _vm.isDef(_vm.message)
+                ? _c("div", { class: _vm.b("text") }, [
+                    _vm._v(_vm._s(_vm.message))
+                  ])
+                : _vm._e()
+            ]
+          : _vm._e()
+      ],
+      2
+    )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-1769d1e7", module.exports)
   }
 }
 
@@ -43278,7 +43180,10 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "md-image", class: [_vm.$mdActiveTheme] },
+    _vm._g(
+      { staticClass: "md-image", class: [_vm.$mdActiveTheme] },
+      _vm.$listeners
+    ),
     [_vm._t("default", [_c("img", { attrs: { src: _vm.mdSrc } })])],
     2
   )
@@ -43545,7 +43450,13 @@ var render = function() {
         })
       : _c(
           "i",
-          { staticClass: "md-icon md-icon-font", class: [_vm.$mdActiveTheme] },
+          _vm._g(
+            {
+              staticClass: "md-icon md-icon-font",
+              class: [_vm.$mdActiveTheme]
+            },
+            _vm.$listeners
+          ),
           [_vm._t("default")],
           2
         )
@@ -43689,6 +43600,50 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-274a81b7", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-2924a999\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/vendor/gmf-sys/components/MdLoading/MdLoading2.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { class: _vm.b([_vm.type, _vm.color]), style: _vm.style }, [
+    _c(
+      "span",
+      { class: _vm.b("spinner", _vm.type) },
+      [
+        _vm._l(_vm.type === "spinner" ? 12 : 0, function(item) {
+          return _c("i")
+        }),
+        _vm._v(" "),
+        _vm.type === "circular"
+          ? _c(
+              "svg",
+              { class: _vm.b("circular"), attrs: { viewBox: "25 25 50 50" } },
+              [
+                _c("circle", {
+                  attrs: { cx: "50", cy: "50", r: "20", fill: "none" }
+                })
+              ]
+            )
+          : _vm._e()
+      ],
+      2
+    )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-2924a999", module.exports)
   }
 }
 
@@ -43927,40 +43882,6 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-2f2554e2", module.exports)
-  }
-}
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-304685f7\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/vendor/gmf-sys/components/MdScroller/MdScroller.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", { style: _vm.styles }, [
-    _c(
-      "div",
-      { staticClass: "xs-container" },
-      [
-        _vm._t("default"),
-        _vm._v(" "),
-        _vm._t("pulldown"),
-        _vm._v(" "),
-        _vm._t("pullup")
-      ],
-      2
-    )
-  ])
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-304685f7", module.exports)
   }
 }
 
@@ -44410,7 +44331,7 @@ var render = function() {
             _vm.status === "pulling"
               ? _vm._t("pulling", [
                   _c("span", { staticClass: "text" }, [
-                    _vm._v(_vm._s(_vm.pullingText || _vm.$t("pulling")))
+                    _vm._v(_vm._s(_vm.mdPullingText || _vm.$t("pulling")))
                   ])
                 ])
               : _vm._e(),
@@ -44418,7 +44339,7 @@ var render = function() {
             _vm.status === "loosing"
               ? _vm._t("loosing", [
                   _c("span", { staticClass: "text" }, [
-                    _vm._v(_vm._s(_vm.loosingText || _vm.$t("loosing")))
+                    _vm._v(_vm._s(_vm.mdLoosingText || _vm.$t("loosing")))
                   ])
                 ])
               : _vm._e(),
@@ -44432,7 +44353,9 @@ var render = function() {
                       _c("md-loading"),
                       _vm._v(" "),
                       _c("span", { staticClass: "text" }, [
-                        _vm._v(_vm._s(_vm.loadingText || _vm.$t("loadingTip")))
+                        _vm._v(
+                          _vm._s(_vm.mdLoadingText || _vm.$t("loadingTip"))
+                        )
                       ])
                     ],
                     1
@@ -44834,6 +44757,50 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-42ce32ee", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-43816b48\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/vendor/gmf-sys/core/mixins/MdPopup/Modal.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("transition", { attrs: { name: "md-fade" } }, [
+    _c("div", {
+      directives: [
+        {
+          name: "show",
+          rawName: "v-show",
+          value: _vm.visible,
+          expression: "visible"
+        }
+      ],
+      staticClass: "md-modal",
+      class: _vm.className,
+      style: _vm.style,
+      on: {
+        touchmove: function($event) {
+          $event.preventDefault()
+          $event.stopPropagation()
+        },
+        click: function($event) {
+          _vm.$emit("click", $event)
+        }
+      }
+    })
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-43816b48", module.exports)
   }
 }
 
@@ -46296,10 +46263,16 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("i", {
-    staticClass: "md-svg-loader",
-    domProps: { innerHTML: _vm._s(_vm.html) }
-  })
+  return _c(
+    "i",
+    _vm._g(
+      {
+        staticClass: "md-svg-loader",
+        domProps: { innerHTML: _vm._s(_vm.html) }
+      },
+      _vm.$listeners
+    )
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -46421,8 +46394,8 @@ var render = function() {
             {
               name: "show",
               rawName: "v-show",
-              value: _vm.loading,
-              expression: "loading"
+              value: _vm.value,
+              expression: "value"
             }
           ],
           staticClass: "loading"
@@ -46432,7 +46405,7 @@ var render = function() {
             _c("md-loading", { staticClass: "icon" }),
             _vm._v(" "),
             _c("span", { staticClass: "text" }, [
-              _vm._v(_vm._s(_vm.loadingText || _vm.$t("loadingTip")))
+              _vm._v(_vm._s(_vm.mdLoadingText || _vm.$t("loadingTip")))
             ])
           ])
         ],
@@ -47593,7 +47566,7 @@ var render = function() {
   return _c(
     "div",
     {
-      staticClass: "md-app md-app-side-drawer layout-column",
+      staticClass: "md-app md-app-side-drawer layout-row",
       class: [_vm.appClasses, _vm.$mdActiveTheme]
     },
     [
@@ -47628,12 +47601,12 @@ var render = function() {
             },
             [_vm._t("md-app-content")],
             2
-          )
+          ),
+          _vm._v(" "),
+          _vm._t("md-app-bottom-bar")
         ],
         2
-      ),
-      _vm._v(" "),
-      _vm._t("md-app-bottom-bar")
+      )
     ],
     2
   )
@@ -49361,6 +49334,10 @@ var _MdURL = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/util
 
 var _MdURL2 = _interopRequireDefault(_MdURL);
 
+var _MdTip = __webpack_require__("./resources/assets/js/vendor/gmf-sys/components/MdTip/index.js");
+
+var _MdTip2 = _interopRequireDefault(_MdTip);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 window.Vue = window.Vue || __webpack_require__("./node_modules/vue/dist/vue.common.js");
@@ -49375,23 +49352,34 @@ function getQueryString(name) {
     if (r != null) return unescape(r[2]);
     return null;
 }
+
+function configHttp(config) {
+    _http2.default.defaults = _http2.default.defaults || {};
+    _http2.default.defaults.headers = _http2.default.defaults.headers || {};
+    _http2.default.defaults.headers.common = _http2.default.defaults.headers.common || {};
+
+    _http2.default.defaults.headers.common.Ent = config.ent ? config.ent.id : false;
+    if (config.token) {
+        _http2.default.defaults.headers.common.Authorization = (config.token.token_type ? config.token.token_type : "Bearer") + " " + config.token.access_token;
+    } else {
+        _http2.default.defaults.headers.common.Authorization = false;
+    }
+}
 _app2.default.config(function () {
     return new Promise(function (resolve, reject) {
-        var vcode = getQueryString('vcode');
-        if (vcode) {
-            _http2.default.post('/api/sys/auth/login-vcode/' + vcode).then(function (res) {
-                getConfigs();
-            });
-        } else {
-            getConfigs();
-        }
+        var url = new _MdURL2.default(window.location, true);
+        _http2.default.get('/site/configs', { params: url.query }).then(function (res) {
+            configHttp(res.data.data);
+            appConfig(res.data.data);
+        }, function (err) {
+            (0, _MdTip2.default)('获取配置信息失败！');
+        });
 
-        function getConfigs() {
-            var url = new _MdURL2.default(window.location, true);
-            _http2.default.get('/site/configs', { params: url.query }).then(function (res) {
-                resolve(res.data.data);
+        function appConfig(data) {
+            _http2.default.config({ name: "suite.cbo", appId: "suite.cbo" }).then(function (res) {
+                resolve(data);
             }, function (err) {
-                console.log(err);
+                (0, _MdTip2.default)('配置应用发现失败！');
             });
         }
     });
@@ -49404,37 +49392,101 @@ _app2.default.run({ app: _AppRoot2.default, locale: 'enUS' });
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
+	"./Dept/EditDia": [
+		"./resources/assets/js/pages/Dept/EditDia.vue",
+		5
+	],
+	"./Dept/EditDia.vue": [
+		"./resources/assets/js/pages/Dept/EditDia.vue",
+		5
+	],
+	"./Dept/List": [
+		"./resources/assets/js/pages/Dept/List.vue",
+		2
+	],
+	"./Dept/List.vue": [
+		"./resources/assets/js/pages/Dept/List.vue",
+		2
+	],
+	"./DocType/EditDia": [
+		"./resources/assets/js/pages/DocType/EditDia.vue",
+		4
+	],
+	"./DocType/EditDia.vue": [
+		"./resources/assets/js/pages/DocType/EditDia.vue",
+		4
+	],
+	"./DocType/List": [
+		"./resources/assets/js/pages/DocType/List.vue",
+		1
+	],
+	"./DocType/List.vue": [
+		"./resources/assets/js/pages/DocType/List.vue",
+		1
+	],
+	"./Item/EditDia": [
+		"./resources/assets/js/pages/Item/EditDia.vue",
+		3
+	],
+	"./Item/EditDia.vue": [
+		"./resources/assets/js/pages/Item/EditDia.vue",
+		3
+	],
+	"./Item/List": [
+		"./resources/assets/js/pages/Item/List.vue",
+		0
+	],
+	"./Item/List.vue": [
+		"./resources/assets/js/pages/Item/List.vue",
+		0
+	],
 	"./Messages/Message": [
 		"./resources/assets/js/pages/Messages/Message.vue",
-		3
+		11
 	],
 	"./Messages/Message.vue": [
 		"./resources/assets/js/pages/Messages/Message.vue",
-		3
+		11
 	],
 	"./Reports/Report": [
 		"./resources/assets/js/pages/Reports/Report.vue",
-		2
+		10
 	],
 	"./Reports/Report.vue": [
 		"./resources/assets/js/pages/Reports/Report.vue",
-		2
+		10
+	],
+	"./RptBiz/Total": [
+		"./resources/assets/js/pages/RptBiz/Total.vue",
+		7
+	],
+	"./RptBiz/Total.vue": [
+		"./resources/assets/js/pages/RptBiz/Total.vue",
+		7
+	],
+	"./RptProfit/Rank": [
+		"./resources/assets/js/pages/RptProfit/Rank.vue",
+		6
+	],
+	"./RptProfit/Rank.vue": [
+		"./resources/assets/js/pages/RptProfit/Rank.vue",
+		6
 	],
 	"./Settings/Setting": [
 		"./resources/assets/js/pages/Settings/Setting.vue",
-		1
+		9
 	],
 	"./Settings/Setting.vue": [
 		"./resources/assets/js/pages/Settings/Setting.vue",
-		1
+		9
 	],
 	"./Works/Work": [
 		"./resources/assets/js/pages/Works/Work.vue",
-		0
+		8
 	],
 	"./Works/Work.vue": [
 		"./resources/assets/js/pages/Works/Work.vue",
-		0
+		8
 	]
 };
 function webpackAsyncContext(req) {
@@ -49460,38 +49512,32 @@ module.exports = webpackAsyncContext;
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var routeList = [{
-  path: '/',
-  name: 'home',
-  page: 'Messages/Message.vue'
-}, {
-  path: '/m/messages',
-  name: 'messages',
-  page: 'Messages/Message.vue'
-}, {
-  path: '/m/reports',
-  name: 'reports',
-  page: 'Reports/Report.vue'
-}, {
-  path: '/m/settings',
-  name: 'settings',
-  page: 'Settings/Setting.vue'
-}, {
-  path: '/m/works',
-  name: 'works',
-  page: 'Works/Work.vue'
-}];
+var routeList = [{ path: '/', name: 'home', page: 'Messages/Message.vue' }, { path: '/m/messages', name: 'messages', page: 'Messages/Message.vue' }, { path: '/m/reports', name: 'reports', page: 'Reports/Report.vue' }, { path: '/m/settings', name: 'settings', page: 'Settings/Setting.vue' }, { path: '/m/works', name: 'works', page: 'Works/Work.vue' }];
+
+routeList.push({ path: '/m/cbo/dept/list', name: 'cbo.dept.list', page: 'Dept/List.vue', meta: { keepAlive: true } });
+
+routeList.push({ path: '/m/cbo/item/list', name: 'cbo.item.list', page: 'Item/List.vue', meta: { keepAlive: true } });
+
+routeList.push({ path: '/m/cbo/doc-type/list', name: 'cbo.doc.type.list', page: 'DocType/List.vue', meta: { keepAlive: true } });
+
+routeList.push({ path: '/m/rpt/profit/rank', name: 'rpt.profit.rank', page: 'RptProfit/Rank.vue', meta: { keepAlive: true } });
+routeList.push({ path: '/m/rpt/profit/trend', name: 'rpt.profit.trend', page: 'RptProfit/Trend.vue', meta: { keepAlive: true } });
+routeList.push({ path: '/m/rpt/expend/analy', name: 'rpt.expend.analy', page: 'RptExpend/Analy.vue', meta: { keepAlive: true } });
+routeList.push({ path: '/m/rpt/income/analy', name: 'rpt.income.analy', page: 'RptIncome/Analy.vue', meta: { keepAlive: true } });
+routeList.push({ path: '/m/rpt/achieve/total', name: 'rpt.achieve.total', page: 'RptAchieve/Total.vue', meta: { keepAlive: true } });
+routeList.push({ path: '/m/rpt/biz/biz-total', name: 'rpt.biz.total', page: 'RptBiz/Total.vue', meta: { keepAlive: true } });
+
 var mappedRoutes = routeList.map(function (route) {
-  return _extends({}, route, {
-    component: function component() {
-      return __webpack_require__("./resources/assets/js/pages lazy recursive ^\\.\\/.*$")("./" + route.page);
-    }
-  });
+    return _extends({}, route, {
+        component: function component() {
+            return __webpack_require__("./resources/assets/js/pages lazy recursive ^\\.\\/.*$")("./" + route.page);
+        }
+    });
 });
 
 exports.default = mappedRoutes;
@@ -49505,7 +49551,7 @@ exports.default = mappedRoutes;
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -49575,291 +49621,291 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Start = function () {
-  function Start(columnComponent) {
-    _classCallCheck(this, Start);
-  }
-
-  _createClass(Start, [{
-    key: 'use',
-    value: function use(component) {
-      _vue2.default.use(component);
+    function Start(columnComponent) {
+        _classCallCheck(this, Start);
     }
-  }, {
-    key: 'route',
-    value: function route(routes) {
-      _config2.default.route(routes);
-    }
-  }, {
-    key: 'config',
-    value: function config(fn) {
-      _config2.default.config(fn);
-    }
-  }, {
-    key: 'store',
-    value: function store(_store) {
-      _config2.default.store(_store);
-    }
-  }, {
-    key: 'i18n',
-    value: function i18n(locale, name, _i18n) {
-      _config2.default.i18n(locale, name, _i18n);
-    }
-  }, {
-    key: 'run',
-    value: function run(options, mixin) {
-      options = options || {};
-      var elID = options.elID || '#gmfApp';
-      _http2.default.defaults.baseURL = (0, _MdCombineURLs2.default)(options.host, '/api');
-      _http2.default.defaults.headers = { common: { Ent: false } };
-      initVue(options);
 
-      var appConfig = getAppConfig();
-      /*routes*/
-      initRoute(appConfig, options);
+    _createClass(Start, [{
+        key: 'use',
+        value: function use(component) {
+            _vue2.default.use(component);
+        }
+    }, {
+        key: 'route',
+        value: function route(routes) {
+            _config2.default.route(routes);
+        }
+    }, {
+        key: 'config',
+        value: function config(fn) {
+            _config2.default.config(fn);
+        }
+    }, {
+        key: 'store',
+        value: function store(_store) {
+            _config2.default.store(_store);
+        }
+    }, {
+        key: 'i18n',
+        value: function i18n(locale, name, _i18n) {
+            _config2.default.i18n(locale, name, _i18n);
+        }
+    }, {
+        key: 'run',
+        value: function run(options, mixin) {
+            options = options || {};
+            var elID = options.elID || '#gmfApp';
+            _http2.default.defaults.baseURL = (0, _MdCombineURLs2.default)(options.host, '/api');
+            _http2.default.defaults.headers = { common: { Ent: false } };
+            initVue(options);
 
-      /*store*/
-      initStore(appConfig, options);
+            var appConfig = getAppConfig();
+            /*routes*/
+            initRoute(appConfig, options);
 
-      //Vuei18n
-      initI18n(appConfig, options);
+            /*store*/
+            initStore(appConfig, options);
 
-      if (options.app) {
-        appConfig.render = function (mount) {
-          return mount(options.app);
-        };
-      }
-      if (mixin) {
-        appConfig.mixins = [mixin];
-      }
-      document.addEventListener('DOMContentLoaded', function () {
-        initConfigs().then(function (res) {
-          (0, _extend2.default)(appConfig.data.configs, res);
-          initHttp(_http2.default, res);
-          if (res && res.loadEnums) {
-            return loadEnums();
-          }
-          return true;
-        }).then(function (res) {
-          var app = new _vue2.default(appConfig);
-          appConfig.router.onReady(function () {
-            app.$mount(elID);
-          });
-        });
-      });
-    }
-  }]);
+            //Vuei18n
+            initI18n(appConfig, options);
 
-  return Start;
+            if (options.app) {
+                appConfig.render = function (mount) {
+                    return mount(options.app);
+                };
+            }
+            if (mixin) {
+                appConfig.mixins = [mixin];
+            }
+            document.addEventListener('DOMContentLoaded', function () {
+                initConfigs().then(function (res) {
+                    (0, _extend2.default)(appConfig.data.configs, res);
+                    initHttp(_http2.default, res);
+                    if (res && res.loadEnums) {
+                        return loadEnums();
+                    }
+                    return true;
+                }).then(function (res) {
+                    var app = new _vue2.default(appConfig);
+                    appConfig.router.onReady(function () {
+                        app.$mount(elID);
+                    });
+                });
+            });
+        }
+    }]);
+
+    return Start;
 }();
 
 exports.default = Start;
 
 
 function initConfigs() {
-  return new Promise(function (resolved, rejected) {
-    return Promise.all([_config2.default.configs.length > 0 ? _config2.default.configs[0]() : false]).then(function (res) {
-      resolved(res[0]);
-    }, function (err) {
-      rejected(err);
+    return new Promise(function (resolved, rejected) {
+        return Promise.all([_config2.default.configs.length > 0 ? _config2.default.configs[0]() : false]).then(function (res) {
+            resolved(res[0]);
+        }, function (err) {
+            rejected(err);
+        });
     });
-  });
 }
 
 function initRoute(appConfig, options) {
-  _vue2.default.use(_vueRouter2.default);
-  var router = {
-    mode: 'history',
-    routes: _config2.default.routes,
-    scrollBehavior: function scrollBehavior(to, from, savedPosition) {
-      if (savedPosition) {
-        return savedPosition;
-      } else {
-        if (from.meta.keepAlive) {
-          from.meta.savedPosition = document.body.scrollTop;
+    _vue2.default.use(_vueRouter2.default);
+    var router = {
+        mode: 'history',
+        routes: _config2.default.routes,
+        scrollBehavior: function scrollBehavior(to, from, savedPosition) {
+            if (savedPosition) {
+                return savedPosition;
+            } else {
+                if (from.meta.keepAlive) {
+                    from.meta.savedPosition = document.body.scrollTop;
+                }
+                return { x: 0, y: to.meta.savedPosition || 0 };
+            }
         }
-        return { x: 0, y: to.meta.savedPosition || 0 };
-      }
-    }
-  };
-  var vueRouter = new _vueRouter2.default(router);
-  vueRouter.beforeEach(function (to, from, next) {
-    if (to.meta.requiresAuth && !appConfig.data.configs.user) {
-      if ((0, _isString2.default)(appConfig.data.configs.auth.route)) {
-        next(appConfig.data.configs.auth.route + "?continue=" + to.fullPath);
-      } else {
-        next((0, _extend2.default)({}, appConfig.data.configs.auth.route, { query: { continue: to.fullPath } }));
-      }
-    } else {
-      next();
-    }
-  });
-  appConfig.router = vueRouter;
+    };
+    var vueRouter = new _vueRouter2.default(router);
+    vueRouter.beforeEach(function (to, from, next) {
+        if (to.meta.requiresAuth && !appConfig.data.configs.user) {
+            if ((0, _isString2.default)(appConfig.data.configs.auth.route)) {
+                next(appConfig.data.configs.auth.route + "?continue=" + to.fullPath);
+            } else {
+                next((0, _extend2.default)({}, appConfig.data.configs.auth.route, { query: { continue: to.fullPath } }));
+            }
+        } else {
+            next();
+        }
+    });
+    appConfig.router = vueRouter;
 }
 
 function initStore(appConfig, options) {
-  _vue2.default.use(_vuex2.default);
-  if (_config2.default.stores && _config2.default.stores.length > 0) {
-    _store3.default.modules = {};
-    _config2.default.stores.forEach(function (item) {
-      _store3.default.modules[item.name] = item;
-    });
-  }
-  var store = new _vuex2.default.Store(_store3.default);
-  appConfig.store = store;
+    _vue2.default.use(_vuex2.default);
+    if (_config2.default.stores && _config2.default.stores.length > 0) {
+        _store3.default.modules = {};
+        _config2.default.stores.forEach(function (item) {
+            _store3.default.modules[item.name] = item;
+        });
+    }
+    var store = new _vuex2.default.Store(_store3.default);
+    appConfig.store = store;
 }
 
 function initI18n(appConfig, options) {
-  _vue2.default.use(_vueI18n2.default);
-  var i18n = new _vueI18n2.default({
-    locale: options.locale || 'zh',
-    messages: _config2.default.i18ns.messages
-  });
-  appConfig.i18n = i18n;
+    _vue2.default.use(_vueI18n2.default);
+    var i18n = new _vueI18n2.default({
+        locale: options.locale || 'zh',
+        messages: _config2.default.i18ns.messages
+    });
+    appConfig.i18n = i18n;
 }
 
 function initHttp(http, config) {
-  http.defaults.headers.common.Ent = config.ent ? config.ent.id : false;
-  if (config.token) {
-    http.defaults.headers.common.Authorization = (config.token.token_type ? config.token.token_type : "Bearer") + " " + config.token.access_token;
-  } else {
-    http.defaults.headers.common.Authorization = false;
-  }
+    http.defaults.headers.common.Ent = config.ent ? config.ent.id : false;
+    if (config.token) {
+        http.defaults.headers.common.Authorization = (config.token.token_type ? config.token.token_type : "Bearer") + " " + config.token.access_token;
+    } else {
+        http.defaults.headers.common.Authorization = false;
+    }
 }
 
 function getAppConfig() {
-  return {
-    data: {
-      'appName': '',
-      'title': '',
-      'configs': { home: '/', ent: false, user: false, token: false, auth: { route: { name: 'auth.login' } } }
-    },
-    methods: {
-      $loadConfigs: function $loadConfigs() {
-        var _this = this;
+    return {
+        data: {
+            'appName': '',
+            'title': '',
+            'configs': { home: '/', ent: false, user: false, token: false, auth: { route: { name: 'auth.login' } } }
+        },
+        methods: {
+            $loadConfigs: function $loadConfigs() {
+                var _this = this;
 
-        initConfigs().then(function (res) {
-          _this.$setConfigs(res);
-        });
-      },
-      changedConfig: function changedConfig() {
-        (0, _extend2.default)(window.gmfConfig, this.configs);
-        initHttp(this.$http, this.configs);
-      },
-      setCacheEnum: function setCacheEnum(item) {
-        _MdEnumCache2.default.set(item);
-      },
-      getCacheEnum: function getCacheEnum(type) {
-        return _MdEnumCache2.default.get(type);
-      },
-      getCacheEnumName: function getCacheEnumName(type, item) {
-        return _MdEnumCache2.default.getEnumName(type, item);
-      },
-      issueUid: function issueUid() {
-        var _this2 = this;
+                initConfigs().then(function (res) {
+                    _this.$setConfigs(res);
+                });
+            },
+            changedConfig: function changedConfig() {
+                (0, _extend2.default)(window.gmfConfig, this.configs);
+                initHttp(this.$http, this.configs);
+            },
+            setCacheEnum: function setCacheEnum(item) {
+                _MdEnumCache2.default.set(item);
+            },
+            getCacheEnum: function getCacheEnum(type) {
+                return _MdEnumCache2.default.get(type);
+            },
+            getCacheEnumName: function getCacheEnumName(type, item) {
+                return _MdEnumCache2.default.getEnumName(type, item);
+            },
+            issueUid: function issueUid() {
+                var _this2 = this;
 
-        return new Promise(function (resolved, rejected) {
-          _this2.$http.get('sys/datas/uid').then(function (res) {
-            resolved(res.data.data);
-          }, function (err) {
-            rejected(false);
-          });
-        });
-      },
-      issueSn: function issueSn(node, num) {
-        var _this3 = this;
+                return new Promise(function (resolved, rejected) {
+                    _this2.$http.get('sys/datas/uid').then(function (res) {
+                        resolved(res.data.data);
+                    }, function (err) {
+                        rejected(false);
+                    });
+                });
+            },
+            issueSn: function issueSn(node, num) {
+                var _this3 = this;
 
-        return new Promise(function (resolved, rejected) {
-          _this3.$http.get('sys/datas/sn', { params: { node: node, num: num } }).then(function (res) {
-            resolved(res.data.data);
-          }, function (err) {
-            rejected(false);
-          });
-        });
-      }
-    }
-  };
+                return new Promise(function (resolved, rejected) {
+                    _this3.$http.get('sys/datas/sn', { params: { node: node, num: num } }).then(function (res) {
+                        resolved(res.data.data);
+                    }, function (err) {
+                        rejected(false);
+                    });
+                });
+            }
+        }
+    };
 }
 
 function initVue(options) {
-  options = options || {};
+    options = options || {};
 
-  _vue2.default.prototype.$http = _http2.default;
-  _vue2.default.prototype._ = _common2.default;
-  _vue2.default.prototype.$devicePixelRatio = 1;
-  _vue2.default.prototype.$toast = function (toast) {
-    this.$root.$refs.rootToast && this.$root.$refs.rootToast.toast(toast);
-  };
-  _vue2.default.prototype.$setConfigs = function (configs) {
-    (0, _extend2.default)(this.$root.configs, configs);
-    this.$root.changedConfig();
-  };
-  _vue2.default.prototype.$lang = _lang2.default;
-  _vue2.default.prototype.$go = function (options, isReplace) {
-    this.$router && this.$router[isReplace ? 'replace' : 'push'](options);
-  };
-  _vue2.default.prototype.$goID = function (id, options, isReplace) {
-    var localtion = { name: 'id', params: { id: id } };
-    isReplace = !!isReplace;
-    localtion = (0, _merge2.default)(localtion, options);
-    this.$router && this.$router[isReplace ? 'replace' : 'push'](localtion);
-  };
-  _vue2.default.prototype.$goModule = function (module, options, isReplace) {
-    var localtion = { name: 'module', params: { module: module } };
-    isReplace = !!isReplace;
-    localtion = (0, _merge2.default)(localtion, options);
-    this.$router && this.$router[isReplace ? 'replace' : 'push'](localtion);
-  };
-  _vue2.default.prototype.$goApp = function (app, options, isReplace) {
-    var localtion = { name: 'app' };
-    isReplace = !!isReplace;
-    localtion = (0, _merge2.default)(localtion, options, { params: { app: app } });
-    this.$router && this.$router[isReplace ? 'replace' : 'push'](localtion);
-  };
-  _vue2.default.prototype.$hasRole = function (roles) {
-    var _this4 = this;
+    _vue2.default.prototype.$http = _http2.default;
+    _vue2.default.prototype._ = _common2.default;
+    _vue2.default.prototype.$devicePixelRatio = 1;
+    _vue2.default.prototype.$toast = function (toast) {
+        this.$root.$refs.rootToast && this.$root.$refs.rootToast.toast(toast);
+    };
+    _vue2.default.prototype.$setConfigs = function (configs) {
+        (0, _extend2.default)(this.$root.configs, configs);
+        this.$root.changedConfig();
+    };
+    _vue2.default.prototype.$lang = _lang2.default;
+    _vue2.default.prototype.$go = function (options, isReplace) {
+        this.$router && this.$router[isReplace ? 'replace' : 'push'](options);
+    };
+    _vue2.default.prototype.$goID = function (id, options, isReplace) {
+        var localtion = { name: 'id', params: { id: id } };
+        isReplace = !!isReplace;
+        localtion = (0, _merge2.default)(localtion, options);
+        this.$router && this.$router[isReplace ? 'replace' : 'push'](localtion);
+    };
+    _vue2.default.prototype.$goModule = function (module, options, isReplace) {
+        var localtion = { name: 'module', params: { module: module } };
+        isReplace = !!isReplace;
+        localtion = (0, _merge2.default)(localtion, options);
+        this.$router && this.$router[isReplace ? 'replace' : 'push'](localtion);
+    };
+    _vue2.default.prototype.$goApp = function (app, options, isReplace) {
+        var localtion = { name: 'app' };
+        isReplace = !!isReplace;
+        localtion = (0, _merge2.default)(localtion, options, { params: { app: app } });
+        this.$router && this.$router[isReplace ? 'replace' : 'push'](localtion);
+    };
+    _vue2.default.prototype.$hasRole = function (roles) {
+        var _this4 = this;
 
-    if (!roles || !this.$root.configs || !this.$root.configs.roles) return false;
-    if ((0, _isString2.default)(roles)) {
-      roles = roles.split(',');
-    }
-    return roles.map(function (v) {
-      return _this4.$root.configs.roles.indexOf(v) >= 0;
-    }).filter(function (v) {
-      return v;
-    }).length > 0;
-  };
-  _vue2.default.prototype.$canPermit = function (permits) {
-    var _this5 = this;
+        if (!roles || !this.$root.configs || !this.$root.configs.roles) return false;
+        if ((0, _isString2.default)(roles)) {
+            roles = roles.split(',');
+        }
+        return roles.map(function (v) {
+            return _this4.$root.configs.roles.indexOf(v) >= 0;
+        }).filter(function (v) {
+            return v;
+        }).length > 0;
+    };
+    _vue2.default.prototype.$canPermit = function (permits) {
+        var _this5 = this;
 
-    if (!permits || !this.$root.configs || !this.$root.configs.permits) return false;
-    if ((0, _isString2.default)(roles)) {
-      roles = roles.split(',');
-    }
-    return permits.map(function (v) {
-      return _this5.$root.configs.permits.indexOf(v) >= 0;
-    }).filter(function (v) {
-      return v;
-    }).length > 0;
-  };
-  _vue2.default.prototype.$documentTitle = function (title) {
-    document.title = title;
-    this.$root.title = title;
-  };
+        if (!permits || !this.$root.configs || !this.$root.configs.permits) return false;
+        if ((0, _isString2.default)(roles)) {
+            roles = roles.split(',');
+        }
+        return permits.map(function (v) {
+            return _this5.$root.configs.permits.indexOf(v) >= 0;
+        }).filter(function (v) {
+            return v;
+        }).length > 0;
+    };
+    _vue2.default.prototype.$documentTitle = function (title) {
+        document.title = title;
+        this.$root.title = title;
+    };
 }
 
 function loadEnums() {
-  return new Promise(function (resolved, rejected) {
-    _http2.default.get('sys/enums/all').then(function (res) {
-      if (res && res.data && res.data.data) {
-        res.data.data.forEach(function (item) {
-          _MdEnumCache2.default.set(item);
+    return new Promise(function (resolved, rejected) {
+        _http2.default.get('sys/enums/all').then(function (res) {
+            if (res && res.data && res.data.data) {
+                res.data.data.forEach(function (item) {
+                    _MdEnumCache2.default.set(item);
+                });
+            }
+            resolved();
+        }, function (err) {
+            rejected();
         });
-      }
-      resolved();
-    }, function (err) {
-      rejected();
     });
-  });
 }
 
 /***/ }),
@@ -55155,6 +55201,58 @@ module.exports = Component.exports
 
 /***/ }),
 
+/***/ "./resources/assets/js/vendor/gmf-sys/components/MdLoading/MdLoading2.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__("./node_modules/extract-text-webpack-plugin/dist/loader.js?{\"id\":1,\"omit\":1,\"remove\":true}!./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2924a999\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/vendor/gmf-sys/components/MdLoading/MdLoading2.vue")
+}
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/vendor/gmf-sys/components/MdLoading/MdLoading2.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-2924a999\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/vendor/gmf-sys/components/MdLoading/MdLoading2.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\vendor\\gmf-sys\\components\\MdLoading\\MdLoading2.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-2924a999", Component.options)
+  } else {
+    hotAPI.reload("data-v-2924a999", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
 /***/ "./resources/assets/js/vendor/gmf-sys/components/MdLoading/index.js":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -55162,7 +55260,7 @@ module.exports = Component.exports
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
 exports.default = install;
 
@@ -55170,10 +55268,15 @@ var _MdLoading = __webpack_require__("./resources/assets/js/vendor/gmf-sys/compo
 
 var _MdLoading2 = _interopRequireDefault(_MdLoading);
 
+var _MdLoading3 = __webpack_require__("./resources/assets/js/vendor/gmf-sys/components/MdLoading/MdLoading2.vue");
+
+var _MdLoading4 = _interopRequireDefault(_MdLoading3);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function install(Vue) {
-  Vue.component('md-loading', _MdLoading2.default);
+    Vue.component(_MdLoading2.default.name, _MdLoading2.default);
+    Vue.component(_MdLoading4.default.name, _MdLoading4.default);
 }
 
 /***/ }),
@@ -57213,85 +57316,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = function (Vue) {
   (0, _material2.default)(Vue);
   Vue.component(_MdScrollLoad2.default.name, _MdScrollLoad2.default);
-};
-
-/***/ }),
-
-/***/ "./resources/assets/js/vendor/gmf-sys/components/MdScroller/MdScroller.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__("./node_modules/extract-text-webpack-plugin/dist/loader.js?{\"id\":1,\"omit\":1,\"remove\":true}!./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-304685f7\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/vendor/gmf-sys/components/MdScroller/MdScroller.vue")
-}
-var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
-/* script */
-var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/vendor/gmf-sys/components/MdScroller/MdScroller.vue")
-/* template */
-var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-304685f7\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/vendor/gmf-sys/components/MdScroller/MdScroller.vue")
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = injectStyle
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "resources\\assets\\js\\vendor\\gmf-sys\\components\\MdScroller\\MdScroller.vue"
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-304685f7", Component.options)
-  } else {
-    hotAPI.reload("data-v-304685f7", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-
-/***/ "./resources/assets/js/vendor/gmf-sys/components/MdScroller/index.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _material = __webpack_require__("./resources/assets/js/vendor/gmf-sys/material.js");
-
-var _material2 = _interopRequireDefault(_material);
-
-var _MdScroller = __webpack_require__("./resources/assets/js/vendor/gmf-sys/components/MdScroller/MdScroller.vue");
-
-var _MdScroller2 = _interopRequireDefault(_MdScroller);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = function (Vue) {
-  (0, _material2.default)(Vue);
-  Vue.component(_MdScroller2.default.name, _MdScroller2.default);
 };
 
 /***/ }),
@@ -59367,6 +59391,198 @@ module.exports = Component.exports
 
 /***/ }),
 
+/***/ "./resources/assets/js/vendor/gmf-sys/components/MdTip/MdTip.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__("./node_modules/extract-text-webpack-plugin/dist/loader.js?{\"id\":1,\"omit\":1,\"remove\":true}!./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1769d1e7\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/vendor/gmf-sys/components/MdTip/MdTip.vue")
+}
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/vendor/gmf-sys/components/MdTip/MdTip.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-1769d1e7\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/vendor/gmf-sys/components/MdTip/MdTip.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\vendor\\gmf-sys\\components\\MdTip\\MdTip.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-1769d1e7", Component.options)
+  } else {
+    hotAPI.reload("data-v-1769d1e7", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/vendor/gmf-sys/components/MdTip/index.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _vue = __webpack_require__("./node_modules/vue/dist/vue.common.js");
+
+var _vue2 = _interopRequireDefault(_vue);
+
+var _MdTip = __webpack_require__("./resources/assets/js/vendor/gmf-sys/components/MdTip/MdTip.vue");
+
+var _MdTip2 = _interopRequireDefault(_MdTip);
+
+var _common = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/utils/common.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var defaultOptions = {
+    type: 'text',
+    mask: false,
+    message: '',
+    value: true,
+    duration: 3000,
+    position: 'middle',
+    loadingType: 'circular',
+    forbidClick: false,
+    overlayStyle: {}
+};
+var parseOptions = function parseOptions(message) {
+    return (0, _common.isObject)(message) ? message : { message: message };
+};
+
+var queue = [];
+var singleton = true;
+var currentOptions = _extends({}, defaultOptions);
+
+function createInstance() {
+    if (!queue.length || !singleton) {
+        var tip = new (_vue2.default.extend(_MdTip2.default))({
+            el: document.createElement('div')
+        });
+        document.body.appendChild(tip.$el);
+        queue.push(tip);
+    }
+    return queue[queue.length - 1];
+};
+
+// transform tip options to popup props
+function transformer(options) {
+    options.overlay = options.mask;
+    return options;
+}
+
+function Tip() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+    var tip = createInstance();
+
+    options = _extends({}, currentOptions, parseOptions(options), {
+        clear: function clear() {
+            tip.value = false;
+        }
+    });
+
+    Object.assign(tip, transformer(options));
+    clearTimeout(tip.timer);
+
+    if (options.duration > 0) {
+        tip.timer = setTimeout(function () {
+            tip.clear();
+        }, options.duration);
+    }
+
+    return tip;
+};
+
+var createMethod = function createMethod(type) {
+    return function (options) {
+        return Tip(_extends({
+            type: type
+        }, parseOptions(options)));
+    };
+};
+Tip.waiting = function (options) {
+    options = _extends({}, parseOptions(options), {
+        mask: true,
+        type: 'loading'
+    });
+    Tip(options);
+};
+['loading', 'success', 'fail'].forEach(function (method) {
+    Tip[method] = createMethod(method);
+});
+
+Tip.clear = function (all) {
+    if (queue.length) {
+        if (all) {
+            queue.forEach(function (tip) {
+                tip.clear();
+            });
+            queue = [];
+        } else if (singleton) {
+            queue[0].clear();
+        } else {
+            queue.shift().clear();
+        }
+    }
+};
+
+Tip.setDefaultOptions = function (options) {
+    Object.assign(currentOptions, options);
+};
+
+Tip.resetDefaultOptions = function () {
+    currentOptions = _extends({}, defaultOptions);
+};
+
+Tip.allowMultiple = function () {
+    var allow = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+
+    singleton = !allow;
+};
+
+Tip.install = function () {
+    _vue2.default.use(_MdTip2.default);
+};
+
+_vue2.default.prototype.$tip = Tip;
+
+exports.default = Tip;
+
+/***/ }),
+
 /***/ "./resources/assets/js/vendor/gmf-sys/components/MdToast/MdToast.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -60355,9 +60571,9 @@ exports.default = function (Vue) {
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
-exports.MdSticky = exports.MdScrollLoad = exports.MdPullRefresh = exports.MdScroller = exports.MdVChart = exports.MdSwipeout = exports.MdPopup = exports.MdPicker = exports.MdDatepicker = exports.MdTable = exports.MdWrap = exports.MdToast = exports.MdLayout = exports.MdFetch = exports.MdBackground = exports.MdLoading = exports.MdTooltip = exports.MdToolbar = exports.MdTabs = exports.MdSwitch = exports.MdSubheader = exports.MdSteppers = exports.MdSpeedDial = exports.MdSnackbar = exports.MdRipple = exports.MdRadio = exports.MdPagination = exports.MdProgress = exports.MdMenu = exports.MdList = exports.MdImage = exports.MdIcon = exports.MdHighlightText = exports.MdField = exports.MdEmptyState = exports.MdElevation = exports.MdDrawer = exports.MdDivider = exports.MdDialog = exports.MdContent = exports.MdChips = exports.MdCheckbox = exports.MdCard = exports.MdButton = exports.MdBottomBar = exports.MdBadge = exports.MdAvatar = exports.MdAutocomplete = exports.MdApp = undefined;
+exports.MdTip = exports.MdSticky = exports.MdScrollLoad = exports.MdPullRefresh = exports.MdVChart = exports.MdSwipeout = exports.MdPopup = exports.MdPicker = exports.MdDatepicker = exports.MdTable = exports.MdWrap = exports.MdToast = exports.MdLayout = exports.MdFetch = exports.MdBackground = exports.MdLoading = exports.MdTooltip = exports.MdToolbar = exports.MdTabs = exports.MdSwitch = exports.MdSubheader = exports.MdSteppers = exports.MdSpeedDial = exports.MdSnackbar = exports.MdRipple = exports.MdRadio = exports.MdPagination = exports.MdProgress = exports.MdMenu = exports.MdList = exports.MdImage = exports.MdIcon = exports.MdHighlightText = exports.MdField = exports.MdEmptyState = exports.MdElevation = exports.MdDrawer = exports.MdDivider = exports.MdDialog = exports.MdContent = exports.MdChips = exports.MdCheckbox = exports.MdCard = exports.MdButton = exports.MdBottomBar = exports.MdBadge = exports.MdAvatar = exports.MdAutocomplete = exports.MdApp = undefined;
 
 var _MdApp = __webpack_require__("./resources/assets/js/vendor/gmf-sys/components/MdApp/index.js");
 
@@ -60551,9 +60767,9 @@ var _MdSticky = __webpack_require__("./resources/assets/js/vendor/gmf-sys/compon
 
 var _MdSticky2 = _interopRequireDefault(_MdSticky);
 
-var _MdScroller = __webpack_require__("./resources/assets/js/vendor/gmf-sys/components/MdScroller/index.js");
+var _MdTip = __webpack_require__("./resources/assets/js/vendor/gmf-sys/components/MdTip/index.js");
 
-var _MdScroller2 = _interopRequireDefault(_MdScroller);
+var _MdTip2 = _interopRequireDefault(_MdTip);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -60604,10 +60820,10 @@ exports.MdPicker = _MdPicker2.default;
 exports.MdPopup = _MdPopup2.default;
 exports.MdSwipeout = _MdSwipeout2.default;
 exports.MdVChart = _MdVChart2.default;
-exports.MdScroller = _MdScroller2.default;
 exports.MdPullRefresh = _MdPullRefresh2.default;
 exports.MdScrollLoad = _MdScrollLoad2.default;
 exports.MdSticky = _MdSticky2.default;
+exports.MdTip = _MdTip2.default;
 
 /***/ }),
 
@@ -60787,34 +61003,40 @@ exports.default = config;
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 exports.default = function (newComponent) {
-  newComponent.mixins = newComponent.mixins || [];
-  newComponent.methods = newComponent.methods || {};
-  newComponent.mixins.push(_MdBem2.default);
+    newComponent.mixins = newComponent.mixins || [];
+    newComponent.methods = newComponent.methods || {};
+    newComponent.mixins.push(_MdBem2.default);
 
-  var defaults = {
-    props: {
-      mdTheme: null
-    },
-    computed: {
-      $mdActiveTheme: function $mdActiveTheme() {
-        var enabled = _MdTheme2.default.enabled,
-            getThemeName = _MdTheme2.default.getThemeName,
-            getAncestorTheme = _MdTheme2.default.getAncestorTheme;
+    var defaults = {
+        props: {
+            mdTheme: null
+        },
+        computed: {
+            $mdActiveTheme: function $mdActiveTheme() {
+                var enabled = _MdTheme2.default.enabled,
+                    getThemeName = _MdTheme2.default.getThemeName,
+                    getAncestorTheme = _MdTheme2.default.getAncestorTheme;
 
 
-        if (enabled && this.mdTheme !== false) {
-          return getThemeName(this.mdTheme || getAncestorTheme(this));
+                if (enabled && this.mdTheme !== false) {
+                    return getThemeName(this.mdTheme || getAncestorTheme(this));
+                }
+                return null;
+            }
+        },
+        methods: {
+            isDef: isDef,
+            isObj: isObj
         }
-        return null;
-      }
-    }
-  };
+    };
 
-  return (0, _deepmerge2.default)(defaults, newComponent);
+    return (0, _deepmerge2.default)(defaults, newComponent);
 };
 
 var _MdTheme = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/MdTheme.js");
@@ -60830,6 +61052,15 @@ var _MdBem = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/mixi
 var _MdBem2 = _interopRequireDefault(_MdBem);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function isDef(value) {
+    return value !== undefined && value !== null;
+}
+
+function isObj(x) {
+    var type = typeof x === 'undefined' ? 'undefined' : _typeof(x);
+    return x !== null && (type === 'object' || type === 'function');
+}
 
 /***/ }),
 
@@ -61647,7 +61878,7 @@ exports.default = {
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
 
 var _common = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/utils/common.js");
@@ -61656,54 +61887,54 @@ var _common2 = _interopRequireDefault(_common);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var ELEMENT = '-'; /**
-                    * bem helper
-                    * b() // 'button'
-                    * b('text') // 'button-text'
-                    * b({ disabled }) // 'button button--disabled'
-                    * b('text', { disabled }) // 'button-text button-text--disabled'
-                    * b(['disabled', 'primary']) // 'button button--disabled button--primary'
-                    */
+var ELEMENT = '__'; /**
+                     * bem helper
+                     * b() // 'button'
+                     * b('text') // 'button__text'
+                     * b({ disabled }) // 'button button--disabled'
+                     * b('text', { disabled }) // 'button__text button__text--disabled'
+                     * b(['disabled', 'primary']) // 'button button--disabled button--primary'
+                     */
 
 var MODS = '--';
 
 var join = function join(name, el, symbol) {
-  return el ? name + symbol + el : name;
+    return el ? name + symbol + el : name;
 };
 
 var prefix = function prefix(name, mods) {
-  if (typeof mods === 'string') {
-    return join(name, mods, MODS);
-  }
+    if (typeof mods === 'string') {
+        return join(name, mods, MODS);
+    }
 
-  if (Array.isArray(mods)) {
-    return mods.map(function (item) {
-      return prefix(name, item);
+    if (Array.isArray(mods)) {
+        return mods.map(function (item) {
+            return prefix(name, item);
+        });
+    }
+
+    var ret = {};
+    Object.keys(mods).forEach(function (key) {
+        ret[name + MODS + key] = mods[key];
     });
-  }
-
-  var ret = {};
-  Object.keys(mods).forEach(function (key) {
-    ret[name + MODS + key] = mods[key];
-  });
-  return ret;
+    return ret;
 };
 
 exports.default = {
-  methods: {
-    b: function b(el, mods) {
-      var name = this.$options.name;
+    methods: {
+        b: function b(el, mods) {
+            var name = this.$options.name;
 
-      name = _common2.default.snakeCase(name);
-      if (el && typeof el !== 'string') {
-        mods = el;
-        el = '';
-      }
-      el = join(name, el, ELEMENT);
+            name = _common2.default.snakeCase(name);
+            if (el && typeof el !== 'string') {
+                mods = el;
+                el = '';
+            }
+            el = join(name, el, ELEMENT);
 
-      return mods ? [el, prefix(el, mods)] : el;
+            return mods ? [el, prefix(el, mods)] : el;
+        }
     }
-  }
 };
 
 /***/ }),
@@ -61812,6 +62043,375 @@ exports.default = {
   },
   mounted: function mounted() {
     createEvents();
+  }
+};
+
+/***/ }),
+
+/***/ "./resources/assets/js/vendor/gmf-sys/core/mixins/MdPopup/Modal.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__("./node_modules/extract-text-webpack-plugin/dist/loader.js?{\"id\":1,\"omit\":1,\"remove\":true}!./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-43816b48\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/vendor/gmf-sys/core/mixins/MdPopup/Modal.vue")
+}
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/vendor/gmf-sys/core/mixins/MdPopup/Modal.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-43816b48\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/vendor/gmf-sys/core/mixins/MdPopup/Modal.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\vendor\\gmf-sys\\core\\mixins\\MdPopup\\Modal.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-43816b48", Component.options)
+  } else {
+    hotAPI.reload("data-v-43816b48", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/vendor/gmf-sys/core/mixins/MdPopup/context.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {
+  id: 1,
+  zIndex: 2000,
+  stack: [],
+  lockCount: 0,
+
+  plusKey: function plusKey(key) {
+    return this[key]++;
+  },
+
+
+  get top() {
+    return this.stack[this.stack.length - 1];
+  }
+};
+
+/***/ }),
+
+/***/ "./resources/assets/js/vendor/gmf-sys/core/mixins/MdPopup/index.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _manager = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/mixins/MdPopup/manager.js");
+
+var _manager2 = _interopRequireDefault(_manager);
+
+var _context = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/mixins/MdPopup/context.js");
+
+var _context2 = _interopRequireDefault(_context);
+
+var _MdScroll = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/utils/MdScroll.js");
+
+var _MdScroll2 = _interopRequireDefault(_MdScroll);
+
+var _MdInteractionEvents = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/utils/MdInteractionEvents.js");
+
+var _MdTouch = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/mixins/MdTouch/MdTouch.js");
+
+var _MdTouch2 = _interopRequireDefault(_MdTouch);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    mixins: [_MdTouch2.default],
+
+    props: {
+        // whether to show popup
+        value: Boolean,
+        // whether to show overlay
+        overlay: Boolean,
+        // overlay custom style
+        overlayStyle: Object,
+        // overlay custom class name
+        overlayClass: String,
+        // whether to close popup when click overlay
+        closeOnClickOverlay: Boolean,
+        // z-index
+        zIndex: [String, Number],
+        // return the mount node for popup
+        getContainer: Function,
+        // prevent body scroll
+        lockScroll: {
+            type: Boolean,
+            default: true
+        }
+    },
+
+    watch: {
+        value: function value(val) {
+            this[val ? 'open' : 'close']();
+        },
+        getContainer: function getContainer() {
+            this.move();
+        },
+        overlay: function overlay() {
+            this.renderOverlay();
+        }
+    },
+
+    created: function created() {
+        this._popupId = 'popup-' + _context2.default.plusKey('id');
+    },
+    mounted: function mounted() {
+        if (this.getContainer) {
+            this.move();
+        }
+        if (this.value) {
+            this.open();
+        }
+    },
+    activated: function activated() {
+        /* istanbul ignore next */
+        if (this.value) {
+            this.open();
+        }
+    },
+    beforeDestroy: function beforeDestroy() {
+        this.close();
+    },
+    deactivated: function deactivated() {
+        /* istanbul ignore next */
+        this.close();
+    },
+
+
+    methods: {
+        open: function open() {
+            /* istanbul ignore next */
+            if (this.$isServer || this.opened) {
+                return;
+            }
+
+            // 如果属性中传入了`zIndex`，则覆盖`context`中对应的`zIndex`
+            if (this.zIndex !== undefined) {
+                _context2.default.zIndex = this.zIndex;
+            }
+
+            this.opened = true;
+            this.renderOverlay();
+
+            if (this.lockScroll) {
+                (0, _MdInteractionEvents.on)(document, 'touchstart', this.touchStart);
+                (0, _MdInteractionEvents.on)(document, 'touchmove', this.onTouchMove);
+                if (!_context2.default.lockCount) {
+                    document.body.classList.add('md-overflow-hidden');
+                }
+                _context2.default.lockCount++;
+            }
+        },
+        close: function close() {
+            if (!this.opened) {
+                return;
+            }
+
+            if (this.lockScroll) {
+                _context2.default.lockCount--;
+                (0, _MdInteractionEvents.off)(document, 'touchstart', this.touchStart);
+                (0, _MdInteractionEvents.off)(document, 'touchmove', this.onTouchMove);
+                if (!_context2.default.lockCount) {
+                    document.body.classList.remove('md-overflow-hidden');
+                }
+            }
+
+            this.opened = false;
+            _manager2.default.close(this._popupId);
+            this.$emit('input', false);
+        },
+        move: function move() {
+            if (this.getContainer) {
+                this.getContainer().appendChild(this.$el);
+            } else if (this.$parent) {
+                this.$parent.$el.appendChild(this.$el);
+            }
+        },
+        onTouchMove: function onTouchMove(e) {
+            this.touchMove(e);
+            var direction = this.deltaY > 0 ? '10' : '01';
+            var el = _MdScroll2.default.getScrollEventTarget(e.target, this.$el);
+            var scrollHeight = el.scrollHeight,
+                offsetHeight = el.offsetHeight,
+                scrollTop = el.scrollTop;
+
+            var status = '11';
+
+            /* istanbul ignore next */
+            if (scrollTop === 0) {
+                status = offsetHeight >= scrollHeight ? '00' : '01';
+            } else if (scrollTop + offsetHeight >= scrollHeight) {
+                status = '10';
+            }
+
+            /* istanbul ignore next */
+            if (status !== '11' && this.direction === 'vertical' && !(parseInt(status, 2) & parseInt(direction, 2))) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        },
+        renderOverlay: function renderOverlay() {
+            var _this = this;
+
+            if (this.overlay) {
+                _manager2.default.open(this, {
+                    zIndex: _context2.default.plusKey('zIndex'),
+                    className: this.overlayClass,
+                    customStyle: this.overlayStyle
+                });
+            } else {
+                _manager2.default.close(this._popupId);
+            }
+
+            this.$nextTick(function () {
+                _this.$el.style.zIndex = _context2.default.plusKey('zIndex');
+            });
+        }
+    }
+};
+
+/***/ }),
+
+/***/ "./resources/assets/js/vendor/gmf-sys/core/mixins/MdPopup/manager.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _vue = __webpack_require__("./node_modules/vue/dist/vue.common.js");
+
+var _vue2 = _interopRequireDefault(_vue);
+
+var _Modal = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/mixins/MdPopup/Modal.vue");
+
+var _Modal2 = _interopRequireDefault(_Modal);
+
+var _context = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/mixins/MdPopup/context.js");
+
+var _context2 = _interopRequireDefault(_context);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var defaultConfig = {
+  className: '',
+  customStyle: {}
+};
+
+exports.default = {
+  open: function open(vm, config) {
+    /* istanbul ignore next */
+    if (!_context2.default.stack.some(function (item) {
+      return item.vm._popupId === vm._popupId;
+    })) {
+      var el = vm.$el;
+      var targetNode = el && el.parentNode && el.parentNode.nodeType !== 11 ? el.parentNode : document.body;
+      _context2.default.stack.push({ vm: vm, config: config, targetNode: targetNode });
+      this.update();
+    };
+  },
+  close: function close(id) {
+    var stack = _context2.default.stack;
+
+
+    if (stack.length) {
+      if (_context2.default.top.vm._popupId === id) {
+        stack.pop();
+        this.update();
+      } else {
+        _context2.default.stack = stack.filter(function (item) {
+          return item.vm._popupId !== id;
+        });
+      }
+    }
+  },
+  update: function update() {
+    var modal = _context2.default.modal;
+
+
+    if (!modal) {
+      modal = new (_vue2.default.extend(_Modal2.default))({
+        el: document.createElement('div')
+      });
+      modal.$on('click', this.onClick);
+
+      _context2.default.modal = modal;
+    }
+
+    if (modal.$el.parentNode) {
+      modal.visible = false;
+    }
+
+    if (_context2.default.top) {
+      var _context$top = _context2.default.top,
+          targetNode = _context$top.targetNode,
+          config = _context$top.config;
+
+
+      targetNode.appendChild(modal.$el);
+      Object.assign(modal, _extends({}, defaultConfig, config, {
+        visible: true
+      }));
+    }
+  },
+
+
+  // close popup when click modal && closeOnClickOverlay is true
+  onClick: function onClick() {
+    /* istanbul ignore else */
+    if (_context2.default.top) {
+      var vm = _context2.default.top.vm;
+
+      vm.$emit('click-overlay');
+      vm.closeOnClickOverlay && vm.$emit('input', false);
+    }
   }
 };
 
@@ -62299,103 +62899,6 @@ exports.default = function (value) {
     return false;
   }
   return Object.prototype.toString.call(value) === '[object Array]';
-};
-
-/***/ }),
-
-/***/ "./resources/assets/js/vendor/gmf-sys/core/utils/MdObjectAssign.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/*
-object-assign
-(c) Sindre Sorhus
-@license MIT
-*/
-
-
-/* eslint-disable no-unused-vars */
-
-var getOwnPropertySymbols = Object.getOwnPropertySymbols;
-var hasOwnProperty = Object.prototype.hasOwnProperty;
-var propIsEnumerable = Object.prototype.propertyIsEnumerable;
-
-function toObject(val) {
-	if (val === null || val === undefined) {
-		throw new TypeError('Object.assign cannot be called with null or undefined');
-	}
-
-	return Object(val);
-}
-
-function shouldUseNative() {
-	try {
-		if (!Object.assign) {
-			return false;
-		}
-
-		// Detect buggy property enumeration order in older V8 versions.
-
-		// https://bugs.chromium.org/p/v8/issues/detail?id=4118
-		var test1 = new String('abc'); // eslint-disable-line no-new-wrappers
-		test1[5] = 'de';
-		if (Object.getOwnPropertyNames(test1)[0] === '5') {
-			return false;
-		}
-
-		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
-		var test2 = {};
-		for (var i = 0; i < 10; i++) {
-			test2['_' + String.fromCharCode(i)] = i;
-		}
-		var order2 = Object.getOwnPropertyNames(test2).map(function (n) {
-			return test2[n];
-		});
-		if (order2.join('') !== '0123456789') {
-			return false;
-		}
-
-		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
-		var test3 = {};
-		'abcdefghijklmnopqrst'.split('').forEach(function (letter) {
-			test3[letter] = letter;
-		});
-		if (Object.keys(Object.assign({}, test3)).join('') !== 'abcdefghijklmnopqrst') {
-			return false;
-		}
-
-		return true;
-	} catch (err) {
-		// We don't expect any of the above to throw, but better to be safe.
-		return false;
-	}
-}
-
-module.exports = shouldUseNative() ? Object.assign : function (target, source) {
-	var from;
-	var to = toObject(target);
-	var symbols;
-
-	for (var s = 1; s < arguments.length; s++) {
-		from = Object(arguments[s]);
-
-		for (var key in from) {
-			if (hasOwnProperty.call(from, key)) {
-				to[key] = from[key];
-			}
-		}
-
-		if (getOwnPropertySymbols) {
-			symbols = getOwnPropertySymbols(from);
-			for (var i = 0; i < symbols.length; i++) {
-				if (propIsEnumerable.call(from, symbols[i])) {
-					to[symbols[i]] = from[symbols[i]];
-				}
-			}
-		}
-	}
-
-	return to;
 };
 
 /***/ }),
@@ -63615,6 +64118,10 @@ var _common = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/uti
 
 var _common2 = _interopRequireDefault(_common);
 
+var _MdCombineURLs = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/utils/MdCombineURLs.js");
+
+var _MdCombineURLs2 = _interopRequireDefault(_MdCombineURLs);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var defaults = {
@@ -63631,7 +64138,7 @@ var defaults = {
 };
 
 function Http(instanceConfig) {
-    this.defaults = instanceConfig;
+    this.defaults = instanceConfig || {};
     this.Cancel = _axios2.default.Cancel;
     this.CancelToken = _axios2.default.CancelToken;
     this.isCancel = _axios2.default.isCancel;
@@ -63669,6137 +64176,75 @@ _common2.default.forEach(['post', 'put', 'patch'], function forEachMethodWithDat
         }));
     };
 });
-
-function createInstance(defaultConfig) {
-    var instance = new Http(defaultConfig);
-    return instance;
-}
-
-var instancedefaults = {};
-var instance = createInstance(instancedefaults);
-
-instance.create = function create(instanceConfig) {
-    return createInstance(instanceConfig);
+Http.prototype.create = function (config) {
+    return new Http(config);
 };
 
-exports.default = instance;
+var queue = {};
+var defaultName = 'default';
 
-/***/ }),
-
-/***/ "./resources/assets/js/vendor/gmf-sys/core/xscroll/animate.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(module) {
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var Util = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/util.js");
-var Timer = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/timer.js");
-var Easing = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/easing.js");
-var Base = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/base.js");
-//transform
-var vendorTransform = Util.prefixStyle("transform");
-//transition webkitTransition MozTransition OTransition msTtransition
-var vendorTransition = Util.prefixStyle("transition");
-
-var vendorTransitionDuration = Util.prefixStyle("transitionDuration");
-
-var vendorTransformOrigin = Util.prefixStyle("transformOrigin");
-
-var vendorTransitionEnd = Util.vendor ? Util.prefixStyle("transitionEnd") : "transitionend";
-
-var vendorTransformStr = Util.vendor ? ["-", Util.vendor, "-transform"].join("") : "transform";
-
-var translateTpl = 'translateX({translateX}px) translateY({translateY}px) translateZ(0)';
-//limit attrs
-var animAttrs = {
-	'transform': true,
-	'opacity': true,
-	'scrollTop': true,
-	'scrollLeft': true
-};
-
-function myParse(v) {
-	return Math.round(parseFloat(v) * 1e5) / 1e5;
-}
-
-function defaultDecompose() {
-	return {
-		translateX: 0,
-		translateY: 0,
-		rotate: 0,
-		skewX: 0,
-		skewY: 0,
-		scaleX: 1,
-		scaleY: 1
-	};
-}
-
-function toMatrixArray(matrix) {
-	matrix = matrix.split(/,/);
-	matrix = Array.prototype.map.call(matrix, function (v) {
-		return myParse(v);
-	});
-	return matrix;
-}
-
-function decomposeMatrix(matrix) {
-	matrix = toMatrixArray(matrix);
-	var scaleX,
-	    scaleY,
-	    skew,
-	    A = matrix[0],
-	    B = matrix[1],
-	    C = matrix[2],
-	    D = matrix[3];
-
-	// Make sure matrix is not singular
-	if (A * D - B * C) {
-		scaleX = Math.sqrt(A * A + B * B);
-		skew = (A * C + B * D) / (A * D - C * B);
-		scaleY = (A * D - B * C) / scaleX;
-		// step (6)
-		if (A * D < B * C) {
-			skew = -skew;
-			scaleX = -scaleX;
-		}
-		// matrix is singular and cannot be interpolated
-	} else {
-		// In this case the elem shouldn't be rendered, hence scale == 0
-		scaleX = scaleY = skew = 0;
-	}
-
-	// The recomposition order is very important
-	// see http://hg.mozilla.org/mozilla-central/file/7cb3e9795d04/layout/style/nsStyleAnimation.cpp#l971
-	return {
-		translateX: myParse(matrix[4]),
-		translateY: myParse(matrix[5]),
-		rotate: myParse(Math.atan2(B, A) * 180 / Math.PI),
-		skewX: myParse(Math.atan(skew) * 180 / Math.PI),
-		skewY: 0,
-		scaleX: myParse(scaleX),
-		scaleY: myParse(scaleY)
-	};
-}
-
-function getTransformInfo(transform) {
-	transform = transform.split(')');
-	var trim = Util.trim,
-	    i = -1,
-	    l = transform.length - 1,
-	    split,
-	    prop,
-	    val,
-	    ret = defaultDecompose();
-
-	// Loop through the transform properties, parse and multiply them
-	while (++i < l) {
-		split = transform[i].split('(');
-		prop = trim(split[0]);
-		val = split[1];
-		switch (prop) {
-			case 'translateX':
-			case 'translateY':
-			case 'scaleX':
-			case 'scaleY':
-				ret[prop] = myParse(val);
-				break;
-			case 'translate':
-			case 'translate3d':
-				val = val.split(',');
-				ret.translateX = myParse(val[0]);
-				ret.translateY = myParse(val[1] || 0);
-				break;
-			case 'scale':
-				val = val.split(',');
-				ret.scaleX = myParse(val[0]);
-				ret.scaleY = myParse(val[1] || val[0]);
-				break;
-			case 'matrix':
-				return decomposeMatrix(val);
-		}
-	}
-
-	return ret;
-}
-
-/**
- * animate function
- * @constructor
- * @param {HTMLElement} el element to animate
- * @param {Object} config config for animate
- * @param {Object} config.css
- * @param {Number} config.duration
- * @param {String} config.easing
- * @extends {Base}
- */
-function Animate(el, cfg) {
-	if (!el || !cfg || !cfg.css) return;
-	var self = this;
-	self.cfg = cfg;
-	self.el = el;
-	var duration = cfg.duration || 0,
-	    easing = cfg.easing || "ease",
-	    delay = cfg.delay || 0;
-	//trigger run
-	if (cfg.run) {
-		//frame animate
-		self.timer = self.timer || new Timer({
-			duration: Math.round(duration),
-			easing: easing
-		});
-		self.timer.on("run", cfg.run);
-	}
-	self._bindEvt();
-	return self;
-}
-
-function computeTransform(prevTransform, destTransform) {
-	var transform = getTransformInfo(prevTransform);
-	var dest = getTransformInfo(destTransform);
-	var trans = {};
-	for (var i in dest) {
-		trans[i] = {
-			prevVal: transform[i],
-			newVal: dest[i]
-		};
-	}
-	return trans;
-}
-
-//for scroll only
-function setStyle(el, styleName, prevVal, newVal, percent) {
-	prevVal = isNaN(Number(prevVal)) ? 0 : Number(prevVal);
-	var curVal = (newVal - prevVal) * percent + prevVal;
-	css(el, styleName, curVal);
-}
-
-function css(el, styleName, val) {
-	switch (styleName) {
-		case "scrollTop":
-		case "scrollLeft":
-			el[styleName] = val;
-			break;
-		case "transform":
-			el.style[vendorTransform] = val;
-		case "opacity":
-			el.style[styleName] = val;
-			break;
-
-	}
-}
-
-Util.extend(Animate, Base, {
-	/**
-  * to start the animation
-  * @memberof Animate
-  * @return {Animate}
-  */
-	run: function run() {
-		var self = this;
-		var cfg = self.cfg,
-		    el = self.el,
-		    duration = cfg.duration || 0,
-		    easing = cfg.easing || "ease",
-		    delay = cfg.delay || 0;
-		self.__isTransitionEnd = false;
-		clearTimeout(self.__itv);
-		self.timer && self.timer.run();
-		if (duration <= Timer.MIN_DURATION) {
-			for (var i in cfg.css) {
-				css(el, i, cfg.css[i]);
-			}
-			self.stop();
-			self.__handlers.stop.call(self);
-			return;
-		}
-
-		if (Util.isBadAndroid()) {
-			//use frame animate on bad android device
-			cfg.useTransition = false;
-		}
-
-		if (cfg.useTransition) {
-			//transition
-			el.style[vendorTransition] = Util.substitute('all {duration}ms {easing} {delay}ms', {
-				duration: Math.round(duration),
-				easing: Easing.format(easing),
-				delay: delay
-			});
-			for (var i in cfg.css) {
-				//set css
-				css(el, i, cfg.css[i]);
-			}
-			self.__itv = setTimeout(function () {
-				if (!self.__isTransitionEnd) {
-					self.__isTransitionEnd = true;
-					self.trigger("transitionend");
-				}
-			}, Number(duration) + 60);
-		} else {
-			self.computeStyle = self.computeStyle || window.getComputedStyle(el);
-			//transform
-			if (cfg.css.transform && self.timer) {
-				var transmap = self.transmap = computeTransform(self.computeStyle[vendorTransform], cfg.css.transform);
-				self.timer.off("run", self.__handlers.transRun);
-				self.timer.on("run", self.__handlers.transRun, self);
-				self.timer.off("end", self.__handlers.transRun);
-				self.timer.on("end", self.__handlers.transRun, self);
-			}
-		}
-		return self;
-	},
-	_transitionEndHandler: function _transitionEndHandler(e) {
-		var self = this;
-		self.stop();
-		self.__handlers.stop.call(self);
-	},
-	__handlers: {
-		transRun: function transRun(e) {
-			var self = this;
-			var transmap = self.transmap;
-			var el = self.el;
-			var newTrans = {};
-			for (var i in transmap) {
-				newTrans[i] = (transmap[i].newVal - transmap[i].prevVal) * e.percent + transmap[i].prevVal;
-			}
-			var ret = Util.substitute(translateTpl + ' ' + 'scale({scaleX},{scaleY})', newTrans);
-			el.style[vendorTransform] = ret;
-		},
-		stop: function stop(e) {
-			var self = this;
-			var cfg = self.cfg;
-			cfg.end && cfg.end({
-				percent: 1
-			});
-		}
-	},
-	_bindEvt: function _bindEvt() {
-		var self = this;
-		var cfg = self.cfg;
-		var el = self.el;
-		self.el.addEventListener(vendorTransitionEnd, function (e) {
-			self.__isTransitionEnd = true;
-			if (e.target !== e.currentTarget) return;
-			self.trigger("transitionend", e);
-		});
-		self.on("transitionend", self._transitionEndHandler, self);
-		var cssRun = function cssRun(e) {
-			self.computeStyle = self.computeStyle || window.getComputedStyle(el);
-			for (var i in cfg.css) {
-				if (!/transform/.test(i)) {
-					setStyle(self.el, i, self.computeStyle[i], cfg.css[i], e.percent);
-				}
-			}
-		};
-		self.timer && self.timer.on("run", cssRun);
-		self.timer && self.timer.on("stop", self.__handlers.stop, self);
-	},
-	/**
-  * to stop the animation
-  * @memberof Animate
-  * @return {Animate}
-  */
-	stop: function stop() {
-		var self = this;
-		if (self.cfg.useTransition && self.cfg.duration > Timer.MIN_DURATION) {
-			var computeStyle = window.getComputedStyle(this.el);
-			for (var i in self.cfg.css) {
-				if (animAttrs[i]) {
-					var value = /transform/.test(i) ? computeStyle[vendorTransform] : computeStyle[i];
-					css(self.el, i, Util.substitute(translateTpl + ' ' + 'scale({scaleX},{scaleY})', getTransformInfo(value)));
-				}
-			}
-			self.el.style[vendorTransition] = "none";
-		}
-		self.timer && self.timer.stop() && self.timer.reset();
-		self.computeStyle = null;
-		return self;
-	},
-	/**
-  * to reset the animation to a new state
-  * @memberof Animate
-  * @param {object} cfg cfg for new animation
-  * @return {Animate}
-  */
-	reset: function reset(cfg) {
-		var self = this;
-		self.computeStyle = null;
-		Util.mix(self.cfg, cfg);
-		this.timer && self.timer.reset({
-			duration: Math.round(self.cfg.duration),
-			easing: self.cfg.easing
-		});
-		return self;
-	}
-});
-
-if (( false ? 'undefined' : _typeof(module)) == 'object' && module.exports) {
-	module.exports = Animate;
-}
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/webpack/buildin/module.js")(module)))
-
-/***/ }),
-
-/***/ "./resources/assets/js/vendor/gmf-sys/core/xscroll/base.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(module) {
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var Util = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/util.js");
-var Events = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/events.js");
-/** 
-      @constructor 
-      @mixes Events
-      */
-var Base = function Base() {};
-
-Util.mix(Base.prototype, Events);
-
-Util.mix(Base.prototype, {
-	/**
-  * @memberof Base
-  * @param  {object} plugin plug a plugin
-  */
-	plug: function plug(plugin) {
-		var self = this;
-		if (!plugin || !plugin.pluginId) return;
-		if (!self.__plugins) {
-			self.__plugins = [];
-		}
-		var __plugin = self.getPlugin(plugin.pluginId);
-		__plugin && self.unplug(plugin.pluginId);
-		plugin.pluginInitializer(self);
-		self.__plugins.push(plugin);
-		return self;
-	},
-	/**
-  * @memberof Base
-  * @param  {object|string} plugin unplug a plugin by pluginId or plugin instance
-  */
-	unplug: function unplug(plugin) {
-		var self = this;
-		if (!plugin || !self.__plugins) return;
-		var _plugin = typeof plugin == "string" ? self.getPlugin(plugin) : plugin;
-		_plugin.pluginDestructor(self);
-		for (var i = 0, l = self.__plugins.length; i < l; i++) {
-			if (self.__plugins[i] == _plugin) {
-				return self.__plugins.splice(i, 1);
-			}
-		}
-	},
-	/**
-  * @memberof Base
-  * @param  {object|string} plugin get plugin by pluginId
-  */
-	getPlugin: function getPlugin(pluginId) {
-		var self = this;
-		var plugins = [];
-		if (!self.__plugins) return;
-		for (var i = 0, l = self.__plugins.length; i < l; i++) {
-			if (self.__plugins[i] && self.__plugins[i].pluginId == pluginId) {
-				plugins.push(self.__plugins[i]);
-			}
-		}
-		return plugins.length > 1 ? plugins : plugins[0] || null;
-	}
-});
-
-if (( false ? 'undefined' : _typeof(module)) == 'object' && module.exports) {
-	module.exports = Base;
-}
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/webpack/buildin/module.js")(module)))
-
-/***/ }),
-
-/***/ "./resources/assets/js/vendor/gmf-sys/core/xscroll/boundry.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(module) {
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var Util = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/util.js");
-
-function Boundry(cfg) {
-    this.cfg = Util.mix({
-        width: 0,
-        height: 0
-    }, cfg);
-    this.init();
-}
-Util.mix(Boundry.prototype, {
-    init: function init() {
-        var self = this;
-        self._xtop = 0;
-        self._xright = 0;
-        self._xleft = 0;
-        self._xbottom = 0;
-        self.refresh({
-            width: self.cfg.width,
-            height: self.cfg.height
-        });
-    },
-    reset: function reset() {
-        this.resetTop();
-        this.resetLeft();
-        this.resetBottom();
-        this.resetRight();
-        return this;
-    },
-    resetTop: function resetTop() {
-        this._xtop = 0;
-        this.refresh();
-        return this;
-    },
-    resetLeft: function resetLeft() {
-        this._xleft = 0;
-        this.refresh();
-        return this;
-    },
-    resetBottom: function resetBottom() {
-        this._xbottom = 0;
-        this.refresh();
-        return this;
-    },
-    resetRight: function resetRight() {
-        this._xright = 0;
-        this.refresh();
-        return this;
-    },
-    expandTop: function expandTop(top) {
-        this._xtop = top;
-        this.refresh();
-        return this;
-    },
-    expandLeft: function expandLeft(left) {
-        this._xleft = left;
-        this.refresh();
-        return this;
-    },
-    expandRight: function expandRight(right) {
-        this._xright = right;
-        this.refresh();
-        return this;
-    },
-    expandBottom: function expandBottom(bottom) {
-        this._xbottom = bottom;
-        this.refresh();
-        return this;
-    },
-    refresh: function refresh(cfg) {
-        Util.mix(this.cfg, cfg);
-        this.top = this._xtop;
-        this.left = this._xleft;
-        this.bottom = (cfg && cfg.height || this.cfg.height || 0) - this._xbottom;
-        this.right = (cfg && cfg.width || this.cfg.width || 0) - this._xright;
-        this.width = this.right - this.left > 0 ? this.right - this.left : 0;
-        this.height = this.bottom - this.top > 0 ? this.bottom - this.top : 0;
-        return this;
+function createGHTTPInstance(name, config) {
+    name = name || defaultName;
+    if (!queue[name]) {
+        config = config || {};
+        queue[name] = new Http(config);
     }
-});
-
-if (( false ? 'undefined' : _typeof(module)) == 'object' && module.exports) {
-    module.exports = Boundry;
-}
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/webpack/buildin/module.js")(module)))
-
-/***/ }),
-
-/***/ "./resources/assets/js/vendor/gmf-sys/core/xscroll/components/controller.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(module) {/*
-	wrapped scroll controller
-*/
-
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var Util = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/util.js"),
-    Base = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/base.js");
-
-var Controller = function Controller(cfg) {
-	Controller.superclass.constructor.call(this, cfg);
-	this.userConfig = Util.mix({}, cfg);
-	this.init();
+    return queue[name];
 };
 
-Util.extend(Controller, Base, {
-	init: function init() {
-		var self = this;
-		self.xscroll = self.userConfig.xscroll;
-	},
-	add: function add(scroll, cfg) {
-		var self = this;
-		cfg = Util.extend({
-			captureBounce: false,
-			stopPropagation: true
-		}, cfg);
-		if (!self.__scrolls) {
-			self.__scrolls = {};
-		}
-		if (scroll.guid && !self.__scrolls[scroll.guid]) {
-			scroll.parentscroll = self.xscroll;
-			self._bind(scroll);
-			return self.__scrolls[scroll.guid] = scroll;
-		}
-		return;
-	},
-	remove: function remove(scroll) {
-		var self = this;
-		if (!scroll || !scroll.guid) return;
-		var subscroll = self.__scrolls[scroll.guid];
-		if (subscroll) {
-			subscroll.parentscroll = null;
-			self._unbind(scroll);
-			subscroll = null;
-		}
-	},
-	get: function get(guid) {
-		if (guid) {
-			return this.__scrolls[guid];
-		}
-		return this.__scrolls;
-	},
-
-	_unbind: function _unbind(sub) {},
-
-	_bind: function _bind(sub) {
-		var self = this,
-		    xscroll = self.xscroll;
-		xscroll.renderTo.addEventListener("touchstart", function () {
-			xscroll._resetLockConfig();
-		});
-		sub.renderTo.addEventListener("touchstart", function () {
-			sub._resetLockConfig();
-		});
-		xscroll.on("panend", xscroll._resetLockConfig);
-		sub.on("panend", sub._resetLockConfig);
-		sub.on("panstart", function (e) {
-			//vertical scroll enabled
-			if (!sub.userConfig.lockY && !xscroll.userConfig.lockY) {
-				//outside of boundry
-				if (sub.isBoundryOut()) {
-					xscroll.userConfig.lockY = true;
-					return;
-				}
-				if (e.direction == 16 && sub.getBoundryOutTop() >= 0) {
-					sub.userConfig.lockY = true;
-				} else if (e.direction == 8 && sub.getBoundryOutTop() >= 0 && sub.getBoundryOutBottom() < 0) {
-					xscroll.userConfig.lockY = true;
-				}
-				if (e.direction == 8 && sub.getBoundryOutBottom() >= 0) {
-					sub.userConfig.lockY = true;
-				} else if (e.direction == 16 && sub.getBoundryOutBottom() >= 0 && sub.getBoundryOutTop() < 0) {
-					xscroll.userConfig.lockY = true;
-				}
-				if (sub.getBoundryOutTop() < 0 && sub.getBoundryOutBottom() < 0) {
-					xscroll.userConfig.lockY = true;
-				}
-			}
-			//horizontal scroll enabled
-			if (!sub.userConfig.lockX && !xscroll.userConfig.lockX) {
-				if (sub.isBoundryOut()) {
-					xscroll.userConfig.lockX = true;
-					return;
-				}
-				if (e.direction == 4 && sub.getBoundryOutLeft() >= 0) {
-					sub.userConfig.lockX = true;
-				} else if (e.direction == 2 && sub.getBoundryOutLeft() >= 0 && sub.getBoundryOutRight() < 0) {
-					xscroll.userConfig.lockX = true;
-				}
-				if (e.direction == 2 && sub.getBoundryOutRight() >= 0) {
-					sub.userConfig.lockX = true;
-				} else if (e.direction == 4 && sub.getBoundryOutRight() >= 0 && sub.getBoundryOutLeft() < 0) {
-					xscroll.userConfig.lockX = true;
-				}
-				if (sub.getBoundryOutLeft() < 0 && sub.getBoundryOutRight() < 0) {
-					xscroll.userConfig.lockX = true;
-				}
-			}
-
-			if (!sub.userConfig.lockX && xscroll.userConfig.lockX) {
-				//pan x
-				if (e.direction == 2 || e.direction == 4) {
-					xscroll.userConfig.lockY = true;
-				} else {
-					sub.userConfig.lockX = true;
-				}
-			}
-
-			if (!sub.userConfig.lockY && xscroll.userConfig.lockY) {
-				//pan y
-				if (e.direction == 8 || e.direction == 16) {
-					xscroll.userConfig.lockX = true;
-				} else {
-					sub.userConfig.lockY = true;
-				}
-			}
-		});
-	}
-});
-
-if (( false ? 'undefined' : _typeof(module)) == 'object' && module.exports) {
-	module.exports = Controller;
-}
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/webpack/buildin/module.js")(module)))
-
-/***/ }),
-
-/***/ "./resources/assets/js/vendor/gmf-sys/core/xscroll/components/fixed.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(module) {
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var Util = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/util.js");
-var Base = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/base.js");
-var transform = Util.prefixStyle("transform");
-
-var Fixed = function Fixed(cfg) {
-  Fixed.superclass.constructor.call(this, cfg);
-  this.userConfig = Util.mix({
-    fixedRenderTo: undefined,
-    fixedElements: ".xs-fixed",
-    prefix: "xs-fixed-container",
-    zoomType: "y"
-  }, cfg);
-  this.init();
+function GHTTP(name, config) {
+    return createGHTTPInstance(name, config);
 };
+/**
+ * {name,appId,entId,gateway,timestamp,apiList}
+ * @param {object} config 
+ */
+GHTTP.config = function (config) {
+    if (!config.name) {
+        alert('[assert]: name is required');
+    }
+    if (!config.appId) {
+        alert('[assert]: appId is required');
+    }
+    var chttp = createGHTTPInstance();
+    var instance = createGHTTPInstance(config.name);
 
-Util.extend(Fixed, Base, {
-  fixedElements: [],
-  init: function init() {
-    var self = this,
-        userConfig = self.userConfig,
-        xscroll = self.xscroll = userConfig.xscroll,
-        xscrollConfig = self.xscrollConfig = xscroll.userConfig;
-    self.isY = !!(userConfig.zoomType == "y");
-    self._ = self.isY ? {
-      top: "top",
-      height: "height",
-      width: "width",
-      offsetTop: "offsetTop"
-    } : {
-      top: "left",
-      height: "width",
-      width: "height",
-      offsetTop: "offsetLeft"
+    return new Promise(function (resolved, rejected) {
+        chttp.post('sys/apps/config', config).then(function (res) {
+            var d = res.data.data;
+            instance.defaults.baseURL = d.host;
+            instance.defaults.headers = { common: {} };
+            if (d.ent) {
+                instance.defaults.headers.common.Ent = _common2.default.isObject(d.ent) ? d.ent.id : d.ent;
+            }
+            if (d.token) {
+                instance.defaults.headers.common.Authorization = _common2.default.isObject(d.token) ? (d.token.token_type ? d.token.token_type : "Bearer") + " " + d.token.access_token : d.token;
+            }
+            resolved(true);
+        }, function (err) {
+            rejected(false);
+        });
+    });
+};
+['delete', 'get', 'head', 'options'].forEach(function (method) {
+    GHTTP[method] = function (url, config) {
+        return createGHTTPInstance().request(_common2.default.merge(config || {}, {
+            method: method,
+            url: url
+        }));
     };
-    self.fixedRenderTo = Util.getNode(userConfig.fixedRenderTo);
-    return self;
-  },
-  render: function render() {
-    var self = this;
-    var xscroll = self.xscroll;
-    self.infinite = xscroll.getPlugin("infinite");
-    if (!self.fixedRenderTo) {
-      self.fixedRenderTo = document.createElement('div');
-      xscroll.renderTo.appendChild(self.fixedRenderTo);
-    }
-    Util.addClass(self.fixedRenderTo, self.userConfig.prefix);
-    var originalFixedElements = self.originalFixedElements = self.getFixedElements();
-    for (var i = 0, l = originalFixedElements.length; i < l; i++) {
-      self.renderFixedElement(originalFixedElements[i], i, self.fixedRenderTo);
-    }
-    return self;
-  },
-  getFixedElements: function getFixedElements() {
-    var self = this;
-    var infinite = self.infinite;
-    var userConfig = self.userConfig;
-    if (infinite) {
-      var els = [];
-      for (var i in infinite.__serializedData) {
-        var data = infinite.__serializedData[i];
-        if (data && data.style && data.style.position == "fixed") {
-          els.push(data);
-        }
-      }
-      return els;
-    } else {
-      return Util.getNodes(userConfig.fixedElements, self.xscroll.content);
-    }
-  },
-  renderFixedElement: function renderFixedElement(el, fixedIndex, fixedRenderTo) {
-    var self = this;
-    var isRender = true;
-    var _ = self._;
-    var xscroll = self.xscroll;
-    var userConfig = self.userConfig;
-    var xscrollConfig = self.xscrollConfig;
-    var useOriginScroll = xscrollConfig.useOriginScroll;
-    var infinite = self.infinite;
-    var fixedElement = self.fixedElements[fixedIndex];
-    if (!self.fixedElements[fixedIndex]) {
-      isRender = false;
-      if (useOriginScroll && !infinite) {
-        //use original position:fixed stylesheet
-        el.style.position = "fixed";
-        el.style.display = "block";
-      } else {
-        //deep clone fixed nodes and hide original nodes
-        fixedElement = document.createElement("div");
-        if (infinite) {
-          fixedElement.setAttribute("style", Util.stringifyStyle(Util.mix(el.style, {
-            display: "block",
-            width: "100%"
-          })));
-          fixedElement.style[_.top] = (el.style[_.top] >= 0 ? el.style[_.top] : el._top) + "px";
-          if (el.style[_.height]) {
-            fixedElement.style[_.height] = el.style[_.height] + "px";
-          }
-          infinite.userConfig.renderHook.call(self, fixedElement, el);
-        } else {
-          fixedElement.style.display = "block";
-          fixedElement.style.position = "absolute";
-          fixedElement.style[_.width] = "100%";
-          fixedElement.innerHTML = el.innerHTML;
-          fixedElement.className = el.className;
-          fixedElement.setAttribute("style", el.getAttribute("style"));
-          fixedElement.style[_.top] = el[_.offsetTop] + "px";
-          el.style.display = "none";
-        }
-        fixedRenderTo.appendChild(fixedElement);
-        self.fixedElements.push(fixedElement);
-      }
-    }
-    xscroll.trigger("fixedchange", {
-      fixedIndex: fixedIndex,
-      fixedElement: useOriginScroll ? el : fixedElement,
-      originalFixedElement: el,
-      isRender: isRender
-    });
-  },
-  destroy: function destroy() {
-    var self = this;
-    self.fixedElements = undefined;
-  }
 });
-
-if (( false ? 'undefined' : _typeof(module)) == 'object' && module.exports) {
-  module.exports = Fixed;
-}
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/webpack/buildin/module.js")(module)))
-
-/***/ }),
-
-/***/ "./resources/assets/js/vendor/gmf-sys/core/xscroll/components/scrollbar.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(module) {
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var Util = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/util.js");
-var Animate = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/animate.js");
-var MAX_BOUNCE_DISTANCE = 40;
-var MIN_BAR_SCROLLED_SIZE = 10;
-var MIN_BAR_SIZE = 50;
-var transform = Util.prefixStyle("transform");
-var transformStr = Util.vendor ? ["-", Util.vendor, "-transform"].join("") : "transform";
-var transition = Util.prefixStyle("transition");
-var borderRadius = Util.prefixStyle("borderRadius");
-var transitionDuration = Util.prefixStyle("transitionDuration");
-
-var ScrollBar = function ScrollBar(cfg) {
-	this.userConfig = Util.mix({
-		MIN_BAR_SCROLLED_SIZE: MIN_BAR_SCROLLED_SIZE,
-		MIN_BAR_SIZE: MIN_BAR_SIZE,
-		MAX_BOUNCE_DISTANCE: MAX_BOUNCE_DISTANCE,
-		spacing: 5
-	}, cfg);
-	this.init(cfg.xscroll);
-};
-
-Util.mix(ScrollBar.prototype, {
-	init: function init(xscroll) {
-		var self = this;
-		self.xscroll = xscroll;
-		self.type = self.userConfig.type;
-		self.isY = self.type == "y" ? true : false;
-		self.scrollTopOrLeft = self.isY ? "scrollTop" : "scrollLeft";
-	},
-	destroy: function destroy() {
-		var self = this;
-		Util.remove(self.scrollbar);
-		self.xscroll.off("scroll", self._scrollHandler, self);
-		self.xscroll.off("scrollend", self._scrollEndHandler, self);
-	},
-	render: function render() {
-		var self = this;
-		var xscroll = self.xscroll;
-		var boundry = xscroll.boundry;
-		var indicatorInsets = self.xscroll.userConfig.indicatorInsets;
-		var translateZ = xscroll.userConfig.gpuAcceleration ? " translateZ(0) " : "";
-		var transform = translateZ ? transformStr + ":" + translateZ + ";" : "";
-		var commonCss = "opacity:0;position:absolute;z-index:999;overflow:hidden;-webkit-border-radius:3px;-moz-border-radius:3px;-o-border-radius:3px;" + transform;
-		indicatorInsets._xright = indicatorInsets.right + indicatorInsets.spacing;
-		indicatorInsets._xbottom = indicatorInsets.bottom + indicatorInsets.spacing;
-		var css = self.isY ? Util.substitute("width:{width}px;bottom:{_xbottom}px;top:{top}px;right:{right}px;", indicatorInsets) + commonCss : Util.substitute("height:{width}px;left:{left}px;right:{_xright}px;bottom:{bottom}px;", indicatorInsets) + commonCss;
-
-		if (!self.scrollbar) {
-			self.scrollbar = document.createElement("div");
-			self.indicate = document.createElement("div");
-			xscroll.renderTo.appendChild(self.scrollbar);
-			self.scrollbar.appendChild(self.indicate);
-		}
-		self.scrollbar.style.cssText = css;
-		var size = self.isY ? "width:100%;" : "height:100%;";
-		self.indicate.style.cssText = size + "position:absolute;background:rgba(0,0,0,0.3);-webkit-border-radius:3px;-moz-border-radius:3px;-o-border-radius:3px;";
-		self._update();
-		self.hide(0);
-		self._bindEvt();
-	},
-	_update: function _update(pos, duration, easing, callback) {
-		var self = this;
-		var pos = undefined === pos ? self.isY ? self.xscroll.getScrollTop() : self.xscroll.getScrollLeft() : pos;
-		var barInfo = self.computeScrollBar(pos);
-		var size = self.isY ? "height" : "width";
-		self.indicate.style[size] = Math.round(barInfo.size) + "px";
-		if (duration && easing) {
-			self.scrollTo(barInfo.pos, duration, easing, callback);
-		} else {
-			self.moveTo(barInfo.pos);
-		}
-	},
-	//compute the position and size of the scrollbar
-	computeScrollBar: function computeScrollBar(pos) {
-		var self = this;
-		var type = self.isY ? "y" : "x";
-		var spacing = self.userConfig.spacing;
-		var xscroll = self.xscroll;
-		var boundry = xscroll.boundry;
-		var userConfig = self.userConfig;
-		var pos = self.isY ? Math.round(pos) + boundry._xtop : Math.round(pos) + boundry._xleft;
-		var MIN_BAR_SCROLLED_SIZE = userConfig.MIN_BAR_SCROLLED_SIZE;
-		var MIN_BAR_SIZE = userConfig.MIN_BAR_SIZE;
-		var MAX_BOUNCE_DISTANCE = userConfig.MAX_BOUNCE_DISTANCE;
-		self.containerSize = self.isY ? xscroll.containerHeight + boundry._xtop + boundry._xbottom : self.xscroll.containerWidth + boundry._xright + boundry._xleft;
-		self.size = self.isY ? boundry.cfg.height : boundry.cfg.width;
-		self.indicateSize = self.isY ? boundry.cfg.height - spacing * 2 : boundry.cfg.width - spacing * 2;
-		var indicateSize = self.indicateSize;
-		var containerSize = self.containerSize;
-		var barPos = indicateSize * pos / containerSize;
-		var barSize = Math.round(indicateSize * self.size / containerSize);
-		var overTop = self.isY ? xscroll.getBoundryOutTop() : xscroll.getBoundryOutLeft();
-		var overBottom = self.isY ? xscroll.getBoundryOutBottom() : xscroll.getBoundryOutRight();
-		var barShiftSize = MIN_BAR_SIZE - barSize > 0 ? MIN_BAR_SIZE - barSize : 0;
-		barSize = barSize < MIN_BAR_SIZE ? MIN_BAR_SIZE : barSize;
-		barPos = (indicateSize - barShiftSize) * pos / containerSize;
-		if (overTop >= 0) {
-			var pct = overTop / MAX_BOUNCE_DISTANCE;
-			pct = pct > 1 ? 1 : pct;
-			barPos = -pct * (barSize - MIN_BAR_SCROLLED_SIZE);
-		}
-		if (overBottom >= 0) {
-			var pct = overBottom / MAX_BOUNCE_DISTANCE;
-			pct = pct > 1 ? 1 : pct;
-			barPos = pct * (barSize - MIN_BAR_SCROLLED_SIZE) + indicateSize - barSize;
-		}
-		self.barPos = Math.round(barPos);
-		return {
-			size: Math.round(barSize),
-			pos: self.barPos
-		};
-	},
-	scrollTo: function scrollTo(pos, duration, easing, callback) {
-		var self = this;
-		self.show();
-		var translateZ = self.xscroll.userConfig.gpuAcceleration ? " translateZ(0) " : "";
-		var config = {
-			css: {
-				transform: self.isY ? "translateY(" + pos + "px)" + translateZ : "translateX(" + pos + "px)" + translateZ
-			},
-			duration: duration,
-			easing: easing,
-			useTransition: self.xscroll.userConfig.useTransition,
-			end: callback
-		};
-		self.__timer = self.__timer || new Animate(self.indicate, config);
-		//run
-		self.__timer.stop();
-		self.__timer.reset(config);
-		self.__timer.run();
-	},
-	moveTo: function moveTo(pos) {
-		var self = this;
-		self.show();
-		var translateZ = self.xscroll.userConfig.gpuAcceleration ? " translateZ(0) " : "";
-		self.isY ? self.indicate.style[transform] = "translateY(" + pos + "px) " + translateZ : self.indicate.style[transform] = "translateX(" + pos + "px) " + translateZ;
-		self.indicate.style[transition] = "";
-	},
-	_scrollHandler: function _scrollHandler(e) {
-		var self = this;
-		self._update(e[self.scrollTopOrLeft]);
-		return self;
-	},
-	isBoundryOut: function isBoundryOut() {
-		var self = this;
-		return !self.isY ? self.xscroll.isBoundryOutLeft() || self.xscroll.isBoundryOutRight() : self.xscroll.isBoundryOutTop() || self.xscroll.isBoundryOutBottom();
-	},
-	_scrollEndHandler: function _scrollEndHandler(e) {
-		var self = this;
-		if (!self.isBoundryOut()) {
-			self._update(e[self.scrollTopOrLeft]);
-			self.hide();
-		}
-		return self;
-	},
-	_bindEvt: function _bindEvt() {
-		var self = this;
-		if (self.__isEvtBind) return;
-		self.__isEvtBind = true;
-		self.xscroll.on("scroll", self._scrollHandler, self);
-		self.xscroll.on("scrollend", self._scrollEndHandler, self);
-	},
-	reset: function reset() {
-		var self = this;
-		self.pos = 0;
-		self._update();
-	},
-	hide: function hide(duration, easing, delay) {
-		var self = this;
-		var duration = duration >= 0 ? duration : 300;
-		var easing = easing || "ease-out";
-		var delay = delay >= 0 ? delay : 100;
-		self.scrollbar.style.opacity = 0;
-		self.scrollbar.style[transition] = ["opacity ", duration, "ms ", " ease-out ", delay, "ms"].join("");
-	},
-	show: function show() {
-		var self = this;
-		self.scrollbar.style.opacity = 1;
-		self.scrollbar.style[transition] = "";
-	}
-});
-
-if (( false ? 'undefined' : _typeof(module)) == 'object' && module.exports) {
-	module.exports = ScrollBar;
-}
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/webpack/buildin/module.js")(module)))
-
-/***/ }),
-
-/***/ "./resources/assets/js/vendor/gmf-sys/core/xscroll/components/sticky.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(module) {
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var Util = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/util.js");
-var Base = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/base.js");
-//transform
-var transform = Util.prefixStyle("transform");
-// default render function for position:sticky elements
-var defaultStickyRenderFunc = function defaultStickyRenderFunc(e) {
-  var stickyElement = e.stickyElement;
-  var curStickyElement = e.curStickyElement;
-  var xscroll = e.xscroll;
-  var _ = e._;
-  var infinite = xscroll.getPlugin("infinite");
-  if (infinite) {
-    infinite.userConfig.renderHook.call(self, stickyElement, curStickyElement);
-    stickyElement.setAttribute("xs-guid", curStickyElement.guid);
-    Util.addClass(stickyElement, curStickyElement.className);
-    for (var attrName in curStickyElement.style) {
-      if (attrName != "display" && attrName != "position") {
-        //copy styles
-        stickyElement.style[attrName] = attrName == _.height ? curStickyElement.style[attrName] + 'px' : curStickyElement.style[attrName];
-      }
-    }
-  } else {
-    var style = curStickyElement.getAttribute("style");
-    stickyElement.innerHTML = curStickyElement.innerHTML;
-    stickyElement.className = curStickyElement.className;
-    style && stickyElement.setAttribute("style", style);
-  }
-};
-
-var Sticky = function Sticky(cfg) {
-  Sticky.superclass.constructor.call(this, cfg);
-  this.userConfig = Util.mix({
-    stickyRenderTo: undefined,
-    forceSticky: true,
-    prefix: "xs-sticky-container",
-    stickyRenderFunc: defaultStickyRenderFunc,
-    zoomType: "y"
-  }, cfg);
-  this.init();
-};
-
-Util.extend(Sticky, Base, {
-  init: function init() {
-    var self = this,
-        userConfig = self.userConfig,
-        xscroll = self.xscroll = userConfig.xscroll;
-    var isY = self.isY = !!(userConfig.zoomType == "y");
-    self._ = {
-      top: self.isY ? "top" : "left",
-      left: self.isY ? "left" : "bottom",
-      right: self.isY ? "right" : "top",
-      height: self.isY ? "height" : "width",
-      width: self.isY ? "width" : "height"
+['post', 'put', 'patch'].forEach(function (method) {
+    GHTTP[method] = function (url, data, config) {
+        return createGHTTPInstance().request(_common2.default.merge(config || {}, {
+            method: method,
+            url: url,
+            data: data
+        }));
     };
-    self.stickyRenderTo = Util.getNode(userConfig.stickyRenderTo);
-    self._handlers = [];
-    return self;
-  },
-  getStickiesPos: function getStickiesPos() {
-    var self = this;
-    var xscroll = self.xscroll;
-    var isInfinite = self.isInfinite;
-    var isY = self.isY;
-    var _ = self._;
-    var stickiesPos = [];
-    var getPos = function getPos(sticky) {
-      var pos = {};
-      if (isInfinite) {
-        pos[_.top] = isY ? sticky._top : sticky._left;
-        pos[_.height] = isY ? sticky._height : sticky._width;
-      } else {
-        pos[_.top] = self.isY ? Util.getOffsetTop(sticky) : Util.getOffsetLeft(sticky);
-        pos[_.height] = self.isY ? sticky.offsetHeight : sticky.offsetWidth;
-      }
-      return pos;
-    };
-    for (var i = 0; i < self.stickiesNum; i++) {
-      var pos = getPos(self.stickyElements[i]);
-      self._handlers[i] = self._handlers[i] || self.createStickyEl();
-      pos.el = self._handlers[i];
-      pos.isRender = false;
-      stickiesPos.push(pos);
-    }
-    return stickiesPos;
-  },
-  getStickyElements: function getStickyElements() {
-    var self = this;
-    var xscroll = self.xscroll;
-    var userConfig = self.userConfig;
-    var isInfinite = self.isInfinite;
-    var infinite = xscroll.getPlugin("infinite");
-    if (infinite) {
-      var stickyElements = [],
-          serializedData = infinite.__serializedData;
-      for (var i in serializedData) {
-        var rowData = serializedData[i];
-        if (rowData && rowData.style && "sticky" == rowData.style.position) {
-          stickyElements.push(rowData);
-        }
-      }
-      return stickyElements;
-    } else {
-      return Util.getNodes(xscroll.userConfig.stickyElements, xscroll.content);
-    }
-  },
-  render: function render(force) {
-    var self = this;
-    var userConfig = self.userConfig;
-    var xscroll = self.xscroll;
-    self.isInfinite = !!xscroll.getPlugin("infinite");
-    var _ = self._;
-    self.stickyElements = self.getStickyElements();
-    self.stickiesNum = self.stickyElements && self.stickyElements.length;
-    if (!self.stickiesNum) return;
-    if (!self.stickyRenderTo) {
-      self.stickyRenderTo = document.createElement('div');
-      xscroll.renderTo.appendChild(self.stickyRenderTo);
-    }
-    self.stickiesPos = self.getStickiesPos();
-    var stickyRenderTo = self.stickyRenderTo;
-    stickyRenderTo.style[_.top] = 0;
-    stickyRenderTo.style[_.left] = 0;
-    stickyRenderTo.style[_.right] = 0;
-    stickyRenderTo.style.position = xscroll.userConfig.useOriginScroll ? "fixed" : "absolute";
-    Util.addClass(self.stickyRenderTo, userConfig.prefix);
-    self.stickyHandler(force);
-    self._bindEvt();
-  },
-  createStickyEl: function createStickyEl() {
-    var self = this;
-    var el = document.createElement('div');
-    el.style.display = "none";
-    Util.addClass(el, "xs-sticky-handler");
-    self.stickyRenderTo.appendChild(el);
-    return el;
-  },
-  _bindEvt: function _bindEvt() {
-    var self = this,
-        xscroll = self.xscroll;
-    xscroll.on("scroll", self.stickyHandler, self);
-  },
-  stickyHandler: function stickyHandler(force) {
-    var self = this;
-    var xscroll = self.xscroll;
-    var userConfig = self.userConfig;
-    var scrollTop = self.isY ? xscroll.getScrollTop() : xscroll.getScrollLeft();
-    var stickiesPos = self.stickiesPos;
-    var _ = self._;
-    var indexes = [];
-    for (var i = 0, l = stickiesPos.length; i < l; i++) {
-      var top = stickiesPos[i][_.top];
-      if (scrollTop > top) {
-        indexes.push(i);
-      }
-    }
-    if (!indexes.length) {
-      if (self.stickyElement) {
-        self.stickyElement.style.display = "none";
-      }
-      self.curStickyIndex = undefined;
-      return;
-    }
-
-    var curStickyIndex = Math.max.apply(null, indexes);
-    if (self.curStickyIndex != curStickyIndex || force) {
-      var prevStickyIndex = self.curStickyIndex;
-      self.curStickyIndex = curStickyIndex;
-      self.curStickyElement = self.stickyElements[curStickyIndex];
-      self.curStickyPos = stickiesPos[curStickyIndex];
-      self.stickyElement = self.curStickyPos.el;
-      for (var i = 0, l = stickiesPos.length; i < l; i++) {
-        stickiesPos[i].el.style.display = "none";
-      }
-      var eventsObj = {
-        stickyElement: self.stickyElement,
-        curStickyIndex: self.curStickyIndex,
-        prevStickyIndex: prevStickyIndex,
-        curStickyPos: self.curStickyPos,
-        isRender: self.curStickyPos.isRender
-      };
-      xscroll.trigger("beforestickychange", eventsObj);
-      self._stickyRenderFunc(self);
-      xscroll.trigger("stickychange", eventsObj);
-    }
-
-    var trans = 0;
-    if (self.stickiesPos[self.curStickyIndex + 1]) {
-      var cur = self.stickiesPos[self.curStickyIndex];
-      var next = self.stickiesPos[self.curStickyIndex + 1];
-      if (scrollTop + cur[_.height] > next[_.top] && scrollTop + cur[_.height] < next[_.top] + cur[_.height]) {
-        trans = cur[_.height] + scrollTop - next[_.top];
-      } else {
-        trans = 0;
-      }
-    }
-    self.stickyElement.style[transform] = self.isY ? "translateY(-" + trans + "px) translateZ(0)" : "translateX(-" + trans + "px) translateZ(0)";
-  },
-  _stickyRenderFunc: function _stickyRenderFunc(e) {
-    var self = this;
-    var _ = self._;
-    var stickyRenderFunc = self.userConfig.stickyRenderFunc;
-    var el = self.curStickyPos.el;
-    if (!self.curStickyPos.isRender) {
-      el.style[_.left] = 0;
-      el.style[_.right] = 0;
-      stickyRenderFunc && stickyRenderFunc.call(self, e);
-    }
-    el.style.display = "block";
-    self.curStickyPos.isRender = true;
-  },
-  destroy: function destroy() {
-    var self = this;
-    self.stickyElements = undefined;
-    self.stickiesNum = undefined;
-    self.stickiesPos = undefined;
-    Util.remove(self.stickyElement);
-    self.stickyElement = undefined;
-  }
 });
-
-if (( false ? 'undefined' : _typeof(module)) == 'object' && module.exports) {
-  module.exports = Sticky;
-}
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/webpack/buildin/module.js")(module)))
-
-/***/ }),
-
-/***/ "./resources/assets/js/vendor/gmf-sys/core/xscroll/core.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(module) {
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var Util = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/util.js"),
-    Base = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/base.js"),
-    Animate = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/animate.js"),
-    Boundry = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/boundry.js"),
-    Hammer = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/hammer.js"),
-    Sticky = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/components/sticky.js"),
-    Fixed = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/components/fixed.js");
-// boundry checked bounce effect
-var BOUNDRY_CHECK_DURATION = 500;
-var BOUNDRY_CHECK_EASING = "ease";
-var BOUNDRY_CHECK_ACCELERATION = 0.1;
-/** 
- * @constructor
- * @param {object} cfg config for scroll
- * @param {number} cfg.SCROLL_ACCELERATION  acceleration for scroll, min value make the scrolling smoothly
- * @param {number} cfg.BOUNDRY_CHECK_DURATION duration for boundry bounce
- * @param {number} cfg.BOUNDRY_CHECK_EASING easing for boundry bounce
- * @param {number} cfg.BOUNDRY_CHECK_ACCELERATION acceleration for boundry bounce
- * @param {boolean} cfg.lockX just like overflow-x:hidden
- * @param {boolean} cfg.lockY just like overflow-y:hidden
- * @param {boolean} cfg.scrollbarX config if the scrollbar-x is visible
- * @param {boolean} cfg.scrollbarY config if the scrollbar-y is visible
- * @param {boolean} cfg.useTransition config if use css3 transition or raf for scroll animation
- * @param {boolean} cfg.useOriginScroll config if use simulate or origin scroll
- * @param {boolean} cfg.bounce config if use has the bounce effect when scrolling outside of the boundry
- * @param {boolean} cfg.boundryCheck config if scrolling inside of the boundry
- * @param {boolean} cfg.preventDefault prevent touchstart
- * @param {boolean} cfg.preventTouchMove prevent touchmove
- * @param {string|HTMLElement}  cfg.container config for scroller's container which default value is ".xs-container"
- * @param {string|HTMLElement}  cfg.content config for scroller's content which default value is ".xs-content"
- * @param {object}  cfg.indicatorInsets  config scrollbars position {top: number, left: number, bottom: number, right: number}
- * @param {string}  cfg.stickyElements config for sticky-positioned elements
- * @param {string}  cfg.fixedElements config for fixed-positioned elements
- * @param {string}  cfg.touchAction config for touchAction of the scroller
- * @extends XScroll
- * @example
- * var xscroll = new XScroll({
- *    renderTo:"#scroll",
- *    lockX:false,
- *    scrollbarX:true
- * });
- * xscroll.render();
- */
-function XScroll(cfg) {
-    XScroll.superclass.constructor.call(this);
-    this.userConfig = cfg;
-    this.init();
-}
-
-Util.extend(XScroll, Base, {
-    /**
-     * version
-     * @memberof XScroll
-     * @type {string}
-     */
-    version: "3.0.13",
-    /**
-     * init scroll
-     * @memberof XScroll
-     * @return {XScroll}
-     */
-    init: function init() {
-        var self = this;
-        var defaultCfg = {
-            preventDefault: true,
-            bounce: true,
-            boundryCheck: true,
-            useTransition: true,
-            gpuAcceleration: true,
-            BOUNDRY_CHECK_EASING: BOUNDRY_CHECK_EASING,
-            BOUNDRY_CHECK_DURATION: BOUNDRY_CHECK_DURATION,
-            BOUNDRY_CHECK_ACCELERATION: BOUNDRY_CHECK_ACCELERATION,
-            useOriginScroll: false,
-            zoomType: "y",
-            indicatorInsets: {
-                top: 3,
-                bottom: 3,
-                left: 3,
-                right: 3,
-                width: 3,
-                spacing: 5
-            },
-            container: ".xs-container",
-            content: ".xs-content",
-            stickyElements: ".xs-sticky",
-            fixedElements: ".xs-fixed",
-            touchAction: "auto"
-        };
-        //generate guid
-        self.guid = Util.guid();
-        self.renderTo = Util.getNode(self.userConfig.renderTo);
-        //timer for animtion
-        self.__timers = {};
-        //config attributes on element
-        var elCfg = JSON.parse(self.renderTo.getAttribute('xs-cfg'));
-        var userConfig = self.userConfig = Util.mix(Util.mix(defaultCfg, elCfg), self.userConfig);
-        self.container = Util.getNode(userConfig.container, self.renderTo);
-        self.content = Util.getNode(userConfig.content, self.renderTo);
-        self.boundry = new Boundry();
-        self.boundry.refresh();
-        return self;
-    },
-    /**
-     * destroy scroll
-     * @memberof XScroll
-     * @return {XScroll}
-     */
-    destroy: function destroy() {
-        var self = this;
-        self.mc && self.mc.destroy();
-        self.sticky && self.sticky.destroy();
-        self.fixed && self.fixed.destroy();
-    },
-    _initContainer: function _initContainer() {},
-    /**
-     * @memberof XScroll
-     * @return {XScroll}
-     */
-    enableGPUAcceleration: function enableGPUAcceleration() {
-        this.userConfig.gpuAcceleration = true;
-        return this;
-    },
-    /**
-     * @memberof XScroll
-     * @return {XScroll}
-     */
-    disableGPUAcceleration: function disableGPUAcceleration() {
-        this.userConfig.gpuAcceleration = false;
-        return this;
-    },
-    /**
-     * get scroll offset
-     * @memberof XScroll
-     * @return {Object} {scrollTop:scrollTop,scrollLeft:scrollLeft}
-     */
-    getScrollPos: function getScrollPos() {
-        var self = this;
-        return {
-            scrollLeft: self.getScrollLeft(),
-            scrollTop: self.getScrollTop()
-        };
-    },
-    /**
-     * get scroll top value
-     * @memberof XScroll
-     * @return {number} scrollTop
-     */
-    getScrollTop: function getScrollTop() {},
-    /**
-     * get scroll left value
-     * @memberof XScroll
-     * @return {number} scrollLeft
-     */
-    getScrollLeft: function getScrollLeft() {},
-    /**
-     * scroll absolute to the destination
-     * @memberof XScroll
-     * @param scrollLeft {number} scrollLeft
-     * @param scrollTop {number} scrollTop
-     * @param duration {number} duration for animte
-     * @param easing {string} easing functio for animate : ease-in | ease-in-out | ease | bezier(n,n,n,n)
-     **/
-    scrollTo: function scrollTo(scrollLeft, scrollTop, duration, easing, callback) {
-        var self = this;
-        var scrollLeft = undefined === scrollLeft || isNaN(scrollLeft) ? -self.getScrollLeft() : scrollLeft;
-        var scrollTop = undefined === scrollTop || isNaN(scrollTop) ? -self.getScrollTop() : scrollTop;
-        self.scrollLeft(scrollLeft, duration, easing, callback);
-        self.scrollTop(scrollTop, duration, easing, callback);
-    },
-    /**
-     * scroll relative to the destination
-     * @memberof XScroll
-     * @param scrollLeft {number} scrollLeft
-     * @param scrollTop {number} scrollTop
-     * @param duration {number} duration for animte
-     * @param easing {string} easing functio for animate : ease-in | ease-in-out | ease | bezier(n,n,n,n)
-     **/
-    scrollBy: function scrollBy(scrollLeft, scrollTop, duration, easing, callback) {
-        this.scrollByX(scrollLeft, duration, easing, callback);
-        this.scrollByY(scrollTop, duration, easing, callback);
-    },
-    /**
-     * horizontal scroll relative to the destination
-     * @memberof XScroll
-     * @param scrollLeft {number} scrollLeft
-     * @param duration {number} duration for animte
-     * @param easing {string} easing functio for animate : ease-in | ease-in-out | ease | bezier(n,n,n,n)
-     **/
-    scrollLeftBy: function scrollLeftBy(scrollLeft, duration, easing, callback) {
-        this.scrollLeft(Number(scrollLeft) + Number(this.getScrollLeft()), duration, easing, callback);
-    },
-    /**
-     * vertical scroll relative to the destination
-     * @memberof XScroll
-     * @param scrollTop {number} scrollTop
-     * @param duration {number} duration for animte
-     * @param easing {string} easing functio for animate : ease-in | ease-in-out | ease | bezier(n,n,n,n)
-     **/
-    scrollTopBy: function scrollTopBy(scrollTop, duration, easing, callback) {
-        this.scrollTop(Number(scrollTop) + Number(this.getScrollTop()), duration, easing, callback);
-    },
-    /**
-     * horizontal scroll absolute to the destination
-     * @memberof XScroll
-     * @param scrollLeft {number} scrollLeft
-     * @param duration {number} duration for animte
-     * @param easing {string} easing functio for animate : ease-in | ease-in-out | ease | bezier(n,n,n,n)
-     **/
-    scrollLeft: function scrollLeft(_scrollLeft, duration, easing, callback) {},
-    /**
-     * vertical scroll absolute to the destination
-     * @memberof XScroll
-     * @param scrollTop {number} scrollTop
-     * @param duration {number} duration for animte
-     * @param easing {string} easing functio for animate : ease-in | ease-in-out | ease | bezier(n,n,n,n)
-     **/
-    scrollTop: function scrollTop(_scrollTop, duration, easing, callback) {},
-    /**
-     * reset the boundry size
-     * @memberof XScroll
-     * @return {XScroll}
-     **/
-    resetSize: function resetSize() {
-        var self = this;
-        if (!self.container || !self.content) return;
-        var userConfig = self.userConfig;
-        var renderToStyle = getComputedStyle(self.renderTo);
-        var width = self.width = (userConfig.width || self.renderTo.offsetWidth) - Util.px2Num(renderToStyle['padding-left']) - Util.px2Num(renderToStyle['padding-right']);
-        var height = self.height = (userConfig.height || self.renderTo.offsetHeight) - Util.px2Num(renderToStyle['padding-top']) - Util.px2Num(renderToStyle['padding-bottom']);;
-        var containerWidth = userConfig.containerWidth || self.content.offsetWidth;
-        var containerHeight = userConfig.containerHeight || self.content.offsetHeight;
-        self.containerWidth = containerWidth < self.width ? self.width : containerWidth;
-        self.containerHeight = containerHeight < self.height ? self.height : containerHeight;
-        self.boundry.refresh({
-            width: self.width,
-            height: self.height
-        });
-        return self;
-    },
-    /**
-     * render scroll
-     * @memberof XScroll
-     * @return {XScroll}
-     **/
-    render: function render() {
-        var self = this;
-        self.resetSize();
-        //init stickies
-        self.initSticky();
-        //init fixed elements
-        self.initFixed();
-
-        self.trigger("afterrender", {
-            type: "afterrender"
-        });
-        self._bindEvt();
-        //update touch-action 
-        self.initTouchAction();
-        return self;
-    },
-    /**
-     * init touch action
-     * @memberof XScroll
-     * @return {XScroll}
-     */
-    initTouchAction: function initTouchAction() {
-        var self = this;
-        self.mc.set({
-            touchAction: self.userConfig.touchAction
-        });
-        return self;
-    },
-    initFixed: function initFixed() {
-        var self = this,
-            userConfig = self.userConfig;
-        self.fixed = self.fixed || new Fixed({
-            fixedElements: userConfig.fixedElements,
-            xscroll: self,
-            fixedRenderTo: userConfig.fixedRenderTo
-        });
-        self.fixed.render();
-        self.resetSize();
-        return self;
-    },
-    initSticky: function initSticky() {
-        var self = this,
-            userConfig = self.userConfig;
-        var sticky = self.sticky = self.sticky || new Sticky({
-            xscroll: self,
-            zoomType: userConfig.zoomType,
-            stickyRenderTo: userConfig.stickyRenderTo
-        });
-        sticky.render();
-    },
-    /**
-     * bounce to the boundry vertical and horizontal
-     * @memberof XScroll
-     * @return {XScroll}
-     **/
-    boundryCheck: function boundryCheck() {
-        return this;
-    },
-    /**
-     * bounce to the boundry horizontal
-     * @memberof XScroll
-     * @return {XScroll}
-     **/
-    boundryCheckX: function boundryCheckX() {
-        return this;
-    },
-    /**
-     * bounce to the boundry vertical
-     * @memberof XScroll
-     * @return {XScroll}
-     **/
-    boundryCheckY: function boundryCheckY() {
-        return this;
-    },
-    _bindEvt: function _bindEvt() {
-        var self = this;
-        if (self.___isEvtBind) return;
-        self.___isEvtBind = true;
-        var mc = self.mc = new Hammer.Manager(self.renderTo);
-        var tap = new Hammer.Tap();
-        var pan = new Hammer.Pan();
-        var pinch = new Hammer.Pinch();
-        mc.add([tap, pan]);
-        //trigger all events 
-        self.mc.on("panstart pan panend pancancel pinchstart pinchmove pinchend pinchcancel pinchin pinchout", function (e) {
-            self.trigger(e.type, e);
-        });
-        //trigger touch events
-        var touchEvents = ['touchstart', 'touchmove', 'touchend', 'touchcancel', 'mousedown'];
-        for (var i = 0, l = touchEvents.length; i < l; i++) {
-            self.renderTo.addEventListener(touchEvents[i], function (e) {
-                self.trigger(e.type, e);
-            });
-        }
-        self.mc.on("tap", function (e) {
-            if (e.tapCount == 1) {
-                e.type = "tap";
-                self.trigger(e.type, e);
-            } else if (e.tapCount == 2) {
-                e.type = "doubletap";
-                self.trigger("doubletap", e);
-            }
-        });
-        return self;
-    },
-    _resetLockConfig: function _resetLockConfig() {},
-    stop: function stop() {}
-});
-
-if (( false ? 'undefined' : _typeof(module)) == 'object' && module.exports) {
-    module.exports = XScroll;
-}
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/webpack/buildin/module.js")(module)))
-
-/***/ }),
-
-/***/ "./resources/assets/js/vendor/gmf-sys/core/xscroll/easing.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(module) {
-//easing
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var Easing = {
-	"linear": [0, 0, 1, 1],
-	"ease": [.25, .1, .25, 1],
-	"ease-in": [.42, 0, 1, 1],
-	"ease-out": [0, 0, .58, 1],
-	"ease-in-out": [.42, 0, .58, 1],
-	"quadratic": [0.33, 0.66, 0.66, 1],
-	"circular": [0.1, 0.57, 0.1, 1],
-	"bounce": [.71, 1.35, .47, 1.41],
-	format: function format(easing) {
-		if (!easing) return;
-		if (typeof easing === "string" && this[easing]) {
-			return this[easing] instanceof Array ? [" cubic-bezier(", this[easing], ") "].join("") : this[easing];
-		}
-		if (easing instanceof Array) {
-			return [" cubic-bezier(", easing, ") "].join("");
-		}
-		return easing;
-	}
-};
-if (( false ? "undefined" : _typeof(module)) == 'object' && module.exports) {
-	module.exports = Easing;
-}
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/webpack/buildin/module.js")(module)))
-
-/***/ }),
-
-/***/ "./resources/assets/js/vendor/gmf-sys/core/xscroll/events.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(module) {
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var Util = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/util.js");
-// Returns a function that will be executed at most one time, no matter how
-// often you call it. Useful for lazy initialization.
-var _once = function _once(func) {
-  var ran = false,
-      memo;
-  return function () {
-    if (ran) return memo;
-    ran = true;
-    memo = func.apply(this, arguments);
-    func = null;
-    return memo;
-  };
-};
-
-/**
- * @discription events
- * @mixin
- */
-var Events = {
-  // Bind an event to a `callback` function. Passing `"all"` will bind
-  // the callback to all events fired.
-  on: function on(name, callback, context) {
-    if (!eventsApi(this, 'on', name, [callback, context]) || !callback) return this;
-    this._events || (this._events = {});
-    var events = this._events[name] || (this._events[name] = []);
-    events.push({
-      callback: callback,
-      context: context,
-      ctx: context || this
-    });
-    return this;
-  },
-
-  // Bind an event to only be triggered a single time. After the first time
-  // the callback is invoked, it will be removed.
-  once: function once(name, callback, context) {
-    if (!eventsApi(this, 'once', name, [callback, context]) || !callback) return this;
-    var self = this;
-    var once = _once(function () {
-      self.off(name, once);
-      callback.apply(this, arguments);
-    });
-    once._callback = callback;
-    return this.on(name, once, context);
-  },
-
-  // Remove one or many callbacks. If `context` is null, removes all
-  // callbacks with that function. If `callback` is null, removes all
-  // callbacks for the event. If `name` is null, removes all bound
-  // callbacks for all events.
-  off: function off(name, callback, context) {
-    if (!this._events || !eventsApi(this, 'off', name, [callback, context])) return this;
-
-    // Remove all callbacks for all events.
-    if (!name && !callback && !context) {
-      this._events = void 0;
-      return this;
-    }
-
-    var names = name ? [name] : Object.keys(this._events);
-    for (var i = 0, length = names.length; i < length; i++) {
-      name = names[i];
-
-      // Bail out if there are no events stored.
-      var events = this._events[name];
-      if (!events) continue;
-
-      // Remove all callbacks for this event.
-      if (!callback && !context) {
-        delete this._events[name];
-        continue;
-      }
-
-      // Find any remaining events.
-      var remaining = [];
-      for (var j = 0, k = events.length; j < k; j++) {
-        var event = events[j];
-        if (callback && callback !== event.callback && callback !== event.callback._callback || context && context !== event.context) {
-          remaining.push(event);
-        }
-      }
-
-      // Replace events if there are any remaining.  Otherwise, clean up.
-      if (remaining.length) {
-        this._events[name] = remaining;
-      } else {
-        delete this._events[name];
-      }
-    }
-
-    return this;
-  },
-
-  // Trigger one or many events, firing all bound callbacks. Callbacks are
-  // passed the same arguments as `trigger` is, apart from the event name
-  // (unless you're listening on `"all"`, which will cause your callback to
-  // receive the true name of the event as the first argument).
-  trigger: function trigger(name) {
-    if (!this._events) return this;
-    var args = Array.prototype.slice.call(arguments, 1);
-    if (!eventsApi(this, 'trigger', name, args)) return this;
-    var events = this._events[name];
-    var allEvents = this._events.all;
-    if (events) triggerEvents(events, args);
-    if (allEvents) triggerEvents(allEvents, arguments);
-    return this;
-  },
-
-  // Inversion-of-control versions of `on` and `once`. Tell *this* object to
-  // listen to an event in another object ... keeping track of what it's
-  // listening to.
-  listenTo: function listenTo(obj, name, callback) {
-    var listeningTo = this._listeningTo || (this._listeningTo = {});
-    var id = obj._listenId || (obj._listenId = Util.guid('l'));
-    listeningTo[id] = obj;
-    if (!callback && (typeof name === 'undefined' ? 'undefined' : _typeof(name)) === 'object') callback = this;
-    obj.on(name, callback, this);
-    return this;
-  },
-
-  listenToOnce: function listenToOnce(obj, name, callback) {
-    if ((typeof name === 'undefined' ? 'undefined' : _typeof(name)) === 'object') {
-      for (var event in name) {
-        this.listenToOnce(obj, event, name[event]);
-      }return this;
-    }
-    var cb = _once(function () {
-      this.stopListening(obj, name, cb);
-      callback.apply(this, arguments);
-    });
-    cb._callback = callback;
-    return this.listenTo(obj, name, cb);
-  },
-
-  // Tell this object to stop listening to either specific events ... or
-  // to every object it's currently listening to.
-  stopListening: function stopListening(obj, name, callback) {
-    var listeningTo = this._listeningTo;
-    if (!listeningTo) return this;
-    var remove = !name && !callback;
-    if (!callback && (typeof name === 'undefined' ? 'undefined' : _typeof(name)) === 'object') callback = this;
-    if (obj) (listeningTo = {})[obj._listenId] = obj;
-    for (var id in listeningTo) {
-      obj = listeningTo[id];
-      obj.off(name, callback, this);
-      if (remove || Util.isEmpty(obj._events)) delete this._listeningTo[id];
-    }
-    return this;
-  }
-
-};
-
-// Regular expression used to split event strings.
-var eventSplitter = /\s+/;
-
-// Implement fancy features of the Events API such as multiple event
-// names `"change blur"` and jQuery-style event maps `{change: action}`
-// in terms of the existing API.
-var eventsApi = function eventsApi(obj, action, name, rest) {
-  if (!name) return true;
-
-  // Handle event maps.
-  if ((typeof name === 'undefined' ? 'undefined' : _typeof(name)) === 'object') {
-    for (var key in name) {
-      obj[action].apply(obj, [key, name[key]].concat(rest));
-    }
-    return false;
-  }
-
-  // Handle space separated event names.
-  if (eventSplitter.test(name)) {
-    var names = name.split(eventSplitter);
-    for (var i = 0, length = names.length; i < length; i++) {
-      obj[action].apply(obj, [names[i]].concat(rest));
-    }
-    return false;
-  }
-
-  return true;
-};
-
-// A difficult-to-believe, but optimized internal dispatch function for
-// triggering events. Tries to keep the usual cases speedy (most internal
-var triggerEvents = function triggerEvents(events, args) {
-  var ev,
-      i = -1,
-      l = events.length,
-      a1 = args[0],
-      a2 = args[1],
-      a3 = args[2];
-  switch (args.length) {
-    case 0:
-      while (++i < l) {
-        (ev = events[i]).callback.call(ev.ctx);
-      }return;
-    case 1:
-      while (++i < l) {
-        (ev = events[i]).callback.call(ev.ctx, a1);
-      }return;
-    case 2:
-      while (++i < l) {
-        (ev = events[i]).callback.call(ev.ctx, a1, a2);
-      }return;
-    case 3:
-      while (++i < l) {
-        (ev = events[i]).callback.call(ev.ctx, a1, a2, a3);
-      }return;
-    default:
-      while (++i < l) {
-        (ev = events[i]).callback.apply(ev.ctx, args);
-      }return;
-  }
-};
-
-// Aliases for backwards compatibility.
-Events.bind = Events.on;
-Events.unbind = Events.off;
-
-if (( false ? 'undefined' : _typeof(module)) == 'object' && module.exports) {
-  module.exports = Events;
-}
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/webpack/buildin/module.js")(module)))
-
-/***/ }),
-
-/***/ "./resources/assets/js/vendor/gmf-sys/core/xscroll/hammer.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(module) {/*! Hammer.JS - v2.0.4 - 2014-09-28
- * http://hammerjs.github.io/
- *
- * Copyright (c) 2014 Jorik Tangelder;
- * Licensed under the MIT license */
-
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var VENDOR_PREFIXES = ['', 'webkit', 'moz', 'MS', 'ms', 'o'];
-var TEST_ELEMENT = document.createElement('div');
-
-var TYPE_FUNCTION = 'function';
-
-var round = Math.round;
-var abs = Math.abs;
-var now = Date.now;
-
-/**
- * set a timeout with a given scope
- * @param {Function} fn
- * @param {Number} timeout
- * @param {Object} context
- * @returns {number}
- */
-function setTimeoutContext(fn, timeout, context) {
-    return setTimeout(bindFn(fn, context), timeout);
-}
-
-/**
- * if the argument is an array, we want to execute the fn on each entry
- * if it aint an array we don't want to do a thing.
- * this is used by all the methods that accept a single and array argument.
- * @param {*|Array} arg
- * @param {String} fn
- * @param {Object} [context]
- * @returns {Boolean}
- */
-function invokeArrayArg(arg, fn, context) {
-    if (Array.isArray(arg)) {
-        each(arg, context[fn], context);
-        return true;
-    }
-    return false;
-}
-
-/**
- * walk objects and arrays
- * @param {Object} obj
- * @param {Function} iterator
- * @param {Object} context
- */
-function each(obj, iterator, context) {
-    var i;
-
-    if (!obj) {
-        return;
-    }
-
-    if (obj.forEach) {
-        obj.forEach(iterator, context);
-    } else if (obj.length !== undefined) {
-        i = 0;
-        while (i < obj.length) {
-            iterator.call(context, obj[i], i, obj);
-            i++;
-        }
-    } else {
-        for (i in obj) {
-            obj.hasOwnProperty(i) && iterator.call(context, obj[i], i, obj);
-        }
-    }
-}
-
-/**
- * extend object.
- * means that properties in dest will be overwritten by the ones in src.
- * @param {Object} dest
- * @param {Object} src
- * @param {Boolean} [merge]
- * @returns {Object} dest
- */
-function extend(dest, src, merge) {
-    var keys = Object.keys(src);
-    var i = 0;
-    while (i < keys.length) {
-        if (!merge || merge && dest[keys[i]] === undefined) {
-            dest[keys[i]] = src[keys[i]];
-        }
-        i++;
-    }
-    return dest;
-}
-
-/**
- * merge the values from src in the dest.
- * means that properties that exist in dest will not be overwritten by src
- * @param {Object} dest
- * @param {Object} src
- * @returns {Object} dest
- */
-function merge(dest, src) {
-    return extend(dest, src, true);
-}
-
-/**
- * simple class inheritance
- * @param {Function} child
- * @param {Function} base
- * @param {Object} [properties]
- */
-function inherit(child, base, properties) {
-    var baseP = base.prototype,
-        childP;
-
-    childP = child.prototype = Object.create(baseP);
-    childP.constructor = child;
-    childP._super = baseP;
-
-    if (properties) {
-        extend(childP, properties);
-    }
-}
-
-/**
- * simple function bind
- * @param {Function} fn
- * @param {Object} context
- * @returns {Function}
- */
-function bindFn(fn, context) {
-    return function boundFn() {
-        return fn.apply(context, arguments);
-    };
-}
-
-/**
- * let a boolean value also be a function that must return a boolean
- * this first item in args will be used as the context
- * @param {Boolean|Function} val
- * @param {Array} [args]
- * @returns {Boolean}
- */
-function boolOrFn(val, args) {
-    if ((typeof val === 'undefined' ? 'undefined' : _typeof(val)) == TYPE_FUNCTION) {
-        return val.apply(args ? args[0] || undefined : undefined, args);
-    }
-    return val;
-}
-
-/**
- * use the val2 when val1 is undefined
- * @param {*} val1
- * @param {*} val2
- * @returns {*}
- */
-function ifUndefined(val1, val2) {
-    return val1 === undefined ? val2 : val1;
-}
-
-/**
- * addEventListener with multiple events at once
- * @param {EventTarget} target
- * @param {String} types
- * @param {Function} handler
- */
-function addEventListeners(target, types, handler) {
-    each(splitStr(types), function (type) {
-        target.addEventListener(type, handler, false);
-    });
-}
-
-/**
- * removeEventListener with multiple events at once
- * @param {EventTarget} target
- * @param {String} types
- * @param {Function} handler
- */
-function removeEventListeners(target, types, handler) {
-    each(splitStr(types), function (type) {
-        target.removeEventListener(type, handler, false);
-    });
-}
-
-/**
- * find if a node is in the given parent
- * @method hasParent
- * @param {HTMLElement} node
- * @param {HTMLElement} parent
- * @return {Boolean} found
- */
-function hasParent(node, parent) {
-    while (node) {
-        if (node == parent) {
-            return true;
-        }
-        node = node.parentNode;
-    }
-    return false;
-}
-
-/**
- * small indexOf wrapper
- * @param {String} str
- * @param {String} find
- * @returns {Boolean} found
- */
-function inStr(str, find) {
-    return str.indexOf(find) > -1;
-}
-
-/**
- * split string on whitespace
- * @param {String} str
- * @returns {Array} words
- */
-function splitStr(str) {
-    return str.trim().split(/\s+/g);
-}
-
-/**
- * find if a array contains the object using indexOf or a simple polyFill
- * @param {Array} src
- * @param {String} find
- * @param {String} [findByKey]
- * @return {Boolean|Number} false when not found, or the index
- */
-function inArray(src, find, findByKey) {
-    if (src.indexOf && !findByKey) {
-        return src.indexOf(find);
-    } else {
-        var i = 0;
-        while (i < src.length) {
-            if (findByKey && src[i][findByKey] == find || !findByKey && src[i] === find) {
-                return i;
-            }
-            i++;
-        }
-        return -1;
-    }
-}
-
-/**
- * convert array-like objects to real arrays
- * @param {Object} obj
- * @returns {Array}
- */
-function toArray(obj) {
-    return Array.prototype.slice.call(obj, 0);
-}
-
-/**
- * unique array with objects based on a key (like 'id') or just by the array's value
- * @param {Array} src [{id:1},{id:2},{id:1}]
- * @param {String} [key]
- * @param {Boolean} [sort=False]
- * @returns {Array} [{id:1},{id:2}]
- */
-function uniqueArray(src, key, sort) {
-    var results = [];
-    var values = [];
-    var i = 0;
-
-    while (i < src.length) {
-        var val = key ? src[i][key] : src[i];
-        if (inArray(values, val) < 0) {
-            results.push(src[i]);
-        }
-        values[i] = val;
-        i++;
-    }
-
-    if (sort) {
-        if (!key) {
-            results = results.sort();
-        } else {
-            results = results.sort(function sortUniqueArray(a, b) {
-                return a[key] > b[key];
-            });
-        }
-    }
-
-    return results;
-}
-
-/**
- * get the prefixed property
- * @param {Object} obj
- * @param {String} property
- * @returns {String|Undefined} prefixed
- */
-function prefixed(obj, property) {
-    var prefix, prop;
-    var camelProp = property[0].toUpperCase() + property.slice(1);
-
-    var i = 0;
-    while (i < VENDOR_PREFIXES.length) {
-        prefix = VENDOR_PREFIXES[i];
-        prop = prefix ? prefix + camelProp : property;
-
-        if (prop in obj) {
-            return prop;
-        }
-        i++;
-    }
-    return undefined;
-}
-
-/**
- * get a unique id
- * @returns {number} uniqueId
- */
-var _uniqueId = 1;
-function uniqueId() {
-    return _uniqueId++;
-}
-
-/**
- * get the window object of an element
- * @param {HTMLElement} element
- * @returns {DocumentView|Window}
- */
-function getWindowForElement(element) {
-    var doc = element.ownerDocument;
-    return doc.defaultView || doc.parentWindow;
-}
-
-var MOBILE_REGEX = /mobile|tablet|ip(ad|hone|od)|android/i;
-
-var SUPPORT_TOUCH = 'ontouchstart' in window;
-var SUPPORT_POINTER_EVENTS = prefixed(window, 'PointerEvent') !== undefined;
-var SUPPORT_ONLY_TOUCH = SUPPORT_TOUCH && MOBILE_REGEX.test(navigator.userAgent);
-
-var INPUT_TYPE_TOUCH = 'touch';
-var INPUT_TYPE_PEN = 'pen';
-var INPUT_TYPE_MOUSE = 'mouse';
-var INPUT_TYPE_KINECT = 'kinect';
-
-var COMPUTE_INTERVAL = 25;
-
-var INPUT_START = 1;
-var INPUT_MOVE = 2;
-var INPUT_END = 4;
-var INPUT_CANCEL = 8;
-
-var DIRECTION_NONE = 1;
-var DIRECTION_LEFT = 2;
-var DIRECTION_RIGHT = 4;
-var DIRECTION_UP = 8;
-var DIRECTION_DOWN = 16;
-
-var DIRECTION_HORIZONTAL = DIRECTION_LEFT | DIRECTION_RIGHT;
-var DIRECTION_VERTICAL = DIRECTION_UP | DIRECTION_DOWN;
-var DIRECTION_ALL = DIRECTION_HORIZONTAL | DIRECTION_VERTICAL;
-
-var PROPS_XY = ['x', 'y'];
-var PROPS_CLIENT_XY = ['clientX', 'clientY'];
-
-/**
- * create new input type manager
- * @param {Manager} manager
- * @param {Function} callback
- * @returns {Input}
- * @constructor
- */
-function Input(manager, callback) {
-    var self = this;
-    this.manager = manager;
-    this.callback = callback;
-    this.element = manager.element;
-    this.target = manager.options.inputTarget;
-
-    // smaller wrapper around the handler, for the scope and the enabled state of the manager,
-    // so when disabled the input events are completely bypassed.
-    this.domHandler = function (ev) {
-        if (boolOrFn(manager.options.enable, [manager])) {
-            self.handler(ev);
-        }
-    };
-
-    this.init();
-}
-
-Input.prototype = {
-    /**
-     * should handle the inputEvent data and trigger the callback
-     * @virtual
-     */
-    handler: function handler() {},
-
-    /**
-     * bind the events
-     */
-    init: function init() {
-        this.evEl && addEventListeners(this.element, this.evEl, this.domHandler);
-        this.evTarget && addEventListeners(this.target, this.evTarget, this.domHandler);
-        this.evWin && addEventListeners(getWindowForElement(this.element), this.evWin, this.domHandler);
-    },
-
-    /**
-     * unbind the events
-     */
-    destroy: function destroy() {
-        this.evEl && removeEventListeners(this.element, this.evEl, this.domHandler);
-        this.evTarget && removeEventListeners(this.target, this.evTarget, this.domHandler);
-        this.evWin && removeEventListeners(getWindowForElement(this.element), this.evWin, this.domHandler);
-    }
-};
-
-/**
- * create new input type manager
- * called by the Manager constructor
- * @param {Hammer} manager
- * @returns {Input}
- */
-function createInputInstance(manager) {
-    var Type;
-    var inputClass = manager.options.inputClass;
-
-    if (inputClass) {
-        Type = inputClass;
-    } else if (SUPPORT_POINTER_EVENTS) {
-        Type = PointerEventInput;
-    } else if (SUPPORT_ONLY_TOUCH) {
-        Type = TouchInput;
-    } else if (!SUPPORT_TOUCH) {
-        Type = MouseInput;
-    } else {
-        Type = TouchMouseInput;
-    }
-    return new Type(manager, inputHandler);
-}
-
-/**
- * handle input events
- * @param {Manager} manager
- * @param {String} eventType
- * @param {Object} input
- */
-function inputHandler(manager, eventType, input) {
-    var pointersLen = input.pointers.length;
-    var changedPointersLen = input.changedPointers.length;
-    var isFirst = eventType & INPUT_START && pointersLen - changedPointersLen === 0;
-    var isFinal = eventType & (INPUT_END | INPUT_CANCEL) && pointersLen - changedPointersLen === 0;
-
-    input.isFirst = !!isFirst;
-    input.isFinal = !!isFinal;
-    if (isFirst) {
-        manager.session = {};
-    }
-
-    // source event is the normalized value of the domEvents
-    // like 'touchstart, mouseup, pointerdown'
-    input.eventType = eventType;
-
-    // compute scale, rotation etc
-    computeInputData(manager, input);
-
-    // emit secret event
-    manager.emit('hammer.input', input);
-
-    manager.recognize(input);
-    manager.session.prevInput = input;
-}
-
-/**
- * extend the data with some usable properties like scale, rotate, velocity etc
- * @param {Object} manager
- * @param {Object} input
- */
-function computeInputData(manager, input) {
-    var session = manager.session;
-    var pointers = input.pointers;
-    var pointersLength = pointers.length;
-
-    // store the first input to calculate the distance and direction
-    if (!session.firstInput) {
-        session.firstInput = simpleCloneInputData(input);
-    }
-
-    // to compute scale and rotation we need to store the multiple touches
-    if (pointersLength > 1 && !session.firstMultiple) {
-        session.firstMultiple = simpleCloneInputData(input);
-    } else if (pointersLength === 1) {
-        session.firstMultiple = false;
-    }
-
-    var firstInput = session.firstInput;
-    var firstMultiple = session.firstMultiple;
-    var offsetCenter = firstMultiple ? firstMultiple.center : firstInput.center;
-
-    var center = input.center = getCenter(pointers);
-    input.timeStamp = now();
-    input.deltaTime = input.timeStamp - firstInput.timeStamp;
-
-    input.angle = getAngle(offsetCenter, center);
-    input.distance = getDistance(offsetCenter, center);
-
-    computeDeltaXY(session, input);
-    input.offsetDirection = getDirection(input.deltaX, input.deltaY);
-
-    input.scale = firstMultiple ? getScale(firstMultiple.pointers, pointers) : 1;
-    input.rotation = firstMultiple ? getRotation(firstMultiple.pointers, pointers) : 0;
-
-    computeIntervalInputData(session, input);
-
-    // find the correct target
-    var target = manager.element;
-    if (hasParent(input.srcEvent.target, target)) {
-        target = input.srcEvent.target;
-    }
-    input.target = target;
-}
-
-function computeDeltaXY(session, input) {
-    var center = input.center;
-    var offset = session.offsetDelta || {};
-    var prevDelta = session.prevDelta || {};
-    var prevInput = session.prevInput || {};
-
-    if (input.eventType === INPUT_START || prevInput.eventType === INPUT_END) {
-        prevDelta = session.prevDelta = {
-            x: prevInput.deltaX || 0,
-            y: prevInput.deltaY || 0
-        };
-
-        offset = session.offsetDelta = {
-            x: center.x,
-            y: center.y
-        };
-    }
-
-    input.deltaX = prevDelta.x + (center.x - offset.x);
-    input.deltaY = prevDelta.y + (center.y - offset.y);
-}
-
-/**
- * velocity is calculated every x ms
- * @param {Object} session
- * @param {Object} input
- */
-function computeIntervalInputData(session, input) {
-    var last = session.lastInterval || input,
-        deltaTime = input.timeStamp - last.timeStamp,
-        velocity,
-        velocityX,
-        velocityY,
-        direction;
-
-    if (input.eventType != INPUT_CANCEL && (deltaTime > COMPUTE_INTERVAL || last.velocity === undefined)) {
-        var deltaX = last.deltaX - input.deltaX;
-        var deltaY = last.deltaY - input.deltaY;
-        var v = getVelocity(deltaTime, deltaX, deltaY);
-        velocityX = v.x;
-        velocityY = v.y;
-        velocity = abs(v.x) > abs(v.y) ? v.x : v.y;
-        direction = getDirection(deltaX, deltaY);
-
-        session.lastInterval = input;
-    } else {
-        // use latest velocity info if it doesn't overtake a minimum period
-        velocity = last.velocity;
-        velocityX = last.velocityX;
-        velocityY = last.velocityY;
-        direction = last.direction;
-    }
-
-    input.velocity = velocity;
-    input.velocityX = velocityX;
-    input.velocityY = velocityY;
-    input.direction = direction;
-}
-
-/**
- * create a simple clone from the input used for storage of firstInput and firstMultiple
- * @param {Object} input
- * @returns {Object} clonedInputData
- */
-function simpleCloneInputData(input) {
-    // make a simple copy of the pointers because we will get a reference if we don't
-    // we only need clientXY for the calculations
-    var pointers = [];
-    var i = 0;
-    while (i < input.pointers.length) {
-        pointers[i] = {
-            clientX: round(input.pointers[i].clientX),
-            clientY: round(input.pointers[i].clientY)
-        };
-        i++;
-    }
-
-    return {
-        timeStamp: now(),
-        pointers: pointers,
-        center: getCenter(pointers),
-        deltaX: input.deltaX,
-        deltaY: input.deltaY
-    };
-}
-
-/**
- * get the center of all the pointers
- * @param {Array} pointers
- * @return {Object} center contains `x` and `y` properties
- */
-function getCenter(pointers) {
-    var pointersLength = pointers.length;
-
-    // no need to loop when only one touch
-    if (pointersLength === 1) {
-        return {
-            x: round(pointers[0].clientX),
-            y: round(pointers[0].clientY)
-        };
-    }
-
-    var x = 0,
-        y = 0,
-        i = 0;
-    while (i < pointersLength) {
-        x += pointers[i].clientX;
-        y += pointers[i].clientY;
-        i++;
-    }
-
-    return {
-        x: round(x / pointersLength),
-        y: round(y / pointersLength)
-    };
-}
-
-/**
- * calculate the velocity between two points. unit is in px per ms.
- * @param {Number} deltaTime
- * @param {Number} x
- * @param {Number} y
- * @return {Object} velocity `x` and `y`
- */
-function getVelocity(deltaTime, x, y) {
-    return {
-        x: x / deltaTime || 0,
-        y: y / deltaTime || 0
-    };
-}
-
-/**
- * get the direction between two points
- * @param {Number} x
- * @param {Number} y
- * @return {Number} direction
- */
-function getDirection(x, y) {
-    if (x === y) {
-        return DIRECTION_NONE;
-    }
-
-    if (abs(x) >= abs(y)) {
-        return x > 0 ? DIRECTION_LEFT : DIRECTION_RIGHT;
-    }
-    return y > 0 ? DIRECTION_UP : DIRECTION_DOWN;
-}
-
-/**
- * calculate the absolute distance between two points
- * @param {Object} p1 {x, y}
- * @param {Object} p2 {x, y}
- * @param {Array} [props] containing x and y keys
- * @return {Number} distance
- */
-function getDistance(p1, p2, props) {
-    if (!props) {
-        props = PROPS_XY;
-    }
-    var x = p2[props[0]] - p1[props[0]],
-        y = p2[props[1]] - p1[props[1]];
-
-    return Math.sqrt(x * x + y * y);
-}
-
-/**
- * calculate the angle between two coordinates
- * @param {Object} p1
- * @param {Object} p2
- * @param {Array} [props] containing x and y keys
- * @return {Number} angle
- */
-function getAngle(p1, p2, props) {
-    if (!props) {
-        props = PROPS_XY;
-    }
-    var x = p2[props[0]] - p1[props[0]],
-        y = p2[props[1]] - p1[props[1]];
-    return Math.atan2(y, x) * 180 / Math.PI;
-}
-
-/**
- * calculate the rotation degrees between two pointersets
- * @param {Array} start array of pointers
- * @param {Array} end array of pointers
- * @return {Number} rotation
- */
-function getRotation(start, end) {
-    return getAngle(end[1], end[0], PROPS_CLIENT_XY) - getAngle(start[1], start[0], PROPS_CLIENT_XY);
-}
-
-/**
- * calculate the scale factor between two pointersets
- * no scale is 1, and goes down to 0 when pinched together, and bigger when pinched out
- * @param {Array} start array of pointers
- * @param {Array} end array of pointers
- * @return {Number} scale
- */
-function getScale(start, end) {
-    return getDistance(end[0], end[1], PROPS_CLIENT_XY) / getDistance(start[0], start[1], PROPS_CLIENT_XY);
-}
-
-var MOUSE_INPUT_MAP = {
-    mousedown: INPUT_START,
-    mousemove: INPUT_MOVE,
-    mouseup: INPUT_END
-};
-
-var MOUSE_ELEMENT_EVENTS = 'mousedown';
-var MOUSE_WINDOW_EVENTS = 'mousemove mouseup';
-
-/**
- * Mouse events input
- * @constructor
- * @extends Input
- */
-function MouseInput() {
-    this.evEl = MOUSE_ELEMENT_EVENTS;
-    this.evWin = MOUSE_WINDOW_EVENTS;
-
-    this.allow = true; // used by Input.TouchMouse to disable mouse events
-    this.pressed = false; // mousedown state
-
-    Input.apply(this, arguments);
-}
-
-inherit(MouseInput, Input, {
-    /**
-     * handle mouse events
-     * @param {Object} ev
-     */
-    handler: function MEhandler(ev) {
-        var eventType = MOUSE_INPUT_MAP[ev.type];
-
-        // on start we want to have the left mouse button down
-        if (eventType & INPUT_START && ev.button === 0) {
-            this.pressed = true;
-        }
-
-        if (eventType & INPUT_MOVE && ev.which !== 1) {
-            eventType = INPUT_END;
-        }
-
-        // mouse must be down, and mouse events are allowed (see the TouchMouse input)
-        if (!this.pressed || !this.allow) {
-            return;
-        }
-
-        if (eventType & INPUT_END) {
-            this.pressed = false;
-        }
-
-        this.callback(this.manager, eventType, {
-            pointers: [ev],
-            changedPointers: [ev],
-            pointerType: INPUT_TYPE_MOUSE,
-            srcEvent: ev
-        });
-    }
-});
-
-var POINTER_INPUT_MAP = {
-    pointerdown: INPUT_START,
-    pointermove: INPUT_MOVE,
-    pointerup: INPUT_END,
-    pointercancel: INPUT_CANCEL,
-    pointerout: INPUT_CANCEL
-};
-
-// in IE10 the pointer types is defined as an enum
-var IE10_POINTER_TYPE_ENUM = {
-    2: INPUT_TYPE_TOUCH,
-    3: INPUT_TYPE_PEN,
-    4: INPUT_TYPE_MOUSE,
-    5: INPUT_TYPE_KINECT // see https://twitter.com/jacobrossi/status/480596438489890816
-};
-
-var POINTER_ELEMENT_EVENTS = 'pointerdown';
-var POINTER_WINDOW_EVENTS = 'pointermove pointerup pointercancel';
-
-// IE10 has prefixed support, and case-sensitive
-if (window.MSPointerEvent) {
-    POINTER_ELEMENT_EVENTS = 'MSPointerDown';
-    POINTER_WINDOW_EVENTS = 'MSPointerMove MSPointerUp MSPointerCancel';
-}
-
-/**
- * Pointer events input
- * @constructor
- * @extends Input
- */
-function PointerEventInput() {
-    this.evEl = POINTER_ELEMENT_EVENTS;
-    this.evWin = POINTER_WINDOW_EVENTS;
-
-    Input.apply(this, arguments);
-
-    this.store = this.manager.session.pointerEvents = [];
-}
-
-inherit(PointerEventInput, Input, {
-    /**
-     * handle mouse events
-     * @param {Object} ev
-     */
-    handler: function PEhandler(ev) {
-        var store = this.store;
-        var removePointer = false;
-
-        var eventTypeNormalized = ev.type.toLowerCase().replace('ms', '');
-        var eventType = POINTER_INPUT_MAP[eventTypeNormalized];
-        var pointerType = IE10_POINTER_TYPE_ENUM[ev.pointerType] || ev.pointerType;
-
-        var isTouch = pointerType == INPUT_TYPE_TOUCH;
-
-        // get index of the event in the store
-        var storeIndex = inArray(store, ev.pointerId, 'pointerId');
-
-        // start and mouse must be down
-        if (eventType & INPUT_START && (ev.button === 0 || isTouch)) {
-            if (storeIndex < 0) {
-                store.push(ev);
-                storeIndex = store.length - 1;
-            }
-        } else if (eventType & (INPUT_END | INPUT_CANCEL)) {
-            removePointer = true;
-        }
-
-        // it not found, so the pointer hasn't been down (so it's probably a hover)
-        if (storeIndex < 0) {
-            return;
-        }
-
-        // update the event in the store
-        store[storeIndex] = ev;
-
-        this.callback(this.manager, eventType, {
-            pointers: store,
-            changedPointers: [ev],
-            pointerType: pointerType,
-            srcEvent: ev
-        });
-
-        if (removePointer) {
-            // remove from the store
-            store.splice(storeIndex, 1);
-        }
-    }
-});
-
-var SINGLE_TOUCH_INPUT_MAP = {
-    touchstart: INPUT_START,
-    touchmove: INPUT_MOVE,
-    touchend: INPUT_END,
-    touchcancel: INPUT_CANCEL
-};
-
-var SINGLE_TOUCH_TARGET_EVENTS = 'touchstart';
-var SINGLE_TOUCH_WINDOW_EVENTS = 'touchstart touchmove touchend touchcancel';
-
-/**
- * Touch events input
- * @constructor
- * @extends Input
- */
-function SingleTouchInput() {
-    this.evTarget = SINGLE_TOUCH_TARGET_EVENTS;
-    this.evWin = SINGLE_TOUCH_WINDOW_EVENTS;
-    this.started = false;
-
-    Input.apply(this, arguments);
-}
-
-inherit(SingleTouchInput, Input, {
-    handler: function TEhandler(ev) {
-        var type = SINGLE_TOUCH_INPUT_MAP[ev.type];
-
-        // should we handle the touch events?
-        if (type === INPUT_START) {
-            this.started = true;
-        }
-
-        if (!this.started) {
-            return;
-        }
-
-        var touches = normalizeSingleTouches.call(this, ev, type);
-
-        // when done, reset the started state
-        if (type & (INPUT_END | INPUT_CANCEL) && touches[0].length - touches[1].length === 0) {
-            this.started = false;
-        }
-
-        this.callback(this.manager, type, {
-            pointers: touches[0],
-            changedPointers: touches[1],
-            pointerType: INPUT_TYPE_TOUCH,
-            srcEvent: ev
-        });
-    }
-});
-
-/**
- * @this {TouchInput}
- * @param {Object} ev
- * @param {Number} type flag
- * @returns {undefined|Array} [all, changed]
- */
-function normalizeSingleTouches(ev, type) {
-    var all = toArray(ev.touches);
-    var changed = toArray(ev.changedTouches);
-
-    if (type & (INPUT_END | INPUT_CANCEL)) {
-        all = uniqueArray(all.concat(changed), 'identifier', true);
-    }
-
-    return [all, changed];
-}
-
-var TOUCH_INPUT_MAP = {
-    touchstart: INPUT_START,
-    touchmove: INPUT_MOVE,
-    touchend: INPUT_END,
-    touchcancel: INPUT_CANCEL
-};
-
-var TOUCH_TARGET_EVENTS = 'touchstart touchmove touchend touchcancel';
-
-/**
- * Multi-user touch events input
- * @constructor
- * @extends Input
- */
-function TouchInput() {
-    this.evTarget = TOUCH_TARGET_EVENTS;
-    this.targetIds = {};
-
-    Input.apply(this, arguments);
-}
-
-inherit(TouchInput, Input, {
-    handler: function MTEhandler(ev) {
-        var type = TOUCH_INPUT_MAP[ev.type];
-        var touches = getTouches.call(this, ev, type);
-        if (!touches) {
-            return;
-        }
-
-        this.callback(this.manager, type, {
-            pointers: touches[0],
-            changedPointers: touches[1],
-            pointerType: INPUT_TYPE_TOUCH,
-            srcEvent: ev
-        });
-    }
-});
-
-/**
- * @this {TouchInput}
- * @param {Object} ev
- * @param {Number} type flag
- * @returns {undefined|Array} [all, changed]
- */
-function getTouches(ev, type) {
-    var allTouches = toArray(ev.touches);
-    var targetIds = this.targetIds;
-
-    // when there is only one touch, the process can be simplified
-    if (type & (INPUT_START | INPUT_MOVE) && allTouches.length === 1) {
-        targetIds[allTouches[0].identifier] = true;
-        return [allTouches, allTouches];
-    }
-
-    var i,
-        targetTouches,
-        changedTouches = toArray(ev.changedTouches),
-        changedTargetTouches = [],
-        target = this.target;
-
-    // get target touches from touches
-    targetTouches = allTouches.filter(function (touch) {
-        return hasParent(touch.target, target);
-    });
-
-    // collect touches
-    if (type === INPUT_START) {
-        i = 0;
-        while (i < targetTouches.length) {
-            targetIds[targetTouches[i].identifier] = true;
-            i++;
-        }
-    }
-
-    // filter changed touches to only contain touches that exist in the collected target ids
-    i = 0;
-    while (i < changedTouches.length) {
-        if (targetIds[changedTouches[i].identifier]) {
-            changedTargetTouches.push(changedTouches[i]);
-        }
-
-        // cleanup removed touches
-        if (type & (INPUT_END | INPUT_CANCEL)) {
-            delete targetIds[changedTouches[i].identifier];
-        }
-        i++;
-    }
-
-    if (!changedTargetTouches.length) {
-        return;
-    }
-
-    return [
-    // merge targetTouches with changedTargetTouches so it contains ALL touches, including 'end' and 'cancel'
-    uniqueArray(targetTouches.concat(changedTargetTouches), 'identifier', true), changedTargetTouches];
-}
-
-/**
- * Combined touch and mouse input
- *
- * Touch has a higher priority then mouse, and while touching no mouse events are allowed.
- * This because touch devices also emit mouse events while doing a touch.
- *
- * @constructor
- * @extends Input
- */
-function TouchMouseInput() {
-    Input.apply(this, arguments);
-
-    var handler = bindFn(this.handler, this);
-    this.touch = new TouchInput(this.manager, handler);
-    this.mouse = new MouseInput(this.manager, handler);
-}
-
-inherit(TouchMouseInput, Input, {
-    /**
-     * handle mouse and touch events
-     * @param {Hammer} manager
-     * @param {String} inputEvent
-     * @param {Object} inputData
-     */
-    handler: function TMEhandler(manager, inputEvent, inputData) {
-        var isTouch = inputData.pointerType == INPUT_TYPE_TOUCH,
-            isMouse = inputData.pointerType == INPUT_TYPE_MOUSE;
-
-        // when we're in a touch event, so  block all upcoming mouse events
-        // most mobile browser also emit mouseevents, right after touchstart
-        if (isTouch) {
-            this.mouse.allow = false;
-        } else if (isMouse && !this.mouse.allow) {
-            return;
-        }
-
-        // reset the allowMouse when we're done
-        if (inputEvent & (INPUT_END | INPUT_CANCEL)) {
-            this.mouse.allow = true;
-        }
-
-        this.callback(manager, inputEvent, inputData);
-    },
-
-    /**
-     * remove the event listeners
-     */
-    destroy: function destroy() {
-        this.touch.destroy();
-        this.mouse.destroy();
-    }
-});
-
-var PREFIXED_TOUCH_ACTION = prefixed(TEST_ELEMENT.style, 'touchAction');
-var NATIVE_TOUCH_ACTION = PREFIXED_TOUCH_ACTION !== undefined;
-
-// magical touchAction value
-var TOUCH_ACTION_COMPUTE = 'compute';
-var TOUCH_ACTION_AUTO = 'auto';
-var TOUCH_ACTION_MANIPULATION = 'manipulation'; // not implemented
-var TOUCH_ACTION_NONE = 'none';
-var TOUCH_ACTION_PAN_X = 'pan-x';
-var TOUCH_ACTION_PAN_Y = 'pan-y';
-
-/**
- * Touch Action
- * sets the touchAction property or uses the js alternative
- * @param {Manager} manager
- * @param {String} value
- * @constructor
- */
-function TouchAction(manager, value) {
-    this.manager = manager;
-    this.set(value);
-}
-
-TouchAction.prototype = {
-    /**
-     * set the touchAction value on the element or enable the polyfill
-     * @param {String} value
-     */
-    set: function set(value) {
-        // find out the touch-action by the event handlers
-        if (value == TOUCH_ACTION_COMPUTE) {
-            value = this.compute();
-        }
-
-        if (NATIVE_TOUCH_ACTION) {
-            this.manager.element.style[PREFIXED_TOUCH_ACTION] = value;
-        }
-        this.actions = value.toLowerCase().trim();
-    },
-
-    /**
-     * just re-set the touchAction value
-     */
-    update: function update() {
-        this.set(this.manager.options.touchAction);
-    },
-
-    /**
-     * compute the value for the touchAction property based on the recognizer's settings
-     * @returns {String} value
-     */
-    compute: function compute() {
-        var actions = [];
-        each(this.manager.recognizers, function (recognizer) {
-            if (boolOrFn(recognizer.options.enable, [recognizer])) {
-                actions = actions.concat(recognizer.getTouchAction());
-            }
-        });
-        return cleanTouchActions(actions.join(' '));
-    },
-
-    /**
-     * this method is called on each input cycle and provides the preventing of the browser behavior
-     * @param {Object} input
-     */
-    preventDefaults: function preventDefaults(input) {
-        // not needed with native support for the touchAction property
-        if (NATIVE_TOUCH_ACTION) {
-            return;
-        }
-
-        var srcEvent = input.srcEvent;
-        var direction = input.offsetDirection;
-
-        // if the touch action did prevented once this session
-        if (this.manager.session.prevented) {
-            srcEvent.preventDefault();
-            return;
-        }
-
-        var actions = this.actions;
-        var hasNone = inStr(actions, TOUCH_ACTION_NONE);
-        var hasPanY = inStr(actions, TOUCH_ACTION_PAN_Y);
-        var hasPanX = inStr(actions, TOUCH_ACTION_PAN_X);
-
-        if (hasNone || hasPanY && direction & DIRECTION_HORIZONTAL || hasPanX && direction & DIRECTION_VERTICAL) {
-            return this.preventSrc(srcEvent);
-        }
-    },
-
-    /**
-     * call preventDefault to prevent the browser's default behavior (scrolling in most cases)
-     * @param {Object} srcEvent
-     */
-    preventSrc: function preventSrc(srcEvent) {
-        this.manager.session.prevented = true;
-        srcEvent.preventDefault();
-    }
-};
-
-/**
- * when the touchActions are collected they are not a valid value, so we need to clean things up. *
- * @param {String} actions
- * @returns {*}
- */
-function cleanTouchActions(actions) {
-    // none
-    if (inStr(actions, TOUCH_ACTION_NONE)) {
-        return TOUCH_ACTION_NONE;
-    }
-
-    var hasPanX = inStr(actions, TOUCH_ACTION_PAN_X);
-    var hasPanY = inStr(actions, TOUCH_ACTION_PAN_Y);
-
-    // pan-x and pan-y can be combined
-    if (hasPanX && hasPanY) {
-        return TOUCH_ACTION_PAN_X + ' ' + TOUCH_ACTION_PAN_Y;
-    }
-
-    // pan-x OR pan-y
-    if (hasPanX || hasPanY) {
-        return hasPanX ? TOUCH_ACTION_PAN_X : TOUCH_ACTION_PAN_Y;
-    }
-
-    // manipulation
-    if (inStr(actions, TOUCH_ACTION_MANIPULATION)) {
-        return TOUCH_ACTION_MANIPULATION;
-    }
-
-    return TOUCH_ACTION_AUTO;
-}
-
-/**
- * Recognizer flow explained; *
- * All recognizers have the initial state of POSSIBLE when a input session starts.
- * The definition of a input session is from the first input until the last input, with all it's movement in it. *
- * Example session for mouse-input: mousedown -> mousemove -> mouseup
- *
- * On each recognizing cycle (see Manager.recognize) the .recognize() method is executed
- * which determines with state it should be.
- *
- * If the recognizer has the state FAILED, CANCELLED or RECOGNIZED (equals ENDED), it is reset to
- * POSSIBLE to give it another change on the next cycle.
- *
- *               Possible
- *                  |
- *            +-----+---------------+
- *            |                     |
- *      +-----+-----+               |
- *      |           |               |
- *   Failed      Cancelled          |
- *                          +-------+------+
- *                          |              |
- *                      Recognized       Began
- *                                         |
- *                                      Changed
- *                                         |
- *                                  Ended/Recognized
- */
-var STATE_POSSIBLE = 1;
-var STATE_BEGAN = 2;
-var STATE_CHANGED = 4;
-var STATE_ENDED = 8;
-var STATE_RECOGNIZED = STATE_ENDED;
-var STATE_CANCELLED = 16;
-var STATE_FAILED = 32;
-
-/**
- * Recognizer
- * Every recognizer needs to extend from this class.
- * @constructor
- * @param {Object} options
- */
-function Recognizer(options) {
-    this.id = uniqueId();
-
-    this.manager = null;
-    this.options = merge(options || {}, this.defaults);
-
-    // default is enable true
-    this.options.enable = ifUndefined(this.options.enable, true);
-
-    this.state = STATE_POSSIBLE;
-
-    this.simultaneous = {};
-    this.requireFail = [];
-}
-
-Recognizer.prototype = {
-    /**
-     * @virtual
-     * @type {Object}
-     */
-    defaults: {},
-
-    /**
-     * set options
-     * @param {Object} options
-     * @return {Recognizer}
-     */
-    set: function set(options) {
-        extend(this.options, options);
-
-        // also update the touchAction, in case something changed about the directions/enabled state
-        this.manager && this.manager.touchAction.update();
-        return this;
-    },
-
-    /**
-     * recognize simultaneous with an other recognizer.
-     * @param {Recognizer} otherRecognizer
-     * @returns {Recognizer} this
-     */
-    recognizeWith: function recognizeWith(otherRecognizer) {
-        if (invokeArrayArg(otherRecognizer, 'recognizeWith', this)) {
-            return this;
-        }
-
-        var simultaneous = this.simultaneous;
-        otherRecognizer = getRecognizerByNameIfManager(otherRecognizer, this);
-        if (!simultaneous[otherRecognizer.id]) {
-            simultaneous[otherRecognizer.id] = otherRecognizer;
-            otherRecognizer.recognizeWith(this);
-        }
-        return this;
-    },
-
-    /**
-     * drop the simultaneous link. it doesnt remove the link on the other recognizer.
-     * @param {Recognizer} otherRecognizer
-     * @returns {Recognizer} this
-     */
-    dropRecognizeWith: function dropRecognizeWith(otherRecognizer) {
-        if (invokeArrayArg(otherRecognizer, 'dropRecognizeWith', this)) {
-            return this;
-        }
-
-        otherRecognizer = getRecognizerByNameIfManager(otherRecognizer, this);
-        delete this.simultaneous[otherRecognizer.id];
-        return this;
-    },
-
-    /**
-     * recognizer can only run when an other is failing
-     * @param {Recognizer} otherRecognizer
-     * @returns {Recognizer} this
-     */
-    requireFailure: function requireFailure(otherRecognizer) {
-        if (invokeArrayArg(otherRecognizer, 'requireFailure', this)) {
-            return this;
-        }
-
-        var requireFail = this.requireFail;
-        otherRecognizer = getRecognizerByNameIfManager(otherRecognizer, this);
-        if (inArray(requireFail, otherRecognizer) === -1) {
-            requireFail.push(otherRecognizer);
-            otherRecognizer.requireFailure(this);
-        }
-        return this;
-    },
-
-    /**
-     * drop the requireFailure link. it does not remove the link on the other recognizer.
-     * @param {Recognizer} otherRecognizer
-     * @returns {Recognizer} this
-     */
-    dropRequireFailure: function dropRequireFailure(otherRecognizer) {
-        if (invokeArrayArg(otherRecognizer, 'dropRequireFailure', this)) {
-            return this;
-        }
-
-        otherRecognizer = getRecognizerByNameIfManager(otherRecognizer, this);
-        var index = inArray(this.requireFail, otherRecognizer);
-        if (index > -1) {
-            this.requireFail.splice(index, 1);
-        }
-        return this;
-    },
-
-    /**
-     * has require failures boolean
-     * @returns {boolean}
-     */
-    hasRequireFailures: function hasRequireFailures() {
-        return this.requireFail.length > 0;
-    },
-
-    /**
-     * if the recognizer can recognize simultaneous with an other recognizer
-     * @param {Recognizer} otherRecognizer
-     * @returns {Boolean}
-     */
-    canRecognizeWith: function canRecognizeWith(otherRecognizer) {
-        return !!this.simultaneous[otherRecognizer.id];
-    },
-
-    /**
-     * You should use `tryEmit` instead of `emit` directly to check
-     * that all the needed recognizers has failed before emitting.
-     * @param {Object} input
-     */
-    emit: function emit(input) {
-        var self = this;
-        var state = this.state;
-
-        function emit(withState) {
-            self.manager.emit(self.options.event + (withState ? stateStr(state) : ''), input);
-        }
-
-        // 'panstart' and 'panmove'
-        if (state < STATE_ENDED) {
-            emit(true);
-        }
-
-        emit(); // simple 'eventName' events
-
-        // panend and pancancel
-        if (state >= STATE_ENDED) {
-            emit(true);
-        }
-    },
-
-    /**
-     * Check that all the require failure recognizers has failed,
-     * if true, it emits a gesture event,
-     * otherwise, setup the state to FAILED.
-     * @param {Object} input
-     */
-    tryEmit: function tryEmit(input) {
-        if (this.canEmit()) {
-            return this.emit(input);
-        }
-        // it's failing anyway
-        this.state = STATE_FAILED;
-    },
-
-    /**
-     * can we emit?
-     * @returns {boolean}
-     */
-    canEmit: function canEmit() {
-        var i = 0;
-        while (i < this.requireFail.length) {
-            if (!(this.requireFail[i].state & (STATE_FAILED | STATE_POSSIBLE))) {
-                return false;
-            }
-            i++;
-        }
-        return true;
-    },
-
-    /**
-     * update the recognizer
-     * @param {Object} inputData
-     */
-    recognize: function recognize(inputData) {
-        // make a new copy of the inputData
-        // so we can change the inputData without messing up the other recognizers
-        var inputDataClone = extend({}, inputData);
-
-        // is is enabled and allow recognizing?
-        if (!boolOrFn(this.options.enable, [this, inputDataClone])) {
-            this.reset();
-            this.state = STATE_FAILED;
-            return;
-        }
-
-        // reset when we've reached the end
-        if (this.state & (STATE_RECOGNIZED | STATE_CANCELLED | STATE_FAILED)) {
-            this.state = STATE_POSSIBLE;
-        }
-
-        this.state = this.process(inputDataClone);
-
-        // the recognizer has recognized a gesture
-        // so trigger an event
-        if (this.state & (STATE_BEGAN | STATE_CHANGED | STATE_ENDED | STATE_CANCELLED)) {
-            this.tryEmit(inputDataClone);
-        }
-    },
-
-    /**
-     * return the state of the recognizer
-     * the actual recognizing happens in this method
-     * @virtual
-     * @param {Object} inputData
-     * @returns {Const} STATE
-     */
-    process: function process(inputData) {}, // jshint ignore:line
-
-    /**
-     * return the preferred touch-action
-     * @virtual
-     * @returns {Array}
-     */
-    getTouchAction: function getTouchAction() {},
-
-    /**
-     * called when the gesture isn't allowed to recognize
-     * like when another is being recognized or it is disabled
-     * @virtual
-     */
-    reset: function reset() {}
-};
-
-/**
- * get a usable string, used as event postfix
- * @param {Const} state
- * @returns {String} state
- */
-function stateStr(state) {
-    if (state & STATE_CANCELLED) {
-        return 'cancel';
-    } else if (state & STATE_ENDED) {
-        return 'end';
-    } else if (state & STATE_CHANGED) {
-        return 'move';
-    } else if (state & STATE_BEGAN) {
-        return 'start';
-    }
-    return '';
-}
-
-/**
- * direction cons to string
- * @param {Const} direction
- * @returns {String}
- */
-function directionStr(direction) {
-    if (direction == DIRECTION_DOWN) {
-        return 'down';
-    } else if (direction == DIRECTION_UP) {
-        return 'up';
-    } else if (direction == DIRECTION_LEFT) {
-        return 'left';
-    } else if (direction == DIRECTION_RIGHT) {
-        return 'right';
-    }
-    return '';
-}
-
-/**
- * get a recognizer by name if it is bound to a manager
- * @param {Recognizer|String} otherRecognizer
- * @param {Recognizer} recognizer
- * @returns {Recognizer}
- */
-function getRecognizerByNameIfManager(otherRecognizer, recognizer) {
-    var manager = recognizer.manager;
-    if (manager) {
-        return manager.get(otherRecognizer);
-    }
-    return otherRecognizer;
-}
-
-/**
- * This recognizer is just used as a base for the simple attribute recognizers.
- * @constructor
- * @extends Recognizer
- */
-function AttrRecognizer() {
-    Recognizer.apply(this, arguments);
-}
-
-inherit(AttrRecognizer, Recognizer, {
-    /**
-     * @namespace
-     * @memberof AttrRecognizer
-     */
-    defaults: {
-        /**
-         * @type {Number}
-         * @default 1
-         */
-        pointers: 1
-    },
-
-    /**
-     * Used to check if it the recognizer receives valid input, like input.distance > 10.
-     * @memberof AttrRecognizer
-     * @param {Object} input
-     * @returns {Boolean} recognized
-     */
-    attrTest: function attrTest(input) {
-        var optionPointers = this.options.pointers;
-        return optionPointers === 0 || input.pointers.length === optionPointers;
-    },
-
-    /**
-     * Process the input and return the state for the recognizer
-     * @memberof AttrRecognizer
-     * @param {Object} input
-     * @returns {*} State
-     */
-    process: function process(input) {
-        var state = this.state;
-        var eventType = input.eventType;
-
-        var isRecognized = state & (STATE_BEGAN | STATE_CHANGED);
-        var isValid = this.attrTest(input);
-
-        // on cancel input and we've recognized before, return STATE_CANCELLED
-        if (isRecognized && (eventType & INPUT_CANCEL || !isValid)) {
-            return state | STATE_CANCELLED;
-        } else if (isRecognized || isValid) {
-            if (eventType & INPUT_END) {
-                return state | STATE_ENDED;
-            } else if (!(state & STATE_BEGAN)) {
-                return STATE_BEGAN;
-            }
-            return state | STATE_CHANGED;
-        }
-        return STATE_FAILED;
-    }
-});
-
-/**
- * Pan
- * Recognized when the pointer is down and moved in the allowed direction.
- * @constructor
- * @extends AttrRecognizer
- */
-function PanRecognizer() {
-    AttrRecognizer.apply(this, arguments);
-
-    this.pX = null;
-    this.pY = null;
-}
-
-inherit(PanRecognizer, AttrRecognizer, {
-    /**
-     * @namespace
-     * @memberof PanRecognizer
-     */
-    defaults: {
-        event: 'pan',
-        threshold: 10,
-        pointers: 1,
-        direction: DIRECTION_ALL
-    },
-
-    getTouchAction: function getTouchAction() {
-        var direction = this.options.direction;
-        var actions = [];
-        if (direction & DIRECTION_HORIZONTAL) {
-            actions.push(TOUCH_ACTION_PAN_Y);
-        }
-        if (direction & DIRECTION_VERTICAL) {
-            actions.push(TOUCH_ACTION_PAN_X);
-        }
-        return actions;
-    },
-
-    directionTest: function directionTest(input) {
-        var options = this.options;
-        var hasMoved = true;
-        var distance = input.distance;
-        var direction = input.direction;
-        var x = input.deltaX;
-        var y = input.deltaY;
-
-        // lock to axis?
-        if (!(direction & options.direction)) {
-            if (options.direction & DIRECTION_HORIZONTAL) {
-                direction = x === 0 ? DIRECTION_NONE : x < 0 ? DIRECTION_LEFT : DIRECTION_RIGHT;
-                hasMoved = x != this.pX;
-                distance = Math.abs(input.deltaX);
-            } else {
-                direction = y === 0 ? DIRECTION_NONE : y < 0 ? DIRECTION_UP : DIRECTION_DOWN;
-                hasMoved = y != this.pY;
-                distance = Math.abs(input.deltaY);
-            }
-        }
-        input.direction = direction;
-        return hasMoved && distance > options.threshold && direction & options.direction;
-    },
-
-    attrTest: function attrTest(input) {
-        return AttrRecognizer.prototype.attrTest.call(this, input) && (this.state & STATE_BEGAN || !(this.state & STATE_BEGAN) && this.directionTest(input));
-    },
-
-    emit: function emit(input) {
-        this.pX = input.deltaX;
-        this.pY = input.deltaY;
-
-        var direction = directionStr(input.direction);
-        if (direction) {
-            this.manager.emit(this.options.event + direction, input);
-        }
-
-        this._super.emit.call(this, input);
-    },
-    reset: function reset() {}
-});
-
-/**
- * Pinch
- * Recognized when two or more pointers are moving toward (zoom-in) or away from each other (zoom-out).
- * @constructor
- * @extends AttrRecognizer
- */
-function PinchRecognizer() {
-    AttrRecognizer.apply(this, arguments);
-}
-
-inherit(PinchRecognizer, AttrRecognizer, {
-    /**
-     * @namespace
-     * @memberof PinchRecognizer
-     */
-    defaults: {
-        event: 'pinch',
-        threshold: 0,
-        pointers: 2
-    },
-
-    getTouchAction: function getTouchAction() {
-        return [TOUCH_ACTION_NONE];
-    },
-
-    attrTest: function attrTest(input) {
-        return this._super.attrTest.call(this, input) && (Math.abs(input.scale - 1) > this.options.threshold || this.state & STATE_BEGAN);
-    },
-
-    emit: function emit(input) {
-        this._super.emit.call(this, input);
-        if (input.scale !== 1) {
-            var inOut = input.scale < 1 ? 'in' : 'out';
-            this.manager.emit(this.options.event + inOut, input);
-        }
-    }
-});
-
-/**
- * Press
- * Recognized when the pointer is down for x ms without any movement.
- * @constructor
- * @extends Recognizer
- */
-function PressRecognizer() {
-    Recognizer.apply(this, arguments);
-
-    this._timer = null;
-    this._input = null;
-}
-
-inherit(PressRecognizer, Recognizer, {
-    /**
-     * @namespace
-     * @memberof PressRecognizer
-     */
-    defaults: {
-        event: 'press',
-        pointers: 1,
-        time: 500, // minimal time of the pointer to be pressed
-        threshold: 5 // a minimal movement is ok, but keep it low
-    },
-
-    getTouchAction: function getTouchAction() {
-        return [TOUCH_ACTION_AUTO];
-    },
-
-    process: function process(input) {
-        var options = this.options;
-        var validPointers = input.pointers.length === options.pointers;
-        var validMovement = input.distance < options.threshold;
-        var validTime = input.deltaTime > options.time;
-
-        this._input = input;
-
-        // we only allow little movement
-        // and we've reached an end event, so a tap is possible
-        if (!validMovement || !validPointers || input.eventType & (INPUT_END | INPUT_CANCEL) && !validTime) {
-            this.reset();
-        } else if (input.eventType & INPUT_START) {
-            this.reset();
-            this._timer = setTimeoutContext(function () {
-                this.state = STATE_RECOGNIZED;
-                this.tryEmit();
-            }, options.time, this);
-        } else if (input.eventType & INPUT_END) {
-            return STATE_RECOGNIZED;
-        }
-        return STATE_FAILED;
-    },
-
-    reset: function reset() {
-        clearTimeout(this._timer);
-    },
-
-    emit: function emit(input) {
-        if (this.state !== STATE_RECOGNIZED) {
-            return;
-        }
-
-        if (input && input.eventType & INPUT_END) {
-            this.manager.emit(this.options.event + 'up', input);
-        } else {
-            this._input.timeStamp = now();
-            this.manager.emit(this.options.event, this._input);
-        }
-    }
-});
-
-/**
- * Rotate
- * Recognized when two or more pointer are moving in a circular motion.
- * @constructor
- * @extends AttrRecognizer
- */
-function RotateRecognizer() {
-    AttrRecognizer.apply(this, arguments);
-}
-
-inherit(RotateRecognizer, AttrRecognizer, {
-    /**
-     * @namespace
-     * @memberof RotateRecognizer
-     */
-    defaults: {
-        event: 'rotate',
-        threshold: 0,
-        pointers: 2
-    },
-
-    getTouchAction: function getTouchAction() {
-        return [TOUCH_ACTION_NONE];
-    },
-
-    attrTest: function attrTest(input) {
-        return this._super.attrTest.call(this, input) && (Math.abs(input.rotation) > this.options.threshold || this.state & STATE_BEGAN);
-    }
-});
-
-/**
- * Swipe
- * Recognized when the pointer is moving fast (velocity), with enough distance in the allowed direction.
- * @constructor
- * @extends AttrRecognizer
- */
-function SwipeRecognizer() {
-    AttrRecognizer.apply(this, arguments);
-}
-
-inherit(SwipeRecognizer, AttrRecognizer, {
-    /**
-     * @namespace
-     * @memberof SwipeRecognizer
-     */
-    defaults: {
-        event: 'swipe',
-        threshold: 10,
-        velocity: 0.65,
-        direction: DIRECTION_HORIZONTAL | DIRECTION_VERTICAL,
-        pointers: 1
-    },
-
-    getTouchAction: function getTouchAction() {
-        return PanRecognizer.prototype.getTouchAction.call(this);
-    },
-
-    attrTest: function attrTest(input) {
-        var direction = this.options.direction;
-        var velocity;
-
-        if (direction & (DIRECTION_HORIZONTAL | DIRECTION_VERTICAL)) {
-            velocity = input.velocity;
-        } else if (direction & DIRECTION_HORIZONTAL) {
-            velocity = input.velocityX;
-        } else if (direction & DIRECTION_VERTICAL) {
-            velocity = input.velocityY;
-        }
-
-        return this._super.attrTest.call(this, input) && direction & input.direction && input.distance > this.options.threshold && abs(velocity) > this.options.velocity && input.eventType & INPUT_END;
-    },
-
-    emit: function emit(input) {
-        var direction = directionStr(input.direction);
-        if (direction) {
-            this.manager.emit(this.options.event + direction, input);
-        }
-
-        this.manager.emit(this.options.event, input);
-    }
-});
-
-/**
- * A tap is ecognized when the pointer is doing a small tap/click. Multiple taps are recognized if they occur
- * between the given interval and position. The delay option can be used to recognize multi-taps without firing
- * a single tap.
- *
- * The eventData from the emitted event contains the property `tapCount`, which contains the amount of
- * multi-taps being recognized.
- * @constructor
- * @extends Recognizer
- */
-function TapRecognizer() {
-    Recognizer.apply(this, arguments);
-
-    // previous time and center,
-    // used for tap counting
-    this.pTime = false;
-    this.pCenter = false;
-
-    this._timer = null;
-    this._input = null;
-    this.count = 0;
-}
-
-inherit(TapRecognizer, Recognizer, {
-    /**
-     * @namespace
-     * @memberof PinchRecognizer
-     */
-    defaults: {
-        event: 'tap',
-        pointers: 1,
-        taps: 1,
-        interval: 300, // max time between the multi-tap taps
-        time: 250, // max time of the pointer to be down (like finger on the screen)
-        threshold: 10, // a minimal movement is ok, but keep it low
-        posThreshold: 10 // a multi-tap can be a bit off the initial position
-    },
-
-    getTouchAction: function getTouchAction() {
-        return [TOUCH_ACTION_MANIPULATION];
-    },
-
-    process: function process(input) {
-        var options = this.options;
-        var validPointers = input.pointers.length === options.pointers;
-        var validMovement = input.distance < options.threshold;
-        var validTouchTime = input.deltaTime < options.time;
-        this.reset();
-
-        if (input.eventType & INPUT_START && this.count === 0) {
-            return this.failTimeout();
-        }
-        // we only allow little movement
-        // and we've reached an end event, so a tap is possible
-        if (validMovement && validTouchTime && validPointers) {
-            if (input.eventType != INPUT_END) {
-                return this.failTimeout();
-            }
-
-            var validInterval = this.pTime ? input.timeStamp - this.pTime < options.interval : true;
-            var validMultiTap = !this.pCenter || getDistance(this.pCenter, input.center) < options.posThreshold;
-
-            this.pTime = input.timeStamp;
-            this.pCenter = input.center;
-            if (!validMultiTap || !validInterval) {
-                this.count = 1;
-            } else {
-                this.count += 1;
-            }
-
-            this._input = input;
-
-            // if tap count matches we have recognized it,
-            // else it has began recognizing...
-            var tapCount = this.count % options.taps;
-            if (tapCount === 0) {
-                // no failing requirements, immediately trigger the tap event
-                // or wait as long as the multitap interval to trigger
-                if (!this.hasRequireFailures()) {
-                    return STATE_RECOGNIZED;
-                } else {
-                    this._timer = setTimeoutContext(function () {
-                        this.state = STATE_RECOGNIZED;
-                        this.tryEmit();
-                    }, options.interval, this);
-                    return STATE_BEGAN;
-                }
-            }
-        }
-        return STATE_FAILED;
-    },
-
-    failTimeout: function failTimeout() {
-        this._timer = setTimeoutContext(function () {
-            this.state = STATE_FAILED;
-        }, this.options.interval, this);
-        return STATE_FAILED;
-    },
-
-    reset: function reset() {
-        clearTimeout(this._timer);
-    },
-
-    emit: function emit() {
-        if (this.state == STATE_RECOGNIZED) {
-            this._input.tapCount = this.count;
-            this.manager.emit(this.options.event, this._input);
-        }
-    }
-});
-
-/**
- * Simple way to create an manager with a default set of recognizers.
- * @param {HTMLElement} element
- * @param {Object} [options]
- * @constructor
- */
-function Hammer(element, options) {
-    options = options || {};
-    options.recognizers = ifUndefined(options.recognizers, Hammer.defaults.preset);
-    return new Manager(element, options);
-}
-
-/**
- * @const {string}
- */
-Hammer.VERSION = '2.0.4';
-
-/**
- * default settings
- * @namespace
- */
-Hammer.defaults = {
-    /**
-     * set if DOM events are being triggered.
-     * But this is slower and unused by simple implementations, so disabled by default.
-     * @type {Boolean}
-     * @default false
-     */
-    domEvents: false,
-
-    /**
-     * The value for the touchAction property/fallback.
-     * When set to `compute` it will magically set the correct value based on the added recognizers.
-     * @type {String}
-     * @default compute
-     */
-    touchAction: TOUCH_ACTION_COMPUTE,
-
-    /**
-     * @type {Boolean}
-     * @default true
-     */
-    enable: true,
-
-    /**
-     * EXPERIMENTAL FEATURE -- can be removed/changed
-     * Change the parent input target element.
-     * If Null, then it is being set the to main element.
-     * @type {Null|EventTarget}
-     * @default null
-     */
-    inputTarget: null,
-
-    /**
-     * force an input class
-     * @type {Null|Function}
-     * @default null
-     */
-    inputClass: null,
-
-    /**
-     * Default recognizer setup when calling `Hammer()`
-     * When creating a new Manager these will be skipped.
-     * @type {Array}
-     */
-    preset: [
-    // RecognizerClass, options, [recognizeWith, ...], [requireFailure, ...]
-    [RotateRecognizer, { enable: false }], [PinchRecognizer, { enable: false }, ['rotate']], [SwipeRecognizer, { direction: DIRECTION_HORIZONTAL }], [PanRecognizer, { direction: DIRECTION_HORIZONTAL }, ['swipe']], [TapRecognizer], [TapRecognizer, { event: 'doubletap', taps: 2 }, ['tap']], [PressRecognizer]],
-
-    /**
-     * Some CSS properties can be used to improve the working of Hammer.
-     * Add them to this method and they will be set when creating a new Manager.
-     * @namespace
-     */
-    cssProps: {
-        /**
-         * Disables text selection to improve the dragging gesture. Mainly for desktop browsers.
-         * @type {String}
-         * @default 'none'
-         */
-        userSelect: 'none',
-
-        /**
-         * Disable the Windows Phone grippers when pressing an element.
-         * @type {String}
-         * @default 'none'
-         */
-        touchSelect: 'none',
-
-        /**
-         * Disables the default callout shown when you touch and hold a touch target.
-         * On iOS, when you touch and hold a touch target such as a link, Safari displays
-         * a callout containing information about the link. This property allows you to disable that callout.
-         * @type {String}
-         * @default 'none'
-         */
-        touchCallout: 'none',
-
-        /**
-         * Specifies whether zooming is enabled. Used by IE10>
-         * @type {String}
-         * @default 'none'
-         */
-        contentZooming: 'none',
-
-        /**
-         * Specifies that an entire element should be draggable instead of its contents. Mainly for desktop browsers.
-         * @type {String}
-         * @default 'none'
-         */
-        userDrag: 'none',
-
-        /**
-         * Overrides the highlight color shown when the user taps a link or a JavaScript
-         * clickable element in iOS. This property obeys the alpha value, if specified.
-         * @type {String}
-         * @default 'rgba(0,0,0,0)'
-         */
-        tapHighlightColor: 'rgba(0,0,0,0)'
-    }
-};
-
-var STOP = 1;
-var FORCED_STOP = 2;
-
-/**
- * Manager
- * @param {HTMLElement} element
- * @param {Object} [options]
- * @constructor
- */
-function Manager(element, options) {
-    options = options || {};
-
-    this.options = merge(options, Hammer.defaults);
-    this.options.inputTarget = this.options.inputTarget || element;
-    this.handlers = {};
-    this.session = {};
-    this.recognizers = [];
-
-    this.element = element;
-    this.input = createInputInstance(this);
-    this.touchAction = new TouchAction(this, this.options.touchAction);
-
-    toggleCssProps(this, true);
-
-    each(options.recognizers, function (item) {
-        var recognizer = this.add(new item[0](item[1]));
-        item[2] && recognizer.recognizeWith(item[2]);
-        item[3] && recognizer.requireFailure(item[3]);
-    }, this);
-}
-
-Manager.prototype = {
-    /**
-     * set options
-     * @param {Object} options
-     * @returns {Manager}
-     */
-    set: function set(options) {
-        extend(this.options, options);
-
-        // Options that need a little more setup
-        if (options.touchAction) {
-            this.touchAction.update();
-        }
-        if (options.inputTarget) {
-            // Clean up existing event listeners and reinitialize
-            this.input.destroy();
-            this.input.target = options.inputTarget;
-            this.input.init();
-        }
-        return this;
-    },
-
-    /**
-     * stop recognizing for this session.
-     * This session will be discarded, when a new [input]start event is fired.
-     * When forced, the recognizer cycle is stopped immediately.
-     * @param {Boolean} [force]
-     */
-    stop: function stop(force) {
-        this.session.stopped = force ? FORCED_STOP : STOP;
-    },
-
-    /**
-     * run the recognizers!
-     * called by the inputHandler function on every movement of the pointers (touches)
-     * it walks through all the recognizers and tries to detect the gesture that is being made
-     * @param {Object} inputData
-     */
-    recognize: function recognize(inputData) {
-        var session = this.session;
-        if (session.stopped) {
-            return;
-        }
-
-        // run the touch-action polyfill
-        this.touchAction.preventDefaults(inputData);
-
-        var recognizer;
-        var recognizers = this.recognizers;
-
-        // this holds the recognizer that is being recognized.
-        // so the recognizer's state needs to be BEGAN, CHANGED, ENDED or RECOGNIZED
-        // if no recognizer is detecting a thing, it is set to `null`
-        var curRecognizer = session.curRecognizer;
-
-        // reset when the last recognizer is recognized
-        // or when we're in a new session
-        if (!curRecognizer || curRecognizer && curRecognizer.state & STATE_RECOGNIZED) {
-            curRecognizer = session.curRecognizer = null;
-        }
-
-        var i = 0;
-        while (i < recognizers.length) {
-            recognizer = recognizers[i];
-
-            // find out if we are allowed try to recognize the input for this one.
-            // 1.   allow if the session is NOT forced stopped (see the .stop() method)
-            // 2.   allow if we still haven't recognized a gesture in this session, or the this recognizer is the one
-            //      that is being recognized.
-            // 3.   allow if the recognizer is allowed to run simultaneous with the current recognized recognizer.
-            //      this can be setup with the `recognizeWith()` method on the recognizer.
-            if (session.stopped !== FORCED_STOP && ( // 1
-            !curRecognizer || recognizer == curRecognizer || // 2
-            recognizer.canRecognizeWith(curRecognizer))) {
-                // 3
-                recognizer.recognize(inputData);
-            } else {
-                recognizer.reset();
-            }
-
-            // if the recognizer has been recognizing the input as a valid gesture, we want to store this one as the
-            // current active recognizer. but only if we don't already have an active recognizer
-            if (!curRecognizer && recognizer.state & (STATE_BEGAN | STATE_CHANGED | STATE_ENDED)) {
-                curRecognizer = session.curRecognizer = recognizer;
-            }
-            i++;
-        }
-    },
-
-    /**
-     * get a recognizer by its event name.
-     * @param {Recognizer|String} recognizer
-     * @returns {Recognizer|Null}
-     */
-    get: function get(recognizer) {
-        if (recognizer instanceof Recognizer) {
-            return recognizer;
-        }
-
-        var recognizers = this.recognizers;
-        for (var i = 0; i < recognizers.length; i++) {
-            if (recognizers[i].options.event == recognizer) {
-                return recognizers[i];
-            }
-        }
-        return null;
-    },
-
-    /**
-     * add a recognizer to the manager
-     * existing recognizers with the same event name will be removed
-     * @param {Recognizer} recognizer
-     * @returns {Recognizer|Manager}
-     */
-    add: function add(recognizer) {
-        if (invokeArrayArg(recognizer, 'add', this)) {
-            return this;
-        }
-
-        // remove existing
-        var existing = this.get(recognizer.options.event);
-        if (existing) {
-            this.remove(existing);
-        }
-
-        this.recognizers.push(recognizer);
-        recognizer.manager = this;
-
-        this.touchAction.update();
-        return recognizer;
-    },
-
-    /**
-     * remove a recognizer by name or instance
-     * @param {Recognizer|String} recognizer
-     * @returns {Manager}
-     */
-    remove: function remove(recognizer) {
-        if (invokeArrayArg(recognizer, 'remove', this)) {
-            return this;
-        }
-
-        var recognizers = this.recognizers;
-        recognizer = this.get(recognizer);
-        recognizers.splice(inArray(recognizers, recognizer), 1);
-
-        this.touchAction.update();
-        return this;
-    },
-
-    /**
-     * bind event
-     * @param {String} events
-     * @param {Function} handler
-     * @returns {EventEmitter} this
-     */
-    on: function on(events, handler) {
-        var handlers = this.handlers;
-        each(splitStr(events), function (event) {
-            handlers[event] = handlers[event] || [];
-            handlers[event].push(handler);
-        });
-        return this;
-    },
-
-    /**
-     * unbind event, leave emit blank to remove all handlers
-     * @param {String} events
-     * @param {Function} [handler]
-     * @returns {EventEmitter} this
-     */
-    off: function off(events, handler) {
-        var handlers = this.handlers;
-        each(splitStr(events), function (event) {
-            if (!handler) {
-                delete handlers[event];
-            } else {
-                handlers[event].splice(inArray(handlers[event], handler), 1);
-            }
-        });
-        return this;
-    },
-
-    /**
-     * emit event to the listeners
-     * @param {String} event
-     * @param {Object} data
-     */
-    emit: function emit(event, data) {
-        // we also want to trigger dom events
-        if (this.options.domEvents) {
-            triggerDomEvent(event, data);
-        }
-
-        // no handlers, so skip it all
-        var handlers = this.handlers[event] && this.handlers[event].slice();
-        if (!handlers || !handlers.length) {
-            return;
-        }
-
-        data.type = event;
-        data.preventDefault = function () {
-            data.srcEvent.preventDefault();
-        };
-
-        var i = 0;
-        while (i < handlers.length) {
-            handlers[i](data);
-            i++;
-        }
-    },
-
-    /**
-     * destroy the manager and unbinds all events
-     * it doesn't unbind dom events, that is the user own responsibility
-     */
-    destroy: function destroy() {
-        this.element && toggleCssProps(this, false);
-
-        this.handlers = {};
-        this.session = {};
-        this.input.destroy();
-        this.element = null;
-    }
-};
-
-/**
- * add/remove the css properties as defined in manager.options.cssProps
- * @param {Manager} manager
- * @param {Boolean} add
- */
-function toggleCssProps(manager, add) {
-    var element = manager.element;
-    each(manager.options.cssProps, function (value, name) {
-        element.style[prefixed(element.style, name)] = add ? value : '';
-    });
-}
-
-/**
- * trigger dom event
- * @param {String} event
- * @param {Object} data
- */
-function triggerDomEvent(event, data) {
-    var gestureEvent = document.createEvent('Event');
-    gestureEvent.initEvent(event, true, true);
-    gestureEvent.gesture = data;
-    data.target.dispatchEvent(gestureEvent);
-}
-
-extend(Hammer, {
-    INPUT_START: INPUT_START,
-    INPUT_MOVE: INPUT_MOVE,
-    INPUT_END: INPUT_END,
-    INPUT_CANCEL: INPUT_CANCEL,
-
-    STATE_POSSIBLE: STATE_POSSIBLE,
-    STATE_BEGAN: STATE_BEGAN,
-    STATE_CHANGED: STATE_CHANGED,
-    STATE_ENDED: STATE_ENDED,
-    STATE_RECOGNIZED: STATE_RECOGNIZED,
-    STATE_CANCELLED: STATE_CANCELLED,
-    STATE_FAILED: STATE_FAILED,
-
-    DIRECTION_NONE: DIRECTION_NONE,
-    DIRECTION_LEFT: DIRECTION_LEFT,
-    DIRECTION_RIGHT: DIRECTION_RIGHT,
-    DIRECTION_UP: DIRECTION_UP,
-    DIRECTION_DOWN: DIRECTION_DOWN,
-    DIRECTION_HORIZONTAL: DIRECTION_HORIZONTAL,
-    DIRECTION_VERTICAL: DIRECTION_VERTICAL,
-    DIRECTION_ALL: DIRECTION_ALL,
-
-    Manager: Manager,
-    Input: Input,
-    TouchAction: TouchAction,
-
-    TouchInput: TouchInput,
-    MouseInput: MouseInput,
-    PointerEventInput: PointerEventInput,
-    TouchMouseInput: TouchMouseInput,
-    SingleTouchInput: SingleTouchInput,
-
-    Recognizer: Recognizer,
-    AttrRecognizer: AttrRecognizer,
-    Tap: TapRecognizer,
-    Pan: PanRecognizer,
-    Swipe: SwipeRecognizer,
-    Pinch: PinchRecognizer,
-    Rotate: RotateRecognizer,
-    Press: PressRecognizer,
-
-    on: addEventListeners,
-    off: removeEventListeners,
-    each: each,
-    merge: merge,
-    extend: extend,
-    inherit: inherit,
-    bindFn: bindFn,
-    prefixed: prefixed
-});
-
-if (( false ? 'undefined' : _typeof(module)) == 'object' && module.exports) {
-    module.exports = Hammer;
-}
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/webpack/buildin/module.js")(module)))
-
-/***/ }),
-
-/***/ "./resources/assets/js/vendor/gmf-sys/core/xscroll/origin-scroll.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(module) {
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var Util = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/util.js"),
-    Base = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/base.js"),
-    Core = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/core.js"),
-    Animate = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/animate.js");
-
-var transformOrigin = Util.prefixStyle("transformOrigin");
-/** 
- * @constructor
- * @param {object} cfg config for scroll
- * @extends XScroll
- * @example
- * var xscroll = new OriginScroll({
- *    renderTo:"#scroll"
- * });
- * xscroll.render();
- */
-function OriginScroll(cfg) {
-    OriginScroll.superclass.constructor.call(this, cfg);
-}
-
-Util.extend(OriginScroll, Core, {
-    init: function init() {
-        var self = this;
-        OriginScroll.superclass.init.call(this);
-        self.resetSize();
-    },
-    /**
-     * get scroll top value
-     * @memberof OriginScroll
-     * @return {number} scrollTop
-     */
-    getScrollTop: function getScrollTop() {
-        return this.renderTo.scrollTop;
-    },
-    /**
-     * get scroll left value
-     * @memberof OriginScroll
-     * @return {number} scrollLeft
-     */
-    getScrollLeft: function getScrollLeft() {
-        return this.renderTo.scrollLeft;
-    },
-    /**
-     * vertical scroll absolute to the destination
-     * @memberof SimuScroll
-     * @param scrollTop {number} scrollTop
-     * @param duration {number} duration for animte
-     * @param easing {string} easing functio for animate : ease-in | ease-in-out | ease | bezier(n,n,n,n)
-     **/
-    scrollTop: function scrollTop(y, duration, easing, callback) {
-        var self = this;
-        var y = Math.round(y);
-        if (self.userConfig.lockY) return;
-        var duration = duration || 0;
-        var easing = easing || "quadratic";
-        var config = {
-            css: {
-                scrollTop: y
-            },
-            duration: duration,
-            easing: easing,
-            run: function run(e) {
-                //trigger scroll event
-                self.trigger("scroll", {
-                    scrollTop: self.getScrollTop(),
-                    scrollLeft: self.getScrollLeft()
-                });
-            },
-            useTransition: false, //scrollTop 
-            end: callback
-        };
-        self.__timers.y = self.__timers.y || new Animate(self.renderTo, config);
-        //run
-        self.__timers.y.stop();
-        self.__timers.y.reset(config);
-        self.__timers.y.run();
-    },
-    /**
-     * horizontal scroll absolute to the destination
-     * @memberof SimuScroll
-     * @param scrollLeft {number} scrollLeft
-     * @param duration {number} duration for animte
-     * @param easing {string} easing functio for animate : ease-in | ease-in-out | ease | bezier(n,n,n,n)
-     **/
-    scrollLeft: function scrollLeft(x, duration, easing, callback) {
-        var self = this;
-        var x = Math.round(x);
-        if (self.userConfig.lockX) return;
-        var duration = duration || 0;
-        var easing = easing || "quadratic";
-        var config = {
-            css: {
-                scrollLeft: x
-            },
-            duration: duration,
-            easing: easing,
-            run: function run(e) {
-                //trigger scroll event
-                self.trigger("scroll", {
-                    scrollTop: self.getScrollTop(),
-                    scrollLeft: self.getScrollLeft()
-                });
-            },
-            useTransition: false, //scrollTop 
-            end: callback
-        };
-        self.__timers.x = self.__timers.x || new Animate(self.renderTo, config);
-        //run
-        self.__timers.x.stop();
-        self.__timers.x.reset(config);
-        self.__timers.x.run();
-    },
-    _bindEvt: function _bindEvt() {
-        OriginScroll.superclass._bindEvt.call(this);
-        var self = this;
-        if (self.__isEvtBind) return;
-        self.__isEvtBind = true;
-        self.renderTo.addEventListener("scroll", function (e) {
-            self.trigger("scroll", {
-                type: "scroll",
-                scrollTop: self.getScrollTop(),
-                scrollLeft: self.getScrollLeft()
-            });
-        }, false);
-    }
-});
-
-if (( false ? 'undefined' : _typeof(module)) == 'object' && module.exports) {
-    module.exports = OriginScroll;
-}
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/webpack/buildin/module.js")(module)))
-
-/***/ }),
-
-/***/ "./resources/assets/js/vendor/gmf-sys/core/xscroll/plugins/pulldown.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(module) {
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var Util = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/util.js");
-var Base = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/base.js");
-var clsPrefix;
-var containerCls;
-var content = "Pull Down To Refresh";
-var loadingContent = "Loading...";
-/**
- * A pulldown to refresh plugin for xscroll.
- * @constructor
- * @param {object} cfg
- * @param {number} cfg.height
- * @param {string} cfg.content default html for pulldown
- * @param {string} cfg.downContent html for pulldown when scrollTop is smaller than cfg.height
- * @param {string} cfg.upContent html for pulldown when scrollTop is larger than cfg.height
- * @param {string} cfg.loadingContent html for pulldown when released
- * @param {string} cfg.clsPrefix  class prefix which default value is "xs-plugin-pulldown-"
- * @extends {Base}
- */
-var PullDown = function PullDown(cfg) {
-	PullDown.superclass.constructor.call(this, cfg);
-	this.userConfig = Util.mix({
-		content: content,
-		height: 60,
-		autoRefresh: true,
-		downContent: "Pull Down To Refresh",
-		upContent: "Release To Refresh",
-		loadingContent: loadingContent,
-		clsPrefix: "xs-plugin-pulldown-"
-	}, cfg);
-};
-Util.extend(PullDown, Base, {
-	/**
-  * a pluginId
-  * @memberOf PullDown
-  * @type {string}
-  */
-	pluginId: "pulldown",
-	/**
-  * plugin initializer
-  * @memberOf PullDown
-  * @override Base
-  * @return {PullDown}
-  */
-	pluginInitializer: function pluginInitializer(xscroll) {
-		var self = this;
-		self.xscroll = xscroll.render();
-		clsPrefix = self.userConfig.clsPrefix;
-		self.render();
-		return self;
-	},
-	/**
-  * detroy the plugin
-  * @memberOf PullDown
-  * @override Base
-  * @return {PullDown}
-  */
-	pluginDestructor: function pluginDestructor() {
-		var self = this;
-		Util.remove(self.pulldown);
-		self.xscroll.off("panstart", self._panStartHandler, self);
-		self.xscroll.off("pan", self._panHandler, self);
-		self.xscroll.off("panend", self._panEndHandler, self);
-		self.__isRender = false;
-		self._evtBinded = false;
-	},
-	/**
-  * render pulldown plugin
-  * @memberOf PullDown
-  * @return {PullDown}
-  */
-	render: function render() {
-		var self = this;
-		if (self.__isRender) return;
-		self.__isRender = true;
-		var containerCls = clsPrefix + "container";
-		var height = self.userConfig.height || 60;
-		var pulldown = self.pulldown = document.createElement("div");
-		pulldown.className = containerCls;
-		pulldown.style.position = "absolute";
-		pulldown.style.width = "100%";
-		pulldown.style.height = height + "px";
-		pulldown.style.lineHeight = height + "px";
-		pulldown.style.top = -height + "px";
-		pulldown.style.textAlign = "center";
-		self.xscroll.container.appendChild(pulldown);
-		self.status = 'up';
-		Util.addClass(pulldown, clsPrefix + self.status);
-		pulldown.innerHTML = self.userConfig[self.status + "Content"] || self.userConfig.content;
-		self._bindEvt();
-		return self;
-	},
-	_bindEvt: function _bindEvt() {
-		var self = this;
-		if (self._evtBinded) return;
-		self._evtBinded = true;
-		var pulldown = self.pulldown;
-		var xscroll = self.xscroll;
-		xscroll.on("pan", self._panHandler, self);
-		xscroll.on("panstart", self._panStartHandler, self);
-		xscroll.on("panend", self._panEndHandler, self);
-	},
-	_changeStatus: function _changeStatus(status) {
-		var prevVal = this.status;
-		this.status = status;
-		Util.removeClass(this.pulldown, clsPrefix + prevVal);
-		Util.addClass(this.pulldown, clsPrefix + status);
-		if (this.userConfig[status + "Content"]) {
-			this.pulldown.innerHTML = this.userConfig[status + "Content"];
-		}
-		if (prevVal != status) {
-			this.trigger("statuschange", {
-				prevVal: prevVal,
-				newVal: status
-			});
-			if (status == "loading") {
-				this.trigger("loading");
-			}
-		}
-	},
-	/**
-  * reset the pulldown plugin
-  * @memberOf PullDown
-  * @param {function} callback
-  * @return {PullDown}
-  */
-	reset: function reset(callback) {
-		this.xscroll.boundry.resetTop();
-		this.xscroll.boundryCheckY(callback);
-		this._expanded = false;
-		return this;
-	},
-	_panStartHandler: function _panStartHandler(e) {
-		clearTimeout(this.loadingItv);
-	},
-	_panHandler: function _panHandler(e) {
-		var self = this;
-		var scrollTop = self.xscroll.getScrollTop();
-		if (scrollTop > 0) return;
-		self._changeStatus(Math.abs(scrollTop) < self.userConfig.height ? "down" : "up");
-	},
-	_panEndHandler: function _panEndHandler(e) {
-		var self = this;
-		var xscroll = self.xscroll;
-		var height = self.userConfig.height || 60;
-		var scrollTop = xscroll.getScrollTop();
-		if (scrollTop < -height) {
-			//prevent default bounce
-			e.preventDefault();
-			xscroll.boundry.resetTop();
-			xscroll.boundry.expandTop(height);
-			xscroll.boundryCheckY(function () {
-				self._changeStatus("loading");
-			});
-			if (self.userConfig.autoRefresh) {
-				clearTimeout(self.loadingItv);
-				self.loadingItv = setTimeout(function () {
-					xscroll.boundry.resetTop();
-					xscroll.boundryCheckY(function () {
-						window.location.reload();
-					});
-				}, 800);
-			}
-		}
-	}
-});
-
-if (( false ? 'undefined' : _typeof(module)) == 'object' && module.exports) {
-	module.exports = PullDown;
-}
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/webpack/buildin/module.js")(module)))
-
-/***/ }),
-
-/***/ "./resources/assets/js/vendor/gmf-sys/core/xscroll/plugins/pullup.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(module) {
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var Util = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/util.js");
-var Base = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/base.js");
-var clsPrefix;
-var containerCls;
-var loadingContent = "Loading...";
-var upContent = "Pull Up To Refresh";
-var downContent = "Release To Refresh";
-var PULL_UP_HEIGHT = 60;
-var HEIGHT = 40;
-/**
- * A pullup to load plugin for xscroll.
- * @constructor
- * @param {object} cfg
- * @param {number} cfg.height
- * @param {string} cfg.downContent
- * @param {string} cfg.upContent
- * @param {string} cfg.loadingContent
- * @param {string} cfg.clsPrefix  class prefix which default value is "xs-plugin-pullup-"
- * @param {number} cfg.bufferHeight preload data before scrolling to the bottom of the boundry
- * @extends {Base}
- */
-var PullUp = function PullUp(cfg) {
-	PullUp.superclass.constructor.call(this);
-	this.userConfig = Util.mix({
-		upContent: upContent,
-		downContent: downContent,
-		pullUpHeight: PULL_UP_HEIGHT,
-		height: HEIGHT,
-		loadingContent: loadingContent,
-		bufferHeight: 0,
-		clsPrefix: "xs-plugin-pullup-"
-	}, cfg);
-};
-Util.extend(PullUp, Base, {
-	/**
-  * a pluginId
-  * @memberOf PullUp
-  * @type {string}
-  */
-	pluginId: "pullup",
-	/**
-  * plugin initializer
-  * @memberOf PullUp
-  * @override Base
-  * @return {PullUp}
-  */
-	pluginInitializer: function pluginInitializer(xscroll) {
-		var self = this;
-		self.xscroll = xscroll.render();
-		clsPrefix = self.userConfig.clsPrefix;
-		self.render();
-		return self;
-	},
-	/**
-  * detroy the plugin
-  * @memberOf PullUp
-  * @override Base
-  * @return {PullUp}
-  */
-	pluginDestructor: function pluginDestructor() {
-		var self = this;
-		Util.remove(self.pullup);
-		self.xscroll.off("scrollend", self._scrollEndHandler, self);
-		self.xscroll.off("scroll", self._scrollHandler, self);
-		self.xscroll.off("pan", self._panHandler, self);
-		self.xscroll.boundry.resetBottom();
-		self.__isRender = false;
-		self._evtBinded = false;
-	},
-	/**
-  * render pullup plugin
-  * @memberOf PullUp
-  * @return {PullUp}
-  */
-	render: function render() {
-		var self = this;
-		if (self.__isRender) return;
-		self.__isRender = true;
-		var containerCls = clsPrefix + "container";
-		var height = self.userConfig.height;
-		var pullup = self.pullup = document.createElement("div");
-		pullup.className = containerCls;
-		pullup.style.position = "absolute";
-		pullup.style.width = "100%";
-		pullup.style.height = height + "px";
-		pullup.style.bottom = -height + "px";
-		self.xscroll.container.appendChild(pullup);
-		self.xscroll.boundry.expandBottom(self.userConfig.height);
-		self.status = 'up';
-		Util.addClass(pullup, clsPrefix + self.status);
-		pullup.innerHTML = self.userConfig[self.status + "Content"] || self.userConfig.content;
-		self._bindEvt();
-		return self;
-	},
-	_bindEvt: function _bindEvt() {
-		var self = this;
-		if (self._evtBinded) return;
-		self._evtBinded = true;
-		var pullup = self.pullup;
-		var xscroll = self.xscroll;
-		xscroll.on("pan", self._panHandler, self);
-		//load width a buffer
-		if (self.userConfig.bufferHeight > 0) {
-			xscroll.on("scroll", self._scrollHandler, self);
-		}
-		//bounce bottom
-		xscroll.on("scrollend", self._scrollEndHandler, self);
-		return self;
-	},
-	_scrollEndHandler: function _scrollEndHandler(e) {
-		var self = this,
-		    xscroll = self.xscroll,
-		    scrollTop = xscroll.getScrollTop();
-		if (scrollTop == xscroll.containerHeight - xscroll.height + self.userConfig.height) {
-			self._changeStatus("loading");
-		}
-		return self;
-	},
-	_scrollHandler: function _scrollHandler(e) {
-		var self = this,
-		    xscroll = self.xscroll;
-		if (!self.isLoading && Math.abs(e.scrollTop) + xscroll.height + self.userConfig.height + self.userConfig.bufferHeight >= xscroll.containerHeight + xscroll.boundry._xtop + xscroll.boundry._xbottom) {
-			self._changeStatus("loading");
-		}
-		return self;
-	},
-	_panHandler: function _panHandler(e) {
-		var self = this;
-		var xscroll = self.xscroll;
-		var offsetTop = -xscroll.getScrollTop();
-		if (offsetTop < xscroll.height - xscroll.containerHeight - self.userConfig.pullUpHeight) {
-			self._changeStatus("down");
-		} else {
-			self._changeStatus("up");
-		}
-		return self;
-	},
-	_changeStatus: function _changeStatus(status) {
-		if (status != "loading" && this.isLoading) return;
-		var prevVal = this.status;
-		this.status = status;
-		Util.removeClass(this.pullup, clsPrefix + prevVal);
-		Util.addClass(this.pullup, clsPrefix + status);
-		this.pullup.innerHTML = this.userConfig[status + "Content"];
-		if (prevVal != status) {
-			this.trigger("statuschange", {
-				prevVal: prevVal,
-				newVal: status
-			});
-			if (status == "loading") {
-				this.isLoading = true;
-				this.trigger("loading");
-			}
-		}
-		return this;
-	},
-	/**
-  * notify pullup plugin to complete state after a remote data request
-  * @memberOf PullUp
-  * @return {PullUp}
-  */
-	complete: function complete() {
-		var self = this;
-		var xscroll = self.xscroll;
-		self.isLoading = false;
-		self._changeStatus("up");
-		return self;
-	}
-});
-
-if (( false ? 'undefined' : _typeof(module)) == 'object' && module.exports) {
-	module.exports = PullUp;
-}
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/webpack/buildin/module.js")(module)))
-
-/***/ }),
-
-/***/ "./resources/assets/js/vendor/gmf-sys/core/xscroll/simulate-scroll.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(module) {
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var Util = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/util.js"),
-    Base = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/base.js"),
-    Core = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/core.js"),
-    Animate = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/animate.js"),
-    Hammer = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/hammer.js"),
-    ScrollBar = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/components/scrollbar.js"),
-    Controller = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/components/controller.js");
-//reduced boundry pan distance
-var PAN_RATE = 1 - 0.618;
-//constant for scrolling acceleration
-var SCROLL_ACCELERATION = 0.0005;
-//constant for outside of boundry acceleration
-var BOUNDRY_ACCELERATION = 0.03;
-//transform-origin
-var transformOrigin = Util.prefixStyle("transformOrigin");
-//transform
-var transform = Util.prefixStyle("transform");
-/** 
- * @constructor
- * @param {object} cfg config for scroll
- * @param {number} cfg.SCROLL_ACCELERATION  acceleration for scroll, min value make the scrolling smoothly
- * @param {number} cfg.BOUNDRY_CHECK_DURATION duration for boundry bounce
- * @param {number} cfg.BOUNDRY_CHECK_EASING easing for boundry bounce
- * @param {number} cfg.BOUNDRY_CHECK_ACCELERATION acceleration for boundry bounce
- * @param {boolean} cfg.lockX just like overflow-x:hidden
- * @param {boolean} cfg.lockY just like overflow-y:hidden
- * @param {boolean} cfg.scrollbarX config if the scrollbar-x is visible
- * @param {boolean} cfg.scrollbarY config if the scrollbar-y is visible
- * @param {boolean} cfg.useTransition config if use css3 transition or raf for scroll animation
- * @param {boolean} cfg.bounce config if use has the bounce effect when scrolling outside of the boundry
- * @param {boolean} cfg.boundryCheck config if scrolling inside of the boundry
- * @param {boolean} cfg.preventDefault prevent touchstart
- * @param {boolean} cfg.preventTouchMove prevent touchmove
- * @param {string|HTMLElement}  cfg.container config for scroller's container which default value is ".xs-container"
- * @param {string|HTMLElement}  cfg.content config for scroller's content which default value is ".xs-content"
- * @param {object}  cfg.indicatorInsets  config scrollbars position {top: number, left: number, bottom: number, right: number}
- * @param {string}  cfg.stickyElements config for sticky-positioned elements
- * @param {string}  cfg.fixedElements config for fixed-positioned elements
- * @param {string}  cfg.touchAction config for touchAction of the scroller
- * @extends XScroll
- * @example
- * var xscroll = new SimuScroll({
- *    renderTo:"#scroll",
- *    lockX:false,
- *    scrollbarX:true
- * });
- * xscroll.render();
- */
-function SimuScroll(cfg) {
-  SimuScroll.superclass.constructor.call(this, cfg);
-}
-
-Util.extend(SimuScroll, Core, {
-  /** 
-   * @memberof SimuScroll
-   * @override
-   */
-  init: function init() {
-    var self = this;
-    var defaultCfg = {
-      preventDefault: true,
-      preventTouchMove: true
-    };
-    SimuScroll.superclass.init.call(this);
-    self.userConfig = Util.mix(defaultCfg, self.userConfig);
-    self.SCROLL_ACCELERATION = self.userConfig.SCROLL_ACCELERATION || SCROLL_ACCELERATION;
-    self.BOUNDRY_ACCELERATION = self.userConfig.BOUNDRY_ACCELERATION || BOUNDRY_ACCELERATION;
-    self._initContainer();
-    self.resetSize();
-    //set overflow behaviors
-    self._setOverflowBehavior();
-    self.defaltConfig = {
-      lockY: self.userConfig.lockY,
-      lockX: self.userConfig.lockX
-    };
-    return self;
-  },
-  destroy: function destroy() {
-    var self = this;
-    SimuScroll.superclass.destroy.call(this);
-    self.renderTo.style.overflow = "";
-    self.renderTo.style.touchAction = "";
-    self.container.style.transform = "";
-    self.container.style.transformOrigin = "";
-    self.content.style.transform = "";
-    self.content.style.transformOrigin = "";
-    self.off("touchstart mousedown", self._ontouchstart);
-    self.off("touchmove", self._ontouchmove);
-    self.destroyScrollBars();
-  },
-  /**
-   * set overflow behavior
-   * @return {boolean} [description]
-   */
-  _setOverflowBehavior: function _setOverflowBehavior() {
-    var self = this;
-    var renderTo = self.renderTo;
-    var computeStyle = getComputedStyle(renderTo);
-    self.userConfig.lockX = undefined === self.userConfig.lockX ? computeStyle['overflow-x'] == "hidden" || self.width == self.containerWidth ? true : false : self.userConfig.lockX;
-    self.userConfig.lockY = undefined === self.userConfig.lockY ? computeStyle['overflow-y'] == "hidden" || self.height == self.containerHeight ? true : false : self.userConfig.lockY;
-    self.userConfig.scrollbarX = undefined === self.userConfig.scrollbarX ? self.userConfig.lockX ? false : true : self.userConfig.scrollbarX;
-    self.userConfig.scrollbarY = undefined === self.userConfig.scrollbarY ? self.userConfig.lockY ? false : true : self.userConfig.scrollbarY;
-    return self;
-  },
-  /**
-   * reset lockX or lockY config to the default value
-   */
-  _resetLockConfig: function _resetLockConfig() {
-    var self = this;
-    self.userConfig.lockX = self.defaltConfig.lockX;
-    self.userConfig.lockY = self.defaltConfig.lockY;
-    return self;
-  },
-  /**
-   * init container
-   * @override
-   * @return {SimuScroll}
-   */
-  _initContainer: function _initContainer() {
-    var self = this;
-    SimuScroll.superclass._initContainer.call(self);
-    if (self.__isContainerInited || !self.container || !self.content) return;
-    self.container.style[transformOrigin] = "0 0";
-    self.content.style[transformOrigin] = "0 0";
-    self.translate(0, 0);
-    self.__isContainerInited = true;
-    return self;
-  },
-  /**
-   * get scroll top value
-   * @memberof SimuScroll
-   * @return {number} scrollTop
-   */
-  getScrollTop: function getScrollTop() {
-    var transY = window.getComputedStyle(this.container)[transform].match(/[-\d\.*\d*]+/g);
-    return transY ? Math.round(transY[5]) === 0 ? 0 : -Math.round(transY[5]) : 0;
-  },
-  /**
-   * get scroll left value
-   * @memberof SimuScroll
-   * @return {number} scrollLeft
-   */
-  getScrollLeft: function getScrollLeft() {
-    var transX = window.getComputedStyle(this.content)[transform].match(/[-\d\.*\d*]+/g);
-    return transX ? Math.round(transX[4]) === 0 ? 0 : -Math.round(transX[4]) : 0;
-  },
-  /**
-   * horizontal scroll absolute to the destination
-   * @memberof SimuScroll
-   * @param scrollLeft {number} scrollLeft
-   * @param duration {number} duration for animte
-   * @param easing {string} easing functio for animate : ease-in | ease-in-out | ease | bezier(n,n,n,n)
-   **/
-  scrollLeft: function scrollLeft(x, duration, easing, callback) {
-    if (this.userConfig.lockX) return;
-    var translateZ = this.userConfig.gpuAcceleration ? " translateZ(0) " : "";
-    this.x = undefined === x || isNaN(x) || 0 === x ? 0 : -Math.round(x);
-    this._animate("x", "translateX(" + this.x + "px) scale(" + this.scale + ")" + translateZ, duration, easing, callback);
-    return this;
-  },
-  /**
-   * vertical scroll absolute to the destination
-   * @memberof SimuScroll
-   * @param scrollTop {number} scrollTop
-   * @param duration {number} duration for animte
-   * @param easing {string} easing functio for animate : ease-in | ease-in-out | ease | bezier(n,n,n,n)
-   **/
-  scrollTop: function scrollTop(y, duration, easing, callback) {
-    if (this.userConfig.lockY) return;
-    var translateZ = this.userConfig.gpuAcceleration ? " translateZ(0) " : "";
-    this.y = undefined === y || isNaN(y) || 0 === y ? 0 : -Math.round(y);
-    this._animate("y", "translateY(" + this.y + "px) " + translateZ, duration, easing, callback);
-    return this;
-  },
-  /**
-   * translate the scroller to a new destination includes x , y , scale
-   * @memberof SimuScroll
-   * @param x {number} x
-   * @param y {number} y
-   * @param scale {number} scale
-   **/
-  translate: function translate(x, y, scale) {
-    var translateZ = this.userConfig.gpuAcceleration ? " translateZ(0) " : "";
-    this.x = x || this.x || 0;
-    this.y = y || this.y || 0;
-    this.scale = scale || this.scale || 1;
-    this.content.style[transform] = "translate(" + this.x + "px,0px) scale(" + this.scale + ") " + translateZ;
-    this.container.style[transform] = "translate(0px," + this.y + "px) " + translateZ;
-    return this;
-  },
-  _animate: function _animate(type, transform, duration, easing, callback) {
-    var self = this;
-    var duration = duration || 0;
-    var easing = easing || "quadratic";
-    var el = type == "y" ? self.container : self.content;
-    var config = {
-      css: {
-        transform: transform
-      },
-      duration: duration,
-      easing: easing,
-      run: function run(e) {
-        /**
-         * @event {@link SimuScroll#"scroll"}
-         */
-        self.trigger("scroll", {
-          scrollTop: self.getScrollTop(),
-          scrollLeft: self.getScrollLeft(),
-          type: "scroll"
-        });
-      },
-      useTransition: self.userConfig.useTransition,
-      end: function end(e) {
-        callback && callback();
-        if ((self["_bounce" + type] === 0 || self["_bounce" + type] === undefined) && easing != "linear") {
-          self['isScrolling' + type.toUpperCase()] = false;
-          self['isRealScrolling' + type.toUpperCase()] = false;
-          self.trigger("scrollend", {
-            type: "scrollend",
-            scrollTop: self.getScrollTop(),
-            scrollLeft: self.getScrollLeft(),
-            zoomType: type,
-            duration: duration,
-            easing: easing
-          });
-        }
-      }
-    };
-    var timer = self.__timers[type] = self.__timers[type] || new Animate(el, config);
-    timer.stop();
-    timer.reset(config);
-    timer.run();
-    self.trigger("scrollanimate", {
-      type: "scrollanimate",
-      scrollTop: -self.y,
-      scrollLeft: -self.x,
-      duration: duration,
-      easing: easing,
-      zoomType: type
-    });
-    return this;
-  },
-  _ontap: function _ontap(e) {
-    var self = this;
-    self.boundryCheck();
-    self._unPreventHref(e);
-    if (!self.isRealScrollingX && !self.isRealScrollingY) {
-      self._triggerClick(e);
-    }
-    self._preventHref(e);
-    self.isRealScrollingY = false;
-    self.isRealScrollingY = false;
-  },
-  _bindEvt: function _bindEvt() {
-    SimuScroll.superclass._bindEvt.call(this);
-    var self = this;
-    if (self.__isEvtBind) return;
-    self.__isEvtBind = true;
-    var pinch = new Hammer.Pinch();
-    self.mc.add(pinch);
-    self.on("touchstart mousedown", self._ontouchstart, self);
-    self.on("touchmove", self._ontouchmove, self);
-    self.on("tap", self._ontap, self);
-    self.on("panstart", self._onpanstart, self);
-    self.on("pan", self._onpan, self);
-    self.on("panend", self._onpanend, self);
-    //window resize
-    window.addEventListener("resize", function (e) {
-      setTimeout(function () {
-        self.resetSize();
-        self.boundryCheck(0);
-        self.render();
-      }, 100);
-    }, self);
-
-    return this;
-  },
-  _ontouchstart: function _ontouchstart(e) {
-    var self = this;
-    if (!/(SELECT|INPUT|TEXTAREA)/i.test(e.target.tagName) && self.userConfig.preventDefault) {
-      e.preventDefault();
-    }
-    self.stop();
-  },
-  _ontouchmove: function _ontouchmove(e) {
-    this.userConfig.preventTouchMove && e.preventDefault();
-  },
-  _onpanstart: function _onpanstart(e) {
-    this.userConfig.preventTouchMove && e.preventDefault();
-    var self = this;
-    var scrollLeft = self.getScrollLeft();
-    var scrollTop = self.getScrollTop();
-    self.stop();
-    self.translate(-scrollLeft, -scrollTop);
-    var threshold = self.mc.get("pan").options.threshold;
-    self.thresholdY = e.direction == "8" ? threshold : e.direction == "16" ? -threshold : 0;
-    self.thresholdX = e.direction == "2" ? threshold : e.direction == "4" ? -threshold : 0;
-    return self;
-  },
-  _onpan: function _onpan(e) {
-    this.userConfig.preventTouchMove && e.preventDefault();
-    var self = this;
-    var boundry = self.boundry;
-    var userConfig = self.userConfig;
-    var boundryCheck = userConfig.boundryCheck;
-    var bounce = userConfig.bounce;
-    var scrollTop = self.__topstart || (self.__topstart = -self.getScrollTop());
-    var scrollLeft = self.__leftstart || (self.__leftstart = -self.getScrollLeft());
-    var y = userConfig.lockY ? Number(scrollTop) : Number(scrollTop) + (e.deltaY + self.thresholdY);
-    var x = userConfig.lockX ? Number(scrollLeft) : Number(scrollLeft) + (e.deltaX + self.thresholdX);
-    var containerWidth = self.containerWidth;
-    var containerHeight = self.containerHeight;
-    if (boundryCheck) {
-      //over top
-      y = y > boundry.top ? bounce ? (y - boundry.top) * PAN_RATE + boundry.top : boundry.top : y;
-      //over bottom
-      y = y < boundry.bottom - containerHeight ? bounce ? y + (boundry.bottom - containerHeight - y) * PAN_RATE : boundry.bottom - containerHeight : y;
-      //over left
-      x = x > boundry.left ? bounce ? (x - boundry.left) * PAN_RATE + boundry.left : boundry.left : x;
-      //over right
-      x = x < boundry.right - containerWidth ? bounce ? x + (boundry.right - containerWidth - x) * PAN_RATE : boundry.right - containerWidth : x;
-    }
-    //move to x,y
-    self.translate(x, y);
-    //pan trigger the opposite direction
-    self.directionX = e.type == 'panleft' ? 'right' : e.type == 'panright' ? 'left' : '';
-    self.directionY = e.type == 'panup' ? 'down' : e.type == 'pandown' ? 'up' : '';
-    self.trigger("scroll", {
-      scrollTop: -y,
-      scrollLeft: -x,
-      triggerType: "pan",
-      type: "scroll"
-    });
-    return self;
-  },
-  _onpanend: function _onpanend(e) {
-    var self = this;
-    var userConfig = self.userConfig;
-    var transX = self.computeScroll("x", e.velocityX);
-    var transY = self.computeScroll("y", e.velocityY);
-    var scrollLeft = transX ? transX.pos : 0;
-    var scrollTop = transY ? transY.pos : 0;
-    var duration;
-    if (transX && transY && transX.status == "inside" && transY.status == "inside" && transX.duration && transY.duration) {
-      //ensure the same duration
-      duration = Math.max(transX.duration, transY.duration);
-    }
-    transX && self.scrollLeft(scrollLeft, duration || transX.duration, transX.easing, function (e) {
-      self.boundryCheckX();
-    });
-    transY && self.scrollTop(scrollTop, duration || transY.duration, transY.easing, function (e) {
-      self.boundryCheckY();
-    });
-    //judge the direction
-    self.directionX = e.velocityX < 0 ? "left" : "right";
-    self.directionY = e.velocityY < 0 ? "up" : "down";
-    //clear start
-    self.__topstart = null;
-    self.__leftstart = null;
-    return self;
-  },
-  /**
-   * judge the scroller is out of boundry horizontally and vertically
-   * @memberof SimuScroll
-   * @return {boolean} isBoundryOut
-   **/
-  isBoundryOut: function isBoundryOut() {
-    return this.isBoundryOutLeft() || this.isBoundryOutRight() || this.isBoundryOutTop() || this.isBoundryOutBottom();
-  },
-  /**
-   * judge if the scroller is outsideof left
-   * @memberof SimuScroll
-   * @return {boolean} isBoundryOut
-   **/
-  isBoundryOutLeft: function isBoundryOutLeft() {
-    return this.getBoundryOutLeft() > 0 ? true : false;
-  },
-  /**
-   * judge if the scroller is outsideof right
-   * @memberof SimuScroll
-   * @return {boolean} isBoundryOut
-   **/
-  isBoundryOutRight: function isBoundryOutRight() {
-    return this.getBoundryOutRight() > 0 ? true : false;
-  },
-  /**
-   * judge if the scroller is outsideof top
-   * @memberof SimuScroll
-   * @return {boolean} isBoundryOut
-   **/
-  isBoundryOutTop: function isBoundryOutTop() {
-    return this.getBoundryOutTop() > 0 ? true : false;
-  },
-  /**
-   * judge if the scroller is outsideof bottom
-   * @memberof SimuScroll
-   * @return {boolean} isBoundryOut
-   **/
-  isBoundryOutBottom: function isBoundryOutBottom() {
-    return this.getBoundryOutBottom() > 0 ? true : false;
-  },
-  /**
-   * get the offset value outsideof top
-   * @memberof SimuScroll
-   * @return {number} offset
-   **/
-  getBoundryOutTop: function getBoundryOutTop() {
-    return -this.boundry.top - this.getScrollTop();
-  },
-  /**
-   * get the offset value outsideof left
-   * @memberof SimuScroll
-   * @return {number} offset
-   **/
-  getBoundryOutLeft: function getBoundryOutLeft() {
-    return -this.boundry.left - this.getScrollLeft();
-  },
-  /**
-   * get the offset value outsideof bottom
-   * @memberof SimuScroll
-   * @return {number} offset
-   **/
-  getBoundryOutBottom: function getBoundryOutBottom() {
-    return this.boundry.bottom - this.containerHeight + this.getScrollTop();
-  },
-  /**
-   * get the offset value outsideof right
-   * @memberof SimuScroll
-   * @return {number} offset
-   **/
-  getBoundryOutRight: function getBoundryOutRight() {
-    return this.boundry.right - this.containerWidth + this.getScrollLeft();
-  },
-  /**
-   * compute scroll transition by zoomType and velocity
-   * @memberof SimuScroll
-   * @param {string} zoomType zoomType of scrolling
-   * @param {number} velocity velocity after panend
-   * @example
-   * var info = xscroll.computeScroll("x",2);
-   * // return {pos:90,easing:"easing",status:"inside",duration:500}
-   * @return {Object}
-   **/
-  computeScroll: function computeScroll(type, v) {
-    var self = this;
-    var userConfig = self.userConfig;
-    var boundry = self.boundry;
-    var pos = type == "x" ? self.getScrollLeft() : self.getScrollTop();
-    var boundryStart = type == "x" ? boundry.left : boundry.top;
-    var boundryEnd = type == "x" ? boundry.right : boundry.bottom;
-    var innerSize = type == "x" ? self.containerWidth : self.containerHeight;
-    var maxSpeed = userConfig.maxSpeed || 2;
-    var boundryCheck = userConfig.boundryCheck;
-    var bounce = userConfig.bounce;
-    var transition = {};
-    var status = "inside";
-    if (boundryCheck) {
-      if (type == "x" && (self.isBoundryOutLeft() || self.isBoundryOutRight())) {
-        self.boundryCheckX();
-        return;
-      } else if (type == "y" && (self.isBoundryOutTop() || self.isBoundryOutBottom())) {
-        self.boundryCheckY();
-        return;
-      }
-    }
-    if (type == "x" && self.userConfig.lockX) return;
-    if (type == "y" && self.userConfig.lockY) return;
-    v = v > maxSpeed ? maxSpeed : v < -maxSpeed ? -maxSpeed : v;
-    var a = self.SCROLL_ACCELERATION * (v / (Math.abs(v) || 1));
-    var a2 = self.BOUNDRY_ACCELERATION;
-    var t = isNaN(v / a) ? 0 : v / a;
-    var s = Number(pos) + t * v / 2;
-    //over top boundry check bounce
-    if (s < -boundryStart && boundryCheck) {
-      var _s = -boundryStart - pos;
-      var _t = (Math.sqrt(-2 * a * _s + v * v) + v) / a;
-      var v0 = v - a * _t;
-      var _t2 = Math.abs(v0 / a2);
-      var s2 = v0 / 2 * _t2;
-      t = _t + _t2;
-      s = bounce ? -boundryStart + s2 : -boundryStart;
-      status = "outside";
-    } else if (s > innerSize - boundryEnd && boundryCheck) {
-      var _s = boundryEnd - innerSize + pos;
-      var _t = (Math.sqrt(-2 * a * _s + v * v) - v) / a;
-      var v0 = v - a * _t;
-      var _t2 = Math.abs(v0 / a2);
-      var s2 = v0 / 2 * _t2;
-      t = _t + _t2;
-      s = bounce ? innerSize - boundryEnd + s2 : innerSize - boundryEnd;
-      status = "outside";
-    }
-    if (isNaN(s) || isNaN(t)) return;
-    transition.pos = s;
-    transition.duration = t;
-    transition.easing = Math.abs(v) > 2 ? "circular" : "quadratic";
-    transition.status = status;
-    var Type = type.toUpperCase();
-    self['isScrolling' + Type] = true;
-    self['isRealScrolling' + Type] = true;
-    return transition;
-  },
-  /**
-   * bounce to the boundry horizontal
-   * @memberof SimuScroll
-   * @return {SimuScroll}
-   **/
-  boundryCheckX: function boundryCheckX(duration, easing, callback) {
-    var self = this;
-    if (!self.userConfig.boundryCheck) return;
-    if (typeof arguments[0] == "function") {
-      callback = arguments[0];
-      duration = self.userConfig.BOUNDRY_CHECK_DURATION;
-      easing = self.userConfig.BOUNDRY_CHECK_EASING;
-    } else {
-      duration = duration === 0 ? 0 : self.userConfig.BOUNDRY_CHECK_DURATION, easing = easing || self.userConfig.BOUNDRY_CHECK_EASING;
-    }
-    if (!self.userConfig.bounce || self.userConfig.lockX) return;
-    var boundry = self.boundry;
-    if (self.isBoundryOutLeft()) {
-      self.scrollLeft(-boundry.left, duration, easing, callback);
-    } else if (self.isBoundryOutRight()) {
-      self.scrollLeft(self.containerWidth - boundry.right, duration, easing, callback);
-    }
-    return self;
-  },
-  /**
-   * bounce to the boundry vertical
-   * @memberof SimuScroll
-   * @return {SimuScroll}
-   **/
-  boundryCheckY: function boundryCheckY(duration, easing, callback) {
-    var self = this;
-    if (!self.userConfig.boundryCheck) return;
-    if (typeof arguments[0] == "function") {
-      callback = arguments[0];
-      duration = self.userConfig.BOUNDRY_CHECK_DURATION;
-      easing = self.userConfig.BOUNDRY_CHECK_EASING;
-    } else {
-      duration = duration === 0 ? 0 : self.userConfig.BOUNDRY_CHECK_DURATION, easing = easing || self.userConfig.BOUNDRY_CHECK_EASING;
-    }
-    if (!self.userConfig.boundryCheck || self.userConfig.lockY) return;
-    var boundry = self.boundry;
-    if (self.isBoundryOutTop()) {
-      self.scrollTop(-boundry.top, duration, easing, callback);
-    } else if (self.isBoundryOutBottom()) {
-      self.scrollTop(self.containerHeight - boundry.bottom, duration, easing, callback);
-    }
-    return self;
-  },
-  /**
-   * bounce to the boundry vertical and horizontal
-   * @memberof SimuScroll
-   * @return {SimuScroll}
-   **/
-  boundryCheck: function boundryCheck(duration, easing, callback) {
-    this.boundryCheckX(duration, easing, callback);
-    this.boundryCheckY(duration, easing, callback);
-    return this;
-  },
-  /**
-   * stop scrolling immediatelly
-   * @memberof SimuScroll
-   * @return {SimuScroll}
-   **/
-  stop: function stop() {
-    var self = this;
-    self.__timers.x && self.__timers.x.stop();
-    self.__timers.y && self.__timers.y.stop();
-    if (self.isScrollingX || self.isScrollingY) {
-      var scrollTop = self.getScrollTop(),
-          scrollLeft = self.getScrollLeft();
-      self.trigger("scrollend", {
-        scrollTop: scrollTop,
-        scrollLeft: scrollLeft
-      });
-      self.trigger("stop", {
-        scrollTop: scrollTop,
-        scrollLeft: scrollLeft
-      });
-      self.isScrollingX = false;
-      self.isScrollingY = false;
-    }
-    return self;
-  },
-  /**
-   * render scroll
-   * @memberof SimuScroll
-   * @return {SimuScroll}
-   **/
-  render: function render() {
-    var self = this;
-    SimuScroll.superclass.render.call(this);
-    //fixed for scrollbars
-    if (getComputedStyle(self.renderTo).position == "static") {
-      self.renderTo.style.position = "relative";
-    }
-    self.renderTo.style.overflow = "hidden";
-    self.initScrollBars();
-    self.initController();
-    return self;
-  },
-  /**
-   * init scrollbars
-   * @memberof SimuScroll
-   * @return {SimuScroll}
-   */
-  initScrollBars: function initScrollBars() {
-    var self = this;
-    if (!self.userConfig.boundryCheck) return;
-    var indicatorInsets = self.userConfig.indicatorInsets;
-    if (self.userConfig.scrollbarX) {
-      self.scrollbarX = self.scrollbarX || new ScrollBar({
-        xscroll: self,
-        type: "x",
-        spacing: indicatorInsets.spacing
-      });
-      self.scrollbarX.render();
-      self.scrollbarX._update();
-      self.scrollbarX.hide();
-    }
-    if (self.userConfig.scrollbarY) {
-      self.scrollbarY = self.scrollbarY || new ScrollBar({
-        xscroll: self,
-        type: "y",
-        spacing: indicatorInsets.spacing
-      });
-      self.scrollbarY.render();
-      self.scrollbarY._update();
-      self.scrollbarY.hide();
-    }
-    return self;
-  },
-  /**
-   * destroy scrollbars
-   * @memberof SimuScroll
-   * @return {SimuScroll}
-   */
-  destroyScrollBars: function destroyScrollBars() {
-    this.scrollbarX && this.scrollbarX.destroy();
-    this.scrollbarY && this.scrollbarY.destroy();
-    return this;
-  },
-  /**
-   * init controller for multi-scrollers
-   * @memberof SimuScroll
-   * @return {SimuScroll}
-   */
-  initController: function initController() {
-    var self = this;
-    self.controller = self.controller || new Controller({
-      xscroll: self
-    });
-    return self;
-  },
-  _unPreventHref: function _unPreventHref(e) {
-    var target = Util.findParentEl(e.target, 'a', this.renderTo);
-    if (!target) return;
-    if (target.tagName.toLowerCase() == "a") {
-      var href = target.getAttribute("data-xs-href");
-      if (href) {
-        target.setAttribute("href", href);
-      }
-    }
-  },
-  _preventHref: function _preventHref(e) {
-    var target = Util.findParentEl(e.target, 'a', this.renderTo);
-    if (!target) return;
-    if (target.tagName.toLowerCase() == "a") {
-      var href = target.getAttribute("href");
-      href && target.setAttribute("href", "javascript:void(0)");
-      href && target.setAttribute("data-xs-href", href);
-    }
-  },
-  _triggerClick: function _triggerClick(e) {
-    var target = e.target;
-    if (!/(SELECT|INPUT|TEXTAREA)/i.test(target.tagName)) {
-      var ev = document.createEvent('MouseEvents');
-      ev.initMouseEvent('click', true, true, e.view, 1, target.screenX, target.screenY, target.clientX, target.clientY, e.ctrlKey, e.altKey, e.shiftKey, e.metaKey, 0, null);
-      target.dispatchEvent(ev);
-    }
-  }
-});
-
-if (( false ? 'undefined' : _typeof(module)) == 'object' && module.exports) {
-  module.exports = SimuScroll;
-}
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/webpack/buildin/module.js")(module)))
-
-/***/ }),
-
-/***/ "./resources/assets/js/vendor/gmf-sys/core/xscroll/timer.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(module) {
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var Util = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/util.js");
-var Base = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/base.js");
-var Easing = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/easing.js");
-
-var RAF = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function (callback) {
-	window.setTimeout(callback, 1000 / 60);
-};
-
-var vendors = ['webkit', 'moz', 'ms', 'o'];
-var cancelRAF = window.cancelAnimationFrame;
-for (var i = 0; i < vendors.length; i++) {
-	if (window[vendors[i] + 'CancelAnimationFrame'] || window[vendors[i] + 'CancelRequestAnimationFrame']) {
-		cancelRAF = window[vendors[i] + 'CancelAnimationFrame'] || window[vendors[i] + 'CancelRequestAnimationFrame'];
-	}
-}
-cancelRAF = cancelRAF || window.clearTimeout;
-
-function Bezier(x1, y1, x2, y2, epsilon) {
-	var curveX = function curveX(t) {
-		var v = 1 - t;
-		return 3 * v * v * t * x1 + 3 * v * t * t * x2 + t * t * t;
-	};
-
-	var curveY = function curveY(t) {
-		var v = 1 - t;
-		return 3 * v * v * t * y1 + 3 * v * t * t * y2 + t * t * t;
-	};
-
-	var derivativeCurveX = function derivativeCurveX(t) {
-		var v = 1 - t;
-		return 3 * (2 * (t - 1) * t + v * v) * x1 + 3 * (-t * t * t + 2 * v * t) * x2;
-	};
-
-	return function (t) {
-
-		var x = t,
-		    t0,
-		    t1,
-		    t2,
-		    x2,
-		    d2,
-		    i;
-
-		// First try a few iterations of Newton's method -- normally very fast.
-		for (t2 = x, i = 0; i < 8; i++) {
-			x2 = curveX(t2) - x;
-			if (Math.abs(x2) < epsilon) return curveY(t2);
-			d2 = derivativeCurveX(t2);
-			if (Math.abs(d2) < 1e-6) break;
-			t2 = t2 - x2 / d2;
-		}
-
-		t0 = 0, t1 = 1, t2 = x;
-
-		if (t2 < t0) return curveY(t0);
-		if (t2 > t1) return curveY(t1);
-
-		// Fallback to the bisection method for reliability.
-		while (t0 < t1) {
-			x2 = curveX(t2);
-			if (Math.abs(x2 - x) < epsilon) return curveY(t2);
-			if (x > x2) t0 = t2;else t1 = t2;
-			t2 = (t1 - t0) * .5 + t0;
-		}
-
-		// Failure
-		return curveY(t2);
-	};
-};
-
-function Timer(cfg) {
-	var self = this;
-	self.cfg = Util.mix({
-		easing: "linear"
-	}, cfg);
-}
-
-Timer.MIN_DURATION = 1;
-
-Util.extend(Timer, Base, {
-	reset: function reset(cfg) {
-		var self = this;
-		Util.mix(self.cfg, cfg);
-		self.isfinished = false;
-		self.percent = 0;
-		self._stop = null;
-	},
-	run: function run() {
-		var self = this;
-		var duration = self.cfg.duration;
-		if (duration <= Timer.MIN_DURATION) {
-			self.isfinished = true;
-			self.trigger("run", {
-				percent: 1
-			});
-			self.trigger("end", {
-				percent: 1
-			});
-		}
-		if (self.isfinished) return;
-		self._hasFinishedPercent = self._stop && self._stop.percent || 0;
-		self._stop = null;
-		self.start = Date.now();
-		self.percent = 0;
-		// epsilon determines the precision of the solved values
-		var epsilon = 1000 / 60 / duration / 4;
-		var b = Easing[self.cfg.easing];
-		self.easingFn = Bezier(b[0], b[1], b[2], b[3], epsilon);
-		self._run();
-	},
-	_run: function _run() {
-		var self = this;
-		cancelRAF(self._raf);
-		self._raf = RAF(function () {
-			self.now = Date.now();
-			self.duration = self.now - self.start >= self.cfg.duration ? self.cfg.duration : self.now - self.start;
-			self.progress = self.easingFn(self.duration / self.cfg.duration);
-			self.percent = self.duration / self.cfg.duration + self._hasFinishedPercent;
-			if (self.percent >= 1 || self._stop) {
-				self.percent = self._stop && self._stop.percent ? self._stop.percent : 1;
-				self.duration = self._stop && self._stop.duration ? self._stop.duration : self.duration;
-				var param = {
-					percent: self.percent
-				};
-				self.trigger("stop", param);
-				if (self.percent >= 1) {
-					self.isfinished = true;
-					self.trigger("end", {
-						percent: 1
-					});
-				}
-				return;
-			}
-			self.trigger("run", {
-				percent: self.progress,
-				originPercent: self.percent
-			});
-			self._run();
-		});
-	},
-	stop: function stop() {
-		var self = this;
-		self._stop = {
-			percent: self.percent,
-			now: self.now
-		};
-		cancelRAF(self._raf);
-	}
-});
-
-if (( false ? 'undefined' : _typeof(module)) == 'object' && module.exports) {
-	module.exports = Timer;
-}
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/webpack/buildin/module.js")(module)))
-
-/***/ }),
-
-/***/ "./resources/assets/js/vendor/gmf-sys/core/xscroll/util.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(module) {
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var SUBSTITUTE_REG = /\\?\{([^{}]+)\}/g,
-    EMPTY = '';
-
-var RE_TRIM = /^[\s\xa0]+|[\s\xa0]+$/g,
-    trim = String.prototype.trim;
-
-var _trim = trim ? function (str) {
-	return str == null ? EMPTY : trim.call(str);
-} : function (str) {
-	return str == null ? EMPTY : (str + '').replace(RE_TRIM, EMPTY);
-};
-
-function upperCase() {
-	return arguments[1].toUpperCase();
-}
-
-function Empty() {}
-
-function createObject(proto, constructor) {
-	var newProto;
-	if (Object.create) {
-		newProto = Object.create(proto);
-	} else {
-		Empty.prototype = proto;
-		newProto = new Empty();
-	}
-	newProto.constructor = constructor;
-	return newProto;
-}
-
-function getNodes(node, rootNode) {
-	if (!node) return;
-	if (node.nodeType) return [node];
-	var rootNode = rootNode && rootNode.nodeType ? rootNode : document;
-	if (node && typeof node === "string") {
-		return rootNode.querySelectorAll(node);
-	}
-	return;
-}
-
-// Useful for temporary DOM ids.
-var idCounter = 0;
-
-var getOffsetTop = function getOffsetTop(el) {
-	var offset = el.offsetTop;
-	if (el.offsetParent != null) offset += getOffsetTop(el.offsetParent);
-	return offset;
-};
-var getOffsetLeft = function getOffsetLeft(el) {
-	var offset = el.offsetLeft;
-	if (el.offsetParent != null) offset += getOffsetLeft(el.offsetParent);
-	return offset;
-};
-
-var Util = {
-	// Is a given variable an object?
-	isObject: function isObject(obj) {
-		return obj === Object(obj);
-	},
-	isArray: Array.isArray || function (obj) {
-		return toString.call(obj) == '[object Array]';
-	},
-	// Is a given array, string, or object empty?
-	// An "empty" object has no enumerable own-properties.
-	isEmpty: function isEmpty(obj) {
-		if (obj == null) return true;
-		if (this.isArray(obj) || this.isString(obj)) return obj.length === 0;
-		for (var key in obj) {
-			if (this.has(obj, key)) return false;
-		}return true;
-	},
-	mix: function mix(to, from, deep) {
-		for (var i in from) {
-			to[i] = from[i];
-		}
-		return to;
-	},
-	extend: function extend(r, s, px, sx) {
-		if (!s || !r) {
-			return r;
-		}
-		var sp = s.prototype,
-		    rp;
-		// add prototype chain
-		rp = createObject(sp, r);
-		r.prototype = this.mix(rp, r.prototype);
-		r.superclass = createObject(sp, s);
-		// add prototype overrides
-		if (px) {
-			this.mix(rp, px);
-		}
-		// add object overrides
-		if (sx) {
-			this.mix(r, sx);
-		}
-		return r;
-	},
-	/**
-  * test whether a string start with a specified substring
-  * @param {String} str the whole string
-  * @param {String} prefix a specified substring
-  * @return {Boolean} whether str start with prefix
-  * @member util
-  */
-	startsWith: function startsWith(str, prefix) {
-		return str.lastIndexOf(prefix, 0) === 0;
-	},
-
-	/**
-  * test whether a string end with a specified substring
-  * @param {String} str the whole string
-  * @param {String} suffix a specified substring
-  * @return {Boolean} whether str end with suffix
-  * @member util
-  */
-	endsWith: function endsWith(str, suffix) {
-		var ind = str.length - suffix.length;
-		return ind >= 0 && str.indexOf(suffix, ind) === ind;
-	},
-	/**
-  * Removes the whitespace from the beginning and end of a string.
-  * @method
-  * @member util
-  */
-	trim: _trim,
-	/**
-  * Substitutes keywords in a string using an object/array.
-  * Removes undef keywords and ignores escaped keywords.
-  * @param {String} str template string
-  * @param {Object} o json data
-  * @member util
-  * @param {RegExp} [regexp] to match a piece of template string
-  */
-	substitute: function substitute(str, o, regexp) {
-		if (typeof str !== 'string' || !o) {
-			return str;
-		}
-
-		return str.replace(regexp || SUBSTITUTE_REG, function (match, name) {
-			if (match.charAt(0) === '\\') {
-				return match.slice(1);
-			}
-			return o[name] === undefined ? EMPTY : o[name];
-		});
-	},
-	/**
-  * vendors
-  * @return { String } webkit|moz|ms|o
-  * @memberOf Util
-  */
-	vendor: function () {
-		var el = document.createElement('div').style;
-		var vendors = ['t', 'webkitT', 'MozT', 'msT', 'OT'],
-		    transform,
-		    i = 0,
-		    l = vendors.length;
-		for (; i < l; i++) {
-			transform = vendors[i] + 'ransform';
-			if (transform in el) return vendors[i].substr(0, vendors[i].length - 1);
-		}
-		return false;
-	}(),
-	/**
-  *  add vendor to attribute
-  *  @memberOf Util
-  *  @param {String} attrName name of attribute
-  *  @return { String }
-  **/
-	prefixStyle: function prefixStyle(attrName) {
-		if (this.vendor === false) return false;
-		if (this.vendor === '') return attrName;
-		return this.vendor + attrName.charAt(0).toUpperCase() + attrName.substr(1);
-	},
-	/**
-  * judge if has class
-  * @memberOf Util
-  * @param  {HTMLElement}  el
-  * @param  {String}  className
-  * @return {Boolean}
-  */
-	hasClass: function hasClass(el, className) {
-		return el && el.className && className && el.className.indexOf(className) != -1;
-	},
-	/**
-  * add className for the element
-  * @memberOf Util
-  * @param  {HTMLElement}  el
-  * @param  {String}  className
-  */
-	addClass: function addClass(el, className) {
-		if (el && className && !this.hasClass(el, className)) {
-			el.className += " " + className;
-		}
-	},
-	/**
-  * remove className for the element
-  * @memberOf Util
-  * @param  {HTMLElement}  el
-  * @param  {String}  className
-  */
-	removeClass: function removeClass(el, className) {
-		if (el && el.className && className) {
-			el.className = el.className.replace(className, "");
-		}
-	},
-	/**
-  * remove an element
-  * @memberOf Util
-  * @param  {HTMLElement}  el
-  */
-	remove: function remove(el) {
-		if (!el || !el.parentNode) return;
-		el.parentNode.removeChild(el);
-	},
-	/**
-  * get offset top
-  * @memberOf Util
-  * @param  {HTMLElement}   el
-  * @return {Number} offsetTop
-  */
-	getOffsetTop: getOffsetTop,
-	/**
-  * get offset left
-  * @memberOf Util
-  * @param  {HTMLElement}  el
-  * @return {Number} offsetLeft
-  */
-	getOffsetLeft: getOffsetLeft,
-	/**
-  * get offset left
-  * @memberOf Util
-  * @param  {HTMLElement} el
-  * @param  {String} selector
-  * @param  {HTMLElement} rootNode
-  * @return {HTMLElement} parent element
-  */
-	findParentEl: function findParentEl(el, selector, rootNode) {
-		var rs = null,
-		    parent = null;
-		var type = /^#/.test(selector) ? "id" : /^\./.test(selector) ? "class" : "tag";
-		var sel = selector.replace(/\.|#/g, "");
-		if (rootNode && typeof rootNode === "string") {
-			rootNode = document.querySelector(rootNode);
-		}
-		rootNode = rootNode || document.body;
-		if (!el || !selector) return;
-		if (type == "class" && el.className && el.className.match(sel)) {
-			return el;
-		} else if (type == "id" && el.id && _trim(el.id) == sel) {
-			return el;
-		} else if (type == "tag" && el.tagName.toLowerCase() == sel) {
-			return el;
-		}
-		while (!rs) {
-			if (parent == rootNode) break;
-			parent = el.parentNode;
-			if (!parent) break;
-			if (type == "class" && parent.className && parent.className.match(sel) || type == "id" && parent.id && _trim(parent.id) == sel || type == "tag" && parent.tagName && parent.tagName.toLowerCase() == sel) {
-				rs = parent;
-				return rs;
-				break;
-			} else {
-				el = parent;
-			}
-		}
-		return null;
-	},
-	/**
-  * Generate a unique integer id (unique within the entire client session).
-  * @param  {String} prefix
-  * @return {String} guid
-  */
-	guid: function guid(prefix) {
-		var id = ++idCounter + '';
-		return prefix ? prefix + id : id;
-	},
-	/**
-  * judge if is an android os
-  * @return {Boolean} [description]
-  */
-	isAndroid: function isAndroid() {
-		return (/Android /.test(window.navigator.appVersion)
-		);
-	},
-	/**
-  * judge if is an android device with low  performance
-  * @return {Boolean}
-  */
-	isBadAndroid: function isBadAndroid() {
-		return (/Android /.test(window.navigator.appVersion) && !/Chrome\/\d/.test(window.navigator.appVersion)
-		);
-	},
-	px2Num: function px2Num(px) {
-		return Number(px.replace(/px/, ''));
-	},
-	getNodes: getNodes,
-	getNode: function getNode(node, rootNode) {
-		var nodes = getNodes(node, rootNode);
-		return nodes && nodes[0];
-	},
-	stringifyStyle: function stringifyStyle(style) {
-		var styleStr = "";
-		for (var i in style) {
-			styleStr += [i, ":", style[i], ";"].join("");
-		}
-		return styleStr;
-	}
-
-	// Add some isType methods: isArguments, isFunction, isString, isNumber, isDate, isRegExp.
-};var names = ['Arguments', 'Function', 'String', 'Number', 'Date', 'RegExp'];
-for (var i = 0; i < names.length; i++) {
-	Util['is' + names[i]] = function (obj) {
-		return toString.call(obj) == '[object ' + names[i] + ']';
-	};
-}
-
-if (( false ? 'undefined' : _typeof(module)) == 'object' && module.exports) {
-	module.exports = Util;
-}
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/webpack/buildin/module.js")(module)))
-
-/***/ }),
-
-/***/ "./resources/assets/js/vendor/gmf-sys/core/xscroll/xscroll.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(module) {
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var Util = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/util.js"),
-    Base = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/base.js"),
-    Timer = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/timer.js"),
-    Animate = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/animate.js"),
-    Hammer = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/hammer.js"),
-    SimuScroll = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/simulate-scroll.js"),
-    OriginScroll = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/xscroll/origin-scroll.js");
-var XScroll = function XScroll(cfg) {
-  var _ = cfg && cfg.useOriginScroll ? OriginScroll : SimuScroll;
-  return new _(cfg);
-};
-/**
- * Util
- * @namespace Util
- * @type {Object}
- */
-XScroll.Util = Util;
-/**
- * Base
- * @namespace Base
- * @type {Base}
- */
-XScroll.Base = Base;
-/**
- * Timer
- * @namespace Timer
- * @type {Timer}
- */
-XScroll.Timer = Timer;
-/**
- * Animate
- * @namespace Animate
- * @type {Animate}
- */
-XScroll.Animate = Animate;
-/**
- * Hammer
- * @namespace Hammer
- * @type {Hammer}
- */
-XScroll.Hammer = Hammer;
-/**
- * plugins
- * @namespace Plugins
- * @type {Object}
- */
-XScroll.Plugins = {};
-
-if (( false ? 'undefined' : _typeof(module)) == 'object' && module.exports) {
-  module.exports = XScroll;
-}
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/webpack/buildin/module.js")(module)))
-
-/***/ }),
-
-/***/ "./resources/assets/js/vendor/gmf-sys/fonts/materialIcon/MaterialIcons-Regular.eot":
-/***/ (function(module, exports) {
-
-module.exports = "/fonts/MaterialIcons-Regular.eot?e79bfd88537def476913f3ed52f4f4b3";
-
-/***/ }),
-
-/***/ "./resources/assets/js/vendor/gmf-sys/fonts/materialIcon/MaterialIcons-Regular.ttf":
-/***/ (function(module, exports) {
-
-module.exports = "/fonts/MaterialIcons-Regular.ttf?a37b0c01c0baf1888ca812cc0508f6e2";
-
-/***/ }),
-
-/***/ "./resources/assets/js/vendor/gmf-sys/fonts/materialIcon/MaterialIcons-Regular.woff":
-/***/ (function(module, exports) {
-
-module.exports = "/fonts/MaterialIcons-Regular.woff?012cf6a10129e2275d79d6adac7f3b02";
-
-/***/ }),
-
-/***/ "./resources/assets/js/vendor/gmf-sys/fonts/materialIcon/MaterialIcons-Regular.woff2":
-/***/ (function(module, exports) {
-
-module.exports = "/fonts/MaterialIcons-Regular.woff2?570eb83859dc23dd0eec423a49e147fe";
+GHTTP.defaults = createGHTTPInstance().defaults;
+exports.default = GHTTP;
 
 /***/ }),
 
@@ -69813,7 +64258,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-__webpack_require__("./resources/assets/js/vendor/gmf-sys/style/index.scss");
+__webpack_require__("./resources/assets/js/vendor/gmf-sys/style/MdStyle.vue");
 
 var _MdReactive = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/utils/MdReactive.js");
 
@@ -69825,6 +64270,7 @@ var _MdTheme2 = _interopRequireDefault(_MdTheme);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+//import './style/index.scss'
 var init = function init() {
   var material = new _MdReactive2.default({
     ripple: true,
@@ -69870,7 +64316,7 @@ var init = function init() {
   });
 
   return material;
-}; // import './style/MdStyle.vue'
+};
 
 exports.default = function (Vue) {
   if (!Vue.material) {
@@ -69894,100 +64340,100 @@ var routes = [{
   path: '/auth',
   name: 'auth',
   component: function component() {
-    return __webpack_require__.e/* import() */(15).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/App.vue"));
+    return __webpack_require__.e/* import() */(23).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/App.vue"));
   },
   children: [{
     path: 'login',
     name: 'auth.login',
     component: function component() {
-      return __webpack_require__.e/* import() */(16).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Login.vue"));
+      return __webpack_require__.e/* import() */(24).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Login.vue"));
     }
   }, {
     path: 'register',
     name: 'auth.register',
     component: function component() {
-      return __webpack_require__.e/* import() */(11).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Register.vue"));
+      return __webpack_require__.e/* import() */(19).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Register.vue"));
     }
   }, {
     path: 'password/find-sms/:id?',
     name: 'auth.password.find.sms',
     component: function component() {
-      return __webpack_require__.e/* import() */(8).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/PasswordFindSms.vue"));
+      return __webpack_require__.e/* import() */(16).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/PasswordFindSms.vue"));
     }
   }, {
     path: 'password/find-mail/:id?',
     name: 'auth.password.find.mail',
     component: function component() {
-      return __webpack_require__.e/* import() */(12).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/PasswordFindMail.vue"));
+      return __webpack_require__.e/* import() */(20).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/PasswordFindMail.vue"));
     }
   }, {
     path: 'password/find-word/:id?',
     name: 'auth.password.find.word',
     component: function component() {
-      return __webpack_require__.e/* import() */(7).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/PasswordFindWord.vue"));
+      return __webpack_require__.e/* import() */(15).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/PasswordFindWord.vue"));
     }
   }, {
     path: 'password/find/:id?',
     name: 'auth.password.find',
     component: function component() {
-      return __webpack_require__.e/* import() */(17).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/PasswordFind.vue"));
+      return __webpack_require__.e/* import() */(25).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/PasswordFind.vue"));
     }
   }, {
     path: 'password/:id?',
     name: 'auth.password',
     component: function component() {
-      return __webpack_require__.e/* import() */(6).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Password.vue"));
+      return __webpack_require__.e/* import() */(14).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Password.vue"));
     }
   }, {
     path: 'reset/:id/:token?',
     name: 'auth.reset',
     component: function component() {
-      return __webpack_require__.e/* import() */(10).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Reset.vue"));
+      return __webpack_require__.e/* import() */(18).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Reset.vue"));
     }
   }, {
     path: 'verify-mail',
     name: 'auth.verify.mail',
     component: function component() {
-      return __webpack_require__.e/* import() */(9).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/VerifyMail.vue"));
+      return __webpack_require__.e/* import() */(17).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/VerifyMail.vue"));
     },
     meta: { requiresAuth: true }
   }, {
     path: 'chooser',
     name: 'auth.chooser',
     component: function component() {
-      return __webpack_require__.e/* import() */(14).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Chooser.vue"));
+      return __webpack_require__.e/* import() */(22).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Chooser.vue"));
     }
   }, {
     path: 'identifier',
     name: 'auth.identifier',
     component: function component() {
-      return __webpack_require__.e/* import() */(4).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Identifier.vue"));
+      return __webpack_require__.e/* import() */(12).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Identifier.vue"));
     }
   }, {
     path: 'remove',
     name: 'auth.remove',
     component: function component() {
-      return __webpack_require__.e/* import() */(13).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Remove.vue"));
+      return __webpack_require__.e/* import() */(21).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Remove.vue"));
     }
   }, {
     path: 'logout',
     name: 'auth.logout',
     component: function component() {
-      return __webpack_require__.e/* import() */(18).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Logout.vue"));
+      return __webpack_require__.e/* import() */(26).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Logout.vue"));
     },
     meta: { requiresAuth: true }
   }, {
     path: 'account/join',
     name: 'auth.account.join',
     component: function component() {
-      return __webpack_require__.e/* import() */(5).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/AccountJoin.vue"));
+      return __webpack_require__.e/* import() */(13).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/AccountJoin.vue"));
     },
     meta: { requiresAuth: true }
   }, {
     path: 'account/dashboard',
     name: 'auth.account.dashboard',
     component: function component() {
-      return __webpack_require__.e/* import() */(19).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/AccountDashboard.vue"));
+      return __webpack_require__.e/* import() */(27).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/AccountDashboard.vue"));
     },
     meta: { requiresAuth: true }
   }]
@@ -70154,35 +64600,37 @@ exports.default = {
 
 /***/ }),
 
-/***/ "./resources/assets/js/vendor/gmf-sys/style/index.scss":
+/***/ "./resources/assets/js/vendor/gmf-sys/style/MdStyle.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/sass-loader/lib/loader.js!./resources/assets/js/vendor/gmf-sys/style/index.scss");
-if(typeof content === 'string') content = [[module.i, content, '']];
-// Prepare cssTransformation
-var transform;
-
-var options = {}
-options.transform = transform
-// add the styles to the DOM
-var update = __webpack_require__("./node_modules/style-loader/lib/addStyles.js")(content, options);
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/sass-loader/lib/loader.js!./index.scss", function() {
-			var newContent = require("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/sass-loader/lib/loader.js!./index.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
+function injectStyle (ssrContext) {
+  __webpack_require__("./node_modules/extract-text-webpack-plugin/dist/loader.js?{\"id\":1,\"omit\":1,\"remove\":true}!./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-36c446de\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/vendor/gmf-sys/style/MdStyle.vue")
 }
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = null
+/* template */
+var __vue_template__ = null
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\vendor\\gmf-sys\\style\\MdStyle.vue"
+
+module.exports = Component.exports
+
 
 /***/ }),
 
