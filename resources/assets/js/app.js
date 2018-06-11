@@ -19,24 +19,11 @@ function getQueryString(name) {
     if (r != null) return unescape(r[2]);
     return null;
 }
-
-function configHttp(config) {
-    http.defaults = http.defaults || {};
-    http.defaults.headers = http.defaults.headers || {};
-    http.defaults.headers.common = http.defaults.headers.common || {};
-
-    http.defaults.headers.common.Ent = config.ent ? config.ent.id : false;
-    if (config.token) {
-        http.defaults.headers.common.Authorization = (config.token.token_type ? config.token.token_type : "Bearer") + " " + config.token.access_token;
-    } else {
-        http.defaults.headers.common.Authorization = false;
-    }
-}
 gapp.config(function() {
     return new Promise(function(resolve, reject) {
         var url = new URL(window.location, true);
         http.get('/site/configs', { params: url.query }).then(res => {
-            configHttp(res.data.data);
+            http.config(res.data.data);
             appConfig(res.data.data);
         }, err => {
             Tip('获取配置信息失败！');
