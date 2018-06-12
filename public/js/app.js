@@ -49352,36 +49352,16 @@ function getQueryString(name) {
     if (r != null) return unescape(r[2]);
     return null;
 }
-
-function configHttp(config) {
-    _http2.default.defaults = _http2.default.defaults || {};
-    _http2.default.defaults.headers = _http2.default.defaults.headers || {};
-    _http2.default.defaults.headers.common = _http2.default.defaults.headers.common || {};
-
-    _http2.default.defaults.headers.common.Ent = config.ent ? config.ent.id : false;
-    if (config.token) {
-        _http2.default.defaults.headers.common.Authorization = (config.token.token_type ? config.token.token_type : "Bearer") + " " + config.token.access_token;
-    } else {
-        _http2.default.defaults.headers.common.Authorization = false;
-    }
-}
 _app2.default.config(function () {
     return new Promise(function (resolve, reject) {
         var url = new _MdURL2.default(window.location, true);
         _http2.default.get('/site/configs', { params: url.query }).then(function (res) {
-            configHttp(res.data.data);
-            appConfig(res.data.data);
+            _http2.default.config(res.data.data);
+            (0, _http2.default)('suite.cbo').config(res.data.data.entToken);
+            resolve(res.data.data);
         }, function (err) {
             (0, _MdTip2.default)('获取配置信息失败！');
         });
-
-        function appConfig(data) {
-            _http2.default.config({ name: "suite.cbo", appId: "suite.cbo" }).then(function (res) {
-                resolve(data);
-            }, function (err) {
-                (0, _MdTip2.default)('配置应用发现失败！');
-            });
-        }
     });
 });
 _app2.default.run({ app: _AppRoot2.default, locale: 'enUS' });
@@ -49655,8 +49635,7 @@ var Start = function () {
         value: function run(options, mixin) {
             options = options || {};
             var elID = options.elID || '#gmfApp';
-            _http2.default.defaults.baseURL = (0, _MdCombineURLs2.default)(options.host, '/api');
-            _http2.default.defaults.headers = { common: { Ent: false } };
+            _http2.default.config({ host: (0, _MdCombineURLs2.default)(options.host, '/api') });
             initVue(options);
 
             var appConfig = getAppConfig();
@@ -49680,7 +49659,7 @@ var Start = function () {
             document.addEventListener('DOMContentLoaded', function () {
                 initConfigs().then(function (res) {
                     (0, _extend2.default)(appConfig.data.configs, res);
-                    initHttp(_http2.default, res);
+                    _http2.default.config(res);
                     if (res && res.loadEnums) {
                         return loadEnums();
                     }
@@ -49763,15 +49742,6 @@ function initI18n(appConfig, options) {
     appConfig.i18n = i18n;
 }
 
-function initHttp(http, config) {
-    http.defaults.headers.common.Ent = config.ent ? config.ent.id : false;
-    if (config.token) {
-        http.defaults.headers.common.Authorization = (config.token.token_type ? config.token.token_type : "Bearer") + " " + config.token.access_token;
-    } else {
-        http.defaults.headers.common.Authorization = false;
-    }
-}
-
 function getAppConfig() {
     return {
         data: {
@@ -49789,7 +49759,7 @@ function getAppConfig() {
             },
             changedConfig: function changedConfig() {
                 (0, _extend2.default)(window.gmfConfig, this.configs);
-                initHttp(this.$http, this.configs);
+                this.$http.config(this.configs);
             },
             setCacheEnum: function setCacheEnum(item) {
                 _MdEnumCache2.default.set(item);
@@ -64179,7 +64149,20 @@ _common2.default.forEach(['post', 'put', 'patch'], function forEachMethodWithDat
 Http.prototype.create = function (config) {
     return new Http(config);
 };
-
+Http.prototype.config = function (config) {
+    if (!config) return;
+    if (_common2.default.isDefined(config.host)) {
+        this.defaults.baseURL = config.host;
+    }
+    this.defaults.headers = this.defaults.headers || {};
+    this.defaults.headers.common = this.defaults.headers.common || {};
+    if (_common2.default.isDefined(config.ent)) {
+        this.defaults.headers.common.Ent = _common2.default.isObject(config.ent) ? config.ent.id : config.ent;
+    }
+    if (_common2.default.isDefined(config.token)) {
+        this.defaults.headers.common.Authorization = _common2.default.isObject(config.token) ? (config.token.token_type ? config.token.token_type : "Bearer") + " " + config.token.access_token : config.token;
+    }
+};
 var queue = {};
 var defaultName = 'default';
 
@@ -64200,6 +64183,9 @@ function GHTTP(name, config) {
  * @param {object} config 
  */
 GHTTP.config = function (config) {
+    createGHTTPInstance().config(config);
+};
+GHTTP.appConfig = function (config) {
     if (!config.name) {
         alert('[assert]: name is required');
     }
@@ -64211,15 +64197,7 @@ GHTTP.config = function (config) {
 
     return new Promise(function (resolved, rejected) {
         chttp.post('sys/apps/config', config).then(function (res) {
-            var d = res.data.data;
-            instance.defaults.baseURL = d.host;
-            instance.defaults.headers = { common: {} };
-            if (d.ent) {
-                instance.defaults.headers.common.Ent = _common2.default.isObject(d.ent) ? d.ent.id : d.ent;
-            }
-            if (d.token) {
-                instance.defaults.headers.common.Authorization = _common2.default.isObject(d.token) ? (d.token.token_type ? d.token.token_type : "Bearer") + " " + d.token.access_token : d.token;
-            }
+            instance.config(res.data.data);
             resolved(true);
         }, function (err) {
             rejected(false);

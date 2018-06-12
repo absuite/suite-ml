@@ -24,19 +24,11 @@ gapp.config(function() {
         var url = new URL(window.location, true);
         http.get('/site/configs', { params: url.query }).then(res => {
             http.config(res.data.data);
-            appConfig(res.data.data);
+            http('suite.cbo').config(res.data.data.entToken);
+            resolve(res.data.data)
         }, err => {
             Tip('获取配置信息失败！');
         });
-
-        function appConfig(data) {
-            http.config({ name: "suite.cbo", appId: "suite.cbo" }).then(
-                res => {
-                    resolve(data)
-                },
-                err => { Tip('配置应用发现失败！'); }
-            );
-        }
     })
 });
 gapp.run({ app: AppRoot, locale: 'enUS' });

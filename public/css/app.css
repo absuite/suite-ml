@@ -2155,14 +2155,6 @@ audio:not(.md-image),
 .md-indent-9 {
   padding-left: 180px;
 }
-
-/**/
-.layout-fill {
-  margin: 0;
-  width: 100%;
-  min-height: 100%;
-  height: 100%;
-}
 .flex-order {
   order: 0;
 }
@@ -2813,6 +2805,18 @@ audio:not(.md-image),
 }
 .layout-row {
   flex-direction: row;
+}
+.layout-wrap {
+  flex-wrap: wrap;
+}
+.layout-nowrap {
+  flex-wrap: nowrap;
+}
+.layout-fill {
+  margin: 0;
+  width: 100%;
+  min-height: 100%;
+  height: 100%;
 }
 .offset-0, .flex-offset-0 {
   margin-left: 0;
@@ -13760,7 +13764,7 @@ to {
   white-space: nowrap;
 }
 .md-button {
-  min-width: 36px;
+  min-width: 88px;
   height: 36px;
   margin: 6px 8px;
   -webkit-user-select: none;
