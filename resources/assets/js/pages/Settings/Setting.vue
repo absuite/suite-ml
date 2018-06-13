@@ -19,35 +19,16 @@
           Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio itaque ea, nostrum odio. Dolores, sed accusantium quasi non.
         </md-card-content>
       </md-card>
-
-      <md-list>
-        <md-list-item href="/m/ent/list">
-          <md-icon class="md-primary">account_balance</md-icon>
-          <span class="md-list-item-text">企业</span>
-        </md-list-item>
-        <md-list-item>
-          <md-icon>track_changes</md-icon>
-          <span class="md-list-item-text">巴指数</span>
-        </md-list-item>
-      </md-list>
-      <md-list>
-        <md-list-item>
-          <md-icon>account_circle</md-icon>
-          <span class="md-list-item-text">账号</span>
-        </md-list-item>
-        <md-list-item>
-          <md-icon>feedback</md-icon>
-          <span class="md-list-item-text">意见反馈</span>
-        </md-list-item>
-        <md-list-item>
-          <md-icon>assignment</md-icon>
-          <span class="md-list-item-text">邀请</span>
-        </md-list-item>
-        <md-list-item>
-          <md-icon>exit_to_app</md-icon>
-          <span class="md-list-item-text">退出</span>
-        </md-list-item>
-      </md-list>
+      <md-x-cell-group>
+        <md-x-cell title="企业" icon="md:account_balance" is-link to="/m/ent/list" />
+        <md-x-cell title="巴指数" icon="md:track_changes" is-link  />
+      </md-x-cell-group>
+      <md-x-cell-group>
+        <md-x-cell title="账号" icon="md:account_circle" is-link />
+        <md-x-cell title="意见反馈" icon="md:feedback"  is-link/>
+        <md-x-cell title="邀请" icon="md:assignment" is-link/>
+        <md-x-cell title="退出" icon="md:exit_to_app" is-link/>
+      </md-x-cell-group>
     </md-app-content>
     <md-app-bottom-bar>
       <home-bottom-bar></home-bottom-bar>
@@ -72,7 +53,7 @@
     height: 100%;
   }
 
-  .md-list {
+  .md-x-cell-group {
     margin-bottom: 10px;
   }
 

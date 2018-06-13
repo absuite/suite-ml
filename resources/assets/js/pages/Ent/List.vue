@@ -12,28 +12,17 @@
     <md-app-content>
       <md-pull-refresh @refresh="onRefresh">
         <md-scroll-load :md-finished="isFinished" @load="onScrollLoad">
-        <md-list>
-          <template v-for="item in items">
-            <md-list-item>
-              <md-avatar>
-                <md-icon>account_balance</md-icon>
-              </md-avatar>
-              <div class="md-list-item-text">
-                <div>{{item.name}}</div>
-                <p>{{item.code}}</p>
-              </div>
-              <md-button class="md-icon-button md-list-action"  @click="onItemClick(item)">
-                <md-icon>edit</md-icon>
-              </md-button>
-            </md-list-item>
-            <md-divider class="md-inset"></md-divider>
-          </template>
-        </md-list>
+          <md-x-cell-group>
+            <md-x-cell :title="item.name" icon="location" :label="item.code" v-for="item in items" :key="item.id">
+              <md-x-button slot="extra" size="small">设为默认</md-x-button>
+              <md-x-icon v-if="ent&&item.id==ent.id" slot="right-icon" name="certificate" />
+            </md-x-cell>
+          </md-x-cell-group>
         </md-scroll-load>
       </md-pull-refresh>
     </md-app-content>
     <md-app-bottom-bar class="md-elevation-1">
-      <md-button class="md-full" href="/m/ent/search"><md-icon>playlist_add</md-icon>加入企业</md-button>
+      <md-x-button class="md-full" to="/m/ent/search" icon="add-o">加入企业</md-x-button>
     </md-app-bottom-bar>
   </md-app>
 </template>
@@ -55,6 +44,11 @@ export default {
     currentEditData: null,
     search_q: ""
   }),
+  computed:{
+    ent(){
+      return this.$root.configs.ent;
+    }
+  },
   methods: {
     onItemClick(item) {
       this.currentEditData = item;

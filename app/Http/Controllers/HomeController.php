@@ -33,7 +33,7 @@ class HomeController extends Controller
     $config->userName('用户名');
     $config->userData('欢迎使用gmf!');
 
-    $ent = SysModels\Ent::where('openid', '01e86d71771c179083591dba0fa408f3')->first();
+    $ent = SysModels\Ent::where('openid', '01e86d71771c179083591dba0fa408f23')->first();
     if ($ent) {
       $config->ent($ent);
       session([config('gmf.ent.session') => $ent->id]);

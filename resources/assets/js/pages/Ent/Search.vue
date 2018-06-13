@@ -11,27 +11,14 @@
     </md-app-toolbar>
     <md-app-content>
       <md-x-search placeholder="输入您想要加入的企业"  show-action v-model="search_q" @search="onSearch">
-        <div slot="action" @click="onSearch">搜索</div>
       </md-x-search>
       <md-pull-refresh @refresh="onRefresh">
         <md-scroll-load :md-finished="isFinished" @load="onScrollLoad">
-        <md-list>
-          <template v-for="item in items">
-            <md-list-item>
-              <md-avatar>
-                <md-icon>account_balance</md-icon>
-              </md-avatar>
-              <div class="md-list-item-text">
-                <div>{{item.name}}</div>
-                <p>{{item.code}}</p>
-              </div>
-              <md-button class="md-icon-button md-list-action"  @click="onItemClick(item)">
-                <md-icon>edit</md-icon>
-              </md-button>
-            </md-list-item>
-            <md-divider class="md-inset"></md-divider>
-          </template>
-        </md-list>
+        <md-x-cell-group>
+            <md-x-cell :title="item.name" icon="location" :label="item.code" v-for="item in items" :key="item.id">
+              <md-x-button slot="extra" size="small">申请加入</md-x-button>
+            </md-x-cell>
+          </md-x-cell-group>
         </md-scroll-load>
       </md-pull-refresh>
     </md-app-content>

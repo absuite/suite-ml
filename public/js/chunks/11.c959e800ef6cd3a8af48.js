@@ -93,25 +93,6 @@ exports.default = {
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /***/ }),
 
@@ -123,7 +104,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n.md-app[data-v-134a906e] {\n  min-height: 100%;\n  max-width: 100%;\n  height: 100%;\n}\n.md-list[data-v-134a906e] {\n  margin-bottom: 10px;\n}\n.md-card[data-v-134a906e] {\n  margin-bottom: 10px;\n}\n", ""]);
+exports.push([module.i, "\n.md-app[data-v-134a906e] {\n  min-height: 100%;\n  max-width: 100%;\n  height: 100%;\n}\n.md-x-cell-group[data-v-134a906e] {\n  margin-bottom: 10px;\n}\n.md-card[data-v-134a906e] {\n  margin-bottom: 10px;\n}\n", ""]);
 
 // exports
 
@@ -204,88 +185,50 @@ var render = function() {
           ),
           _vm._v(" "),
           _c(
-            "md-list",
+            "md-x-cell-group",
             [
-              _c(
-                "md-list-item",
-                { attrs: { href: "/m/ent/list" } },
-                [
-                  _c("md-icon", { staticClass: "md-primary" }, [
-                    _vm._v("account_balance")
-                  ]),
-                  _vm._v(" "),
-                  _c("span", { staticClass: "md-list-item-text" }, [
-                    _vm._v("企业")
-                  ])
-                ],
-                1
-              ),
+              _c("md-x-cell", {
+                attrs: {
+                  title: "企业",
+                  icon: "md:account_balance",
+                  "is-link": "",
+                  to: "/m/ent/list"
+                }
+              }),
               _vm._v(" "),
-              _c(
-                "md-list-item",
-                [
-                  _c("md-icon", [_vm._v("track_changes")]),
-                  _vm._v(" "),
-                  _c("span", { staticClass: "md-list-item-text" }, [
-                    _vm._v("巴指数")
-                  ])
-                ],
-                1
-              )
+              _c("md-x-cell", {
+                attrs: {
+                  title: "巴指数",
+                  icon: "md:track_changes",
+                  "is-link": ""
+                }
+              })
             ],
             1
           ),
           _vm._v(" "),
           _c(
-            "md-list",
+            "md-x-cell-group",
             [
-              _c(
-                "md-list-item",
-                [
-                  _c("md-icon", [_vm._v("account_circle")]),
-                  _vm._v(" "),
-                  _c("span", { staticClass: "md-list-item-text" }, [
-                    _vm._v("账号")
-                  ])
-                ],
-                1
-              ),
+              _c("md-x-cell", {
+                attrs: {
+                  title: "账号",
+                  icon: "md:account_circle",
+                  "is-link": ""
+                }
+              }),
               _vm._v(" "),
-              _c(
-                "md-list-item",
-                [
-                  _c("md-icon", [_vm._v("feedback")]),
-                  _vm._v(" "),
-                  _c("span", { staticClass: "md-list-item-text" }, [
-                    _vm._v("意见反馈")
-                  ])
-                ],
-                1
-              ),
+              _c("md-x-cell", {
+                attrs: { title: "意见反馈", icon: "md:feedback", "is-link": "" }
+              }),
               _vm._v(" "),
-              _c(
-                "md-list-item",
-                [
-                  _c("md-icon", [_vm._v("assignment")]),
-                  _vm._v(" "),
-                  _c("span", { staticClass: "md-list-item-text" }, [
-                    _vm._v("邀请")
-                  ])
-                ],
-                1
-              ),
+              _c("md-x-cell", {
+                attrs: { title: "邀请", icon: "md:assignment", "is-link": "" }
+              }),
               _vm._v(" "),
-              _c(
-                "md-list-item",
-                [
-                  _c("md-icon", [_vm._v("exit_to_app")]),
-                  _vm._v(" "),
-                  _c("span", { staticClass: "md-list-item-text" }, [
-                    _vm._v("退出")
-                  ])
-                ],
-                1
-              )
+              _c("md-x-cell", {
+                attrs: { title: "退出", icon: "md:exit_to_app", "is-link": "" }
+              })
             ],
             1
           )

@@ -26394,6 +26394,88 @@ exports.default = {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/vendor/gmf-sys/components/MdXButton/MdXButton.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _MdComponent = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/MdComponent.js");
+
+var _MdComponent2 = _interopRequireDefault(_MdComponent);
+
+var _MdRouterLink = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/mixins/MdRouterLink.js");
+
+var _MdRouterLink2 = _interopRequireDefault(_MdRouterLink);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+exports.default = new _MdComponent2.default({
+  name: 'MdXButton',
+  mixins: [_MdRouterLink2.default],
+  props: {
+    text: String,
+    icon: String,
+    block: Boolean,
+    loading: Boolean,
+    disabled: Boolean,
+    nativeType: String,
+    bottomAction: Boolean,
+    tag: {
+      type: String,
+      default: 'button'
+    },
+    type: {
+      type: String,
+      default: 'default'
+    },
+    size: {
+      type: String,
+      default: 'normal'
+    }
+  },
+
+  methods: {
+    onClick: function onClick(event) {
+      if (!this.loading && !this.disabled) {
+        this.$emit('click', event);
+        if (this.url || this.to) {
+          this.routerLink();
+        }
+      }
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/vendor/gmf-sys/components/MdXCell/MdXCell.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -26875,8 +26957,70 @@ exports.default = new _MdComponent2.default({
     name: String,
     info: [String, Number],
     color: String
+  },
+  computed: {
+    type: function type() {
+      return this.name && this.name.indexOf(':') > 0 ? this.name.split(':')[0] : false;
+    },
+    icon: function icon() {
+      return this.name && this.name.indexOf(':') > 0 ? this.name.split(':')[1] : this.name;
+    }
   }
 }); //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/vendor/gmf-sys/components/MdXLoading/MdXLoading.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _MdComponent = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/MdComponent.js");
+
+var _MdComponent2 = _interopRequireDefault(_MdComponent);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = new _MdComponent2.default({
+  name: 'MdXLoading',
+  props: {
+    size: String,
+    type: {
+      type: String,
+      default: 'circular'
+    },
+    color: {
+      type: String,
+      default: 'black'
+    }
+  },
+  computed: {
+    style: function style() {
+      return this.size ? {
+        width: this.size,
+        height: this.size
+      } : {};
+    }
+  }
+}); //
+//
+//
+//
+//
 //
 //
 //
@@ -26902,8 +27046,8 @@ var _MdComponent2 = _interopRequireDefault(_MdComponent);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = (0, _MdComponent2.default)({
-  name: 'MdXPanel',
+exports.default = new _MdComponent2.default({
+  name: "MdXPanel",
   props: {
     desc: String,
     title: String,
@@ -27052,7 +27196,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 
-exports.default = (0, _MdComponent2.default)({
+exports.default = new _MdComponent2.default({
   name: 'MdXSwipe',
 
   mixins: [_MdTouch2.default],
@@ -29918,6 +30062,13 @@ var deepmerge_1 = deepmerge;
 
 /***/ }),
 
+/***/ "./node_modules/extract-text-webpack-plugin/dist/loader.js?{\"id\":1,\"omit\":1,\"remove\":true}!./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2497ffb7\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/vendor/gmf-sys/components/MdXLoading/MdXLoading.vue":
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
 /***/ "./node_modules/extract-text-webpack-plugin/dist/loader.js?{\"id\":1,\"omit\":1,\"remove\":true}!./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2498f93c\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/vendor/gmf-sys/components/MdCard/MdCardArea/MdCardArea.vue":
 /***/ (function(module, exports) {
 
@@ -30059,6 +30210,13 @@ var deepmerge_1 = deepmerge;
 /***/ }),
 
 /***/ "./node_modules/extract-text-webpack-plugin/dist/loader.js?{\"id\":1,\"omit\":1,\"remove\":true}!./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3a4ba02d\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/vendor/gmf-sys/components/MdCard/MdCardExpand/MdCardExpandContent.vue":
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
+/***/ "./node_modules/extract-text-webpack-plugin/dist/loader.js?{\"id\":1,\"omit\":1,\"remove\":true}!./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3d028685\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/vendor/gmf-sys/components/MdXButton/MdXButton.vue":
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
@@ -44334,6 +44492,50 @@ if (false) {
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-2497ffb7\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/vendor/gmf-sys/components/MdXLoading/MdXLoading.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { class: _vm.b([_vm.type, _vm.color]), style: _vm.style }, [
+    _c(
+      "span",
+      { class: _vm.b("spinner", _vm.type) },
+      [
+        _vm._l(_vm.type === "spinner" ? 12 : 0, function(item, index) {
+          return _c("i", { key: index })
+        }),
+        _vm._v(" "),
+        _vm.type === "circular"
+          ? _c(
+              "svg",
+              { class: _vm.b("circular"), attrs: { viewBox: "25 25 50 50" } },
+              [
+                _c("circle", {
+                  attrs: { cx: "50", cy: "50", r: "20", fill: "none" }
+                })
+              ]
+            )
+          : _vm._e()
+      ],
+      2
+    )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-2497ffb7", module.exports)
+  }
+}
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-2498f93c\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/vendor/gmf-sys/components/MdCard/MdCardArea/MdCardArea.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -45443,6 +45645,74 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-3bd01bff", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-3d028685\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/vendor/gmf-sys/components/MdXButton/MdXButton.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    _vm.tag,
+    {
+      tag: "component",
+      class: _vm.b([
+        _vm.type,
+        _vm.size,
+        {
+          block: _vm.block,
+          loading: _vm.loading,
+          disabled: _vm.disabled,
+          unclickable: _vm.disabled || _vm.loading,
+          "bottom-action": _vm.bottomAction
+        }
+      ]),
+      attrs: { type: _vm.nativeType, disabled: _vm.disabled },
+      on: { click: _vm.onClick }
+    },
+    [
+      !_vm.loading
+        ? _vm._t("icon", [
+            _vm.icon
+              ? _c("md-x-icon", {
+                  class: _vm.b("left-icon"),
+                  attrs: { name: _vm.icon }
+                })
+              : _vm._e()
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.loading
+        ? _c("md-x-loading", {
+            attrs: {
+              size: "20px",
+              color: _vm.type === "default" ? "black" : "white"
+            }
+          })
+        : _vm._e(),
+      _vm._v(" "),
+      _c(
+        "span",
+        { class: _vm.b("text") },
+        [_vm._t("default", [_vm._v(_vm._s(_vm.text))])],
+        2
+      )
+    ],
+    2
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-3d028685", module.exports)
   }
 }
 
@@ -47165,24 +47435,33 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "i",
-    _vm._g(
-      {
-        class: [_vm.b(), "md-x-icon-" + _vm.name],
-        style: { color: _vm.color }
-      },
-      _vm.$listeners
-    ),
-    [
-      _vm._t("default"),
-      _vm._v(" "),
-      _vm.isDef(_vm.info)
-        ? _c("div", { class: _vm.b("info") }, [_vm._v(_vm._s(_vm.info))])
-        : _vm._e()
-    ],
-    2
-  )
+  return _vm.type
+    ? _c(
+        "i",
+        _vm._g(
+          { staticClass: "md-x-icon md-icon md-icon-font" },
+          _vm.$listeners
+        ),
+        [_vm._v("\n  " + _vm._s(_vm.icon) + "\n")]
+      )
+    : _c(
+        "i",
+        _vm._g(
+          {
+            class: [_vm.b(), "md-x-icon-default", "md-x-icon-" + _vm.icon],
+            style: { color: _vm.color }
+          },
+          _vm.$listeners
+        ),
+        [
+          _vm._t("default"),
+          _vm._v(" "),
+          _vm.isDef(_vm.info)
+            ? _c("div", { class: _vm.b("info") }, [_vm._v(_vm._s(_vm.info))])
+            : _vm._e()
+        ],
+        2
+      )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -49236,7 +49515,7 @@ var render = function() {
       _vm.$slots.footer
         ? _c(
             "div",
-            { staticClass: "van-hairline--top", class: _vm.b("footer") },
+            { staticClass: "md-1px-t", class: _vm.b("footer") },
             [_vm._t("footer")],
             2
           )
@@ -61998,6 +62277,85 @@ exports.default = function (Vue) {
 
 /***/ }),
 
+/***/ "./resources/assets/js/vendor/gmf-sys/components/MdXButton/MdXButton.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__("./node_modules/extract-text-webpack-plugin/dist/loader.js?{\"id\":1,\"omit\":1,\"remove\":true}!./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3d028685\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/vendor/gmf-sys/components/MdXButton/MdXButton.vue")
+}
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/vendor/gmf-sys/components/MdXButton/MdXButton.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-3d028685\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/vendor/gmf-sys/components/MdXButton/MdXButton.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\vendor\\gmf-sys\\components\\MdXButton\\MdXButton.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-3d028685", Component.options)
+  } else {
+    hotAPI.reload("data-v-3d028685", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/vendor/gmf-sys/components/MdXButton/index.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _material = __webpack_require__("./resources/assets/js/vendor/gmf-sys/material.js");
+
+var _material2 = _interopRequireDefault(_material);
+
+var _MdXButton = __webpack_require__("./resources/assets/js/vendor/gmf-sys/components/MdXButton/MdXButton.vue");
+
+var _MdXButton2 = _interopRequireDefault(_MdXButton);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function (Vue) {
+  (0, _material2.default)(Vue);
+  Vue.component(_MdXButton2.default.name, _MdXButton2.default);
+};
+
+/***/ }),
+
 /***/ "./resources/assets/js/vendor/gmf-sys/components/MdXCell/MdXCell.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -62389,6 +62747,85 @@ exports.default = function (Vue) {
 
 /***/ }),
 
+/***/ "./resources/assets/js/vendor/gmf-sys/components/MdXLoading/MdXLoading.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__("./node_modules/extract-text-webpack-plugin/dist/loader.js?{\"id\":1,\"omit\":1,\"remove\":true}!./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2497ffb7\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/vendor/gmf-sys/components/MdXLoading/MdXLoading.vue")
+}
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/vendor/gmf-sys/components/MdXLoading/MdXLoading.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-2497ffb7\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/vendor/gmf-sys/components/MdXLoading/MdXLoading.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\vendor\\gmf-sys\\components\\MdXLoading\\MdXLoading.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-2497ffb7", Component.options)
+  } else {
+    hotAPI.reload("data-v-2497ffb7", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/vendor/gmf-sys/components/MdXLoading/index.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _material = __webpack_require__("./resources/assets/js/vendor/gmf-sys/material.js");
+
+var _material2 = _interopRequireDefault(_material);
+
+var _MdXLoading = __webpack_require__("./resources/assets/js/vendor/gmf-sys/components/MdXLoading/MdXLoading.vue");
+
+var _MdXLoading2 = _interopRequireDefault(_MdXLoading);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function (Vue) {
+  (0, _material2.default)(Vue);
+  Vue.component(_MdXLoading2.default.name, _MdXLoading2.default);
+};
+
+/***/ }),
+
 /***/ "./resources/assets/js/vendor/gmf-sys/components/MdXPanel/MdXPanel.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -62635,7 +63072,7 @@ exports.default = function (Vue) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.MdXSwipe = exports.MdXPanel = exports.MdXSearch = exports.MdXField = exports.MdXCellSwipe = exports.MdXCellGroup = exports.MdXCell = exports.MdXIcon = exports.MdTip = exports.MdSticky = exports.MdScrollLoad = exports.MdPullRefresh = exports.MdVChart = exports.MdSwipeout = exports.MdPopup = exports.MdPicker = exports.MdDatepicker = exports.MdTable = exports.MdWrap = exports.MdToast = exports.MdLayout = exports.MdFetch = exports.MdBackground = exports.MdLoading = exports.MdTooltip = exports.MdToolbar = exports.MdTabs = exports.MdSwitch = exports.MdSubheader = exports.MdSteppers = exports.MdSpeedDial = exports.MdSnackbar = exports.MdRipple = exports.MdRadio = exports.MdPagination = exports.MdProgress = exports.MdMenu = exports.MdList = exports.MdImage = exports.MdIcon = exports.MdHighlightText = exports.MdField = exports.MdEmptyState = exports.MdElevation = exports.MdDrawer = exports.MdDivider = exports.MdDialog = exports.MdContent = exports.MdChips = exports.MdCheckbox = exports.MdCard = exports.MdButton = exports.MdBottomBar = exports.MdBadge = exports.MdAvatar = exports.MdAutocomplete = exports.MdApp = undefined;
+exports.MdXLoading = exports.MdXButton = exports.MdXSwipe = exports.MdXPanel = exports.MdXSearch = exports.MdXField = exports.MdXCellSwipe = exports.MdXCellGroup = exports.MdXCell = exports.MdXIcon = exports.MdTip = exports.MdSticky = exports.MdScrollLoad = exports.MdPullRefresh = exports.MdVChart = exports.MdSwipeout = exports.MdPopup = exports.MdPicker = exports.MdDatepicker = exports.MdTable = exports.MdWrap = exports.MdToast = exports.MdLayout = exports.MdFetch = exports.MdBackground = exports.MdLoading = exports.MdTooltip = exports.MdToolbar = exports.MdTabs = exports.MdSwitch = exports.MdSubheader = exports.MdSteppers = exports.MdSpeedDial = exports.MdSnackbar = exports.MdRipple = exports.MdRadio = exports.MdPagination = exports.MdProgress = exports.MdMenu = exports.MdList = exports.MdImage = exports.MdIcon = exports.MdHighlightText = exports.MdField = exports.MdEmptyState = exports.MdElevation = exports.MdDrawer = exports.MdDivider = exports.MdDialog = exports.MdContent = exports.MdChips = exports.MdCheckbox = exports.MdCard = exports.MdButton = exports.MdBottomBar = exports.MdBadge = exports.MdAvatar = exports.MdAutocomplete = exports.MdApp = undefined;
 
 var _MdApp = __webpack_require__("./resources/assets/js/vendor/gmf-sys/components/MdApp/index.js");
 
@@ -62865,6 +63302,14 @@ var _MdXSwipe = __webpack_require__("./resources/assets/js/vendor/gmf-sys/compon
 
 var _MdXSwipe2 = _interopRequireDefault(_MdXSwipe);
 
+var _MdXButton = __webpack_require__("./resources/assets/js/vendor/gmf-sys/components/MdXButton/index.js");
+
+var _MdXButton2 = _interopRequireDefault(_MdXButton);
+
+var _MdXLoading = __webpack_require__("./resources/assets/js/vendor/gmf-sys/components/MdXLoading/index.js");
+
+var _MdXLoading2 = _interopRequireDefault(_MdXLoading);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 //news
@@ -62926,6 +63371,8 @@ exports.MdXField = _MdXField2.default;
 exports.MdXSearch = _MdXSearch2.default;
 exports.MdXPanel = _MdXPanel2.default;
 exports.MdXSwipe = _MdXSwipe2.default;
+exports.MdXButton = _MdXButton2.default;
+exports.MdXLoading = _MdXLoading2.default;
 
 /***/ }),
 
