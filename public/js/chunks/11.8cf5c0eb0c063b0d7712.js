@@ -1,4 +1,4 @@
-webpackJsonp([9],{
+webpackJsonp([11],{
 
 /***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/BottomBar/HomeBottomBar.vue":
 /***/ (function(module, exports, __webpack_require__) {
@@ -208,6 +208,7 @@ var render = function() {
             [
               _c(
                 "md-list-item",
+                { attrs: { href: "/m/ent/list" } },
                 [
                   _c("md-icon", { staticClass: "md-primary" }, [
                     _vm._v("account_balance")

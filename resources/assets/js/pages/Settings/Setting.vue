@@ -21,7 +21,7 @@
       </md-card>
 
       <md-list>
-        <md-list-item>
+        <md-list-item href="/m/ent/list">
           <md-icon class="md-primary">account_balance</md-icon>
           <span class="md-list-item-text">企业</span>
         </md-list-item>

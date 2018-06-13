@@ -20,6 +20,8 @@ routeList.push({ path: '/m/rpt/income/analy', name: 'rpt.income.analy', page: 'R
 routeList.push({ path: '/m/rpt/achieve/total', name: 'rpt.achieve.total', page: 'RptAchieve/Total.vue', meta: { keepAlive: true } });
 routeList.push({ path: '/m/rpt/biz/biz-total', name: 'rpt.biz.total', page: 'RptBiz/Total.vue', meta: { keepAlive: true } });
 
+routeList.push({ path: '/m/ent/list', name: 'ent.list', page: 'Ent/List.vue' });
+routeList.push({ path: '/m/ent/search', name: 'ent.search', page: 'Ent/Search.vue' });
 const mappedRoutes = routeList.map(route => ({
     ...route,
     component: () =>
