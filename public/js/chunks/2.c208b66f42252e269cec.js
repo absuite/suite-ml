@@ -278,16 +278,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 exports.default = {
   name: "DeptList",
@@ -348,6 +338,7 @@ exports.default = {
         c && c();
       }, function (err) {
         c && c();
+        _this.isFinished = true;
       });
     }
   }
@@ -777,70 +768,43 @@ var render = function() {
                 },
                 [
                   _c(
-                    "md-list",
-                    [
-                      _vm._l(_vm.items, function(item) {
-                        return [
+                    "md-x-cell-group",
+                    _vm._l(_vm.items, function(item) {
+                      return _c(
+                        "md-x-cell",
+                        {
+                          key: item.id,
+                          attrs: {
+                            icon: "md:settings_input_svideo",
+                            "is-link": ""
+                          },
+                          on: {
+                            click: function($event) {
+                              _vm.onItemClick(item)
+                            }
+                          }
+                        },
+                        [
                           _c(
-                            "md-list-item",
-                            {
-                              on: {
-                                click: function($event) {
-                                  _vm.onItemClick(item)
-                                }
-                              }
-                            },
+                            "template",
+                            { slot: "title" },
                             [
-                              _c(
-                                "md-avatar",
-                                [
-                                  _c("md-icon", [
-                                    _vm._v("settings_input_svideo")
+                              _c("h3", [_vm._v(_vm._s(item.name))]),
+                              _vm._v(" "),
+                              item.org
+                                ? _c("md-x-tag", [
+                                    _vm._v(_vm._s(item.org.name))
                                   ])
-                                ],
-                                1
-                              ),
+                                : _vm._e(),
                               _vm._v(" "),
-                              _c("div", { staticClass: "md-list-item-text" }, [
-                                _c(
-                                  "div",
-                                  [
-                                    _vm._v(
-                                      _vm._s(item.name) + "\n                  "
-                                    ),
-                                    item.org
-                                      ? _c("md-badge", {
-                                          staticClass: "md-square md-primary",
-                                          attrs: {
-                                            "md-dense": "",
-                                            "md-content": item.org.name
-                                          }
-                                        })
-                                      : _vm._e()
-                                  ],
-                                  1
-                                ),
-                                _vm._v(" "),
-                                _c("p", [_vm._v(_vm._s(item.code))])
-                              ]),
-                              _vm._v(" "),
-                              _c(
-                                "md-button",
-                                {
-                                  staticClass: "md-icon-button md-list-action"
-                                },
-                                [_c("md-icon", [_vm._v("edit")])],
-                                1
-                              )
+                              _c("p", [_vm._v(_vm._s(item.code))])
                             ],
                             1
-                          ),
-                          _vm._v(" "),
-                          _c("md-divider", { staticClass: "md-inset" })
-                        ]
-                      })
-                    ],
-                    2
+                          )
+                        ],
+                        2
+                      )
+                    })
                   )
                 ],
                 1

@@ -26533,9 +26533,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 
-
 exports.default = new _MdComponent2.default({
-  name: 'MdXCell',
+  name: "MdXCell",
   mixins: [_MdRouterLink2.default],
   props: {
     icon: String,
@@ -26554,7 +26553,7 @@ exports.default = new _MdComponent2.default({
 
   methods: {
     onClick: function onClick() {
-      this.$emit('click');
+      this.$emit("click");
       this.routerLink();
     }
   }
@@ -49529,13 +49528,10 @@ var render = function() {
             { class: _vm.b("title") },
             [
               _vm._t("title", [
-                _c("span", { domProps: { textContent: _vm._s(_vm.title) } }),
+                _c("h3", { domProps: { textContent: _vm._s(_vm.title) } }),
                 _vm._v(" "),
                 _vm.label
-                  ? _c("div", {
-                      class: _vm.b("label"),
-                      domProps: { textContent: _vm._s(_vm.label) }
-                    })
+                  ? _c("p", { domProps: { textContent: _vm._s(_vm.label) } })
                   : _vm._e()
               ])
             ],

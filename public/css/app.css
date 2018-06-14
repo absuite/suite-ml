@@ -21347,10 +21347,21 @@ tbody .md-table-row td {
 .md-x-cell-group {
     background-color: #fff;
 }
-.md-x-cell__label {
+.md-x-cell__title h2,
+  .md-x-cell__title h3,
+  .md-x-cell__title h4,
+  .md-x-cell__title h5 {
+    margin: 0px;
+    font-weight: normal;
+    font-size: 14px;
+    display: inline-block;
+}
+.md-x-cell__title p {
     font-size: 12px;
     line-height: 1.2;
     color: #666;
+    padding: 0px;
+    margin: 0px;
 }
 .md-x-cell__title, .md-x-cell__value {
     flex: 1;
@@ -21381,7 +21392,7 @@ tbody .md-table-row td {
     overflow: visible;
 }
 .md-x-cell--required::before {
-      content: '*';
+      content: "*";
       position: absolute;
       left: 7px;
       font-size: 14px;

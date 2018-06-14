@@ -190,7 +190,7 @@ var render = function() {
                   ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "md-subhead" }, [
-                    _vm._v(_vm._s(_vm.user.memo))
+                    _vm._v(_vm._s(_vm.user.account))
                   ])
                 ],
                 1

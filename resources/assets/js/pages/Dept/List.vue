@@ -14,25 +14,15 @@
     <md-app-content>
       <md-pull-refresh @refresh="onRefresh">
         <md-scroll-load :md-finished="isFinished" @load="onScrollLoad">
-          <md-list>
-            <template v-for="item in items">
-              <md-list-item @click="onItemClick(item)">
-                <md-avatar>
-                  <md-icon>settings_input_svideo</md-icon>
-                </md-avatar>
-                <div class="md-list-item-text">
-                  <div>{{item.name}}
-                    <md-badge v-if="item.org" class="md-square md-primary" md-dense :md-content="item.org.name"></md-badge>
-                  </div>
-                  <p>{{item.code}}</p>
-                </div>
-                <md-button class="md-icon-button md-list-action">
-                  <md-icon>edit</md-icon>
-                </md-button>
-              </md-list-item>
-              <md-divider class="md-inset"></md-divider>
-            </template>
-          </md-list>
+          <md-x-cell-group>
+            <md-x-cell icon="md:settings_input_svideo" is-link v-for="item in items" :key="item.id" @click="onItemClick(item)">
+              <template slot="title">
+                <h3>{{item.name}}</h3>
+                <md-x-tag v-if="item.org">{{item.org.name}}</md-x-tag>
+                <p>{{item.code}}</p>
+              </template>
+            </md-x-cell>
+          </md-x-cell-group>
         </md-scroll-load>
       </md-pull-refresh>
       <edit-dia :md-active.sync="isEditing" :md-data="currentEditData" @md-closed="editClosed"></edit-dia>
@@ -105,6 +95,7 @@
             },
             err => {
               c && c();
+              this.isFinished = true;
             }
           );
       }

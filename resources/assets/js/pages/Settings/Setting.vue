@@ -16,7 +16,7 @@
           <img :src="user.avatar" alt="Avatar">
         </md-avatar>
         <div class="md-title">{{user.name}}</div>
-        <div class="md-subhead">{{user.memo}}</div>
+        <div class="md-subhead">{{user.account}}</div>
         </md-card-header>
         <md-card-content class="no-padding">
          <md-x-cell title="切换主企业" icon="md:dashboard" :value="ent.name" is-link to="/m/ent/select" />

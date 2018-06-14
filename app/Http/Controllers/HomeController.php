@@ -31,8 +31,7 @@ class HomeController extends Controller
   {
     $userId = GAuth::id();
     $config = new Builder;
-    $config->userName('用户名');
-    $config->userData('欢迎使用gmf!');
+    $config->user(GAuth::user());
     $entId = $request->session()->get(config('gmf.ent.session'));
     if (!empty($entId)) {
       $entId = SysModels\EntUser::where('user_id', $userId)->where('ent_id', $entId)->value('ent_id');
@@ -48,12 +47,17 @@ class HomeController extends Controller
     if ($ent) {
       try {
         $app = SysModels\App\App::where('openid','suite.cbo')->first();
-        $entToken = app('Gmf\Sys\Bp\AppConfig')->config(['appId' => $app->id, 'userId' => GAuth::id(), 'entId' => $ent->id]);
+        $entToken = app('Gmf\Sys\Bp\AppConfig')->config([
+          'appId' => $app->id, 
+          'userId' => GAuth::id(), 
+          'entId' => $ent->id,
+          'token'=>$ent->token
+          ]);
         if (empty($entToken['host'])) {
           $entToken['host'] = $request->getSchemeAndHttpHost();
         }
         $config->entToken($entToken);
-      } catch (\Exceptions $e) {
+      } catch (\Exceptiond $e) {
         Log::error($e->getMessage());
       }
     }
