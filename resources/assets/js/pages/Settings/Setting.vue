@@ -12,16 +12,19 @@
     <md-app-content>
       <md-card>
         <md-card-header>
-          <div class="md-title">Card with hover effect</div>
-          <div class="md-subhead">It also have a ripple</div>
+          <md-avatar>
+          <img :src="user.avatar" alt="Avatar">
+        </md-avatar>
+        <div class="md-title">{{user.name}}</div>
+        <div class="md-subhead">{{user.memo}}</div>
         </md-card-header>
-        <md-card-content>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio itaque ea, nostrum odio. Dolores, sed accusantium quasi non.
+        <md-card-content class="no-padding">
+         <md-x-cell title="切换主企业" icon="md:dashboard" :value="ent.name" is-link to="/m/ent/select" />
         </md-card-content>
       </md-card>
       <md-x-cell-group>
-        <md-x-cell title="企业" icon="md:account_balance" is-link to="/m/ent/list" />
-        <md-x-cell title="巴指数" icon="md:track_changes" is-link  />
+        <md-x-cell title="企业广场" icon="md:account_balance" is-link to="/m/ent/list" />
+        <md-x-cell title="巴指数" icon="md:track_changes" value="今日上升3分" is-link  />
       </md-x-cell-group>
       <md-x-cell-group>
         <md-x-cell title="账号" icon="md:account_circle" is-link />
@@ -36,29 +39,35 @@
   </md-app>
 </template>
 <script>
-  import HomeBottomBar from "../../components/BottomBar/HomeBottomBar";
-  export default {
-    name: "Setting",
-    components: {
-      HomeBottomBar
+import HomeBottomBar from "../../components/BottomBar/HomeBottomBar";
+export default {
+  name: "Setting",
+  components: {
+    HomeBottomBar
+  },
+  data: () => ({}),
+  computed: {
+    user() {
+      return this.$root.configs.user || {};
     },
-    data: () => ({})
-  };
-
+    ent() {
+      return this.$root.configs.ent || {};
+    }
+  }
+};
 </script>
 <style lang="scss" scoped>
-  .md-app {
-    min-height: 100%;
-    max-width: 100%;
-    height: 100%;
-  }
+.md-app {
+  min-height: 100%;
+  max-width: 100%;
+  height: 100%;
+}
 
-  .md-x-cell-group {
-    margin-bottom: 10px;
-  }
+.md-x-cell-group {
+  margin-bottom: 10px;
+}
 
-  .md-card {
-    margin-bottom: 10px;
-  }
-
+.md-card {
+  margin-bottom: 10px;
+}
 </style>

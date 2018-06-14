@@ -1,9 +1,9 @@
 const routeList = [
-    { path: '/', name: 'home', page: 'Messages/Message.vue' },
-    { path: '/m/messages', name: 'messages', page: 'Messages/Message.vue' },
-    { path: '/m/reports', name: 'reports', page: 'Reports/Report.vue' },
-    { path: '/m/settings', name: 'settings', page: 'Settings/Setting.vue' },
-    { path: '/m/works', name: 'works', page: 'Works/Work.vue' },
+  { path: '/', name: 'home', page: 'Messages/Message.vue' },
+  { path: '/m/messages', name: 'messages', page: 'Messages/Message.vue' },
+  { path: '/m/reports', name: 'reports', page: 'Reports/Report.vue' },
+  { path: '/m/settings', name: 'settings', page: 'Settings/Setting.vue' },
+  { path: '/m/works', name: 'works', page: 'Works/Work.vue' },
 ];
 
 routeList.push({ path: '/m/cbo/dept/list', name: 'cbo.dept.list', page: 'Dept/List.vue', meta: { keepAlive: true } });
@@ -22,10 +22,11 @@ routeList.push({ path: '/m/rpt/biz/biz-total', name: 'rpt.biz.total', page: 'Rpt
 
 routeList.push({ path: '/m/ent/list', name: 'ent.list', page: 'Ent/List.vue' });
 routeList.push({ path: '/m/ent/search', name: 'ent.search', page: 'Ent/Search.vue' });
+routeList.push({ path: '/m/ent/select', name: 'ent.select', page: 'Ent/Select.vue' });
 const mappedRoutes = routeList.map(route => ({
-    ...route,
-    component: () =>
-        import (`../pages/${route.page}`)
+  ...route,
+  component: () =>
+    import(`../pages/${route.page}`)
 }));
 
 export default mappedRoutes;

@@ -1,6 +1,6 @@
 webpackJsonp([15],{
 
-/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/vendor/gmf-sys/pages/Auth/AccountJoin.vue":
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/vendor/gmf-sys/pages/Auth/Identifier.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14,6 +14,10 @@ var _AuthCache = __webpack_require__("./resources/assets/js/vendor/gmf-sys/pages
 
 var _AuthCache2 = _interopRequireDefault(_AuthCache);
 
+var _pick = __webpack_require__("./node_modules/lodash/pick.js");
+
+var _pick2 = _interopRequireDefault(_pick);
+
 var _Sns = __webpack_require__("./resources/assets/js/vendor/gmf-sys/pages/Auth/Sns.vue");
 
 var _Sns2 = _interopRequireDefault(_Sns);
@@ -24,46 +28,8 @@ var _validators = __webpack_require__("./node_modules/vuelidate/lib/validators/i
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
 exports.default = {
-  name: 'GmfPagesAuthAccountJoin',
+  name: 'GmfPagesAuthIdentifier',
   components: {
     AuthSns: _Sns2.default
   },
@@ -82,31 +48,20 @@ exports.default = {
         required: _validators.required,
         minLength: (0, _validators.minLength)(3),
         maxLength: (0, _validators.maxLength)(30)
-      },
-      password: {
-        required: _validators.required,
-        minLength: (0, _validators.minLength)(3),
-        maxLength: (0, _validators.maxLength)(30)
       }
     }
   },
   computed: {
+    canRegister: function canRegister() {
+      if (!this.$root.configs.auth || !this.$root.configs.auth.register) return false;
+      return this.$root.configs.auth.register;
+    },
     routeQuery: function routeQuery() {
       var q = {};
       if (this.$route.query && this.$route.query.continue) q.continue = this.$route.query.continue;
       return q;
     }
   },
-  beforeRouteEnter: function beforeRouteEnter(to, from, next) {
-    next(function (vm) {
-      vm.fetchData();
-    });
-  },
-  beforeRouteUpdate: function beforeRouteUpdate(to, from, next) {
-    this.fetchData();
-    next();
-  },
-
   methods: {
     getValidationClass: function getValidationClass(fieldName) {
       var field = this.$v.mainDatas[fieldName];
@@ -126,17 +81,57 @@ exports.default = {
       var _this = this;
 
       this.sending = true;
-      this.$http.post('sys/auth/joins', this.mainDatas).then(function (response) {
+      this.$http.post('sys/auth/checker', this.mainDatas).then(function (response) {
         _this.sending = false;
-        _this.$go(_this.$route.query.continue ? _this.$route.query.continue : { name: 'auth.account.dashboard' });
+        var u = response.data.data;
+        if (u) {
+          u = (0, _pick2.default)(u, ['id', 'account', 'avatar', 'email', 'name', 'nick_name']);
+          _AuthCache2.default.add(u);
+          _this.$go({ name: 'auth.password', params: { id: u.id }, query: _this.routeQuery });
+        }
       }).catch(function (err) {
         _this.sending = false;
         _this.$toast(err);
       });
     },
     fetchData: function fetchData() {}
+  },
+  created: function created() {},
+  mounted: function mounted() {
+    this.fetchData();
   }
-};
+}; //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /***/ }),
 
@@ -266,7 +261,7 @@ if(false) {
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-6c9fe41c\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/vendor/gmf-sys/pages/Auth/AccountJoin.vue":
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-6bbca514\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/vendor/gmf-sys/pages/Auth/Identifier.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -290,18 +285,18 @@ var render = function() {
           "md-card-header",
           [
             _c("md-card-header-text", [
-              _c("div", { staticClass: "md-title" }, [_vm._v("账号关联")]),
+              _c("div", { staticClass: "md-title" }, [_vm._v("登录")]),
               _vm._v(" "),
-              _c("div", { staticClass: "md-body-1" }, [_vm._v("添加更多账号")])
+              _c("div", { staticClass: "md-body-1" }, [
+                _vm._v("使用您的帐号登录")
+              ])
             ]),
             _vm._v(" "),
             _c(
               "md-button",
               {
                 staticClass: "md-icon-button md-list-action",
-                attrs: {
-                  to: { name: "auth.account.dashboard", query: _vm.routeQuery }
-                }
+                attrs: { to: { name: "auth.chooser", query: _vm.routeQuery } }
               },
               [
                 _c("md-icon", { staticClass: "md-primary" }, [
@@ -347,36 +342,6 @@ var render = function() {
                       : _vm._e()
                   ],
                   1
-                ),
-                _vm._v(" "),
-                _c(
-                  "md-field",
-                  { class: _vm.getValidationClass("password") },
-                  [
-                    _c("label", [_vm._v("输入您的密码")]),
-                    _vm._v(" "),
-                    _c("md-input", {
-                      attrs: {
-                        autocomplete: "off",
-                        type: "password",
-                        disabled: _vm.sending
-                      },
-                      model: {
-                        value: _vm.mainDatas.password,
-                        callback: function($$v) {
-                          _vm.$set(_vm.mainDatas, "password", $$v)
-                        },
-                        expression: "mainDatas.password"
-                      }
-                    }),
-                    _vm._v(" "),
-                    !_vm.$v.mainDatas.password.required
-                      ? _c("span", { staticClass: "md-error" }, [
-                          _vm._v("请输入密码")
-                        ])
-                      : _vm._e()
-                  ],
-                  1
                 )
               ],
               1
@@ -388,11 +353,17 @@ var render = function() {
         _c(
           "md-card-actions",
           [
-            _c(
-              "router-link",
-              { attrs: { to: { name: "auth.account.dashboard" } } },
-              [_vm._v("查看关联账号")]
-            ),
+            _vm.canRegister
+              ? _c(
+                  "router-link",
+                  {
+                    attrs: {
+                      to: { name: "auth.register", query: _vm.routeQuery }
+                    }
+                  },
+                  [_vm._v("免费注册")]
+                )
+              : _vm._e(),
             _vm._v(" "),
             _c("span", { staticClass: "flex" }),
             _vm._v(" "),
@@ -402,7 +373,7 @@ var render = function() {
                 staticClass: "md-primary md-raised",
                 attrs: { type: "submit", disabled: _vm.sending }
               },
-              [_vm._v("关联账号")]
+              [_vm._v("下一步")]
             )
           ],
           1
@@ -410,7 +381,7 @@ var render = function() {
         _vm._v(" "),
         _c("md-divider"),
         _vm._v(" "),
-        _c("auth-sns", { attrs: { title: "绑定合作账号", type: "join" } }),
+        _c("auth-sns"),
         _vm._v(" "),
         _vm.sending
           ? _c("md-progress-bar", { attrs: { "md-mode": "indeterminate" } })
@@ -426,7 +397,7 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-6c9fe41c", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-6bbca514", module.exports)
   }
 }
 
@@ -1902,54 +1873,6 @@ exports.default = withParams;
 
 /***/ }),
 
-/***/ "./resources/assets/js/vendor/gmf-sys/pages/Auth/AccountJoin.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
-/* script */
-var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/vendor/gmf-sys/pages/Auth/AccountJoin.vue")
-/* template */
-var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-6c9fe41c\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/vendor/gmf-sys/pages/Auth/AccountJoin.vue")
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = null
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "resources\\assets\\js\\vendor\\gmf-sys\\pages\\Auth\\AccountJoin.vue"
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-6c9fe41c", Component.options)
-  } else {
-    hotAPI.reload("data-v-6c9fe41c", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-
 /***/ "./resources/assets/js/vendor/gmf-sys/pages/Auth/AuthCache.js":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2022,6 +1945,54 @@ var AuthCache = function () {
 }();
 
 exports.default = new AuthCache();
+
+/***/ }),
+
+/***/ "./resources/assets/js/vendor/gmf-sys/pages/Auth/Identifier.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/vendor/gmf-sys/pages/Auth/Identifier.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-6bbca514\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/vendor/gmf-sys/pages/Auth/Identifier.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\vendor\\gmf-sys\\pages\\Auth\\Identifier.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-6bbca514", Component.options)
+  } else {
+    hotAPI.reload("data-v-6bbca514", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
 
 /***/ }),
 

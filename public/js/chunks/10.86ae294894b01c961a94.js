@@ -1,4 +1,4 @@
-webpackJsonp([9],{
+webpackJsonp([10],{
 
 /***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/NavBar/BackNav.vue":
 /***/ (function(module, exports, __webpack_require__) {
@@ -82,17 +82,16 @@ exports.default = {
   },
   methods: {
     onItemClick: function onItemClick(item) {
-      this.currentEditData = item;
-      this.isEditing = true;
-    },
-    onAddClick: function onAddClick() {
-      this.currentEditData = null;
-      this.isEditing = true;
-    },
-    editClosed: function editClosed(data) {
-      if (data && data.isCreated) {
-        this.items.splice(0, 0, data);
-      }
+      var _this = this;
+
+      this.$http.post("sys/ents/default", { entId: item.id }).then(function (res) {
+        _this.items.forEach(function (v) {
+          v.is_default = false;
+        });
+        item.is_default = true;
+      }, function (err) {
+        _this.$tip("设置失败！");
+      });
     },
     onRefresh: function onRefresh(c) {
       this.fetchData(null, c);
@@ -102,7 +101,7 @@ exports.default = {
       this.fetchData(this.pager, c);
     },
     fetchData: function fetchData(pager, c) {
-      var _this = this;
+      var _this2 = this;
 
       var options = (0, _extend2.default)({ q: this.search_q }, { size: 20 }, pager);
       if (!pager) {
@@ -110,17 +109,20 @@ exports.default = {
         this.isFinished = false;
       }
       this.$http.get("sys/ents/my", { params: options }).then(function (res) {
-        _this.items = _this.items.concat(res.data.data);
-        _this.pager = res.data.pager;
-        _this.isFinished = _this.pager.items < _this.pager.size;
+        _this2.items = _this2.items.concat(res.data.data);
+        _this2.pager = res.data.pager;
+        _this2.isFinished = _this2.pager.items < _this2.pager.size;
         c && c();
       }, function (err) {
         c && c();
-        _this.isFinished = true;
+        _this2.isFinished = true;
       });
     }
   }
 }; //
+//
+//
+//
 //
 //
 //
@@ -362,6 +364,12 @@ var render = function() {
       _c(
         "md-app-content",
         [
+          _c("md-subheader", [
+            _vm._v("我的账号加入了"),
+            _c("span", [_vm._v(_vm._s(_vm.pager.total || 0))]),
+            _vm._v("个团队/企业")
+          ]),
+          _vm._v(" "),
           _c(
             "md-pull-refresh",
             { on: { refresh: _vm.onRefresh } },
@@ -388,25 +396,31 @@ var render = function() {
                         },
                         [
                           _c(
-                            "md-x-button",
-                            {
-                              attrs: { slot: "extra", size: "small" },
-                              slot: "extra"
-                            },
-                            [_vm._v("设为默认")]
-                          ),
-                          _vm._v(" "),
-                          _vm.ent && item.id == _vm.ent.id
-                            ? _c("md-x-icon", {
-                                attrs: {
-                                  slot: "right-icon",
-                                  name: "certificate"
-                                },
-                                slot: "right-icon"
-                              })
-                            : _vm._e()
-                        ],
-                        1
+                            "span",
+                            { attrs: { slot: "extra" }, slot: "extra" },
+                            [
+                              item.is_default
+                                ? _c(
+                                    "md-x-button",
+                                    { attrs: { size: "small", disabled: "" } },
+                                    [_vm._v("默认")]
+                                  )
+                                : _c(
+                                    "md-x-button",
+                                    {
+                                      attrs: { size: "small" },
+                                      on: {
+                                        click: function($event) {
+                                          _vm.onItemClick(item)
+                                        }
+                                      }
+                                    },
+                                    [_vm._v("设为默认")]
+                                  )
+                            ],
+                            1
+                          )
+                        ]
                       )
                     })
                   )

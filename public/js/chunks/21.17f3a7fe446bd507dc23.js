@@ -1,6 +1,6 @@
-webpackJsonp([18],{
+webpackJsonp([21],{
 
-/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/vendor/gmf-sys/pages/Auth/PasswordFindSms.vue":
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/vendor/gmf-sys/pages/Auth/Reset.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -66,28 +66,28 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 //
 //
 //
-//
-//
 
 exports.default = {
-  name: 'GmfPagesAuthPasswordFindSms',
+  name: 'GmfPagesAuthPassword',
   props: {},
   mixins: [_vuelidate.validationMixin],
   data: function data() {
     return {
       mainDatas: {},
       loading: 0,
-      sending: false,
-      isSended: false
+      sending: false
     };
   },
 
   validations: {
     mainDatas: {
-      token: {
+      password: {
         required: _validators.required,
         minLength: (0, _validators.minLength)(6),
-        maxLength: (0, _validators.maxLength)(6)
+        maxLength: (0, _validators.maxLength)(30)
+      },
+      password_confirmation: {
+        sameAsPassword: (0, _validators.sameAs)('password')
       }
     }
   },
@@ -96,35 +96,9 @@ exports.default = {
       var q = {};
       if (this.$route.query && this.$route.query.continue) q.continue = this.$route.query.continue;
       return q;
-    },
-    disabledSendBtn: function disabledSendBtn() {
-      return this.sending || this.isSended || !!this.mainDatas.token;
-    },
-    disabledConfirmBtn: function disabledConfirmBtn() {
-      return this.sending || !this.isSended || !this.mainDatas.token;
-    },
-    tipLabel: function tipLabel() {
-      return this.$root.appName + ' 会将验证码发送到 ' + this.mainDatas.mobile;
     }
   },
   methods: {
-    onOtherClick: function onOtherClick() {
-      this.$go({ name: 'auth.password.find.mail', params: { id: this.mainDatas.id }, query: this.routeQuery });
-    },
-    onSendCode: function onSendCode() {
-      var _this = this;
-
-      this.sending = true;
-      var options = { id: this.mainDatas.id, account: this.mainDatas.account, type: 'password', mode: 'sms' };
-      this.$http.post('sys/auth/vcode-create', options).then(function (response) {
-        _this.isSended = true;
-        _this.sending = false;
-        _this.$toast('验证码已发送到您的手机上，请及时查收!');
-      }).catch(function (err) {
-        _this.sending = false;
-        _this.$toast(err);
-      });
-    },
     getValidationClass: function getValidationClass(fieldName) {
       var field = this.$v.mainDatas[fieldName];
       if (field) {
@@ -139,22 +113,9 @@ exports.default = {
         this.submitPost();
       }
     },
-    submitPost: function submitPost() {
-      var _this2 = this;
-
-      this.sending = true;
-      var options = { id: this.mainDatas.id, account: this.mainDatas.account, type: 'password', token: this.mainDatas.token };
-      this.$http.post('sys/auth/vcode-checker', options).then(function (response) {
-        _this2.sending = false;
-        _this2.$go({ name: 'auth.reset', params: { id: _this2.mainDatas.id, token: _this2.mainDatas.token }, query: _this2.routeQuery });
-      }).catch(function (err) {
-        _this2.sending = false;
-        _this2.$toast(err);
-      });
-    },
-    fetchData: function () {
+    submitPost: function () {
       var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
-        var thId, response;
+        var response;
         return _regenerator2.default.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -162,68 +123,122 @@ exports.default = {
                 _context.prev = 0;
 
                 this.sending = true;
-                thId = this.$route.params.id;
+                this.mainDatas.token = this.$route.params.token;
+                _context.next = 5;
+                return this.$http.post('sys/auth/reset', this.mainDatas);
 
-                if (!thId) {
-                  this.$go({ name: 'auth.login', query: this.routeQuery });
-                }
-                _context.next = 6;
-                return this.$http.post('sys/auth/checker', { id: thId });
-
-              case 6:
+              case 5:
                 response = _context.sent;
 
-                this.mainDatas = response.data.data;
-                _context.next = 14;
-                break;
+                this.sending = false;
+                this.$setConfigs({ user: response.data.data, token: response.data.token });
+                _context.next = 10;
+                return this.$root.$loadConfigs();
 
               case 10:
-                _context.prev = 10;
+                this.$go(this.$route.query.continue ? this.$route.query.continue : this.$root.configs.home);
+                _context.next = 17;
+                break;
+
+              case 13:
+                _context.prev = 13;
                 _context.t0 = _context['catch'](0);
 
-                this.$toast(_context.t0);
-                this.$go({ name: 'auth.identifier', query: this.routeQuery });
-
-              case 14:
-                _context.prev = 14;
-
                 this.sending = false;
-                return _context.finish(14);
+                this.$toast(_context.t0);
 
               case 17:
               case 'end':
                 return _context.stop();
             }
           }
-        }, _callee, this, [[0, 10, 14, 17]]);
+        }, _callee, this, [[0, 13]]);
+      }));
+
+      function submitPost() {
+        return _ref.apply(this, arguments);
+      }
+
+      return submitPost;
+    }(),
+    fetchData: function () {
+      var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee2() {
+        var thId, response, u, options;
+        return _regenerator2.default.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.prev = 0;
+
+                this.sending = true;
+                thId = this.$route.params.id;
+
+                if (!thId) {
+                  this.$go({ name: 'auth.chooser', query: this.routeQuery });
+                }
+                _context2.next = 6;
+                return this.$http.post('sys/auth/checker', { id: thId });
+
+              case 6:
+                response = _context2.sent;
+                u = response.data.data;
+
+                this.mainDatas = response.data.data;
+                options = { id: this.mainDatas.id, type: 'password', token: this.$route.params.token };
+                _context2.next = 12;
+                return this.$http.post('sys/auth/vcode-checker', options);
+
+              case 12:
+                _context2.next = 18;
+                break;
+
+              case 14:
+                _context2.prev = 14;
+                _context2.t0 = _context2['catch'](0);
+
+                this.$toast(_context2.t0);
+                this.$go({ name: 'auth.identifier', query: this.routeQuery });
+
+              case 18:
+                _context2.prev = 18;
+
+                this.sending = false;
+                return _context2.finish(18);
+
+              case 21:
+              case 'end':
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this, [[0, 14, 18, 21]]);
       }));
 
       function fetchData() {
-        return _ref.apply(this, arguments);
+        return _ref2.apply(this, arguments);
       }
 
       return fetchData;
     }()
   },
   mounted: function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee2() {
-      return _regenerator2.default.wrap(function _callee2$(_context2) {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee3() {
+      return _regenerator2.default.wrap(function _callee3$(_context3) {
         while (1) {
-          switch (_context2.prev = _context2.next) {
+          switch (_context3.prev = _context3.next) {
             case 0:
-              _context2.next = 2;
+              _context3.next = 2;
               return this.fetchData();
 
             case 2:
             case 'end':
-              return _context2.stop();
+              return _context3.stop();
           }
         }
-      }, _callee2, this);
+      }, _callee3, this);
     }));
 
     function mounted() {
-      return _ref2.apply(this, arguments);
+      return _ref3.apply(this, arguments);
     }
 
     return mounted;
@@ -232,215 +247,182 @@ exports.default = {
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1cedd92c\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/vendor/gmf-sys/pages/Auth/PasswordFindSms.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(false);
-// imports
-
-
-// module
-exports.push([module.i, "/**\r\n * The default transition, used when the element is visible\r\n * since the beginning of the animation\r\n * ---\r\n * @access private\r\n * @type transition\r\n * @group transition\r\n */\n/**\r\n * The enter transition, used when the element is not visible on the screen\r\n * since the beginning of the animation and become visible\r\n * ---\r\n * @access private\r\n * @type transition\r\n * @group transition\r\n */\n/**\r\n * The leave transition, used when the element is visible on the screen\r\n * since the beginning of the animation and is removed\r\n * ---\r\n * @access private\r\n * @type transition\r\n * @group transition\r\n */\n/**\r\n * The stand transition, used when the element is going to accelerate,\r\n * like movements from bottom to top\r\n * ---\r\n * @access private\r\n * @type transition\r\n * @group transition\r\n */\n/**\r\n * The out transition, used when the element is going to deaccelerate,\r\n * like movements from top to bottom\r\n * ---\r\n * @access private\r\n * @type transition\r\n * @group transition\r\n */\n/* Transitions - Based on Angular Material */\n/**\r\n * Breakpoint\r\n */\n/**\r\n * Base\r\n */\n/**\r\n * Layout Item\r\n */\n/**\r\n * Hide Element\r\n */\n.md-card-actions[data-v-1cedd92c] {\n  justify-content: center;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-
-/***/ "./node_modules/extract-text-webpack-plugin/dist/loader.js?{\"id\":1,\"omit\":1,\"remove\":true}!./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1cedd92c\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/vendor/gmf-sys/pages/Auth/PasswordFindSms.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1cedd92c\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/vendor/gmf-sys/pages/Auth/PasswordFindSms.vue");
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("75fdc95a", content, false, {});
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../../../../node_modules/css-loader/index.js!../../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1cedd92c\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../../node_modules/sass-loader/lib/loader.js!../../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PasswordFindSms.vue", function() {
-     var newContent = require("!!../../../../../../../node_modules/css-loader/index.js!../../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1cedd92c\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../../node_modules/sass-loader/lib/loader.js!../../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PasswordFindSms.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-1cedd92c\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/vendor/gmf-sys/pages/Auth/PasswordFindSms.vue":
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-44986634\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/vendor/gmf-sys/pages/Auth/Reset.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "md-card",
-    [
-      _c(
-        "md-card-header",
-        [
-          _c("md-card-header-text", [
-            _c("div", { staticClass: "md-title" }, [_vm._v("帐号帮助")]),
-            _vm._v(" "),
-            _c("div", { staticClass: "md-body-1" }, [_vm._v("获取验证码")])
-          ])
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "md-list",
-        [
-          _c(
-            "md-list-item",
-            [
-              _c(
-                "md-avatar",
-                [_c("md-image", { attrs: { "md-src": _vm.mainDatas.avatar } })],
-                1
-              ),
-              _vm._v(" "),
-              _c("div", { staticClass: "md-list-item-text" }, [
-                _c("span", [_vm._v(_vm._s(_vm.mainDatas.name))]),
-                _vm._v(" "),
-                _c("span", [_vm._v(_vm._s(_vm.mainDatas.mobile))])
-              ]),
-              _vm._v(" "),
-              _c(
-                "md-button",
-                {
-                  staticClass: "md-icon-button md-list-action",
-                  attrs: { to: { name: "auth.chooser", query: _vm.routeQuery } }
-                },
-                [
-                  _c("md-icon", { staticClass: "md-primary" }, [
-                    _vm._v("expand_more")
-                  ])
-                ],
-                1
-              )
-            ],
-            1
-          )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c("md-card-content", [_c("p", [_vm._v(_vm._s(_vm.tipLabel))])]),
-      _vm._v(" "),
-      _c(
-        "md-card-actions",
-        [
-          _c(
-            "md-button",
-            {
-              staticClass: "md-primary md-raised",
-              attrs: { disabled: _vm.disabledSendBtn },
-              on: { click: _vm.onSendCode }
-            },
-            [_vm._v("发送验证码")]
-          )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "form",
-        {
-          attrs: { novalidate: "" },
-          on: {
-            submit: function($event) {
-              $event.preventDefault()
-              return _vm.validateForm($event)
-            }
+  return _c("md-card", [
+    _c(
+      "form",
+      {
+        attrs: { novalidate: "" },
+        on: {
+          submit: function($event) {
+            $event.preventDefault()
+            return _vm.validateForm($event)
           }
-        },
-        [
-          _c(
-            "md-card-content",
-            [
-              _c(
-                "md-layout",
-                [
-                  _c(
-                    "md-field",
-                    { class: _vm.getValidationClass("token") },
-                    [
-                      _c("label", [_vm._v("验证码")]),
-                      _vm._v(" "),
-                      _c("md-input", {
-                        attrs: { autocomplete: "off", disabled: _vm.sending },
-                        model: {
-                          value: _vm.mainDatas.token,
-                          callback: function($$v) {
-                            _vm.$set(_vm.mainDatas, "token", $$v)
-                          },
-                          expression: "mainDatas.token"
-                        }
-                      }),
-                      _vm._v(" "),
-                      !_vm.$v.mainDatas.token.required
-                        ? _c("span", { staticClass: "md-error" }, [
-                            _vm._v("请输入验证码")
-                          ])
-                        : _vm._e(),
-                      _vm._v(" "),
-                      !_vm.$v.mainDatas.token.minLength ||
-                      !_vm.$v.mainDatas.token.maxLength
-                        ? _c("span", { staticClass: "md-error" }, [
-                            _vm._v("验证码格式不符合要求")
-                          ])
-                        : _vm._e()
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "md-card-actions",
-            [
-              _c(
-                "md-button",
-                { staticClass: "md-primary", on: { click: _vm.onOtherClick } },
-                [_vm._v("我没有使用手机")]
-              ),
-              _vm._v(" "),
-              _c("span", { staticClass: "flex" }),
-              _vm._v(" "),
-              _c(
-                "md-button",
-                {
-                  staticClass: "md-primary md-raised",
-                  attrs: { type: "submit", disabled: _vm.disabledConfirmBtn }
-                },
-                [_vm._v("下一步")]
-              )
-            ],
-            1
-          )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _vm.sending
-        ? _c("md-progress-bar", { attrs: { "md-mode": "indeterminate" } })
-        : _vm._e()
-    ],
-    1
-  )
+        }
+      },
+      [
+        _c(
+          "md-card-header",
+          [
+            _c("md-card-header-text", [
+              _c("div", { staticClass: "md-title" }, [_vm._v("重置密码")])
+            ])
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "md-list",
+          [
+            _c(
+              "md-list-item",
+              [
+                _c(
+                  "md-avatar",
+                  [
+                    _c("md-image", {
+                      attrs: { "md-src": _vm.mainDatas.avatar }
+                    })
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "md-list-item-text" }, [
+                  _c("span", [_vm._v(_vm._s(_vm.mainDatas.name))]),
+                  _vm._v(" "),
+                  _c("span", [_vm._v(_vm._s(_vm.mainDatas.account))])
+                ]),
+                _vm._v(" "),
+                _c(
+                  "md-button",
+                  {
+                    staticClass: "md-icon-button md-list-action",
+                    attrs: {
+                      to: { name: "auth.chooser", query: _vm.routeQuery }
+                    }
+                  },
+                  [
+                    _c("md-icon", { staticClass: "md-primary" }, [
+                      _vm._v("expand_more")
+                    ])
+                  ],
+                  1
+                )
+              ],
+              1
+            )
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "md-card-content",
+          [
+            _c(
+              "md-layout",
+              [
+                _c(
+                  "md-field",
+                  { class: _vm.getValidationClass("password") },
+                  [
+                    _c("label", [_vm._v("输入您的新密码")]),
+                    _vm._v(" "),
+                    _c("md-input", {
+                      attrs: {
+                        autocomplete: "off",
+                        type: "password",
+                        disabled: _vm.sending
+                      },
+                      model: {
+                        value: _vm.mainDatas.password,
+                        callback: function($$v) {
+                          _vm.$set(_vm.mainDatas, "password", $$v)
+                        },
+                        expression: "mainDatas.password"
+                      }
+                    }),
+                    _vm._v(" "),
+                    !_vm.$v.mainDatas.password.required
+                      ? _c("span", { staticClass: "md-error" }, [
+                          _vm._v("请输入密码")
+                        ])
+                      : _vm._e()
+                  ],
+                  1
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "md-layout",
+              [
+                _c(
+                  "md-field",
+                  { class: _vm.getValidationClass("password_confirmation") },
+                  [
+                    _c("label", [_vm._v("确认密码")]),
+                    _vm._v(" "),
+                    _c("md-input", {
+                      attrs: {
+                        autocomplete: "off",
+                        type: "password",
+                        disabled: _vm.sending
+                      },
+                      model: {
+                        value: _vm.mainDatas.password_confirmation,
+                        callback: function($$v) {
+                          _vm.$set(_vm.mainDatas, "password_confirmation", $$v)
+                        },
+                        expression: "mainDatas.password_confirmation"
+                      }
+                    }),
+                    _vm._v(" "),
+                    !_vm.$v.mainDatas.password_confirmation.sameAsPassword
+                      ? _c("span", { staticClass: "md-error" }, [
+                          _vm._v("确认密码不符合要求")
+                        ])
+                      : _vm._e()
+                  ],
+                  1
+                )
+              ],
+              1
+            )
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "md-card-actions",
+          [
+            _c("span", { staticClass: "flex" }),
+            _vm._v(" "),
+            _c(
+              "md-button",
+              {
+                staticClass: "md-primary md-raised",
+                attrs: { type: "submit", disabled: _vm.sending }
+              },
+              [_vm._v("设置")]
+            )
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _vm.sending
+          ? _c("md-progress-bar", { attrs: { "md-mode": "indeterminate" } })
+          : _vm._e()
+      ],
+      1
+    )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -448,7 +430,7 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-1cedd92c", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-44986634", module.exports)
   }
 }
 
@@ -1836,25 +1818,21 @@ exports.default = withParams;
 
 /***/ }),
 
-/***/ "./resources/assets/js/vendor/gmf-sys/pages/Auth/PasswordFindSms.vue":
+/***/ "./resources/assets/js/vendor/gmf-sys/pages/Auth/Reset.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__("./node_modules/extract-text-webpack-plugin/dist/loader.js?{\"id\":1,\"omit\":1,\"remove\":true}!./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1cedd92c\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/vendor/gmf-sys/pages/Auth/PasswordFindSms.vue")
-}
 var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
 /* script */
-var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/vendor/gmf-sys/pages/Auth/PasswordFindSms.vue")
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/vendor/gmf-sys/pages/Auth/Reset.vue")
 /* template */
-var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-1cedd92c\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/vendor/gmf-sys/pages/Auth/PasswordFindSms.vue")
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-44986634\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/vendor/gmf-sys/pages/Auth/Reset.vue")
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = injectStyle
+var __vue_styles__ = null
 /* scopeId */
-var __vue_scopeId__ = "data-v-1cedd92c"
+var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
@@ -1865,7 +1843,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources\\assets\\js\\vendor\\gmf-sys\\pages\\Auth\\PasswordFindSms.vue"
+Component.options.__file = "resources\\assets\\js\\vendor\\gmf-sys\\pages\\Auth\\Reset.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -1874,9 +1852,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-1cedd92c", Component.options)
+    hotAPI.createRecord("data-v-44986634", Component.options)
   } else {
-    hotAPI.reload("data-v-1cedd92c", Component.options)
+    hotAPI.reload("data-v-44986634", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true

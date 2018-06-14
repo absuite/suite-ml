@@ -1,4 +1,4 @@
-webpackJsonp([11],{
+webpackJsonp([12],{
 
 /***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/BottomBar/HomeBottomBar.vue":
 /***/ (function(module, exports, __webpack_require__) {
@@ -55,8 +55,19 @@ exports.default = {
   },
   data: function data() {
     return {};
+  },
+  computed: {
+    user: function user() {
+      return this.$root.configs.user || {};
+    },
+    ent: function ent() {
+      return this.$root.configs.ent || {};
+    }
   }
 }; //
+//
+//
+//
 //
 //
 //
@@ -165,21 +176,42 @@ var render = function() {
           _c(
             "md-card",
             [
-              _c("md-card-header", [
-                _c("div", { staticClass: "md-title" }, [
-                  _vm._v("Card with hover effect")
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "md-subhead" }, [
-                  _vm._v("It also have a ripple")
-                ])
-              ]),
+              _c(
+                "md-card-header",
+                [
+                  _c("md-avatar", [
+                    _c("img", {
+                      attrs: { src: _vm.user.avatar, alt: "Avatar" }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "md-title" }, [
+                    _vm._v(_vm._s(_vm.user.name))
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "md-subhead" }, [
+                    _vm._v(_vm._s(_vm.user.memo))
+                  ])
+                ],
+                1
+              ),
               _vm._v(" "),
-              _c("md-card-content", [
-                _vm._v(
-                  "\n        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio itaque ea, nostrum odio. Dolores, sed accusantium quasi non.\n      "
-                )
-              ])
+              _c(
+                "md-card-content",
+                { staticClass: "no-padding" },
+                [
+                  _c("md-x-cell", {
+                    attrs: {
+                      title: "切换主企业",
+                      icon: "md:dashboard",
+                      value: _vm.ent.name,
+                      "is-link": "",
+                      to: "/m/ent/select"
+                    }
+                  })
+                ],
+                1
+              )
             ],
             1
           ),
@@ -189,7 +221,7 @@ var render = function() {
             [
               _c("md-x-cell", {
                 attrs: {
-                  title: "企业",
+                  title: "企业广场",
                   icon: "md:account_balance",
                   "is-link": "",
                   to: "/m/ent/list"
@@ -200,6 +232,7 @@ var render = function() {
                 attrs: {
                   title: "巴指数",
                   icon: "md:track_changes",
+                  value: "今日上升3分",
                   "is-link": ""
                 }
               })

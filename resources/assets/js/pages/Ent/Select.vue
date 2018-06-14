@@ -5,7 +5,7 @@
         <div class="md-toolbar-section-start">
           <app-back-nav></app-back-nav>
         </div>
-        <div class="flex md-title">我加入的企业</div>
+        <div class="flex md-title">切换企业</div>
         <div class="md-toolbar-section-end"></div>
       </div>
     </md-app-toolbar>
@@ -16,8 +16,8 @@
           <md-x-cell-group>
             <md-x-cell :title="item.name" icon="location" :label="item.code" v-for="item in items" :key="item.id">
               <span  slot="extra">
-                <md-x-button size="small" v-if="item.is_default" disabled>默认</md-x-button>
-                <md-x-button v-else size="small" @click="onItemClick(item)">设为默认</md-x-button>
+                <md-x-button size="small" v-if="ent.id==item.id" disabled>当前企业</md-x-button>
+                <md-x-button v-else size="small" @click="onItemClick(item)">设为当前企业</md-x-button>
               </span>
             </md-x-cell>
           </md-x-cell-group>
@@ -34,7 +34,7 @@ import AppBackNav from "../../components/NavBar/BackNav";
 import MdIconAdd from "gmf/components/MdIcon/Parts/MdIconAdd";
 import extend from "lodash/extend";
 export default {
-  name: "EntList",
+  name: "EntSelect",
   components: {
     AppBackNav,
     MdIconAdd
@@ -49,17 +49,15 @@ export default {
   }),
   computed: {
     ent() {
-      return this.$root.configs.ent;
+      return this.$root.configs.ent||{};
     }
   },
   methods: {
     onItemClick(item) {
-      this.$http.post("sys/ents/default", { entId: item.id }).then(
+      this.$http.post("sys/auth/entry-ent/"+item.id).then(
         res => {
-          this.items.forEach(v => {
-            v.is_default = false;
-          });
-          item.is_default = true;
+         this.$setConfigs({ent:res.data.data});
+         this.$http.config({ent:res.data.data},true);
         },
         err => {
           this.$tip("设置失败！");

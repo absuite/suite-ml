@@ -16,7 +16,10 @@
         <md-scroll-load :md-finished="isFinished" @load="onScrollLoad">
         <md-x-cell-group>
             <md-x-cell :title="item.name" icon="location" :label="item.code" v-for="item in items" :key="item.id">
-              <md-x-button slot="extra" size="small">申请加入</md-x-button>
+              <span slot="extra">
+                  <span v-if="item.is_joined">已加入</span>
+                  <md-x-button v-else size="small" @click="onItemClick(item)">申请加入</md-x-button>
+              </span>              
             </md-x-cell>
           </md-x-cell-group>
         </md-scroll-load>
@@ -44,17 +47,21 @@ export default {
   }),
   methods: {
     onItemClick(item) {
-      this.currentEditData = item;
-      this.isEditing = true;
-    },
-    onAddClick() {
-      this.currentEditData = null;
-      this.isEditing = true;
-    },
-    editClosed(data) {
-      if (data && data.isCreated) {
-        this.items.splice(0, 0, data);
-      }
+      this.$dialog
+        .confirm("是否要加入企业")
+        .then(() => {
+          this.$http.post("sys/ents/join", { entId: item.id }).then(
+            res => {
+              if (res && res.data && res.data.data) this.$tip("加入成功！");
+              else this.$tip("已经加入过了!");
+              item.is_joined = true;
+            },
+            err => {
+              this.$tip("加入失败！");
+            }
+          );
+        })
+        .catch(() => {});
     },
     onRefresh(c) {
       this.fetchData(null, c);
@@ -63,25 +70,33 @@ export default {
       this.pager.page++;
       this.fetchData(this.pager, c);
     },
-    onSearch(s){
-      this.$tip('search');
+    onSearch(s) {
+      this.fetchData();
     },
     fetchData(pager, c) {
+      if (!this.search_q) {
+        this.items = [];
+        c && c();
+        this.isFinished = true;
+        return;
+      }
       var options = extend({ q: this.search_q }, { size: 20 }, pager);
       if (!pager) {
         this.items = [];
-        this.isFinished = false;
       }
+      this.$tip.waiting("加载中...");
       this.$http.get("sys/ents", { params: options }).then(
         res => {
           this.items = this.items.concat(res.data.data);
           this.pager = res.data.pager;
           this.isFinished = this.pager.items < this.pager.size;
           c && c();
+          this.$tip.clear();
         },
         err => {
           c && c();
-          this.isFinished=true;
+          this.isFinished = true;
+          this.$tip.clear();
         }
       );
     }
