@@ -18,7 +18,7 @@ routeList.push({ path: '/m/rpt/profit/trend', name: 'rpt.profit.trend', page: 'R
 routeList.push({ path: '/m/rpt/expend/analy', name: 'rpt.expend.analy', page: 'RptExpend/Analy.vue', meta: { keepAlive: true } });
 routeList.push({ path: '/m/rpt/income/analy', name: 'rpt.income.analy', page: 'RptIncome/Analy.vue', meta: { keepAlive: true } });
 routeList.push({ path: '/m/rpt/achieve/total', name: 'rpt.achieve.total', page: 'RptAchieve/Total.vue', meta: { keepAlive: true } });
-routeList.push({ path: '/m/rpt/biz/biz-total', name: 'rpt.biz.total', page: 'RptBiz/Total.vue', meta: { keepAlive: true } });
+routeList.push({ path: '/m/rpt/biz/total', name: 'rpt.biz.total', page: 'RptBiz/Total.vue', meta: { keepAlive: true } });
 
 routeList.push({ path: '/m/ent/list', name: 'ent.list', page: 'Ent/List.vue' });
 routeList.push({ path: '/m/ent/search', name: 'ent.search', page: 'Ent/Search.vue' });

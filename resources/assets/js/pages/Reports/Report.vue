@@ -31,7 +31,7 @@
                     <md-icon slot="icon">assessment</md-icon>
                     <span slot="label">经营业绩</span>
                 </md-layout-grid-item>
-                <md-layout-grid-item  md-link="/m/rpt/biz/biz-total">
+                <md-layout-grid-item  md-link="/m/rpt/biz/total">
                     <md-icon slot="icon">receipt</md-icon>
                     <span slot="label">业务明细</span>
                 </md-layout-grid-item>

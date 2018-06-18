@@ -8,27 +8,27 @@ import routesWeb from './routes/web';
 import gmfComponent from 'gmf/component'
 import URL from 'gmf/core/utils/MdURL';
 import Tip from 'gmf/components/MdTip'
+import amiba from './store/amiba'
 
 gapp.route(routesAuth);
 gapp.route(routesWeb);
 gapp.use(gmfComponent);
+gapp.store(amiba);
 
-function getQueryString(name) {
-    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-    var r = window.location.search.substr(1).match(reg);
-    if (r != null) return unescape(r[2]);
-    return null;
-}
-gapp.config(function() {
-    return new Promise(function(resolve, reject) {
-        var url = new URL(window.location, true);
-        http.get('/site/configs', { params: url.query }).then(res => {
-            http.config(res.data.data);
-            http('suite.cbo').config(res.data.data.entToken);
-            resolve(res.data.data)
-        }, err => {
-            Tip('获取配置信息失败！');
-        });
-    })
+gapp.config(function () {
+  return new Promise(function (resolve, reject) {
+    var url = new URL(window.location, true);
+    http.get('/site/configs', {
+      params: url.query
+    }).then(res => {
+      http.config(res.data.data);
+      resolve(res.data.data);
+    }, err => {
+      Tip('获取配置信息失败！');
+    });
+  })
 });
-gapp.run({ app: AppRoot, locale: 'enUS' });
+gapp.run({
+  app: AppRoot,
+  locale: 'enUS'
+});

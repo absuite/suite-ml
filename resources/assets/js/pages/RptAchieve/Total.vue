@@ -5,7 +5,7 @@
         <div class="md-toolbar-section-start">
           <app-back-nav></app-back-nav>
         </div>
-        <div class="flex md-title">利润排名</div>
+        <div class="flex md-title">经营业绩</div>
         <div class="md-toolbar-section-end">
           <md-icon-filter @click="isShowFilling=true"></md-icon-filter>
         </div>
@@ -15,22 +15,17 @@
       <md-x-tabs @click="onPeriodChanged">
         <md-x-tab v-for="item in periods" :title="item" :key="item.id"></md-x-tab>
       </md-x-tabs>
-      <md-layout>
-        <md-x-chart ref="topChart" :md-data="topChartData">
-          <md-x-bar />
-          <md-x-scale x field="group_name" alias="阿米巴" />
-          <md-x-scale y field="this_profit" alias="利润" />
-          <md-x-tooltip :show-item-marker="false" />
-        </md-x-chart>
-      </md-layout>
       <md-layout class="flex" md-column>
         <md-pull-refresh @refresh="onListRefresh">
           <md-scroll-load :md-finished="isListFinished" :immediate-check="false" @load="onListScrollLoad">
             <md-table v-model="listItems">
               <md-table-row slot="md-table-row" slot-scope="{ item }">
                 <md-table-cell md-label="阿米巴">{{ item.group_name }}</md-table-cell>
+                <md-table-cell md-label="收/支">
+                  <div>收:{{ item.this_income }}</div>
+                  <div>支:{{ item.this_cost }}</div>
+                </md-table-cell>
                 <md-table-cell md-label="利润">{{ item.this_profit }}</md-table-cell>
-                <md-table-cell md-label="利润率">{{ item.this_profit_rate>0?Math.round(item.this_profit_rate * 100) / 100:'-' }}</md-table-cell>
               </md-table-row>
             </md-table>
           </md-scroll-load>
@@ -58,7 +53,7 @@
   } from "vuex";
 
   export default {
-    name: "RptProfitRank",
+    name: "RptAchieveTotal",
     components: {
       AppPurposePicker,
       AppBackNav,
@@ -83,12 +78,7 @@
     },
     computed: {
       ...mapState("amiba", ["purpose", "periods"]),
-      ...mapGetters("amiba", ["currentPeriod"]),
-      topChartData() {
-        return this.listItems.filter((r, i) => {
-          return i < 5 ? r : false;
-        });
-      }
+      ...mapGetters("amiba", ["currentPeriod"])
     },
     watch: {
       purpose(n, o) {
@@ -100,9 +90,6 @@
         if (n && this.configed && ((o && n.id != o.id) || !o)) {
           this.fetchListData();
         }
-      },
-      topChartData() {
-        this.$refs.topChart.rerender();
       }
     },
     methods: {
@@ -128,13 +115,13 @@
         this.period = tab;
       },
       fetchListData: debounce(function (pager, c) {
-        if (!this.configed || !this.purpose || !this.period) {
+        if (!this.configed || !this.purpose || !this.group || !this.period) {
           c && c();
-          this.isListFinished = true;
           return;
         }
         var options = extend({
             purpose_id: this.purpose.id,
+            group: this.group.code,
             period: this.period.code
           }, {
             size: 20
@@ -143,19 +130,17 @@
         );
         if (!pager) {
           this.listItems = [];
-          this.isListFinished = false;
         }
-        this.$http("suite.cbo").post("api/amiba/reports/profit/rank", options)
+        this.$http("suite.cbo")
+          .post("api/amiba/reports/profit/total", options)
           .then(
             res => {
               this.listItems = this.listItems.concat(res.data.data);
               this.listPager = res.data.pager;
-              this.isListFinished = this.listPager.items < this.listPager.size;
               c && c();
             },
             err => {
               c && c();
-              this.isListFinished = true;
             }
           );
       }, 500)

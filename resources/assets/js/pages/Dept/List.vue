@@ -13,7 +13,7 @@
     </md-app-toolbar>
     <md-app-content>
       <md-pull-refresh @refresh="onRefresh">
-        <md-scroll-load :md-finished="isFinished" @load="onScrollLoad">
+        <md-scroll-load :md-finished="isFinished" :configed="configed" @load="onScrollLoad">
           <md-x-cell-group>
             <md-x-cell icon="md:settings_input_svideo" is-link v-for="item in items" :key="item.id" @click="onItemClick(item)">
               <template slot="title">
@@ -42,6 +42,7 @@
       EditDia
     },
     data: () => ({
+      configed: false,
       items: [],
       pager: {},
       isEditing: false,
@@ -49,6 +50,17 @@
       currentEditData: null,
       search_q: ""
     }),
+    beforeRouteEnter(to, from, next) {
+      next(vm => {
+        vm.$http.appConfig('suite.cbo').then(() => vm.configed = true).catch((err) => vm.$tip(err));
+      });
+    },
+    beforeRouteUpdate(to, from, next) {
+      this.$http.appConfig('suite.cbo').then(() => {
+        this.configed = true;
+        next();
+      }).catch((err) => this.$tip(err));
+    },
     methods: {
       onItemClick(item) {
         this.currentEditData = item;

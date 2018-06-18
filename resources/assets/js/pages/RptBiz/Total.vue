@@ -5,92 +5,202 @@
         <div class="md-toolbar-section-start">
           <app-back-nav></app-back-nav>
         </div>
-        <div class="flex md-title">业务数据</div>
+        <div class="flex md-title">业务明细</div>
         <div class="md-toolbar-section-end">
-          <md-icon-filter @click="onFilterClick"></md-icon-filter>
+          <md-icon-filter @click="isShowFilling=true"></md-icon-filter>
         </div>
       </div>
     </md-app-toolbar>
-    <md-app-content>
-      <md-pull-refresh @refresh="onRefresh">
-        <md-scroll-load :md-finished="isFinished" @load="onScrollLoad">
-          <md-table v-model="items">
-            <md-table-row slot="md-table-row" slot-scope="{ item }">
-              <md-table-cell md-label="物料">{{ item.code }}</md-table-cell>
-              <md-table-cell md-label="Name">{{ item.name }}</md-table-cell>
-              <md-table-cell md-label="Email">{{ item.email }}</md-table-cell>
-              <md-table-cell md-label="Gender">{{ item.gender }}</md-table-cell>
-            </md-table-row>
-          </md-table>
-        </md-scroll-load>
-      </md-pull-refresh>
+    <md-app-content class="layout-column">
+      <md-x-dropdowns v-if="configed">
+        <md-x-dropdown :title="group?group:'阿米巴'">
+          <md-picker :md-data="picker_groups" v-model="selector.groups" />
+        </md-x-dropdown>
+        <md-x-dropdown :title="period?period:'期间'">
+          <md-picker :md-data="picker_periods" v-model="selector.periods" />
+        </md-x-dropdown>
+      </md-x-dropdowns>
+      <md-layout class="flex" md-column>
+        <md-pull-refresh @refresh="onListRefresh">
+          <md-scroll-load :md-finished="isListFinished" :immediate-check="false" @load="onListScrollLoad">
+            <md-x-panel v-for="item in listItems" :key="item.id" :title="item.doc_no" :status="item.use_type_enum" class="item-detail">
+              <md-x-cell title="要素" :value="item.element_name" />
+              <md-x-cell title="对方巴" :value="item.to_group_name" />
+            </md-x-panel>
+          </md-scroll-load>
+        </md-pull-refresh>
+      </md-layout>
+      <md-x-popup v-model="isShowFilling" position="right" md-full>
+        <md-x-nav-bar left-arrow @click-left="isShowFilling=false"></md-x-nav-bar>
+        <md-x-cell-group>
+          <md-x-cell title="核算目的" icon="md:account_balance" @click="isShowFillingPurpose=true" />
+        </md-x-cell-group>
+        <app-purpose-picker v-model="isShowFillingPurpose"></app-purpose-picker>
+      </md-x-popup>
     </md-app-content>
   </md-app>
 </template>
 <script>
+  import AppPurposePicker from "../../components/PurposePicker/PurposePicker";
   import AppBackNav from "../../components/NavBar/BackNav";
   import MdIconFilter from "gmf/components/MdIcon/Parts/MdIconFilter";
   import extend from "lodash/extend";
+  import debounce from "gmf/core/utils/MdDebounce";
+  import {
+    mapState,
+    mapGetters
+  } from "vuex";
+
   export default {
     name: "RptBizTotal",
     components: {
+      AppPurposePicker,
       AppBackNav,
       MdIconFilter
     },
+    created() {
+      console.log(this.$options.name);
+    },
     data: () => ({
-      items: [],
-      pager: {},
-      isFinished: false,
+      configed: false,
+      listItems: [],
+      listPager: {},
+      isListFinished: false,
+      isShowFillingPurpose: false,
       isShowFilling: false,
-      search_q: ""
-    }),
-    methods: {
-      onFilterClick() {
-        this.isShowFilling = true;
+      selector: {
+        groups: [],
+        periods: [],
       },
-      editClosed(data) {
-        if (data && data.isCreated) {
-          this.items.splice(0, 0, data);
+      htmlOptions: {
+        position: ['50%', '50%'],
+        content: '3444',
+        style: {
+          fontSize: 24
         }
       },
-      onRefresh(c) {
-        this.fetchData(null, c);
+      legendOptions: {
+        position: 'bottom',
+        align: 'center',
+        itemFormatter(val) {
+          return val
+        }
       },
-      onScrollLoad(c) {
-        this.pager.page++;
-        this.fetchData(this.pager, c);
+      yOptions: {
+        formatter(val) {
+          return val * 100 + '%'
+        }
       },
-      fetchData(pager, c) {
+    }),
+    beforeRouteEnter(to, from, next) {
+      next(vm => {
+        vm.config();
+      });
+    },
+    computed: {
+      ...mapState("amiba", ["purpose", "periods", "groups"]),
+      ...mapGetters("amiba", ["currentPeriod"]),
+      picker_periods() {
+        return this.periods && this.periods.length > 0 ? [
+          this.periods.map(r => {
+            r.value = r.id;
+            return r;
+          })
+        ] : [];
+      },
+      picker_groups() {
+        return this.groups && this.groups.length > 0 ? [
+          this.groups.map(r => {
+            r.value = r.id;
+            return r;
+          })
+        ] : [];
+      },
+      group() {
+        if (this.selector.groups.length && this.selector.groups[0]) {
+          return this.groups.find(r => r.id === this.selector.groups[0]);
+        }
+        return null;
+      },
+      period() {
+        if (this.selector.periods.length && this.selector.periods[0]) {
+          return this.periods.find(r => r.id === this.selector.periods[0]);
+        }
+        return null;
+      },
+    },
+    watch: {
+      purpose(n, o) {
+        if (n && this.configed && ((o && n.id != o.id) || !o)) {
+          this.fetchListData();
+        }
+      },
+      group(n, o) {
+        if (n && this.configed && ((o && n.id != o.id) || !o)) {
+          this.fetchListData();
+        }
+      },
+      period(n, o) {
+        if (n && this.configed && ((o && n.id != o.id) || !o)) {
+          this.fetchListData();
+        }
+      },
+    },
+    methods: {
+      async config() {
+        await this.$store.dispatch("amiba/config");
+        const purposes = await this.$store.dispatch("amiba/getPurposes");
+        if (!this.purpose && purposes && purposes.length > 0) {
+          await this.$store.dispatch("amiba/setPurpose", purposes[0]);
+        }
+        await this.$store.dispatch("amiba/getPeriods");
+        await this.$store.dispatch("amiba/getGroups");
+        if (this.currentPeriod) {
+          this.selector.periods = [this.currentPeriod.id];
+        }
+        this.configed = true;
+        this.fetchListData();
+      },
+      onListRefresh(c) {
+        this.fetchListData(null, c);
+      },
+      onListScrollLoad(c) {
+        this.listPager.page++;
+        this.fetchListData(this.listPager, c);
+      },
+      onPeriodChanged(index, tab) {
+        this.period = tab;
+      },
+      fetchListData: debounce(function (pager, c) {
+        if (!this.configed || !this.purpose || !this.group || !this.period) {
+          c && c();
+          return;
+        }
         var options = extend({
-            q: this.search_q
+            purpose_id: this.purpose.id,
+            group: this.group.code,
+            period: this.period.code
           }, {
             size: 20
           },
           pager
         );
         if (!pager) {
-          this.items = [];
-          this.isFinished=false;
+          this.listItems = [];
         }
         this.$http("suite.cbo")
-          .get("api/amiba/reports/biz-total", {
-            params: options
-          })
+          .post("api/amiba/reports/biz/total", options)
           .then(
             res => {
-              this.items = this.items.concat(res.data.data);
-              this.pager = res.data.pager;
-              this.isFinished=this.pager.items<this.pager.size;
+              this.listItems = this.listItems.concat(res.data.data);
+              this.listPager = res.data.pager;
               c && c();
             },
             err => {
               c && c();
             }
           );
-      }
-    },
-    mounted() {
-
+      }, 500)
     }
   };
 
@@ -104,6 +214,10 @@
 
   .md-avatar .md-icon {
     font-size: 36px;
+  }
+
+  .item-detail {
+    margin-bottom: 10px;
   }
 
 </style>
