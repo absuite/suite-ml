@@ -32,7 +32,7 @@ class WXController extends Controller {
 		if (empty($input['timestamp']) || empty($input['signature']) || empty($input['nonce'])) {
 			return false;
 		}
-		$token = 'u9hubmp';
+		$token =env('GMF_MP_WX_TOKEN');
 		$tmpArr = array($input['timestamp'], $input["nonce"], $token);
 		sort($tmpArr, SORT_STRING);
 		$tmpStr = implode($tmpArr);
