@@ -122,7 +122,7 @@ class WXJSSDK {
 			$datas['access_token'] = $this->getAccessToken();
 		}
 		try {
-			$res = $client->get($url, ['query' => $query]);
+			$res = $client->get($url, ['query' => $datas]);
 			$result = (string) $res->getBody();
 			return json_decode($result);
 		} catch (\Exception $e) {
