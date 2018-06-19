@@ -1,7 +1,20 @@
 ## 通过 gmf 安装器
-首先，通过使用 Composer 安装 Gmf 安装器：
-```
-composer global require "ggoop/gmf-installer"
-```
-
-安装方法见：[gmf-installer 使用说明](https://github.com/ggoop/gmf-installer)
+微信菜单:
+POST:https://api.weixin.qq.com/cgi-bin/menu/create?access_token=ACCESS_TOKEN
+{
+	"button": [{
+			"type": "view",
+			"name": "工作",
+			"url": "http://m.myamiba.cn/m/works"
+		},
+		{
+			"type": "view",
+			"name": "报表",
+			"url": "http://m.myamiba.cn/m/reports"
+		}, {
+			"type": "view",
+			"name": "我的",
+			"url": "http://m.myamiba.cn/m/settings"
+		}
+	]
+}
