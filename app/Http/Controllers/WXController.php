@@ -22,12 +22,11 @@ class WXController extends Controller {
     $from_xml = $request->getContent();
     $xmlObj = simplexml_load_string($from_xml, 'SimpleXMLElement', LIBXML_NOCDATA);
 
-    if ($xmlObj->MsgType === 'event' && !empty($input['openid']) && ($xmlObj->Event === 'subscribe' || $xmlObj->Event === 'VIEW')) {
+    if ($xmlObj->MsgType == 'event' && !empty($input['openid']) && ($xmlObj->Event == 'subscribe' || $xmlObj->Event == 'VIEW')) {
       $user = $this->autoRegUser($input['openid']);
       Auth::login($user);
-    }    
-    Log::error('mp handle ' . json_encode($request->all()));
-
+      Log::error('mp handle ' . json_encode($request->all()));
+    }
     return '';
   }
   private function autoRegUser($openid) {
