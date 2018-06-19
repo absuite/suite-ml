@@ -50,7 +50,7 @@ export default {
       this.$dialog
         .confirm("是否要加入企业")
         .then(() => {
-          this.$http.post("sys/ents/join", { entId: item.id }).then(
+          this.$http.post("ents/join", { entId: item.id }).then(
             res => {
               if (res && res.data && res.data.data) this.$tip("加入成功！");
               else this.$tip("已经加入过了!");
