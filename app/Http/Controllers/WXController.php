@@ -25,7 +25,7 @@ class WXController extends Controller
     $keysArr = array(
       "response_type" => "code",
       "appid" => env('GMF_MP_WX_APPID'),
-      "redirect_uri" => urlencode(env('GMF_MP_WX_CALLBACK')),
+      "redirect_uri" => urlencode(url(env('GMF_MP_WX_CALLBACK'))),
       'scope' => 'snsapi_base',
       "state" => $stateCode->id,
     );

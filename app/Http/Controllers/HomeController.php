@@ -28,7 +28,7 @@ class HomeController extends Controller
       $isWx = strpos(strtolower($ua), 'micromessenger') > 0;
     }
     if (empty($isWx)) {
-      return '请在微信端打开';
+      return view('not-in-wx');
     }
     if (!GAuth::id()) {
       return redirect('/wx/login');
