@@ -1,17 +1,5 @@
 <template>
-  <md-app md-waterfall md-mode="fixed">
-    <md-app-toolbar class="md-primary">
-      <div class="md-toolbar-row">
-        <div class="md-toolbar-section-start">
-          <app-back-nav></app-back-nav>
-        </div>
-        <div class="flex md-title">支出分析</div>
-        <div class="md-toolbar-section-end">
-          <md-icon-filter @click="isShowFilling=true"></md-icon-filter>
-        </div>
-      </div>
-    </md-app-toolbar>
-    <md-app-content class="layout-column">
+<app-rpt-view title="支出分析">
       <md-x-dropdowns v-if="configed">
         <md-x-dropdown :title="group?group:'阿米巴'">
           <md-picker :md-data="picker_groups" v-model="selector.groups" />
@@ -40,20 +28,10 @@
           </md-table>
         </md-pull-refresh>
       </md-layout>
-      <md-x-popup v-model="isShowFilling" position="right" md-full>
-        <md-x-nav-bar left-arrow @click-left="isShowFilling=false"></md-x-nav-bar>
-        <md-x-cell-group>
-          <md-x-cell title="核算目的" icon="md:account_balance" @click="isShowFillingPurpose=true" />
-        </md-x-cell-group>
-        <app-purpose-picker v-model="isShowFillingPurpose"></app-purpose-picker>
-      </md-x-popup>
-    </md-app-content>
-  </md-app>
+</app-rpt-view>
 </template>
 <script>
-  import AppPurposePicker from "../../components/PurposePicker/PurposePicker";
-  import AppBackNav from "../../components/NavBar/BackNav";
-  import MdIconFilter from "gmf/components/MdIcon/Parts/MdIconFilter";
+import AppRptView from "../../components/NavBar/RptView";
   import extend from "lodash/extend";
   import debounce from "gmf/core/utils/MdDebounce";
   import {
@@ -64,9 +42,7 @@
   export default {
     name: "RptExpendAnaly",
     components: {
-      AppPurposePicker,
-      AppBackNav,
-      MdIconFilter
+      AppRptView
     },
     created() {
       console.log(this.$options.name);
@@ -75,8 +51,6 @@
       configed: false,
       listItems: [],
       listPager: {},
-      isShowFillingPurpose: false,
-      isShowFilling: false,
       selector: {
         groups: [],
         periods: [],
@@ -222,14 +196,6 @@
 
 </script>
 <style lang="scss" scoped>
-  .md-app {
-    min-height: 100%;
-    max-width: 100%;
-    height: 100%;
-  }
 
-  .md-avatar .md-icon {
-    font-size: 36px;
-  }
 
 </style>
