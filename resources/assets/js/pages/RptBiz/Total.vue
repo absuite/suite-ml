@@ -21,7 +21,7 @@
 </app-rpt-view>
 </template>
 <script>
-import AppRptView from "../../components/NavBar/RptView";
+import AppRptView from "../../components/RptView/RptView";
   import extend from "lodash/extend";
   import debounce from "gmf/core/utils/MdDebounce";
   import {

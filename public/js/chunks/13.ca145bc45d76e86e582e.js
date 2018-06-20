@@ -80,7 +80,7 @@ exports.default = {
       var _this = this;
 
       this.$dialog.confirm("是否要加入企业").then(function () {
-        _this.$http.post("sys/ents/join", { entId: item.id }).then(function (res) {
+        _this.$http.post("ents/join", { entId: item.id }).then(function (res) {
           if (res && res.data && res.data.data) _this.$tip("加入成功！");else _this.$tip("已经加入过了!");
           item.is_joined = true;
         }, function (err) {

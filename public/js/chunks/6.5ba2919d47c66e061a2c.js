@@ -1,4 +1,4 @@
-webpackJsonp([9],{
+webpackJsonp([6],{
 
 /***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/NavBar/BackNav.vue":
 /***/ (function(module, exports, __webpack_require__) {
@@ -104,7 +104,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/pages/RptExpend/Analy.vue":
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/RptView/RptView.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -119,33 +119,6 @@ var _regenerator = __webpack_require__("./node_modules/babel-runtime/regenerator
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -198,11 +171,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 exports.default = {
-  name: "RptExpendAnaly",
+  name: "RptView",
   components: {
     AppPurposePicker: _PurposePicker2.default,
     AppBackNav: _BackNav2.default,
     MdIconFilter: _MdIconFilter2.default
+  },
+  props: {
+    title: Boolean
   },
   created: function created() {
     console.log(this.$options.name);
@@ -211,103 +187,11 @@ exports.default = {
   data: function data() {
     return {
       configed: false,
-      listItems: [],
-      listPager: {},
-      isShowFillingPurpose: false,
       isShowFilling: false,
-      selector: {
-        groups: [],
-        periods: []
-      },
-      htmlOptions: {
-        position: ['50%', '50%'],
-        content: '3444',
-        style: {
-          fontSize: 24
-        }
-      },
-      legendOptions: {
-        position: 'bottom',
-        align: 'center',
-        itemFormatter: function itemFormatter(val) {
-          return val;
-        }
-      },
-      yOptions: {
-        formatter: function formatter(val) {
-          return val * 100 + '%';
-        }
-      }
+      isShowFillingPurpose: false
     };
   },
-  beforeRouteEnter: function beforeRouteEnter(to, from, next) {
-    next(function (vm) {
-      vm.config();
-    });
-  },
-
-  computed: _extends({}, (0, _vuex.mapState)("amiba", ["purpose", "periods", "groups"]), (0, _vuex.mapGetters)("amiba", ["currentPeriod"]), {
-    picker_periods: function picker_periods() {
-      return this.periods && this.periods.length > 0 ? [this.periods.map(function (r) {
-        r.value = r.id;
-        return r;
-      })] : [];
-    },
-    picker_groups: function picker_groups() {
-      return this.groups && this.groups.length > 0 ? [this.groups.map(function (r) {
-        r.value = r.id;
-        return r;
-      })] : [];
-    },
-    topChartData: function topChartData() {
-      return this.listItems.map(function (r) {
-        r.t = '1';
-        return r;
-      }).filter(function (r, i) {
-        return i < 10 ? r : false;
-      });
-    },
-    group: function group() {
-      var _this = this;
-
-      if (this.selector.groups.length && this.selector.groups[0]) {
-        return this.groups.find(function (r) {
-          return r.id === _this.selector.groups[0];
-        });
-      }
-      return null;
-    },
-    period: function period() {
-      var _this2 = this;
-
-      if (this.selector.periods.length && this.selector.periods[0]) {
-        return this.periods.find(function (r) {
-          return r.id === _this2.selector.periods[0];
-        });
-      }
-      return null;
-    }
-  }),
-  watch: {
-    purpose: function purpose(n, o) {
-      if (n && this.configed && (o && n.id != o.id || !o)) {
-        this.fetchListData();
-      }
-    },
-    group: function group(n, o) {
-      if (n && this.configed && (o && n.id != o.id || !o)) {
-        this.fetchListData();
-      }
-    },
-    period: function period(n, o) {
-      if (n && this.configed && (o && n.id != o.id || !o)) {
-        this.fetchListData();
-      }
-    },
-    topChartData: function topChartData() {
-      this.$refs.topChart.rerender();
-    }
-  },
+  computed: _extends({}, (0, _vuex.mapState)("amiba", ["purpose"])),
   methods: {
     config: function () {
       var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
@@ -335,21 +219,238 @@ exports.default = {
                 return this.$store.dispatch("amiba/setPurpose", purposes[0]);
 
               case 8:
+                this.configed = true;
+
+              case 9:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function config() {
+        return _ref.apply(this, arguments);
+      }
+
+      return config;
+    }()
+  }
+};
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/pages/RptProfit/Trend.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _regenerator = __webpack_require__("./node_modules/babel-runtime/regenerator/index.js");
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+var _RptView = __webpack_require__("./resources/assets/js/components/RptView/RptView.vue");
+
+var _RptView2 = _interopRequireDefault(_RptView);
+
+var _extend = __webpack_require__("./node_modules/lodash/extend.js");
+
+var _extend2 = _interopRequireDefault(_extend);
+
+var _MdDebounce = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/utils/MdDebounce.js");
+
+var _MdDebounce2 = _interopRequireDefault(_MdDebounce);
+
+var _vuex = __webpack_require__("./node_modules/vuex/dist/vuex.esm.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+exports.default = {
+  name: "RptProfitTrend",
+  components: {
+    AppRptView: _RptView2.default
+  },
+  created: function created() {
+    console.log(this.$options.name);
+  },
+
+  data: function data() {
+    return {
+      configed: false,
+      listItems: [],
+      listPager: {},
+      selector: {
+        groups: [],
+        fm_periods: [],
+        to_periods: []
+      }
+    };
+  },
+  beforeRouteEnter: function beforeRouteEnter(to, from, next) {
+    next(function (vm) {
+      vm.config();
+    });
+  },
+
+  computed: _extends({}, (0, _vuex.mapState)("amiba", ["purpose", "periods", "groups"]), (0, _vuex.mapGetters)("amiba", ["currentPeriod"]), {
+    picker_periods: function picker_periods() {
+      return this.periods && this.periods.length > 0 ? [this.periods.map(function (r) {
+        r.value = r.id;
+        return r;
+      })] : [];
+    },
+    picker_groups: function picker_groups() {
+      return this.groups && this.groups.length > 0 ? [this.groups.map(function (r) {
+        r.value = r.id;
+        return r;
+      })] : [];
+    },
+    topChartData: function topChartData() {
+      return this.listItems.filter(function (r, i) {
+        return i < 5 ? r : false;
+      });
+    },
+    group: function group() {
+      var _this = this;
+
+      if (this.selector.groups.length && this.selector.groups[0]) {
+        return this.groups.find(function (r) {
+          return r.id === _this.selector.groups[0];
+        });
+      }
+      return null;
+    },
+    fm_period: function fm_period() {
+      var _this2 = this;
+
+      if (this.selector.fm_periods.length && this.selector.fm_periods[0]) {
+        return this.periods.find(function (r) {
+          return r.id === _this2.selector.fm_periods[0];
+        });
+      }
+      return null;
+    },
+    to_period: function to_period() {
+      var _this3 = this;
+
+      if (this.selector.to_periods.length && this.selector.to_periods[0]) {
+        return this.periods.find(function (r) {
+          return r.id === _this3.selector.to_periods[0];
+        });
+      }
+      return null;
+    }
+  }),
+  watch: {
+    purpose: function purpose(n, o) {
+      if (n && this.configed && (o && n.id != o.id || !o)) {
+        this.fetchListData();
+      }
+    },
+    group: function group(n, o) {
+      if (n && this.configed && (o && n.id != o.id || !o)) {
+        this.fetchListData();
+      }
+    },
+    fm_period: function fm_period(n, o) {
+      if (n && this.configed && (o && n.id != o.id || !o)) {
+        this.fetchListData();
+      }
+    },
+    to_period: function to_period(n, o) {
+      if (n && this.configed && (o && n.id != o.id || !o)) {
+        this.fetchListData();
+      }
+    },
+    topChartData: function topChartData() {
+      this.$refs.topChart.rerender();
+    }
+  },
+  methods: {
+    config: function () {
+      var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
+        var purposes, periods;
+        return _regenerator2.default.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return this.$store.dispatch("amiba/config");
+
+              case 2:
+                _context.next = 4;
+                return this.$store.dispatch("amiba/getPurposes");
+
+              case 4:
+                purposes = _context.sent;
+
+                if (!(!this.purpose && purposes && purposes.length > 0)) {
+                  _context.next = 8;
+                  break;
+                }
+
+                _context.next = 8;
+                return this.$store.dispatch("amiba/setPurpose", purposes[0]);
+
+              case 8:
                 _context.next = 10;
                 return this.$store.dispatch("amiba/getPeriods");
 
               case 10:
-                _context.next = 12;
+                periods = _context.sent;
+                _context.next = 13;
                 return this.$store.dispatch("amiba/getGroups");
 
-              case 12:
+              case 13:
                 if (this.currentPeriod) {
-                  this.selector.periods = [this.currentPeriod.id];
+                  this.selector.to_periods = [this.currentPeriod.id];
                 }
                 this.configed = true;
                 this.fetchListData();
 
-              case 15:
+              case 16:
               case "end":
                 return _context.stop();
             }
@@ -371,25 +472,26 @@ exports.default = {
     },
 
     fetchListData: (0, _MdDebounce2.default)(function (pager, c) {
-      var _this3 = this;
+      var _this4 = this;
 
-      if (!this.configed || !this.purpose || !this.group || !this.period) {
+      if (!this.configed || !this.purpose || !this.group || !this.fm_period || !this.to_period) {
         c && c();
         return;
       }
       var options = (0, _extend2.default)({
         purpose_id: this.purpose.id,
         group: this.group.code,
-        period: this.period.code
+        fm_period: this.fm_period.code,
+        to_period: this.to_period.code
       }, {
         size: 20
       }, pager);
       if (!pager) {
         this.listItems = [];
       }
-      this.$http("suite.cbo").post("api/amiba/reports/expend/analy", options).then(function (res) {
-        _this3.listItems = _this3.listItems.concat(res.data.data);
-        _this3.listPager = res.data.pager;
+      this.$http("suite.cbo").post("api/amiba/reports/profit/trend", options).then(function (res) {
+        _this4.listItems = _this4.listItems.concat(res.data.data);
+        _this4.listPager = res.data.pager;
         c && c();
       }, function (err) {
         c && c();
@@ -449,7 +551,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-0ad81bf2\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/pages/RptExpend/Analy.vue":
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1ae8b616\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/PurposePicker/PurposePicker.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(false);
@@ -457,14 +559,29 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n.md-app[data-v-0ad81bf2] {\n  min-height: 100%;\n  max-width: 100%;\n  height: 100%;\n}\n.md-avatar .md-icon[data-v-0ad81bf2] {\n  font-size: 36px;\n}\n", ""]);
+exports.push([module.i, "", ""]);
 
 // exports
 
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1ae8b616\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/PurposePicker/PurposePicker.vue":
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2cd4f153\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/RptView/RptView.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.md-app[data-v-2cd4f153] {\n  min-height: 100%;\n  max-width: 100%;\n  height: 100%;\n}\n.md-avatar .md-icon[data-v-2cd4f153] {\n  font-size: 36px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4be3f654\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/pages/RptProfit/Trend.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(false);
@@ -494,33 +611,6 @@ exports.push([module.i, "\n.md-icon[data-v-7fd8c5e7] {\n  font-size: 30px;\n}\n"
 
 /***/ }),
 
-/***/ "./node_modules/extract-text-webpack-plugin/dist/loader.js?{\"id\":1,\"omit\":1,\"remove\":true}!./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-0ad81bf2\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/pages/RptExpend/Analy.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-0ad81bf2\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/pages/RptExpend/Analy.vue");
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("74ab089a", content, false, {});
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-0ad81bf2\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Analy.vue", function() {
-     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-0ad81bf2\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Analy.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-
 /***/ "./node_modules/extract-text-webpack-plugin/dist/loader.js?{\"id\":1,\"omit\":1,\"remove\":true}!./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1ae8b616\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/PurposePicker/PurposePicker.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -538,6 +628,60 @@ if(false) {
  if(!content.locals) {
    module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1ae8b616\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PurposePicker.vue", function() {
      var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1ae8b616\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PurposePicker.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ "./node_modules/extract-text-webpack-plugin/dist/loader.js?{\"id\":1,\"omit\":1,\"remove\":true}!./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2cd4f153\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/RptView/RptView.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2cd4f153\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/RptView/RptView.vue");
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("268bca20", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2cd4f153\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./RptView.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2cd4f153\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./RptView.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ "./node_modules/extract-text-webpack-plugin/dist/loader.js?{\"id\":1,\"omit\":1,\"remove\":true}!./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4be3f654\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/pages/RptProfit/Trend.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4be3f654\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/pages/RptProfit/Trend.vue");
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("29aa8188", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4be3f654\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Trend.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4be3f654\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Trend.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -575,7 +719,52 @@ if(false) {
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-0ad81bf2\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/pages/RptExpend/Analy.vue":
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-1ae8b616\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/PurposePicker/PurposePicker.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "md-x-popup",
+    {
+      attrs: { position: "bottom" },
+      model: {
+        value: _vm.isShowFillingPurpose,
+        callback: function($$v) {
+          _vm.isShowFillingPurpose = $$v
+        },
+        expression: "isShowFillingPurpose"
+      }
+    },
+    [
+      _c("md-picker", {
+        attrs: { "md-data": [_vm.purposes], "md-show-toolbar": "" },
+        on: {
+          "md-cancel": function($event) {
+            _vm.isShowFillingPurpose = false
+          },
+          "md-confirm": _vm.onConfirmPurpose
+        }
+      })
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-1ae8b616", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-2cd4f153\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/RptView/RptView.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -595,7 +784,9 @@ var render = function() {
             1
           ),
           _vm._v(" "),
-          _c("div", { staticClass: "flex md-title" }, [_vm._v("支出分析")]),
+          _c("div", { staticClass: "flex md-title" }, [
+            _vm._v(_vm._s(_vm.title))
+          ]),
           _vm._v(" "),
           _c(
             "div",
@@ -618,136 +809,7 @@ var render = function() {
         "md-app-content",
         { staticClass: "layout-column" },
         [
-          _vm.configed
-            ? _c(
-                "md-x-dropdowns",
-                [
-                  _c(
-                    "md-x-dropdown",
-                    { attrs: { title: _vm.group ? _vm.group : "阿米巴" } },
-                    [
-                      _c("md-picker", {
-                        attrs: { "md-data": _vm.picker_groups },
-                        model: {
-                          value: _vm.selector.groups,
-                          callback: function($$v) {
-                            _vm.$set(_vm.selector, "groups", $$v)
-                          },
-                          expression: "selector.groups"
-                        }
-                      })
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "md-x-dropdown",
-                    { attrs: { title: _vm.period ? _vm.period : "期间" } },
-                    [
-                      _c("md-picker", {
-                        attrs: { "md-data": _vm.picker_periods },
-                        model: {
-                          value: _vm.selector.periods,
-                          callback: function($$v) {
-                            _vm.$set(_vm.selector, "periods", $$v)
-                          },
-                          expression: "selector.periods"
-                        }
-                      })
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            : _vm._e(),
-          _vm._v(" "),
-          _c(
-            "md-layout",
-            [
-              _c(
-                "md-x-chart",
-                { ref: "topChart", attrs: { "md-data": _vm.topChartData } },
-                [
-                  _c("md-x-scale", { attrs: { y: "", field: "value" } }),
-                  _vm._v(" "),
-                  _c("md-x-scale", { attrs: { x: "", field: "t" } }),
-                  _vm._v(" "),
-                  _c("md-x-pie", {
-                    attrs: {
-                      radius: 1,
-                      "inner-radius": 0.7,
-                      "series-field": "element_name"
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c("md-x-legend", { attrs: { position: "bottom" } }),
-                  _vm._v(" "),
-                  _c("md-x-guide", {
-                    attrs: { type: "text", options: _vm.htmlOptions }
-                  })
-                ],
-                1
-              )
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "md-layout",
-            { staticClass: "flex", attrs: { "md-column": "" } },
-            [
-              _c(
-                "md-pull-refresh",
-                { on: { refresh: _vm.onListRefresh } },
-                [
-                  _c("md-table", {
-                    scopedSlots: _vm._u([
-                      {
-                        key: "md-table-row",
-                        fn: function(ref) {
-                          var item = ref.item
-                          return _c(
-                            "md-table-row",
-                            {},
-                            [
-                              _c(
-                                "md-table-cell",
-                                { attrs: { "md-label": "项目" } },
-                                [_vm._v(_vm._s(item.element_name))]
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "md-table-cell",
-                                { attrs: { "md-label": "利润" } },
-                                [_vm._v(_vm._s(item.value))]
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "md-table-cell",
-                                { attrs: { "md-label": "利润率" } },
-                                [_vm._v(_vm._s(item.rate))]
-                              )
-                            ],
-                            1
-                          )
-                        }
-                      }
-                    ]),
-                    model: {
-                      value: _vm.listItems,
-                      callback: function($$v) {
-                        _vm.listItems = $$v
-                      },
-                      expression: "listItems"
-                    }
-                  })
-                ],
-                1
-              )
-            ],
-            1
-          ),
+          _vm._t("default"),
           _vm._v(" "),
           _c(
             "md-x-popup",
@@ -799,6 +861,201 @@ var render = function() {
             1
           )
         ],
+        2
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-2cd4f153", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-4be3f654\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/pages/RptProfit/Trend.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "app-rpt-view",
+    { attrs: { title: "利润趋势" } },
+    [
+      _vm.configed
+        ? _c(
+            "md-x-dropdowns",
+            [
+              _c(
+                "md-x-dropdown",
+                { attrs: { title: _vm.group ? _vm.group : "阿米巴" } },
+                [
+                  _c("md-picker", {
+                    attrs: { "md-data": _vm.picker_groups },
+                    model: {
+                      value: _vm.selector.groups,
+                      callback: function($$v) {
+                        _vm.$set(_vm.selector, "groups", $$v)
+                      },
+                      expression: "selector.groups"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "md-x-dropdown",
+                {
+                  attrs: { title: _vm.fm_period ? _vm.fm_period : "开始期间" }
+                },
+                [
+                  _c("md-picker", {
+                    attrs: { "md-data": _vm.picker_periods },
+                    model: {
+                      value: _vm.selector.fm_periods,
+                      callback: function($$v) {
+                        _vm.$set(_vm.selector, "fm_periods", $$v)
+                      },
+                      expression: "selector.fm_periods"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "md-x-dropdown",
+                {
+                  attrs: { title: _vm.to_period ? _vm.to_period : "结束期间" }
+                },
+                [
+                  _c("md-picker", {
+                    attrs: { "md-data": _vm.picker_periods },
+                    model: {
+                      value: _vm.selector.to_periods,
+                      callback: function($$v) {
+                        _vm.$set(_vm.selector, "to_periods", $$v)
+                      },
+                      expression: "selector.to_periods"
+                    }
+                  })
+                ],
+                1
+              )
+            ],
+            1
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _c(
+        "md-layout",
+        [
+          _c(
+            "md-x-chart",
+            { ref: "topChart", attrs: { "md-data": _vm.topChartData } },
+            [
+              _c("md-x-scale", {
+                attrs: {
+                  x: "",
+                  field: "period_name",
+                  alias: "期间",
+                  "tick-count": 0
+                }
+              }),
+              _vm._v(" "),
+              _c("md-x-scale", {
+                attrs: {
+                  y: "",
+                  field: "this_profit",
+                  alias: "利润",
+                  "tick-count": 5
+                }
+              }),
+              _vm._v(" "),
+              _c("md-x-point", {
+                style: { stroke: "#fff", lineWidth: 1 },
+                attrs: { shape: "smooth" }
+              }),
+              _vm._v(" "),
+              _c("md-x-line", { attrs: { shape: "smooth" } })
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "md-layout",
+        { staticClass: "flex", attrs: { "md-column": "" } },
+        [
+          _c(
+            "md-pull-refresh",
+            { on: { refresh: _vm.onListRefresh } },
+            [
+              _c("md-table", {
+                scopedSlots: _vm._u([
+                  {
+                    key: "md-table-row",
+                    fn: function(ref) {
+                      var item = ref.item
+                      return _c(
+                        "md-table-row",
+                        {},
+                        [
+                          _c(
+                            "md-table-cell",
+                            { attrs: { "md-label": "期间" } },
+                            [_vm._v(_vm._s(item.period_name))]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "md-table-cell",
+                            { attrs: { "md-label": "利润" } },
+                            [_vm._v(_vm._s(item.this_profit))]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "md-table-cell",
+                            { attrs: { "md-label": "利润率" } },
+                            [
+                              _vm._v(
+                                _vm._s(
+                                  item.this_profit_rate > 0
+                                    ? Math.round(item.this_profit_rate * 100) /
+                                      100
+                                    : "-"
+                                )
+                              )
+                            ]
+                          )
+                        ],
+                        1
+                      )
+                    }
+                  }
+                ]),
+                model: {
+                  value: _vm.listItems,
+                  callback: function($$v) {
+                    _vm.listItems = $$v
+                  },
+                  expression: "listItems"
+                }
+              })
+            ],
+            1
+          )
+        ],
         1
       )
     ],
@@ -811,52 +1068,7 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-0ad81bf2", module.exports)
-  }
-}
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-1ae8b616\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/PurposePicker/PurposePicker.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "md-x-popup",
-    {
-      attrs: { position: "bottom" },
-      model: {
-        value: _vm.isShowFillingPurpose,
-        callback: function($$v) {
-          _vm.isShowFillingPurpose = $$v
-        },
-        expression: "isShowFillingPurpose"
-      }
-    },
-    [
-      _c("md-picker", {
-        attrs: { "md-data": [_vm.purposes], "md-show-toolbar": "" },
-        on: {
-          "md-cancel": function($event) {
-            _vm.isShowFillingPurpose = false
-          },
-          "md-confirm": _vm.onConfirmPurpose
-        }
-      })
-    ],
-    1
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-1ae8b616", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-4be3f654", module.exports)
   }
 }
 
@@ -1094,25 +1306,25 @@ module.exports = Component.exports
 
 /***/ }),
 
-/***/ "./resources/assets/js/pages/RptExpend/Analy.vue":
+/***/ "./resources/assets/js/components/RptView/RptView.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__("./node_modules/extract-text-webpack-plugin/dist/loader.js?{\"id\":1,\"omit\":1,\"remove\":true}!./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-0ad81bf2\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/pages/RptExpend/Analy.vue")
+  __webpack_require__("./node_modules/extract-text-webpack-plugin/dist/loader.js?{\"id\":1,\"omit\":1,\"remove\":true}!./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2cd4f153\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/RptView/RptView.vue")
 }
 var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
 /* script */
-var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/pages/RptExpend/Analy.vue")
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/RptView/RptView.vue")
 /* template */
-var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-0ad81bf2\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/pages/RptExpend/Analy.vue")
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-2cd4f153\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/RptView/RptView.vue")
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
 var __vue_styles__ = injectStyle
 /* scopeId */
-var __vue_scopeId__ = "data-v-0ad81bf2"
+var __vue_scopeId__ = "data-v-2cd4f153"
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
@@ -1123,7 +1335,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources\\assets\\js\\pages\\RptExpend\\Analy.vue"
+Component.options.__file = "resources\\assets\\js\\components\\RptView\\RptView.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -1132,9 +1344,61 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-0ad81bf2", Component.options)
+    hotAPI.createRecord("data-v-2cd4f153", Component.options)
   } else {
-    hotAPI.reload("data-v-0ad81bf2", Component.options)
+    hotAPI.reload("data-v-2cd4f153", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/pages/RptProfit/Trend.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__("./node_modules/extract-text-webpack-plugin/dist/loader.js?{\"id\":1,\"omit\":1,\"remove\":true}!./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4be3f654\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/pages/RptProfit/Trend.vue")
+}
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/pages/RptProfit/Trend.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-4be3f654\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/pages/RptProfit/Trend.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-4be3f654"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\pages\\RptProfit\\Trend.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-4be3f654", Component.options)
+  } else {
+    hotAPI.reload("data-v-4be3f654", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
