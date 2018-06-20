@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Log;
 use Auth;
 use GuzzleHttp;
+use GAuth;
 
 class WXController extends Controller
 {
@@ -55,6 +56,7 @@ class WXController extends Controller
     try {
       $res = $client->request('GET', 'sns/oauth2/access_token', ['query' => $keysArr]);
     } catch (\Exception $e) {
+      Log::error($e->getMessage());
       return $e->getMessage();
     }
     $result = (string)$res->getBody();
@@ -69,17 +71,23 @@ class WXController extends Controller
       }
     }
     if (empty($access_token)) {
+      Log::error('token is null');
       return 'token is null';
     }
 		//获取用户信息
     $keysArr = array(
       "access_token" => $access_token,
-      "openid" => $openid,
+      "openid" => $openid
     );
     $res = $client->request('GET', 'sns/userinfo', ['query' => $keysArr]);
     $result = (string)$res->getBody();
     $result = json_decode($result);
+    if ($result && !empty($result->errcode)) {
+      Log::error(json_encode($result));
+      return $result->errcode;
+    }
     if (empty($result)) {
+      Log::error('获取信息失败!');
       return '获取信息失败!';
     }
     $options = ['client_id' => env('GMF_MP_WX_APPID'), 'client_type' => 'wx'];
@@ -102,7 +110,6 @@ class WXController extends Controller
     $options['info'] = json_encode($result);
 
     $newUser = User::registerByAccount('wx', $options);
-    $currUser = GAuth::user();
     Auth::login($newUser);
     return redirect($this->getContinueURL($state));
   }
