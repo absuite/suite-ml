@@ -10,22 +10,34 @@ use Gmf\Sys\Models as SysModels;
 use Illuminate\Http\Request;
 use Log;
 
-class HomeController extends Controller {
+class HomeController extends Controller
+{
   /**
    * Create a new controller instance.
    *
    * @return void
    */
-  public function __construct() {
+  public function __construct()
+  {
     //$this->middleware('visitor');
   }
-  public function home(Request $request) {
-
+  public function home(Request $request)
+  {
+    $isWx = false;
+    if ($ua = $request->userAgent()) {
+      $isWx = strpos(strtolower($ua), 'micromessenger') > 0;
+    }
+    if (empty($isWx)) {
+      return '请在微信端打开';
+    }
+    if (!GAuth::id()) {
+      return redirect('/wx/login');
+    }
     $config = new Builder;
-
     return view('gmf::app');
   }
-  public function getConfigs(Request $request) {
+  public function getConfigs(Request $request)
+  {
     $userId = GAuth::id();
     Log::error('HomeController:' . GAuth::id() . '--' . Auth::id());
     $config = new Builder;

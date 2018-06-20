@@ -16,7 +16,7 @@ Route::prefix('wx')->group(function () {
 	Route::get('js-sign-package', 'WXController@getSignPackage');
   Route::get('mp', 'WXController@mpCheck'); 
   Route::post('mp', 'WXController@mpHandle');
-  
+  Route::get('login', 'WXController@wxLogin');
   Route::get('callback', 'WXController@wxCallback');
 });
 
