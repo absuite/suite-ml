@@ -12,10 +12,12 @@
  */
 
 //微信相关接口
-Route::prefix('api/wx')->group(function () {
+Route::prefix('wx')->group(function () {
 	Route::get('js-sign-package', 'WXController@getSignPackage');
-	Route::get('mp', 'WXController@mpCheck');
-	Route::post('mp', 'WXController@mpHandle');
+  Route::get('mp', 'WXController@mpCheck'); 
+  Route::post('mp', 'WXController@mpHandle');
+  
+  Route::get('callback', 'WXController@wxCallback');
 });
 
 Route::get('/', ['uses' => 'HomeController@home']);

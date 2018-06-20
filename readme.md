@@ -5,16 +5,16 @@ POST:https://api.weixin.qq.com/cgi-bin/menu/create?access_token=ACCESS_TOKEN
 	"button": [{
 			"type": "view",
 			"name": "工作",
-			"url": "http://m.myamiba.cn/m/works"
+			"url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx2a88e6c2a4f54c16&redirect_uri=http://m.myamiba.cn/wx/callback&response_type=code&scope=snsapi_base&state=works#wechat_redirect"
 		},
 		{
 			"type": "view",
 			"name": "报表",
-			"url": "http://m.myamiba.cn/m/reports"
+			"url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx2a88e6c2a4f54c16&redirect_uri=http://m.myamiba.cn/wx/callback&response_type=code&scope=snsapi_base&state=reports#wechat_redirect"
 		}, {
 			"type": "view",
 			"name": "我的",
-			"url": "http://m.myamiba.cn/m/settings"
+			"url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx2a88e6c2a4f54c16&redirect_uri=http://m.myamiba.cn/wx/callback&response_type=code&scope=snsapi_base&state=settings#wechat_redirect"
 		}
 	]
 }
