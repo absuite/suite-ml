@@ -7,7 +7,7 @@ use Gmf\Sys\Http\Controllers\Controller;
 use GuzzleHttp;
 use Gmf\Sys\Models;
 use GAuth;
-
+use Validator;
 class EntController extends Controller
 {
   public function auditing(Request $request)
@@ -46,9 +46,9 @@ class EntController extends Controller
     $gateway = $ent->gateway;
     $user = GAuth::user();
     if (!empty($gateway)) {
-      $params = [
-        "user_openid" => $user->openid,
+      $params = [        
         "user" => [
+          "openid" => $user->openid,
           "name" => $user->name,
           'account' => $user->name,
           "type" => $user->type,
@@ -57,11 +57,11 @@ class EntController extends Controller
           "client_type" => $user->client_type,
         ],
         "ent_openid" => $ent->openid,
-        "app_openid" => $app->openid,
+        "app_openid" => '',
         'token' => $ent->token,
       ];
       $client = new GuzzleHttp\Client(['base_uri' => $gateway]);
-      $res = $client->post('api/ents/injection', ['json' => $params]);
+      $res = $client->post('api/cbo/ents/injection', ['json' => $params]);
       $body = (String)$res->getBody();
       if ($body) {
         $body = json_decode($body);

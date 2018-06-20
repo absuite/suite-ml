@@ -21,6 +21,7 @@ Route::prefix('wx')->group(function () {
 });
 
 Route::get('/', ['uses' => 'HomeController@home']);
+Route::get('/demo', ['uses' => 'HomeController@demo']);
 Route::get('/site/configs', ['uses' => 'HomeController@getConfigs']);
 
 

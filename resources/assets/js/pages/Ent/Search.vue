@@ -10,16 +10,16 @@
       </div>
     </md-app-toolbar>
     <md-app-content>
-      <md-x-search placeholder="输入您想要加入的企业"  show-action v-model="search_q" @search="onSearch">
+      <md-x-search placeholder="输入您想要加入的企业"  v-model="search_q" @search="onSearch">
       </md-x-search>
       <md-pull-refresh @refresh="onRefresh">
         <md-scroll-load :md-finished="isFinished" @load="onScrollLoad">
         <md-x-cell-group>
             <md-x-cell :title="item.name" icon="location" :label="item.code" v-for="item in items" :key="item.id">
-              <span slot="extra">
+              <div slot="extra">
                   <span v-if="item.is_joined">已加入</span>
                   <md-x-button v-else size="small" @click="onItemClick(item)">申请加入</md-x-button>
-              </span>              
+              </div>
             </md-x-cell>
           </md-x-cell-group>
         </md-scroll-load>
@@ -52,7 +52,7 @@ export default {
         .then(() => {
           this.$http.post("ents/join", { entId: item.id }).then(
             res => {
-              if (res && res.data && res.data.data) this.$tip("加入成功！");
+              if (res && res.data && res.data.data) this.$tip("加入成功！等待企业审核");
               else this.$tip("已经加入过了!");
               item.is_joined = true;
             },

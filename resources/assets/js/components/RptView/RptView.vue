@@ -13,49 +13,52 @@
     </md-app-toolbar>
     <md-app-content class="layout-column">
       <slot/>
-      <md-x-popup v-model="isShowFilling" position="right" md-full>
-        <md-x-nav-bar left-arrow @click-left="isShowFilling=false"></md-x-nav-bar>
-        <md-x-cell-group>
-          <md-x-cell title="核算目的" icon="md:account_balance" @click="isShowFillingPurpose=true" />
-        </md-x-cell-group>
-        <app-purpose-picker v-model="isShowFillingPurpose"></app-purpose-picker>
-      </md-x-popup>
+      <md-x-popup v-model="isShowFilling" position="bottom">
+    <md-picker :md-data="purposes" v-model="currentPurpose" @md-cancel="isShowFilling=false" @md-confirm="onConfirmPurpose" md-show-toolbar/>
+  </md-x-popup>
     </md-app-content>
   </md-app>
 </template>
 <script>
-  import AppPurposePicker from "../PurposePicker/PurposePicker";
   import AppBackNav from "../NavBar/BackNav";
   import MdIconFilter from "gmf/components/MdIcon/Parts/MdIconFilter";
   import extend from "lodash/extend";
   import debounce from "gmf/core/utils/MdDebounce";
   import {
     mapState,
-    mapGetters
+    mapGetters,
+    mapActions
   } from "vuex";
 
   export default {
     name: "RptView",
     components: {
-      AppPurposePicker,
       AppBackNav,
       MdIconFilter
     },
     props: {
-      title: Boolean
-    },
-    created() {
-      console.log(this.$options.name);
-    },
+      title: String
+    },    
     data: () => ({
       configed: false,
       isShowFilling: false,
-      isShowFillingPurpose:false
+      currentPurpose:[]
     }),
     computed: {
-      ...mapState("amiba", ["purpose"]),
+      ...mapState({
+        purpose: state => state.amiba.purpose,
+        purposes(state) {
+          if(!state.amiba.purposes||!state.amiba.purposes.length)return [];
+          return [state.amiba.purposes.map(r => {
+            r.value = r.id;
+            return r;
+          })];
+        }
+      })
+     
     },
     methods: {
+      ...mapActions("amiba", ["setPurpose"]),
       async config() {
         await this.$store.dispatch("amiba/config");
         const purposes = await this.$store.dispatch("amiba/getPurposes");
@@ -63,7 +66,27 @@
           await this.$store.dispatch("amiba/setPurpose", purposes[0]);
         }
         this.configed = true;
+        if(this.purpose){
+          this.currentPurpose=[this.purpose.id];
+        }
+        
       },
+      onConfirmPurpose(data) {
+        this.isShowFilling = false;
+        if (data && data.length > 0) {
+          const item =this.purposes&&this.purposes[0].find(function (r) {
+            return r.id == data[0];
+          });
+          item&&this.setPurpose(item);
+        }
+
+      },
+    },
+    created() {
+      console.log(this.$options.name);
+    },
+    mounted() {
+      this.config();
     }
   };
 

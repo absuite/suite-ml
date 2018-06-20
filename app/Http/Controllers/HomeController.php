@@ -9,7 +9,7 @@ use Gmf\Sys\Http\Controllers\Controller;
 use Gmf\Sys\Models as SysModels;
 use Illuminate\Http\Request;
 use Log;
-
+use Gmf\Sys\Models\User;
 class HomeController extends Controller
 {
   /**
@@ -21,15 +21,20 @@ class HomeController extends Controller
   {
     //$this->middleware('visitor');
   }
+  public function demo(Request $request){
+    $user=User::where('type','sys')->first();
+    Auth::login($user);
+    return redirect('/?demo=1');
+  }
   public function home(Request $request)
   {
     $isWx = false;
     if ($ua = $request->userAgent()) {
       $isWx = strpos(strtolower($ua), 'micromessenger') > 0;
     }
-    if (empty($isWx)) {
-      return view('not-in-wx');
-    }
+    // if (empty($isWx)&&empty($request->input('demo'))) {
+    //   return view('not-in-wx');
+    // }
     if (!GAuth::id()) {
       return redirect('/wx/login');
     }
@@ -53,23 +58,6 @@ class HomeController extends Controller
     if ($ent) {
       $config->ent($ent);
       session([config('gmf.ent.session') => $ent->id]);
-    }
-    if ($ent) {
-      try {
-        $app = SysModels\App\App::where('openid', 'suite.cbo')->first();
-        $entToken = app('Gmf\Sys\Bp\AppConfig')->config([
-          'appId' => $app->id,
-          'userId' => GAuth::id(),
-          'entId' => $ent->id,
-          'token' => $ent->token,
-        ]);
-        if (empty($entToken['host'])) {
-          $entToken['host'] = $request->getSchemeAndHttpHost();
-        }
-        $config->entToken($entToken);
-      } catch (\Exceptiond $e) {
-        Log::error($e->getMessage());
-      }
     }
 
     return $this->toJson($config);
