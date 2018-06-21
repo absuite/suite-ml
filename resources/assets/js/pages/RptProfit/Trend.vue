@@ -58,7 +58,12 @@ export default {
   }),
   beforeRouteEnter(to, from, next) {
     next(vm => {
-      vm.config();
+      vm.$store.dispatch("amiba/config").then(
+        () => vm.config(),
+        err => {
+          vm.$tip(err);
+        }
+      );
     });
   },
   computed: {
@@ -135,7 +140,6 @@ export default {
   },
   methods: {
     async config() {
-      await this.$store.dispatch("amiba/config");
       const purposes = await this.$store.dispatch("amiba/getPurposes");
       if (!this.purpose && purposes && purposes.length > 0) {
         await this.$store.dispatch("amiba/setPurpose", purposes[0]);

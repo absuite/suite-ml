@@ -60,6 +60,7 @@ export default {
             v.is_default = false;
           });
           item.is_default = true;
+          this.$tip("设置成功，下次进应用时生效！");
         },
         err => {
           this.$tip("设置失败！");

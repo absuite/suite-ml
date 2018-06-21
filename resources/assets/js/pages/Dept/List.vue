@@ -30,100 +30,103 @@
   </md-app>
 </template>
 <script>
-  import AppBackNav from "../../components/NavBar/BackNav";
-  import MdIconAdd from "gmf/components/MdIcon/Parts/MdIconAdd";
-  import EditDia from "./EditDia";
-  import extend from "lodash/extend";
-  export default {
-    name: "DeptList",
-    components: {
-      AppBackNav,
-      MdIconAdd,
-      EditDia
-    },
-    data: () => ({
-      configed: false,
-      items: [],
-      pager: {},
-      isEditing: false,
-      isFinished: false,
-      currentEditData: null,
-      search_q: ""
-    }),
-    beforeRouteEnter(to, from, next) {
-      next(vm => {
-        vm.$http.appConfig('suite.cbo').then(() => vm.configed = true).catch((err) => vm.$tip(err));
-      });
-    },
-    beforeRouteUpdate(to, from, next) {
-      this.$http.appConfig('suite.cbo').then(() => {
-        this.configed = true;
-        next();
-      }).catch((err) => this.$tip(err));
-    },
-    methods: {
-      onItemClick(item) {
-        this.currentEditData = item;
-        this.isEditing = true;
-      },
-      onAddClick() {
-        this.currentEditData = null;
-        this.isEditing = true;
-      },
-      editClosed(data) {
-        if (data && data.isCreated) {
-          this.items.splice(0, 0, data);
+import AppBackNav from "../../components/NavBar/BackNav";
+import MdIconAdd from "gmf/components/MdIcon/Parts/MdIconAdd";
+import EditDia from "./EditDia";
+import extend from "lodash/extend";
+import { mapState, mapGetters } from "vuex";
+export default {
+  name: "DeptList",
+  components: {
+    AppBackNav,
+    MdIconAdd,
+    EditDia
+  },
+  data: () => ({
+    configed: false,
+    items: [],
+    pager: {},
+    isEditing: false,
+    isFinished: false,
+    currentEditData: null,
+    search_q: ""
+  }),
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      vm.$store.dispatch("amiba/config").then(
+        () => vm.config(),
+        err => {
+          vm.$tip(err);
         }
-      },
-      onRefresh(c) {
-        this.fetchData(null, c);
-      },
-      onScrollLoad(c) {
-        this.pager.page++;
-        this.fetchData(this.pager, c);
-      },
-      fetchData(pager, c) {
-        var options = extend({
-            q: this.search_q
-          }, {
-            size: 20
-          },
-          pager
-        );
-        if (!pager) {
-          this.items = [];
-          this.isFinished = false;
-        }
-        this.$http("suite.cbo")
-          .get("api/cbo/depts", {
-            params: options
-          })
-          .then(
-            res => {
-              this.items = this.items.concat(res.data.data);
-              this.pager = res.data.pager;
-              this.isFinished = this.pager.items < this.pager.size;
-              c && c();
-            },
-            err => {
-              c && c();
-              this.isFinished = true;
-            }
-          );
+      );
+    });
+  },
+  methods: {
+    async config() {
+      this.configed = true;
+    },
+    onItemClick(item) {
+      this.currentEditData = item;
+      this.isEditing = true;
+    },
+    onAddClick() {
+      this.currentEditData = null;
+      this.isEditing = true;
+    },
+    editClosed(data) {
+      if (data && data.isCreated) {
+        this.items.splice(0, 0, data);
       }
+    },
+    onRefresh(c) {
+      this.fetchData(null, c);
+    },
+    onScrollLoad(c) {
+      this.pager.page++;
+      this.fetchData(this.pager, c);
+    },
+    fetchData(pager, c) {
+      var options = extend(
+        {
+          q: this.search_q
+        },
+        {
+          size: 20
+        },
+        pager
+      );
+      if (!pager) {
+        this.items = [];
+        this.isFinished = false;
+      }
+      this.$http("suite.cbo")
+        .get("api/cbo/depts", {
+          params: options
+        })
+        .then(
+          res => {
+            this.items = this.items.concat(res.data.data);
+            this.pager = res.data.pager;
+            this.isFinished = this.pager.items < this.pager.size;
+            c && c();
+          },
+          err => {
+            c && c();
+            this.isFinished = true;
+          }
+        );
     }
-  };
-
+  }
+};
 </script>
 <style lang="scss" scoped>
-  .md-app {
-    min-height: 100%;
-    max-width: 100%;
-    height: 100%;
-  }
+.md-app {
+  min-height: 100%;
+  max-width: 100%;
+  height: 100%;
+}
 
-  .md-avatar .md-icon {
-    font-size: 36px;
-  }
-
+.md-avatar .md-icon {
+  font-size: 36px;
+}
 </style>

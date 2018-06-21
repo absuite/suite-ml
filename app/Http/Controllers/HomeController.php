@@ -10,6 +10,7 @@ use Gmf\Sys\Models as SysModels;
 use Illuminate\Http\Request;
 use Log;
 use Gmf\Sys\Models\User;
+
 class HomeController extends Controller
 {
   /**
@@ -21,8 +22,9 @@ class HomeController extends Controller
   {
     //$this->middleware('visitor');
   }
-  public function demo(Request $request){
-    $user=User::where('type','sys')->first();
+  public function demo(Request $request)
+  {
+    $user = User::where('type', 'sys')->first();
     Auth::login($user);
     return redirect('/?demo=1');
   }

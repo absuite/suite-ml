@@ -4,6 +4,7 @@ import Tip from 'gmf/components/MdTip'
 import MdFormatTime from 'gmf/core/utils/MdFormatTime'
 const d = MdFormatTime(new Date(), 'YYYY-MM-DD');
 const mutationTypes = {
+  SET_ENT: 'setEnt',
   SET_PURPOSE: 'setPurpose',
 
   SET_PURPOSES: 'setPurposes',
@@ -17,6 +18,7 @@ const mutationTypes = {
 }
 // initial state
 const state = {
+  ent: null,
   purpose: null,
   purposes: [],
   periods: [],
@@ -32,21 +34,30 @@ const getters = {
 }
 // actions
 const actions = {
-  'config' ({
+  'config'({
+    state,
     dispatch,
     commit
   }, replace) {
     return new Promise((resolve, reject) => {
-      http.appConfig("suite.cbo", replace)
+      if (!state.ent || !state.ent.id) {
+        reject('没有可用的企业，请加入企业，并设置为主企业，再试！');
+      }
+      http.appConfig({ name: "suite.cbo", entId: state.ent.id, appId: 'suite.cbo' }, replace)
         .then(() => {
           resolve(true)
         })
         .catch(err => {
-          Tip(err);
+          console.log(err);
           reject(err);
         });
     });
-
+  },
+  [mutationTypes.SET_ENT]({
+    dispatch,
+    commit
+  }, ent) {
+    commit(mutationTypes.SET_ENT, ent);
   },
   [mutationTypes.SET_PURPOSE]({
     dispatch,
@@ -121,6 +132,9 @@ const actions = {
 }
 // mutations
 const mutations = {
+  [mutationTypes.SET_ENT](state, ent) {
+    state.ent = ent
+  },
   [mutationTypes.SET_PURPOSE](state, purpose) {
     state.purpose = purpose
   },

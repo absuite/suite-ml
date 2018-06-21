@@ -49,15 +49,24 @@ export default {
   }),
   computed: {
     ent() {
-      return this.$root.configs.ent||{};
+      return this.$root.configs.ent || {};
     }
   },
   methods: {
     onItemClick(item) {
-      this.$http.post("sys/auth/entry-ent/"+item.id).then(
+      this.$http.post("sys/auth/entry-ent/" + item.id).then(
         res => {
-         this.$setConfigs({ent:res.data.data});
-         this.$http.config({ent:res.data.data},true);
+          this.$setConfigs({ ent: res.data.data });
+          this.$http.config({ ent: res.data.data }, true);
+          this.$store.dispatch("amiba/setEnt", res.data.data);
+          this.$store.dispatch("amiba/config",true).then(
+            res => {
+              this.$tip("切换成功！");
+            },
+            err => {
+              this.$tip(err);
+            }
+          );
         },
         err => {
           this.$tip("设置失败！");
