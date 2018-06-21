@@ -26,7 +26,7 @@ class WXController extends Controller
       "response_type" => "code",
       "appid" => env('GMF_MP_WX_APPID'),
       "redirect_uri" => urlencode(url(env('GMF_MP_WX_CALLBACK'))),
-      'scope' => 'snsapi_base',
+      'scope' => 'snsapi_userinfo',
       "state" => $stateCode->id,
     );
     return redirect('https://open.weixin.qq.com/connect/oauth2/authorize?' . urldecode(http_build_query($keysArr)) . '#wechat_redirect');
