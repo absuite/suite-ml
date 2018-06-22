@@ -34,9 +34,9 @@ class HomeController extends Controller
     if ($ua = $request->userAgent()) {
       $isWx = strpos(strtolower($ua), 'micromessenger') > 0;
     }
-    if (empty($isWx)&&empty($request->input('demo'))) {
-      return view('not-in-wx');
-    }
+    // if (empty($isWx)&&empty($request->input('demo'))) {
+    //   return view('not-in-wx');
+    // }
     if (!GAuth::id()) {
       return redirect('/wx/login');
     }

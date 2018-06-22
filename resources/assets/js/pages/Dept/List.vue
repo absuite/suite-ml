@@ -15,12 +15,11 @@
       <md-pull-refresh @refresh="onRefresh">
         <md-scroll-load :md-finished="isFinished" :configed="configed" @load="onScrollLoad">
           <md-x-cell-group>
-            <md-x-cell icon="md:settings_input_svideo" is-link v-for="item in items" :key="item.id" @click="onItemClick(item)">
-              <template slot="title">
-                <h3>{{item.name}}</h3>
-                <md-x-tag v-if="item.org">{{item.org.name}}</md-x-tag>
-                <p>{{item.code}}</p>
-              </template>
+            <md-x-cell icon="md:settings_input_svideo" is-link v-for="item in items" :key="item.id" @click="onItemClick(item)" 
+            :title="item.name"
+            :label="item.code"
+            :tag="item.org?item.org.name:''"
+            >
             </md-x-cell>
           </md-x-cell-group>
         </md-scroll-load>
