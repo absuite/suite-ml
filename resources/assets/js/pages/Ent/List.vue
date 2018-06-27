@@ -1,14 +1,5 @@
 <template>
   <md-app md-waterfall md-mode="fixed">
-    <md-app-toolbar class="md-primary">
-      <div class="md-toolbar-row">
-        <div class="md-toolbar-section-start">
-          <app-back-nav></app-back-nav>
-        </div>
-        <div class="flex md-title">我加入的企业</div>
-        <div class="md-toolbar-section-end"></div>
-      </div>
-    </md-app-toolbar>
     <md-app-content>
       <md-subheader>我的账号加入了<span>{{pager.total||0}}</span>个团队/企业</md-subheader>
       <md-pull-refresh @refresh="onRefresh">

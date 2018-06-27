@@ -1,14 +1,5 @@
 <template>
   <md-app md-waterfall md-mode="fixed">
-    <md-app-toolbar class="md-primary">
-      <div class="md-toolbar-row">
-        <div class="md-toolbar-section-start">
-        </div>
-        <div class="flex  md-title">设置</div>
-        <div class="md-toolbar-section-end">
-        </div>
-      </div>
-    </md-app-toolbar>
     <md-app-content>
       <md-card>
         <md-card-header>

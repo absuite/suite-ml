@@ -1,30 +1,24 @@
 <template>
   <md-app md-waterfall md-mode="fixed">
-    <md-app-toolbar class="md-primary">
-      <div class="md-toolbar-row">
-        <div class="md-toolbar-section-start"></div>
-        <div class="flex md-title">消息</div>
-        <div class="md-toolbar-section-end"> </div>
-      </div>
-    </md-app-toolbar>
     <md-app-content>
-      <md-list class="md-triple-line">
-        <template v-for="item in items">
-          <md-list-item @click="onClick(item)">
+      <md-x-cell-group>
+        <md-x-cell v-for="item in items" :key="item.id">
+          <template slot="icon">
             <md-avatar>
               <img :src="item.avatar">
             </md-avatar>
-            <div class="md-list-item-text">
-              <span>{{item.title}}</span>
-              <p>{{item.text}}</p>
-            </div>
-            <md-button class="md-icon-button md-list-action">
+          </template>
+          <template slot="title">
+            <h3>{{item.title}}</h3>
+            <p>{{item.text}}</p>
+          </template>
+          <template slot="extra">
+            <md-button class="md-icon-button">
               <md-icon class="md-primary">star</md-icon>
             </md-button>
-          </md-list-item>
-          <md-divider class="md-inset"></md-divider>
-        </template>
-      </md-list>
+          </template>
+        </md-x-cell>
+      </md-x-cell-group>
     </md-app-content>
     <md-app-bottom-bar>
       <home-bottom-bar></home-bottom-bar>
@@ -40,10 +34,10 @@
     },
     data: () => ({
       items: [],
-      loading:false
+      loading: false
     }),
     methods: {
-      onClick(item){
+      onClick(item) {
         //this.$tip('test');
         // this.$tip.loading({ mask: true, message:  item.title });
         // this.$tip.loading({ mask: true, message:  item.title });
@@ -110,7 +104,7 @@
         }, 500);
       }
     },
-    mounted(){
+    mounted() {
       this.onLoad();
     }
   };

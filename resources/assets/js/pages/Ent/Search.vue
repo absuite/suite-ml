@@ -1,14 +1,5 @@
 <template>
   <md-app md-waterfall md-mode="fixed">
-    <md-app-toolbar class="md-primary">
-      <div class="md-toolbar-row">
-        <div class="md-toolbar-section-start">
-          <app-back-nav></app-back-nav>
-        </div>
-        <div class="flex md-title">查找企业</div>
-        <div class="md-toolbar-section-end"></div>
-      </div>
-    </md-app-toolbar>
     <md-app-content>
       <md-x-search placeholder="输入您想要加入的企业"  v-model="search_q" @search="onSearch">
       </md-x-search>

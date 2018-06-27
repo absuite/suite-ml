@@ -158,6 +158,7 @@ class WXJSSDK {
 				}
 				$result = (string) $res->getBody();
 				$result = json_decode($result);
+				
 				$access_token = $result->access_token;
 				if ($access_token) {
 					$data = new Builder;

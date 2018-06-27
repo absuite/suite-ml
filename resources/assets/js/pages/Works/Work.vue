@@ -1,14 +1,5 @@
 <template>
   <md-app md-waterfall md-mode="fixed">
-    <md-app-toolbar class="md-primary">
-      <div class="md-toolbar-row">
-        <div class="md-toolbar-section-start">
-        </div>
-        <div class="flex  md-title">工作</div>
-        <div class="md-toolbar-section-end">
-        </div>
-      </div>
-    </md-app-toolbar>
     <md-app-content>
       <md-subheader>基础设置</md-subheader>
       <md-layout-grid :md-cols="3" :md-show-lr-borders="false">

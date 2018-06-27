@@ -1,14 +1,5 @@
 <template>
-    <md-app md-waterfall md-mode="fixed">    
-        <md-app-toolbar class="md-primary">    
-            <div class="md-toolbar-row">    
-                <div class="md-toolbar-section-start">    
-                </div>    
-                <div class="flex  md-title">报表</div>    
-                <div class="md-toolbar-section-end">    
-                </div>    
-            </div>    
-        </md-app-toolbar>    
+    <md-app md-waterfall md-mode="fixed">
         <md-app-content>
             <md-layout-grid :md-cols="3" :md-show-lr-borders="false">
                 <md-layout-grid-item  md-link="/m/rpt/profit/rank">

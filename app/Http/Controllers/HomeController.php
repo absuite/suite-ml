@@ -41,7 +41,7 @@ class HomeController extends Controller
       return redirect('/wx/login');
     }
     $config = new Builder;
-    return view('gmf::app');
+    return view('app');
   }
   public function getConfigs(Request $request)
   {

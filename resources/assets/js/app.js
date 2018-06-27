@@ -7,8 +7,30 @@ import routesAuth from 'gmf/routes/auth';
 import routesWeb from './routes/web';
 import gmfComponent from 'gmf/component'
 import URL from 'gmf/core/utils/MdURL';
-import Tip from 'gmf/components/MdTip'
-import amiba from './store/amiba'
+import Tip from 'gmf/components/MdTip';
+import amiba from './store/amiba';
+
+
+
+function setTitle(title) {
+  document.title = title;
+  let userAgent = window.navigator.userAgent.toLowerCase();
+  let isiOS = userAgent.indexOf('applewebkit') >= 0;
+  let isWechat = userAgent.indexOf('micromessenger') >= 0;
+  if (isiOS && isWechat) {
+    let iframe = document.createElement('iframe');
+    iframe.src = '/favicon.ico';
+    iframe.style.display = 'none';
+    document.body.appendChild(iframe);
+    iframe.onload = function () {
+      setTimeout(function () {
+        iframe.remove();
+      }, 0)
+    }
+  }
+}
+window.setTitle = setTitle
+
 
 gapp.route(routesAuth);
 gapp.route(routesWeb);
