@@ -22294,3 +22294,55 @@ tbody .md-table-row td {
   background-color: #fff;
   display: flex;
 }
+/* default colors */
+/* button */
+.md-x-submit-bar {
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  z-index: 100;
+  position: fixed;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+.md-x-submit-bar__tip {
+    color: #f60;
+    font-size: 12px;
+    line-height: 18px;
+    padding: 10px 10px;
+    background-color: #fff7cc;
+}
+.md-x-submit-bar__bar {
+    height: 50px;
+    display: flex;
+    font-size: 16px;
+    align-items: center;
+    background-color: #fff;
+}
+.md-x-submit-bar__price {
+    flex: 1;
+    text-align: right;
+    color: #666;
+    padding-right: 12px;
+}
+.md-x-submit-bar__price span {
+      display: inline-block;
+}
+.md-x-submit-bar__price-integer {
+    color: #f44;
+}
+.md-x-submit-bar__price-decimal {
+    color: #f44;
+    font-size: 12px;
+}
+.md-x-submit-bar .md-x-button {
+    width: 110px;
+    height: 100%;
+    border-radius: 0;
+    font-size: 16px;
+}
+.md-x-submit-bar .md-x-button--disabled {
+      border: none;
+}

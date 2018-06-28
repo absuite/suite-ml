@@ -1,4 +1,4 @@
-webpackJsonp([35],{
+webpackJsonp([36],{
 
 /***/ "./node_modules/@antv/f2/build/f2.js":
 /***/ (function(module, exports, __webpack_require__) {
@@ -27706,6 +27706,86 @@ exports.default = new _MdComponent2.default({
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/vendor/gmf-sys/components/MdXSubmitBar/MdXSubmitBar.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _MdComponent = __webpack_require__("./resources/assets/js/vendor/gmf-sys/core/MdComponent.js");
+
+var _MdComponent2 = _interopRequireDefault(_MdComponent);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = new _MdComponent2.default({
+  name: "MdXSubmitBar",
+  props: {
+    tip: String,
+    type: Number,
+    price: Number,
+    label: {
+      type: String,
+      default: "合计"
+    },
+    loading: Boolean,
+    disabled: Boolean,
+    buttonText: {
+      type: String,
+      default: "保存"
+    },
+    currency: {
+      type: String,
+      default: "¥"
+    },
+    buttonType: {
+      type: String,
+      default: "danger"
+    }
+  },
+
+  computed: {
+    hasPrice: function hasPrice() {
+      return typeof this.price === "number";
+    },
+    priceInterger: function priceInterger() {
+      return Math.floor(this.price / 100);
+    },
+    priceDecimal: function priceDecimal() {
+      var decimal = Math.floor(this.price % 100);
+      return (decimal < 10 ? "0" : "") + decimal;
+    }
+  }
+}); //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/vendor/gmf-sys/components/MdXSwipe/MdXSwipe.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -31011,6 +31091,13 @@ var deepmerge_1 = deepmerge;
 /***/ }),
 
 /***/ "./node_modules/extract-text-webpack-plugin/dist/loader.js?{\"id\":1,\"omit\":1,\"remove\":true}!./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1ad05b67\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/vendor/gmf-sys/components/MdImage/MdImage.vue":
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
+/***/ "./node_modules/extract-text-webpack-plugin/dist/loader.js?{\"id\":1,\"omit\":1,\"remove\":true}!./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1d2e6c57\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/vendor/gmf-sys/components/MdXSubmitBar/MdXSubmitBar.vue":
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
@@ -45319,6 +45406,93 @@ if (false) {
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-1d2e6c57\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/vendor/gmf-sys/components/MdXSubmitBar/MdXSubmitBar.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { class: _vm.b() }, [
+    _vm.tip || _vm.$slots.tip
+      ? _c(
+          "div",
+          { class: _vm.b("tip") },
+          [_vm._v("\n    " + _vm._s(_vm.tip)), _vm._t("tip")],
+          2
+        )
+      : _vm._e(),
+    _vm._v(" "),
+    _c(
+      "div",
+      { class: _vm.b("bar") },
+      [
+        _vm._t("default"),
+        _vm._v(" "),
+        _c(
+          "div",
+          { class: _vm.b("price") },
+          [
+            _vm.hasPrice
+              ? [
+                  _c("span", [_vm._v(_vm._s(_vm.label))]),
+                  _vm._v(" "),
+                  _c("span", { class: _vm.b("price-integer") }, [
+                    _vm._v(
+                      _vm._s(_vm.currency) + _vm._s(_vm.priceInterger) + "."
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("span", { class: _vm.b("price-decimal") }, [
+                    _vm._v(_vm._s(_vm.priceDecimal))
+                  ])
+                ]
+              : _vm._e()
+          ],
+          2
+        ),
+        _vm._v(" "),
+        _vm._t("button", [
+          _c(
+            "md-x-button",
+            {
+              attrs: {
+                type: _vm.buttonType,
+                disabled: _vm.disabled,
+                loading: _vm.loading
+              },
+              on: {
+                click: function($event) {
+                  _vm.$emit("submit")
+                }
+              }
+            },
+            [
+              _vm._v(
+                "\n        " +
+                  _vm._s(_vm.loading ? "" : _vm.buttonText) +
+                  "\n      "
+              )
+            ]
+          )
+        ])
+      ],
+      2
+    )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-1d2e6c57", module.exports)
+  }
+}
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-1d344c92\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/vendor/gmf-sys/components/MdCard/MdCard.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -52719,6 +52893,14 @@ _app2.default.run({
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
+	"./Dept/Edit": [
+		"./resources/assets/js/pages/Dept/Edit.vue",
+		6
+	],
+	"./Dept/Edit.vue": [
+		"./resources/assets/js/pages/Dept/Edit.vue",
+		6
+	],
 	"./Dept/EditDia": [
 		"./resources/assets/js/pages/Dept/EditDia.vue",
 		5
@@ -52753,27 +52935,27 @@ var map = {
 	],
 	"./Ent/List": [
 		"./resources/assets/js/pages/Ent/List.vue",
-		14
+		15
 	],
 	"./Ent/List.vue": [
 		"./resources/assets/js/pages/Ent/List.vue",
-		14
+		15
 	],
 	"./Ent/Search": [
 		"./resources/assets/js/pages/Ent/Search.vue",
-		13
+		14
 	],
 	"./Ent/Search.vue": [
 		"./resources/assets/js/pages/Ent/Search.vue",
-		13
+		14
 	],
 	"./Ent/Select": [
 		"./resources/assets/js/pages/Ent/Select.vue",
-		12
+		13
 	],
 	"./Ent/Select.vue": [
 		"./resources/assets/js/pages/Ent/Select.vue",
-		12
+		13
 	],
 	"./Item/EditDia": [
 		"./resources/assets/js/pages/Item/EditDia.vue",
@@ -52793,83 +52975,83 @@ var map = {
 	],
 	"./Messages/Message": [
 		"./resources/assets/js/pages/Messages/Message.vue",
-		18
+		19
 	],
 	"./Messages/Message.vue": [
 		"./resources/assets/js/pages/Messages/Message.vue",
-		18
+		19
 	],
 	"./Reports/Report": [
 		"./resources/assets/js/pages/Reports/Report.vue",
-		17
+		18
 	],
 	"./Reports/Report.vue": [
 		"./resources/assets/js/pages/Reports/Report.vue",
-		17
+		18
 	],
 	"./RptAchieve/Total": [
 		"./resources/assets/js/pages/RptAchieve/Total.vue",
-		11
+		12
 	],
 	"./RptAchieve/Total.vue": [
 		"./resources/assets/js/pages/RptAchieve/Total.vue",
-		11
+		12
 	],
 	"./RptBiz/Total": [
 		"./resources/assets/js/pages/RptBiz/Total.vue",
-		10
+		11
 	],
 	"./RptBiz/Total.vue": [
 		"./resources/assets/js/pages/RptBiz/Total.vue",
-		10
+		11
 	],
 	"./RptExpend/Analy": [
 		"./resources/assets/js/pages/RptExpend/Analy.vue",
-		9
+		10
 	],
 	"./RptExpend/Analy.vue": [
 		"./resources/assets/js/pages/RptExpend/Analy.vue",
-		9
+		10
 	],
 	"./RptIncome/Analy": [
 		"./resources/assets/js/pages/RptIncome/Analy.vue",
-		8
+		9
 	],
 	"./RptIncome/Analy.vue": [
 		"./resources/assets/js/pages/RptIncome/Analy.vue",
-		8
+		9
 	],
 	"./RptProfit/Rank": [
 		"./resources/assets/js/pages/RptProfit/Rank.vue",
-		7
+		8
 	],
 	"./RptProfit/Rank.vue": [
 		"./resources/assets/js/pages/RptProfit/Rank.vue",
-		7
+		8
 	],
 	"./RptProfit/Trend": [
 		"./resources/assets/js/pages/RptProfit/Trend.vue",
-		6
+		7
 	],
 	"./RptProfit/Trend.vue": [
 		"./resources/assets/js/pages/RptProfit/Trend.vue",
-		6
+		7
 	],
 	"./Settings/Setting": [
 		"./resources/assets/js/pages/Settings/Setting.vue",
-		16
+		17
 	],
 	"./Settings/Setting.vue": [
 		"./resources/assets/js/pages/Settings/Setting.vue",
-		16
+		17
 	],
 	"./Works/Work": [
 		"./resources/assets/js/pages/Works/Work.vue",
-		15
+		16
 	],
 	"./Works/Work.vue": [
 		"./resources/assets/js/pages/Works/Work.vue",
-		15
+		16
 	]
 };
 function webpackAsyncContext(req) {
@@ -52903,6 +53085,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 var routeList = [{ path: '/', name: 'home', page: 'Messages/Message.vue', meta: { keepAlive: true, title: '消息' } }, { path: '/m/messages', name: 'messages', page: 'Messages/Message.vue', meta: { keepAlive: true, title: '消息' } }, { path: '/m/reports', name: 'reports', page: 'Reports/Report.vue', meta: { keepAlive: true, title: '报表' } }, { path: '/m/settings', name: 'settings', page: 'Settings/Setting.vue', meta: { keepAlive: true, title: '设置' } }, { path: '/m/works', name: 'works', page: 'Works/Work.vue', meta: { keepAlive: true, title: '工作' } }];
 
 routeList.push({ path: '/m/cbo/dept/list', name: 'cbo.dept.list', page: 'Dept/List.vue', meta: { keepAlive: true, title: '部门列表' } });
+routeList.push({ path: '/m/cbo/dept/edit', name: 'cbo.dept.edit', page: 'Dept/Edit.vue', meta: { keepAlive: true, title: '部门编辑' } });
 
 routeList.push({ path: '/m/cbo/item/list', name: 'cbo.item.list', page: 'Item/List.vue', meta: { keepAlive: true, title: '物料列表' } });
 
@@ -52996,7 +53179,7 @@ var mutationTypes = {
       if (!state.ent || !state.ent.id) {
         reject('没有可用的企业，请加入企业，并设置为主企业，再试！');
       }
-      _http2.default.appConfig({ name: "suite.cbo", entId: state.ent.id, appId: 'suite.cbo' }, replace).then(function () {
+      _http2.default.packConfig({ name: "suite.cbo", entId: state.ent.id, packId: 'suite.cbo' }, replace).then(function () {
         resolve(true);
       }).catch(function (err) {
         console.log(err);
@@ -65338,6 +65521,85 @@ exports.default = function (Vue) {
 
 /***/ }),
 
+/***/ "./resources/assets/js/vendor/gmf-sys/components/MdXSubmitBar/MdXSubmitBar.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__("./node_modules/extract-text-webpack-plugin/dist/loader.js?{\"id\":1,\"omit\":1,\"remove\":true}!./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1d2e6c57\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/vendor/gmf-sys/components/MdXSubmitBar/MdXSubmitBar.vue")
+}
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/vendor/gmf-sys/components/MdXSubmitBar/MdXSubmitBar.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-1d2e6c57\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/vendor/gmf-sys/components/MdXSubmitBar/MdXSubmitBar.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\vendor\\gmf-sys\\components\\MdXSubmitBar\\MdXSubmitBar.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-1d2e6c57", Component.options)
+  } else {
+    hotAPI.reload("data-v-1d2e6c57", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/vendor/gmf-sys/components/MdXSubmitBar/index.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _material = __webpack_require__("./resources/assets/js/vendor/gmf-sys/material.js");
+
+var _material2 = _interopRequireDefault(_material);
+
+var _MdXSubmitBar = __webpack_require__("./resources/assets/js/vendor/gmf-sys/components/MdXSubmitBar/MdXSubmitBar.vue");
+
+var _MdXSubmitBar2 = _interopRequireDefault(_MdXSubmitBar);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function (Vue) {
+  (0, _material2.default)(Vue);
+  Vue.component(_MdXSubmitBar2.default.name, _MdXSubmitBar2.default);
+};
+
+/***/ }),
+
 /***/ "./resources/assets/js/vendor/gmf-sys/components/MdXSwipe/MdXSwipe.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -65637,7 +65899,7 @@ exports.default = function (Vue) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.MdXDropdown = exports.MdXTab = exports.MdXPopup = exports.MdXDialog = exports.MdXTag = exports.MdXNavBar = exports.MdXLoading = exports.MdXButton = exports.MdXSwipe = exports.MdXPanel = exports.MdXSearch = exports.MdXField = exports.MdXCellSwipe = exports.MdXCellGroup = exports.MdXCell = exports.MdXIcon = exports.MdTip = exports.MdSticky = exports.MdScrollLoad = exports.MdPullRefresh = exports.MdXChart = exports.MdSwipeout = exports.MdPopup = exports.MdPicker = exports.MdDatepicker = exports.MdTable = exports.MdWrap = exports.MdToast = exports.MdLayout = exports.MdFetch = exports.MdBackground = exports.MdLoading = exports.MdTooltip = exports.MdToolbar = exports.MdTabs = exports.MdSwitch = exports.MdSubheader = exports.MdSteppers = exports.MdSpeedDial = exports.MdSnackbar = exports.MdRipple = exports.MdRadio = exports.MdPagination = exports.MdProgress = exports.MdMenu = exports.MdList = exports.MdImage = exports.MdIcon = exports.MdHighlightText = exports.MdField = exports.MdEmptyState = exports.MdElevation = exports.MdDrawer = exports.MdDivider = exports.MdDialog = exports.MdContent = exports.MdChips = exports.MdCheckbox = exports.MdCard = exports.MdButton = exports.MdBottomBar = exports.MdBadge = exports.MdAvatar = exports.MdAutocomplete = exports.MdApp = undefined;
+exports.MdXSubmitBar = exports.MdXDropdown = exports.MdXTab = exports.MdXPopup = exports.MdXDialog = exports.MdXTag = exports.MdXNavBar = exports.MdXLoading = exports.MdXButton = exports.MdXSwipe = exports.MdXPanel = exports.MdXSearch = exports.MdXField = exports.MdXCellSwipe = exports.MdXCellGroup = exports.MdXCell = exports.MdXIcon = exports.MdTip = exports.MdSticky = exports.MdScrollLoad = exports.MdPullRefresh = exports.MdXChart = exports.MdSwipeout = exports.MdPopup = exports.MdPicker = exports.MdDatepicker = exports.MdTable = exports.MdWrap = exports.MdToast = exports.MdLayout = exports.MdFetch = exports.MdBackground = exports.MdLoading = exports.MdTooltip = exports.MdToolbar = exports.MdTabs = exports.MdSwitch = exports.MdSubheader = exports.MdSteppers = exports.MdSpeedDial = exports.MdSnackbar = exports.MdRipple = exports.MdRadio = exports.MdPagination = exports.MdProgress = exports.MdMenu = exports.MdList = exports.MdImage = exports.MdIcon = exports.MdHighlightText = exports.MdField = exports.MdEmptyState = exports.MdElevation = exports.MdDrawer = exports.MdDivider = exports.MdDialog = exports.MdContent = exports.MdChips = exports.MdCheckbox = exports.MdCard = exports.MdButton = exports.MdBottomBar = exports.MdBadge = exports.MdAvatar = exports.MdAutocomplete = exports.MdApp = undefined;
 
 var _MdApp = __webpack_require__("./resources/assets/js/vendor/gmf-sys/components/MdApp/index.js");
 
@@ -65899,9 +66161,11 @@ var _MdXDropdown = __webpack_require__("./resources/assets/js/vendor/gmf-sys/com
 
 var _MdXDropdown2 = _interopRequireDefault(_MdXDropdown);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _MdXSubmitBar = __webpack_require__("./resources/assets/js/vendor/gmf-sys/components/MdXSubmitBar/index.js");
 
-//news
+var _MdXSubmitBar2 = _interopRequireDefault(_MdXSubmitBar);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.MdApp = _MdApp2.default;
 exports.MdAutocomplete = _MdAutocomplete2.default;
@@ -65968,6 +66232,8 @@ exports.MdXDialog = _MdXDialog2.default;
 exports.MdXPopup = _MdXPopup2.default;
 exports.MdXTab = _MdXTab2.default;
 exports.MdXDropdown = _MdXDropdown2.default;
+exports.MdXSubmitBar = _MdXSubmitBar2.default;
+//news
 
 /***/ }),
 
@@ -69581,7 +69847,7 @@ function GHTTP(name, config) {
   return createGHTTPInstance(name, config);
 };
 /**
- * {name,appId,entId,gateway,timestamp,apiList}
+ * {name,packId,entId,gateway,timestamp,apiList}
  * @param {object} config 
  */
 GHTTP.config = function (config, isAll) {
@@ -69593,16 +69859,16 @@ GHTTP.config = function (config, isAll) {
     createGHTTPInstance().config(config);
   }
 };
-GHTTP.appConfig = function (config, replace) {
+GHTTP.packConfig = function (config, replace) {
   config = _common2.default.isObject(config) ? config : {
     name: config,
-    appId: config
+    packId: config
   };
   if (!config.name) {
     alert('[assert]: name is required');
   }
-  if (!config.appId) {
-    alert('[assert]: appId is required');
+  if (!config.packId) {
+    alert('[assert]: packId is required');
   }
   var chttp = createGHTTPInstance();
   var instance = createGHTTPInstance(config.name);
@@ -69611,7 +69877,7 @@ GHTTP.appConfig = function (config, replace) {
     if (instance.configed && !replace) {
       resolved(true);
     } else {
-      chttp.post('sys/apps/config', config).then(function (res) {
+      chttp.post('sys/sv/config', config).then(function (res) {
         instance.config(res.data.data);
         resolved(true);
       }, function (err) {
@@ -69734,100 +70000,100 @@ var routes = [{
   path: '/auth',
   name: 'auth',
   component: function component() {
-    return __webpack_require__.e/* import() */(30).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/App.vue"));
+    return __webpack_require__.e/* import() */(31).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/App.vue"));
   },
   children: [{
     path: 'login',
     name: 'auth.login',
     component: function component() {
-      return __webpack_require__.e/* import() */(31).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Login.vue"));
+      return __webpack_require__.e/* import() */(32).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Login.vue"));
     }
   }, {
     path: 'register',
     name: 'auth.register',
     component: function component() {
-      return __webpack_require__.e/* import() */(26).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Register.vue"));
+      return __webpack_require__.e/* import() */(27).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Register.vue"));
     }
   }, {
     path: 'password/find-sms/:id?',
     name: 'auth.password.find.sms',
     component: function component() {
-      return __webpack_require__.e/* import() */(23).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/PasswordFindSms.vue"));
+      return __webpack_require__.e/* import() */(24).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/PasswordFindSms.vue"));
     }
   }, {
     path: 'password/find-mail/:id?',
     name: 'auth.password.find.mail',
     component: function component() {
-      return __webpack_require__.e/* import() */(27).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/PasswordFindMail.vue"));
+      return __webpack_require__.e/* import() */(28).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/PasswordFindMail.vue"));
     }
   }, {
     path: 'password/find-word/:id?',
     name: 'auth.password.find.word',
     component: function component() {
-      return __webpack_require__.e/* import() */(22).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/PasswordFindWord.vue"));
+      return __webpack_require__.e/* import() */(23).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/PasswordFindWord.vue"));
     }
   }, {
     path: 'password/find/:id?',
     name: 'auth.password.find',
     component: function component() {
-      return __webpack_require__.e/* import() */(32).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/PasswordFind.vue"));
+      return __webpack_require__.e/* import() */(33).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/PasswordFind.vue"));
     }
   }, {
     path: 'password/:id?',
     name: 'auth.password',
     component: function component() {
-      return __webpack_require__.e/* import() */(21).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Password.vue"));
+      return __webpack_require__.e/* import() */(22).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Password.vue"));
     }
   }, {
     path: 'reset/:id/:token?',
     name: 'auth.reset',
     component: function component() {
-      return __webpack_require__.e/* import() */(25).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Reset.vue"));
+      return __webpack_require__.e/* import() */(26).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Reset.vue"));
     }
   }, {
     path: 'verify-mail',
     name: 'auth.verify.mail',
     component: function component() {
-      return __webpack_require__.e/* import() */(24).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/VerifyMail.vue"));
+      return __webpack_require__.e/* import() */(25).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/VerifyMail.vue"));
     },
     meta: { requiresAuth: true }
   }, {
     path: 'chooser',
     name: 'auth.chooser',
     component: function component() {
-      return __webpack_require__.e/* import() */(29).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Chooser.vue"));
+      return __webpack_require__.e/* import() */(30).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Chooser.vue"));
     }
   }, {
     path: 'identifier',
     name: 'auth.identifier',
     component: function component() {
-      return __webpack_require__.e/* import() */(19).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Identifier.vue"));
+      return __webpack_require__.e/* import() */(20).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Identifier.vue"));
     }
   }, {
     path: 'remove',
     name: 'auth.remove',
     component: function component() {
-      return __webpack_require__.e/* import() */(28).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Remove.vue"));
+      return __webpack_require__.e/* import() */(29).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Remove.vue"));
     }
   }, {
     path: 'logout',
     name: 'auth.logout',
     component: function component() {
-      return __webpack_require__.e/* import() */(33).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Logout.vue"));
+      return __webpack_require__.e/* import() */(34).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/Logout.vue"));
     },
     meta: { requiresAuth: true }
   }, {
     path: 'account/join',
     name: 'auth.account.join',
     component: function component() {
-      return __webpack_require__.e/* import() */(20).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/AccountJoin.vue"));
+      return __webpack_require__.e/* import() */(21).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/AccountJoin.vue"));
     },
     meta: { requiresAuth: true }
   }, {
     path: 'account/dashboard',
     name: 'auth.account.dashboard',
     component: function component() {
-      return __webpack_require__.e/* import() */(34).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/AccountDashboard.vue"));
+      return __webpack_require__.e/* import() */(35).then(__webpack_require__.bind(null, "./resources/assets/js/vendor/gmf-sys/pages/Auth/AccountDashboard.vue"));
     },
     meta: { requiresAuth: true }
   }]

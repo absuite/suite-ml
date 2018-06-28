@@ -7,6 +7,7 @@ const routeList = [
 ];
 
 routeList.push({ path: '/m/cbo/dept/list', name: 'cbo.dept.list', page: 'Dept/List.vue', meta: { keepAlive: true ,title:'部门列表'} });
+routeList.push({ path: '/m/cbo/dept/edit', name: 'cbo.dept.edit', page: 'Dept/Edit.vue', meta: { keepAlive: true ,title:'部门编辑'} });
 
 routeList.push({ path: '/m/cbo/item/list', name: 'cbo.item.list', page: 'Item/List.vue', meta: { keepAlive: true ,title:'物料列表'} });
 

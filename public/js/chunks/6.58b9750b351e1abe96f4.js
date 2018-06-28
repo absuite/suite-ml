@@ -1,6 +1,6 @@
-webpackJsonp([25],{
+webpackJsonp([6],{
 
-/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/vendor/gmf-sys/pages/Auth/Reset.vue":
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/pages/Dept/Edit.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13,6 +13,12 @@ Object.defineProperty(exports, "__esModule", {
 var _regenerator = __webpack_require__("./node_modules/babel-runtime/regenerator/index.js");
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
+
+var _extend = __webpack_require__("./node_modules/lodash/extend.js");
+
+var _extend2 = _interopRequireDefault(_extend);
+
+var _vuex = __webpack_require__("./node_modules/vuex/dist/vuex.esm.js");
 
 var _vuelidate = __webpack_require__("./node_modules/vuelidate/lib/index.js");
 
@@ -41,388 +47,226 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 exports.default = {
-  name: 'GmfPagesAuthPassword',
-  props: {},
-  mixins: [_vuelidate.validationMixin],
+  name: "DeptEdit",
   data: function data() {
     return {
-      mainDatas: {},
-      loading: 0,
-      sending: false
+      configed: false,
+      mainData: {}
     };
   },
-
-  validations: {
-    mainDatas: {
-      password: {
-        required: _validators.required,
-        minLength: (0, _validators.minLength)(6),
-        maxLength: (0, _validators.maxLength)(30)
-      },
-      password_confirmation: {
-        sameAsPassword: (0, _validators.sameAs)('password')
-      }
-    }
+  beforeRouteEnter: function beforeRouteEnter(to, from, next) {
+    next(function (vm) {
+      vm.$store.dispatch("amiba/config").then(function () {
+        return vm.config();
+      }, function (err) {
+        vm.$tip(err);
+      });
+    });
   },
-  computed: {
-    routeQuery: function routeQuery() {
-      var q = {};
-      if (this.$route.query && this.$route.query.continue) q.continue = this.$route.query.continue;
-      return q;
+
+  mixins: [_vuelidate.validationMixin],
+  validations: {
+    mainData: {
+      code: {
+        required: _validators.required
+      },
+      name: {
+        required: _validators.required
+      }
     }
   },
   methods: {
-    getValidationClass: function getValidationClass(fieldName) {
-      var field = this.$v.mainDatas[fieldName];
-      if (field) {
-        return {
-          'md-invalid': field.$invalid && field.$dirty
-        };
-      }
-    },
-    validateForm: function validateForm() {
-      this.$v.$touch();
-      if (!this.$v.$invalid) {
-        this.submitPost();
-      }
-    },
-    submitPost: function () {
-      var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
-        var response;
+    config: function () {
+      var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee(to) {
         return _regenerator2.default.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _context.prev = 0;
+                this.configed = true;
+                this.fetchData(to && to.query && to.query.id);
 
-                this.sending = true;
-                this.mainDatas.token = this.$route.params.token;
-                _context.next = 5;
-                return this.$http.post('sys/auth/reset', this.mainDatas);
-
-              case 5:
-                response = _context.sent;
-
-                this.sending = false;
-                this.$setConfigs({ user: response.data.data, token: response.data.token });
-                _context.next = 10;
-                return this.$root.$loadConfigs();
-
-              case 10:
-                this.$go(this.$route.query.continue ? this.$route.query.continue : this.$root.configs.home);
-                _context.next = 17;
-                break;
-
-              case 13:
-                _context.prev = 13;
-                _context.t0 = _context['catch'](0);
-
-                this.sending = false;
-                this.$toast(_context.t0);
-
-              case 17:
-              case 'end':
+              case 2:
+              case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[0, 13]]);
+        }, _callee, this);
       }));
 
-      function submitPost() {
+      function config(_x) {
         return _ref.apply(this, arguments);
       }
 
-      return submitPost;
+      return config;
     }(),
-    fetchData: function () {
-      var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee2() {
-        var thId, response, u, options;
-        return _regenerator2.default.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.prev = 0;
+    fetchData: function fetchData(id) {
+      var _this = this;
 
-                this.sending = true;
-                thId = this.$route.params.id;
-
-                if (!thId) {
-                  this.$go({ name: 'auth.chooser', query: this.routeQuery });
-                }
-                _context2.next = 6;
-                return this.$http.post('sys/auth/checker', { id: thId });
-
-              case 6:
-                response = _context2.sent;
-                u = response.data.data;
-
-                this.mainDatas = response.data.data;
-                options = { id: this.mainDatas.id, type: 'password', token: this.$route.params.token };
-                _context2.next = 12;
-                return this.$http.post('sys/auth/vcode-checker', options);
-
-              case 12:
-                _context2.next = 18;
-                break;
-
-              case 14:
-                _context2.prev = 14;
-                _context2.t0 = _context2['catch'](0);
-
-                this.$toast(_context2.t0);
-                this.$go({ name: 'auth.identifier', query: this.routeQuery });
-
-              case 18:
-                _context2.prev = 18;
-
-                this.sending = false;
-                return _context2.finish(18);
-
-              case 21:
-              case 'end':
-                return _context2.stop();
-            }
-          }
-        }, _callee2, this, [[0, 14, 18, 21]]);
-      }));
-
-      function fetchData() {
-        return _ref2.apply(this, arguments);
+      this.mainData = {};
+      if (!id) {
+        return;
       }
-
-      return fetchData;
-    }()
-  },
-  mounted: function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee3() {
-      return _regenerator2.default.wrap(function _callee3$(_context3) {
-        while (1) {
-          switch (_context3.prev = _context3.next) {
-            case 0:
-              _context3.next = 2;
-              return this.fetchData();
-
-            case 2:
-            case 'end':
-              return _context3.stop();
-          }
+      this.$tip.waiting("加载中...");
+      this.$http("suite.cbo").get("api/cbo/depts/show", {
+        params: {
+          id: id
         }
-      }, _callee3, this);
-    }));
+      }).then(function (res) {
+        _this.mainData = res.data.data;
+        _this.$tip.clear();
+      }, function (err) {
+        _this.$tip("加载数据出错了！");
+      });
+    },
+    postFormData: function postFormData() {
+      var _this2 = this;
 
-    function mounted() {
-      return _ref3.apply(this, arguments);
+      this.$tip.waiting("正在保存...");
+      this.$http("suite.cbo").post("api/cbo/depts", this.mainData).then(function (res) {
+        _this2.$tip.clear();
+        _this2.mainData = res.data.data;
+      }, function (err) {
+        _this2.$tip("保存出错了!");
+      });
+    },
+    validateForm: function validateForm() {
+      this.$v.$touch();
+      if (!this.$v.$invalid) {
+        this.postFormData();
+      }
     }
-
-    return mounted;
-  }()
+  }
 };
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-44986634\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/vendor/gmf-sys/pages/Auth/Reset.vue":
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-78569e7a\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/pages/Dept/Edit.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.md-app[data-v-78569e7a] {\n  min-height: 100%;\n  max-width: 100%;\n  height: 100%;\n}\n.md-app-content[data-v-78569e7a] {\n  padding: 0px 10px;\n}\n.md-avatar .md-icon[data-v-78569e7a] {\n  font-size: 36px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/extract-text-webpack-plugin/dist/loader.js?{\"id\":1,\"omit\":1,\"remove\":true}!./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-78569e7a\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/pages/Dept/Edit.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-78569e7a\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/pages/Dept/Edit.vue");
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("4f8c67b2", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-78569e7a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Edit.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-78569e7a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Edit.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-78569e7a\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/pages/Dept/Edit.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("md-card", [
-    _c(
-      "form",
-      {
-        attrs: { novalidate: "" },
-        on: {
-          submit: function($event) {
-            $event.preventDefault()
-            return _vm.validateForm($event)
-          }
-        }
-      },
-      [
-        _c(
-          "md-card-header",
-          [
-            _c("md-card-header-text", [
-              _c("div", { staticClass: "md-title" }, [_vm._v("重置密码")])
-            ])
-          ],
-          1
-        ),
-        _vm._v(" "),
-        _c(
-          "md-list",
-          [
+  return _c(
+    "md-app",
+    { attrs: { "md-waterfall": "", "md-mode": "fixed" } },
+    [
+      _c(
+        "md-app-content",
+        [
+          _c("md-content", [
             _c(
-              "md-list-item",
+              "form",
+              {
+                attrs: { novalidate: "" },
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault()
+                    return _vm.validateForm($event)
+                  }
+                }
+              },
               [
                 _c(
-                  "md-avatar",
+                  "md-field",
                   [
-                    _c("md-image", {
-                      attrs: { "md-src": _vm.mainDatas.avatar }
+                    _c("label", [_vm._v("编码")]),
+                    _vm._v(" "),
+                    _c("md-input", {
+                      model: {
+                        value: _vm.mainData.code,
+                        callback: function($$v) {
+                          _vm.$set(_vm.mainData, "code", $$v)
+                        },
+                        expression: "mainData.code"
+                      }
                     })
                   ],
                   1
                 ),
                 _vm._v(" "),
-                _c("div", { staticClass: "md-list-item-text" }, [
-                  _c("span", [_vm._v(_vm._s(_vm.mainDatas.name))]),
-                  _vm._v(" "),
-                  _c("span", [_vm._v(_vm._s(_vm.mainDatas.account))])
-                ]),
-                _vm._v(" "),
-                _c(
-                  "md-button",
-                  {
-                    staticClass: "md-icon-button md-list-action",
-                    attrs: {
-                      to: { name: "auth.chooser", query: _vm.routeQuery }
-                    }
-                  },
-                  [
-                    _c("md-icon", { staticClass: "md-primary" }, [
-                      _vm._v("expand_more")
-                    ])
-                  ],
-                  1
-                )
-              ],
-              1
-            )
-          ],
-          1
-        ),
-        _vm._v(" "),
-        _c(
-          "md-card-content",
-          [
-            _c(
-              "md-layout",
-              [
                 _c(
                   "md-field",
-                  { class: _vm.getValidationClass("password") },
                   [
-                    _c("label", [_vm._v("输入您的新密码")]),
+                    _c("label", [_vm._v("名称")]),
                     _vm._v(" "),
                     _c("md-input", {
-                      attrs: {
-                        autocomplete: "off",
-                        type: "password",
-                        disabled: _vm.sending
-                      },
                       model: {
-                        value: _vm.mainDatas.password,
+                        value: _vm.mainData.name,
                         callback: function($$v) {
-                          _vm.$set(_vm.mainDatas, "password", $$v)
+                          _vm.$set(_vm.mainData, "name", $$v)
                         },
-                        expression: "mainDatas.password"
+                        expression: "mainData.name"
                       }
-                    }),
-                    _vm._v(" "),
-                    !_vm.$v.mainDatas.password.required
-                      ? _c("span", { staticClass: "md-error" }, [
-                          _vm._v("请输入密码")
-                        ])
-                      : _vm._e()
-                  ],
-                  1
-                )
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "md-layout",
-              [
-                _c(
-                  "md-field",
-                  { class: _vm.getValidationClass("password_confirmation") },
-                  [
-                    _c("label", [_vm._v("确认密码")]),
-                    _vm._v(" "),
-                    _c("md-input", {
-                      attrs: {
-                        autocomplete: "off",
-                        type: "password",
-                        disabled: _vm.sending
-                      },
-                      model: {
-                        value: _vm.mainDatas.password_confirmation,
-                        callback: function($$v) {
-                          _vm.$set(_vm.mainDatas, "password_confirmation", $$v)
-                        },
-                        expression: "mainDatas.password_confirmation"
-                      }
-                    }),
-                    _vm._v(" "),
-                    !_vm.$v.mainDatas.password_confirmation.sameAsPassword
-                      ? _c("span", { staticClass: "md-error" }, [
-                          _vm._v("确认密码不符合要求")
-                        ])
-                      : _vm._e()
+                    })
                   ],
                   1
                 )
               ],
               1
             )
-          ],
-          1
-        ),
-        _vm._v(" "),
-        _c(
-          "md-card-actions",
-          [
-            _c("span", { staticClass: "flex" }),
-            _vm._v(" "),
-            _c(
-              "md-button",
-              {
-                staticClass: "md-primary md-raised",
-                attrs: { type: "submit", disabled: _vm.sending }
-              },
-              [_vm._v("设置")]
-            )
-          ],
-          1
-        ),
-        _vm._v(" "),
-        _vm.sending
-          ? _c("md-progress-bar", { attrs: { "md-mode": "indeterminate" } })
-          : _vm._e()
-      ],
-      1
-    )
-  ])
+          ])
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "md-app-bottom-bar",
+        [
+          _c("md-x-submit-bar", {
+            attrs: { disabled: _vm.$v.$invalid },
+            on: { submit: _vm.postFormData }
+          })
+        ],
+        1
+      )
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -430,7 +274,7 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-44986634", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-78569e7a", module.exports)
   }
 }
 
@@ -1818,21 +1662,25 @@ exports.default = withParams;
 
 /***/ }),
 
-/***/ "./resources/assets/js/vendor/gmf-sys/pages/Auth/Reset.vue":
+/***/ "./resources/assets/js/pages/Dept/Edit.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__("./node_modules/extract-text-webpack-plugin/dist/loader.js?{\"id\":1,\"omit\":1,\"remove\":true}!./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-78569e7a\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/pages/Dept/Edit.vue")
+}
 var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
 /* script */
-var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/vendor/gmf-sys/pages/Auth/Reset.vue")
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/pages/Dept/Edit.vue")
 /* template */
-var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-44986634\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/vendor/gmf-sys/pages/Auth/Reset.vue")
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-78569e7a\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/pages/Dept/Edit.vue")
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = null
+var __vue_styles__ = injectStyle
 /* scopeId */
-var __vue_scopeId__ = null
+var __vue_scopeId__ = "data-v-78569e7a"
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
@@ -1843,7 +1691,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources\\assets\\js\\vendor\\gmf-sys\\pages\\Auth\\Reset.vue"
+Component.options.__file = "resources\\assets\\js\\pages\\Dept\\Edit.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -1852,9 +1700,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-44986634", Component.options)
+    hotAPI.createRecord("data-v-78569e7a", Component.options)
   } else {
-    hotAPI.reload("data-v-44986634", Component.options)
+    hotAPI.reload("data-v-78569e7a", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true

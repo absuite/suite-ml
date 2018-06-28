@@ -278,11 +278,6 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 //
 //
 //
-//
-//
-//
-//
-//
 
 exports.default = {
   name: "DeptList",
@@ -296,7 +291,6 @@ exports.default = {
       configed: false,
       items: [],
       pager: {},
-      isEditing: false,
       isFinished: false,
       currentEditData: null,
       search_q: ""
@@ -336,12 +330,10 @@ exports.default = {
       return config;
     }(),
     onItemClick: function onItemClick(item) {
-      this.currentEditData = item;
-      this.isEditing = true;
+      this.$go({ name: "cbo.dept.edit", query: { id: item.id } });
     },
     onAddClick: function onAddClick() {
-      this.currentEditData = null;
-      this.isEditing = true;
+      this.$go({ name: "cbo.dept.edit" });
     },
     editClosed: function editClosed(data) {
       if (data && data.isCreated) {
@@ -771,26 +763,6 @@ var render = function() {
     "md-app",
     { attrs: { "md-waterfall": "", "md-mode": "fixed" } },
     [
-      _c("md-app-toolbar", { staticClass: "md-primary" }, [
-        _c("div", { staticClass: "md-toolbar-row" }, [
-          _c(
-            "div",
-            { staticClass: "md-toolbar-section-start" },
-            [_c("app-back-nav")],
-            1
-          ),
-          _vm._v(" "),
-          _c("div", { staticClass: "flex md-title" }, [_vm._v("部门列表")]),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "md-toolbar-section-end" },
-            [_c("md-icon-add", { on: { click: _vm.onAddClick } })],
-            1
-          )
-        ])
-      ]),
-      _vm._v(" "),
       _c(
         "md-app-content",
         [
@@ -833,20 +805,31 @@ var render = function() {
               )
             ],
             1
-          ),
-          _vm._v(" "),
-          _c("edit-dia", {
-            attrs: {
-              "md-active": _vm.isEditing,
-              "md-data": _vm.currentEditData
-            },
-            on: {
-              "update:mdActive": function($event) {
-                _vm.isEditing = $event
-              },
-              "md-closed": _vm.editClosed
-            }
-          })
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "md-app-bottom-bar",
+        [
+          _c(
+            "md-x-submit-bar",
+            [
+              _c(
+                "md-button",
+                {
+                  staticClass: "md-icon-button md-raised",
+                  attrs: { slot: "button" },
+                  on: { click: _vm.onAddClick },
+                  slot: "button"
+                },
+                [_c("md-icon", [_vm._v("add")])],
+                1
+              )
+            ],
+            1
+          )
         ],
         1
       )

@@ -1,6 +1,6 @@
 webpackJsonp([21],{
 
-/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/vendor/gmf-sys/pages/Auth/Password.vue":
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/vendor/gmf-sys/pages/Auth/AccountJoin.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10,9 +10,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _regenerator = __webpack_require__("./node_modules/babel-runtime/regenerator/index.js");
+var _AuthCache = __webpack_require__("./resources/assets/js/vendor/gmf-sys/pages/Auth/AuthCache.js");
 
-var _regenerator2 = _interopRequireDefault(_regenerator);
+var _AuthCache2 = _interopRequireDefault(_AuthCache);
 
 var _Sns = __webpack_require__("./resources/assets/js/vendor/gmf-sys/pages/Auth/Sns.vue");
 
@@ -24,11 +24,6 @@ var _validators = __webpack_require__("./node_modules/vuelidate/lib/validators/i
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; } //
-//
-//
-//
-//
 //
 //
 //
@@ -68,11 +63,10 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 //
 
 exports.default = {
-  name: 'GmfPagesAuthPassword',
+  name: 'GmfPagesAuthAccountJoin',
   components: {
     AuthSns: _Sns2.default
   },
-  props: {},
   mixins: [_vuelidate.validationMixin],
   data: function data() {
     return {
@@ -84,6 +78,11 @@ exports.default = {
 
   validations: {
     mainDatas: {
+      account: {
+        required: _validators.required,
+        minLength: (0, _validators.minLength)(3),
+        maxLength: (0, _validators.maxLength)(30)
+      },
       password: {
         required: _validators.required,
         minLength: (0, _validators.minLength)(3),
@@ -98,6 +97,16 @@ exports.default = {
       return q;
     }
   },
+  beforeRouteEnter: function beforeRouteEnter(to, from, next) {
+    next(function (vm) {
+      vm.fetchData();
+    });
+  },
+  beforeRouteUpdate: function beforeRouteUpdate(to, from, next) {
+    this.fetchData();
+    next();
+  },
+
   methods: {
     getValidationClass: function getValidationClass(fieldName) {
       var field = this.$v.mainDatas[fieldName];
@@ -107,136 +116,26 @@ exports.default = {
         };
       }
     },
-    validateForm: function validateForm() {
+    validateUser: function validateUser() {
       this.$v.$touch();
       if (!this.$v.$invalid) {
         this.submitPost();
       }
     },
-    submitPost: function () {
-      var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
-        var response;
-        return _regenerator2.default.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.prev = 0;
+    submitPost: function submitPost() {
+      var _this = this;
 
-                this.sending = true;
-                _context.next = 4;
-                return this.$http.post('sys/auth/login', this.mainDatas);
-
-              case 4:
-                response = _context.sent;
-
-                this.sending = false;
-                this.$setConfigs({ user: response.data.data, token: response.data.token });
-                _context.next = 9;
-                return this.$root.$loadConfigs();
-
-              case 9:
-                this.$go(this.$route.query.continue ? this.$route.query.continue : this.$root.configs.home);
-                _context.next = 16;
-                break;
-
-              case 12:
-                _context.prev = 12;
-                _context.t0 = _context['catch'](0);
-
-                this.sending = false;
-                this.$toast(_context.t0);
-
-              case 16:
-              case 'end':
-                return _context.stop();
-            }
-          }
-        }, _callee, this, [[0, 12]]);
-      }));
-
-      function submitPost() {
-        return _ref.apply(this, arguments);
-      }
-
-      return submitPost;
-    }(),
-    fetchData: function () {
-      var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee2() {
-        var thId, response, u;
-        return _regenerator2.default.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.prev = 0;
-
-                this.sending = true;
-                thId = this.$route.params.id;
-
-                if (!thId) {
-                  this.$go({ name: 'auth.chooser', query: this.routeQuery });
-                }
-                _context2.next = 6;
-                return this.$http.post('sys/auth/checker', { id: thId });
-
-              case 6:
-                response = _context2.sent;
-                u = response.data.data;
-
-                this.mainDatas = response.data.data;
-                _context2.next = 15;
-                break;
-
-              case 11:
-                _context2.prev = 11;
-                _context2.t0 = _context2['catch'](0);
-
-                this.$toast(_context2.t0);
-                this.$go({ name: 'auth.identifier', query: this.routeQuery });
-
-              case 15:
-                _context2.prev = 15;
-
-                this.sending = false;
-                return _context2.finish(15);
-
-              case 18:
-              case 'end':
-                return _context2.stop();
-            }
-          }
-        }, _callee2, this, [[0, 11, 15, 18]]);
-      }));
-
-      function fetchData() {
-        return _ref2.apply(this, arguments);
-      }
-
-      return fetchData;
-    }()
-  },
-  mounted: function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee3() {
-      return _regenerator2.default.wrap(function _callee3$(_context3) {
-        while (1) {
-          switch (_context3.prev = _context3.next) {
-            case 0:
-              _context3.next = 2;
-              return this.fetchData();
-
-            case 2:
-            case 'end':
-              return _context3.stop();
-          }
-        }
-      }, _callee3, this);
-    }));
-
-    function mounted() {
-      return _ref3.apply(this, arguments);
-    }
-
-    return mounted;
-  }()
+      this.sending = true;
+      this.$http.post('sys/auth/joins', this.mainDatas).then(function (response) {
+        _this.sending = false;
+        _this.$go(_this.$route.query.continue ? _this.$route.query.continue : { name: 'auth.account.dashboard' });
+      }).catch(function (err) {
+        _this.sending = false;
+        _this.$toast(err);
+      });
+    },
+    fetchData: function fetchData() {}
+  }
 };
 
 /***/ }),
@@ -367,7 +266,7 @@ if(false) {
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-4c383a74\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/vendor/gmf-sys/pages/Auth/Password.vue":
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-6c9fe41c\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/vendor/gmf-sys/pages/Auth/AccountJoin.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -382,7 +281,7 @@ var render = function() {
         on: {
           submit: function($event) {
             $event.preventDefault()
-            return _vm.validateForm($event)
+            return _vm.validateUser($event)
           }
         }
       },
@@ -391,49 +290,23 @@ var render = function() {
           "md-card-header",
           [
             _c("md-card-header-text", [
-              _c("div", { staticClass: "md-title" }, [_vm._v("欢迎")])
-            ])
-          ],
-          1
-        ),
-        _vm._v(" "),
-        _c(
-          "md-list",
-          [
+              _c("div", { staticClass: "md-title" }, [_vm._v("账号关联")]),
+              _vm._v(" "),
+              _c("div", { staticClass: "md-body-1" }, [_vm._v("添加更多账号")])
+            ]),
+            _vm._v(" "),
             _c(
-              "md-list-item",
+              "md-button",
+              {
+                staticClass: "md-icon-button md-list-action",
+                attrs: {
+                  to: { name: "auth.account.dashboard", query: _vm.routeQuery }
+                }
+              },
               [
-                _c(
-                  "md-avatar",
-                  [
-                    _c("md-image", {
-                      attrs: { "md-src": _vm.mainDatas.avatar }
-                    })
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c("div", { staticClass: "md-list-item-text" }, [
-                  _c("span", [_vm._v(_vm._s(_vm.mainDatas.name))]),
-                  _vm._v(" "),
-                  _c("span", [_vm._v(_vm._s(_vm.mainDatas.account))])
-                ]),
-                _vm._v(" "),
-                _c(
-                  "md-button",
-                  {
-                    staticClass: "md-icon-button md-list-action",
-                    attrs: {
-                      to: { name: "auth.chooser", query: _vm.routeQuery }
-                    }
-                  },
-                  [
-                    _c("md-icon", { staticClass: "md-primary" }, [
-                      _vm._v("expand_more")
-                    ])
-                  ],
-                  1
-                )
+                _c("md-icon", { staticClass: "md-primary" }, [
+                  _vm._v("expand_more")
+                ])
               ],
               1
             )
@@ -447,6 +320,35 @@ var render = function() {
             _c(
               "md-layout",
               [
+                _c(
+                  "md-field",
+                  {
+                    class: _vm.getValidationClass("account"),
+                    attrs: { "md-clearable": "" }
+                  },
+                  [
+                    _c("label", [_vm._v("电子邮件地址或电话号码")]),
+                    _vm._v(" "),
+                    _c("md-input", {
+                      attrs: { autocomplete: "off", disabled: _vm.sending },
+                      model: {
+                        value: _vm.mainDatas.account,
+                        callback: function($$v) {
+                          _vm.$set(_vm.mainDatas, "account", $$v)
+                        },
+                        expression: "mainDatas.account"
+                      }
+                    }),
+                    _vm._v(" "),
+                    !_vm.$v.mainDatas.account.required
+                      ? _c("span", { staticClass: "md-error" }, [
+                          _vm._v("请输入电子邮件地址或电话号码")
+                        ])
+                      : _vm._e()
+                  ],
+                  1
+                ),
+                _vm._v(" "),
                 _c(
                   "md-field",
                   { class: _vm.getValidationClass("password") },
@@ -488,16 +390,8 @@ var render = function() {
           [
             _c(
               "router-link",
-              {
-                attrs: {
-                  to: {
-                    name: "auth.password.find",
-                    params: { id: _vm.mainDatas.id },
-                    query: _vm.routeQuery
-                  }
-                }
-              },
-              [_vm._v("忘记了密码")]
+              { attrs: { to: { name: "auth.account.dashboard" } } },
+              [_vm._v("查看关联账号")]
             ),
             _vm._v(" "),
             _c("span", { staticClass: "flex" }),
@@ -508,7 +402,7 @@ var render = function() {
                 staticClass: "md-primary md-raised",
                 attrs: { type: "submit", disabled: _vm.sending }
               },
-              [_vm._v("登 录")]
+              [_vm._v("关联账号")]
             )
           ],
           1
@@ -516,7 +410,7 @@ var render = function() {
         _vm._v(" "),
         _c("md-divider"),
         _vm._v(" "),
-        _c("auth-sns"),
+        _c("auth-sns", { attrs: { title: "绑定合作账号", type: "join" } }),
         _vm._v(" "),
         _vm.sending
           ? _c("md-progress-bar", { attrs: { "md-mode": "indeterminate" } })
@@ -532,7 +426,7 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-4c383a74", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-6c9fe41c", module.exports)
   }
 }
 
@@ -2008,15 +1902,15 @@ exports.default = withParams;
 
 /***/ }),
 
-/***/ "./resources/assets/js/vendor/gmf-sys/pages/Auth/Password.vue":
+/***/ "./resources/assets/js/vendor/gmf-sys/pages/Auth/AccountJoin.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
 /* script */
-var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/vendor/gmf-sys/pages/Auth/Password.vue")
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}],\"es2015\",\"stage-3\",[\"env\",{\"modules\":false,\"useBuiltIns\":false}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}],\"syntax-dynamic-import\"],\"ignore\":[\"dist/*.js\",\"public/*.js\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/vendor/gmf-sys/pages/Auth/AccountJoin.vue")
 /* template */
-var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-4c383a74\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/vendor/gmf-sys/pages/Auth/Password.vue")
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-6c9fe41c\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/vendor/gmf-sys/pages/Auth/AccountJoin.vue")
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -2033,7 +1927,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources\\assets\\js\\vendor\\gmf-sys\\pages\\Auth\\Password.vue"
+Component.options.__file = "resources\\assets\\js\\vendor\\gmf-sys\\pages\\Auth\\AccountJoin.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -2042,9 +1936,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-4c383a74", Component.options)
+    hotAPI.createRecord("data-v-6c9fe41c", Component.options)
   } else {
-    hotAPI.reload("data-v-4c383a74", Component.options)
+    hotAPI.reload("data-v-6c9fe41c", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -2053,6 +1947,81 @@ if (false) {(function () {
 
 module.exports = Component.exports
 
+
+/***/ }),
+
+/***/ "./resources/assets/js/vendor/gmf-sys/pages/Auth/AuthCache.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var AuthCache = function () {
+  function AuthCache() {
+    _classCallCheck(this, AuthCache);
+
+    this.storageKey = "gmf.sys.auth." + window.location.host;
+  }
+
+  _createClass(AuthCache, [{
+    key: "get",
+    value: function get() {
+      return JSON.parse(localStorage.getItem(this.storageKey)) || [];
+    }
+  }, {
+    key: "has",
+    value: function has(user) {
+      return false;
+    }
+  }, {
+    key: "remove",
+    value: function remove(user) {
+      if (!user) return;
+      var users = this.get();
+      var ind = -1;
+      for (var i = 0; i < users.length; i++) {
+        if (users[i].id == user.id) {
+          ind = i;
+          break;
+        }
+      }
+      if (i >= 0) {
+        users.splice(i, 1);
+        localStorage.removeItem(this.storageKey);
+        localStorage.setItem(this.storageKey, JSON.stringify(users));
+      }
+    }
+  }, {
+    key: "add",
+    value: function add(user) {
+      if (!user) return;
+      var users = this.get();
+      var isExists = false;
+      users.forEach(function (item) {
+        if (item.id == user.id) {
+          isExists = true;
+        }
+      });
+      if (!isExists) {
+        users.push(user);
+      }
+      localStorage.removeItem(this.storageKey);
+      localStorage.setItem(this.storageKey, JSON.stringify(users));
+    }
+  }]);
+
+  return AuthCache;
+}();
+
+exports.default = new AuthCache();
 
 /***/ }),
 

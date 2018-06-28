@@ -51,12 +51,12 @@ class HomeController extends Controller
     $config->user(GAuth::user());
     $entId = $request->session()->get(config('gmf.ent.session'));
     if (!empty($entId)) {
-      $entId = SysModels\EntUser::where('user_id', $userId)->where('ent_id', $entId)->value('ent_id');
+      $entId = SysModels\Ent\EntUser::where('user_id', $userId)->where('ent_id', $entId)->value('ent_id');
     }
     if (empty($entId)) {
-      $entId = SysModels\EntUser::where('user_id', $userId)->orderBy('is_default', 'desc')->value('ent_id');
+      $entId = SysModels\Ent\EntUser::where('user_id', $userId)->orderBy('is_default', 'desc')->value('ent_id');
     }
-    $ent = SysModels\Ent::find($entId);
+    $ent = SysModels\Ent\Ent::find($entId);
     if ($ent) {
       $config->ent($ent);
       session([config('gmf.ent.session') => $ent->id]);

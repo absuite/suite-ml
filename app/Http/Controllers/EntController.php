@@ -19,7 +19,7 @@ class EntController extends Controller
       'token' => 'required',
       'is_effective' => 'required'
     ])->validate();
-    $ent = Models\Ent::where('id', $input['ent_openid'])->orWhere('openid', $input['ent_openid'])->first();
+    $ent = Models\Ent\Ent::where('id', $input['ent_openid'])->orWhere('openid', $input['ent_openid'])->first();
     if (empty($ent)) {
       throw new \Exception('找不到企业！');
     }
@@ -30,7 +30,7 @@ class EntController extends Controller
     if (empty($user)) {
       throw new \Exception('没有此用户');
     }
-    Models\Ent::setEffective($ent->id, $user->id, $input['is_effective']);
+    Models\Ent\Ent::setEffective($ent->id, $user->id, $input['is_effective']);
     return $this->toJson(true);
   }
   public function join(Request $request)
@@ -69,7 +69,7 @@ class EntController extends Controller
       }
     }
     if (!$ent->hasUser($user->id)) {
-      Models\Ent::addUser($ent->id, $user->id, ['is_effective' => 0, 'type_enum' => 'member']);
+      Models\Ent\Ent::addUser($ent->id, $user->id, ['is_effective' => 0, 'type_enum' => 'member']);
     }
     return $this->toJson(true);
   }

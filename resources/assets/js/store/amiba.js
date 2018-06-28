@@ -43,7 +43,7 @@ const actions = {
       if (!state.ent || !state.ent.id) {
         reject('没有可用的企业，请加入企业，并设置为主企业，再试！');
       }
-      http.appConfig({ name: "suite.cbo", entId: state.ent.id, appId: 'suite.cbo' }, replace)
+      http.packConfig({ name: "suite.cbo", entId: state.ent.id, packId: 'suite.cbo' }, replace)
         .then(() => {
           resolve(true)
         })

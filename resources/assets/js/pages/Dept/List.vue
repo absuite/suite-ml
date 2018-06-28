@@ -1,16 +1,5 @@
 <template>
   <md-app md-waterfall md-mode="fixed">
-    <md-app-toolbar class="md-primary">
-      <div class="md-toolbar-row">
-        <div class="md-toolbar-section-start">
-          <app-back-nav></app-back-nav>
-        </div>
-        <div class="flex md-title">部门列表</div>
-        <div class="md-toolbar-section-end">
-          <md-icon-add @click="onAddClick"></md-icon-add>
-        </div>
-      </div>
-    </md-app-toolbar>
     <md-app-content>
       <md-pull-refresh @refresh="onRefresh">
         <md-scroll-load :md-finished="isFinished" :configed="configed" @load="onScrollLoad">
@@ -24,8 +13,14 @@
           </md-x-cell-group>
         </md-scroll-load>
       </md-pull-refresh>
-      <edit-dia :md-active.sync="isEditing" :md-data="currentEditData" @md-closed="editClosed"></edit-dia>
     </md-app-content>
+    <md-app-bottom-bar>    
+      <md-x-submit-bar>       
+        <md-button class="md-icon-button md-raised" slot="button" @click="onAddClick">
+          <md-icon>add</md-icon>
+        </md-button>      
+      </md-x-submit-bar>
+    </md-app-bottom-bar>
   </md-app>
 </template>
 <script>
@@ -45,7 +40,6 @@ export default {
     configed: false,
     items: [],
     pager: {},
-    isEditing: false,
     isFinished: false,
     currentEditData: null,
     search_q: ""
@@ -65,12 +59,10 @@ export default {
       this.configed = true;
     },
     onItemClick(item) {
-      this.currentEditData = item;
-      this.isEditing = true;
+      this.$go({ name: "cbo.dept.edit", query: { id: item.id } });
     },
     onAddClick() {
-      this.currentEditData = null;
-      this.isEditing = true;
+      this.$go({ name: "cbo.dept.edit" });
     },
     editClosed(data) {
       if (data && data.isCreated) {
