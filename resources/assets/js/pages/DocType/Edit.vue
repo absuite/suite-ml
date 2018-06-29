@@ -14,7 +14,7 @@
         </form>
       </md-content>
     </md-app-content>
-    <md-app-bottom-bar>
+    <md-app-bottom-bar>    
       <md-x-submit-bar :disabled="$v.$invalid" @submit="postFormData"/>
     </md-app-bottom-bar>
   </md-app>
@@ -25,7 +25,7 @@ import { mapState, mapGetters } from "vuex";
 import { validationMixin } from "vuelidate";
 import { required, minLength, maxLength } from "vuelidate/lib/validators";
 export default {
-  name: "DeptEdit",
+  name: "DocTypeEdit",
   data: () => ({
     configed: false,
     mainData: {}
@@ -63,7 +63,7 @@ export default {
       }
       this.$tip.waiting("加载中...");
       this.$http("suite.cbo")
-        .get("api/cbo/depts/show", {
+        .get("api/cbo/doc-types/show", {
           params: {
             id: id
           }
@@ -81,7 +81,7 @@ export default {
     postFormData() {
       this.$tip.waiting("正在保存...");
       this.$http("suite.cbo")
-        .post("api/cbo/depts", this.mainData)
+        .post("api/cbo/doc-types", this.mainData)
         .then(
           res => {
             this.$tip.clear();

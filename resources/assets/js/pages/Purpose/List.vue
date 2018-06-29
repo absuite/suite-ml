@@ -4,22 +4,16 @@
       <md-pull-refresh @refresh="onRefresh">
         <md-scroll-load :md-finished="isFinished" :configed="configed" @load="onScrollLoad">
           <md-x-cell-group>
-            <md-x-cell icon="md:settings_input_svideo" is-link v-for="item in items" :key="item.id" @click="onItemClick(item)" 
+            <md-x-cell icon="md:settings_input_svideo" is-link v-for="item in items" :key="item.id"
             :title="item.name"
             :label="item.code"
-            :tag="item.org?item.org.name:''"
             >
             </md-x-cell>
           </md-x-cell-group>
         </md-scroll-load>
       </md-pull-refresh>
     </md-app-content>
-    <md-app-bottom-bar> 
-      <md-speed-dial md-fixed class="md-bottom-right">
-        <md-speed-dial-target @click="onAddClick">
-          <md-icon>add</md-icon>
-        </md-speed-dial-target>
-      </md-speed-dial>
+    <md-app-bottom-bar>     
     </md-app-bottom-bar>
   </md-app>
 </template>
@@ -27,13 +21,12 @@
 import extend from "lodash/extend";
 import { mapState, mapGetters } from "vuex";
 export default {
-  name: "DeptList",
+  name: "PurposeList",
   data: () => ({
     configed: false,
     items: [],
     pager: {},
     isFinished: false,
-    currentEditData: null,
     search_q: ""
   }),
   beforeRouteEnter(to, from, next) {
@@ -50,12 +43,7 @@ export default {
     async config() {
       this.configed = true;
     },
-    onItemClick(item) {
-      this.$go({ name: "cbo.dept.edit", query: { id: item.id } });
-    },
-    onAddClick() {
-      this.$go({ name: "cbo.dept.edit" });
-    },
+    onItemClick(item) {},
     onRefresh(c) {
       this.fetchData(null, c);
     },
@@ -78,7 +66,7 @@ export default {
         this.isFinished = false;
       }
       this.$http("suite.cbo")
-        .get("api/cbo/depts", {
+        .get("api/amiba/purposes", {
           params: options
         })
         .then(

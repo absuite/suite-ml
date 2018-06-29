@@ -198,7 +198,7 @@ var render = function() {
       _c(
         "md-app-content",
         [
-          _c("md-content", [
+          _c("md-content", { staticClass: "layout-padding" }, [
             _c(
               "form",
               {

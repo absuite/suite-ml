@@ -22264,20 +22264,21 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 exports.default = new _MdComponent2.default({
-  name: 'MdSpeedDial',
+  name: "MdSpeedDial",
   props: {
     mdEvent: _extends({
       type: String,
-      default: 'hover'
-    }, (0, _MdPropValidator2.default)('md-event', ['click', 'hover'])),
+      default: "hover"
+    }, (0, _MdPropValidator2.default)("md-event", ["click", "hover"])),
     mdDirection: _extends({
       type: String,
-      default: 'top'
-    }, (0, _MdPropValidator2.default)('md-direction', ['top', 'bottom'])),
+      default: "top"
+    }, (0, _MdPropValidator2.default)("md-direction", ["top", "bottom"])),
     mdEffect: _extends({
       type: String,
-      default: 'fling'
-    }, (0, _MdPropValidator2.default)('md-effect', ['fling', 'scale', 'opacity']))
+      default: "fling"
+    }, (0, _MdPropValidator2.default)("md-effect", ["fling", "scale", "opacity"])),
+    mdFixed: Boolean
   },
   data: function data() {
     return {
@@ -22299,9 +22300,10 @@ exports.default = new _MdComponent2.default({
       var _ref;
 
       return _ref = {
-        'md-active': this.MdSpeedDial.active,
-        'md-with-hover': this.mdEvent === 'hover'
-      }, _defineProperty(_ref, 'md-direction-' + this.mdDirection, true), _defineProperty(_ref, 'md-effect-' + this.mdEffect, true), _ref;
+        "md-active": this.MdSpeedDial.active,
+        "md-fixed": this.mdFixed,
+        "md-with-hover": this.mdEvent === "hover"
+      }, _defineProperty(_ref, "md-direction-" + this.mdDirection, true), _defineProperty(_ref, "md-effect-" + this.mdEffect, true), _ref;
     }
   }
 });

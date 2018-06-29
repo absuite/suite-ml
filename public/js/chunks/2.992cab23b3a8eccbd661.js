@@ -814,16 +814,12 @@ var render = function() {
         "md-app-bottom-bar",
         [
           _c(
-            "md-x-submit-bar",
+            "md-speed-dial",
+            { staticClass: "md-bottom-right", attrs: { "md-fixed": "" } },
             [
               _c(
-                "md-button",
-                {
-                  staticClass: "md-icon-button md-raised",
-                  attrs: { slot: "button" },
-                  on: { click: _vm.onAddClick },
-                  slot: "button"
-                },
+                "md-speed-dial-target",
+                { on: { click: _vm.onAddClick } },
                 [_c("md-icon", [_vm._v("add")])],
                 1
               )
