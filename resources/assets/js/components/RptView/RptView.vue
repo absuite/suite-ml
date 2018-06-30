@@ -14,8 +14,8 @@
     <md-app-content class="layout-column">
       <slot/>
       <md-x-popup v-model="isShowFilling" position="bottom">
-    <md-picker :md-data="purposes" v-model="currentPurpose" @md-cancel="isShowFilling=false" @md-confirm="onConfirmPurpose" md-show-toolbar/>
-  </md-x-popup>
+        <md-picker :md-data="purposes" v-model="currentPurpose" @md-cancel="isShowFilling=false" @md-confirm="onConfirmPurpose" md-show-toolbar/>
+      </md-x-popup>
     </md-app-content>
   </md-app>
 </template>
@@ -38,24 +38,24 @@
     },
     props: {
       title: String
-    },    
+    },
     data: () => ({
       configed: false,
       isShowFilling: false,
-      currentPurpose:[]
+      currentPurpose: []
     }),
     computed: {
       ...mapState({
         purpose: state => state.amiba.purpose,
         purposes(state) {
-          if(!state.amiba.purposes||!state.amiba.purposes.length)return [];
+          if (!state.amiba.purposes || !state.amiba.purposes.length) return [];
           return [state.amiba.purposes.map(r => {
             r.value = r.id;
             return r;
           })];
         }
       })
-     
+
     },
     methods: {
       ...mapActions("amiba", ["setPurpose"]),
@@ -66,18 +66,18 @@
           await this.$store.dispatch("amiba/setPurpose", purposes[0]);
         }
         this.configed = true;
-        if(this.purpose){
-          this.currentPurpose=[this.purpose.id];
+        if (this.purpose) {
+          this.currentPurpose = [this.purpose.id];
         }
-        
+
       },
       onConfirmPurpose(data) {
         this.isShowFilling = false;
         if (data && data.length > 0) {
-          const item =this.purposes&&this.purposes[0].find(function (r) {
+          const item = this.purposes && this.purposes[0].find(function (r) {
             return r.id == data[0];
           });
-          item&&this.setPurpose(item);
+          item && this.setPurpose(item);
         }
 
       },

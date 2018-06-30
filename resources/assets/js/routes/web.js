@@ -6,19 +6,19 @@ const rs = [
   { path: '/m/works', name: 'works', page: 'Works/Work.vue' , meta: { keepAlive: true ,title:'工作'}},
 ];
 //cbo
-rs.push({ path: '/m/cbo/dept/list', name: 'cbo.dept.list', page: 'Dept/List.vue', meta: { keepAlive: true ,title:'部门列表'} });
-rs.push({ path: '/m/cbo/dept/edit', name: 'cbo.dept.edit', page: 'Dept/Edit.vue', meta: { keepAlive: true ,title:'部门编辑'} });
+rs.push({ path: '/m/cbo/dept/list', name: 'cbo.dept.list', page: 'CboDept/List.vue', meta: { keepAlive: true ,title:'部门列表'} });
+rs.push({ path: '/m/cbo/dept/edit', name: 'cbo.dept.edit', page: 'CboDept/Edit.vue', meta: { keepAlive: true ,title:'部门编辑'} });
 
-rs.push({ path: '/m/cbo/item/list', name: 'cbo.item.list', page: 'Item/List.vue', meta: { keepAlive: true ,title:'物料列表'} });
-rs.push({ path: '/m/cbo/item/edit', name: 'cbo.item.edit', page: 'Item/Edit.vue', meta: { keepAlive: true ,title:'物料编辑'} });
+rs.push({ path: '/m/cbo/item/list', name: 'cbo.item.list', page: 'CboItem/List.vue', meta: { keepAlive: true ,title:'物料列表'} });
+rs.push({ path: '/m/cbo/item/edit', name: 'cbo.item.edit', page: 'CboItem/Edit.vue', meta: { keepAlive: true ,title:'物料编辑'} });
 
-rs.push({ path: '/m/cbo/doc-type/list', name: 'cbo.doc.type.list', page: 'DocType/List.vue', meta: { keepAlive: true ,title:'单据列表'} });
-rs.push({ path: '/m/cbo/doc-type/edit', name: 'cbo.doc.type.edit', page: 'DocType/Edit.vue', meta: { keepAlive: true ,title:'单据编辑'} });
+rs.push({ path: '/m/cbo/doc-type/list', name: 'cbo.doc.type.list', page: 'CboDocType/List.vue', meta: { keepAlive: true ,title:'单据列表'} });
+rs.push({ path: '/m/cbo/doc-type/edit', name: 'cbo.doc.type.edit', page: 'CboDocType/Edit.vue', meta: { keepAlive: true ,title:'单据编辑'} });
 
 //amiba
-rs.push({ path: '/m/amiba/purpose/list', name: 'amiba.purpose.list', page: 'Purpose/List.vue', meta: { keepAlive: true ,title:'核算目的列表'} });
-rs.push({ path: '/m/amiba/element/list', name: 'amiba.element.list', page: 'Element/List.vue', meta: { keepAlive: true ,title:'核算要素列表'} });
-rs.push({ path: '/m/amiba/group/list', name: 'amiba.group.list', page: 'Group/List.vue', meta: { keepAlive: true ,title:'阿米巴列表'} });
+rs.push({ path: '/m/amb/purpose/list', name: 'amb.purpose.list', page: 'AmbPurpose/List.vue', meta: { keepAlive: true ,title:'核算目的列表'} });
+rs.push({ path: '/m/amb/element/list', name: 'amb.element.list', page: 'AmbElement/List.vue', meta: { keepAlive: true ,title:'核算要素列表'} });
+rs.push({ path: '/m/amb/group/list', name: 'amb.group.list', page: 'AmbGroup/List.vue', meta: { keepAlive: true ,title:'阿米巴列表'} });
 
 rs.push({ path: '/m/rpt/profit/rank', name: 'rpt.profit.rank', page: 'RptProfit/Rank.vue', meta: { keepAlive: true } });
 rs.push({ path: '/m/rpt/profit/trend', name: 'rpt.profit.trend', page: 'RptProfit/Trend.vue', meta: { keepAlive: true } });
