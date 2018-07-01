@@ -16,6 +16,9 @@
         </md-scroll-load>
       </md-pull-refresh>
     </md-app-content>
+    <md-app-bottom-bar>
+      <md-x-submit-bar @back="$router.back()" show-back  button-text="" />
+    </md-app-bottom-bar>
   </md-app>
 </template>
 <script>

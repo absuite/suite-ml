@@ -1,8 +1,10 @@
 <template>
-<app-rpt-view title="利润排名">
-      <md-x-tabs @click="onPeriodChanged">
-        <md-x-tab v-for="item in periods" :title="item" :key="item.id"></md-x-tab>
-      </md-x-tabs>
+  <md-app md-waterfall md-mode="fixed">
+    <md-app-content class="layout-column">
+      <md-x-dropdowns v-if="configed">
+        <filter-purpose-dropdown v-model="selector.purpose"></filter-purpose-dropdown>
+        <filter-period-dropdown v-model="selector.period" title="期间"></filter-period-dropdown>
+      </md-x-dropdowns>
       <md-layout>
         <md-x-chart ref="topChart" :md-data="topChartData">
           <md-x-bar />
@@ -11,134 +13,146 @@
           <md-x-tooltip :show-item-marker="false" />
         </md-x-chart>
       </md-layout>
-      <md-layout class="flex" md-column>
+     <md-content class="flex scroll">
         <md-pull-refresh @refresh="onListRefresh">
-          <md-scroll-load :md-finished="isListFinished" :immediate-check="false" @load="onListScrollLoad">
-            <md-table v-model="listItems">
-              <md-table-row slot="md-table-row" slot-scope="{ item }">
-                <md-table-cell md-label="阿米巴">{{ item.group_name }}</md-table-cell>
-                <md-table-cell md-label="利润">{{ item.this_profit }}</md-table-cell>
-                <md-table-cell md-label="利润率">{{ item.this_profit_rate>0?Math.round(item.this_profit_rate * 100) / 100:'-' }}</md-table-cell>
-              </md-table-row>
-            </md-table>
-          </md-scroll-load>
+          <md-table v-model="listItems">
+            <md-table-row slot="md-table-row" slot-scope="{ item }">
+              <md-table-cell md-label="阿米巴">{{ item.group_name }}</md-table-cell>
+              <md-table-cell md-label="利润">{{ item.this_profit }}</md-table-cell>
+              <md-table-cell md-label="利润率">{{ item.this_profit_rate>0?Math.round(item.this_profit_rate * 100) / 100:'-' }}</md-table-cell>
+            </md-table-row>
+          </md-table>
         </md-pull-refresh>
-      </md-layout>
-</app-rpt-view>
+     </md-content>
+    </md-app-content>
+    <md-app-bottom-bar>
+      <md-x-submit-bar button-text="" @back="$router.back()" show-back/>
+    </md-app-bottom-bar>
+  </md-app>
 </template>
 <script>
-import AppRptView from "../../components/RptView/RptView";
-import extend from "lodash/extend";
-import debounce from "gmf/core/utils/MdDebounce";
-import { mapState, mapGetters } from "vuex";
+  import FilterPurposeDropdown from "../../components/Filter/PurposeDropdown";
+  import FilterGroupDropdown from "../../components/Filter/GroupDropdown";
+  import FilterPeriodDropdown from "../../components/Filter/PeriodDropdown";
+  import extend from "lodash/extend";
+  import debounce from "gmf/core/utils/MdDebounce";
+  import {
+    mapState,
+    mapGetters
+  } from "vuex";
 
-export default {
-  name: "RptProfitRank",
-  components: {
-    AppRptView
-  },
-  created() {
-    console.log(this.$options.name);
-  },
-  data: () => ({
-    configed: false,
-    listItems: [],
-    listPager: {},
-    isListFinished: false,
-    period: null
-  }),
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      vm.$store.dispatch("amiba/config").then(
-        () => vm.config(),
-        err => {
-          vm.$tip(err);
-        }
-      );
-    });
-  },
-  computed: {
-    ...mapState("amiba", ["purpose", "periods"]),
-    ...mapGetters("amiba", ["currentPeriod"]),
-    topChartData() {
-      return this.listItems.filter((r, i) => {
-        return i < 5 ? r : false;
-      });
-    }
-  },
-  watch: {
-    purpose(n, o) {
-      if (n && this.configed && ((o && n.id != o.id) || !o)) {
-        this.fetchListData();
+  export default {
+    name: "RptProfitRank",
+    components: {
+      FilterPurposeDropdown,
+      FilterGroupDropdown,
+      FilterPeriodDropdown
+    },
+    data: () => ({
+      configed: false,
+      listItems: [],
+      listPager: {},
+      selector: {
+        purpose: null,
+        period: null
       }
-    },
-    period(n, o) {
-      if (n && this.configed && ((o && n.id != o.id) || !o)) {
-        this.fetchListData();
-      }
-    },
-    topChartData() {
-      this.$refs.topChart.rerender();
-    }
-  },
-  methods: {
-    async config() {
-      const purposes = await this.$store.dispatch("amiba/getPurposes");
-      if (!this.purpose && purposes && purposes.length > 0) {
-        await this.$store.dispatch("amiba/setPurpose", purposes[0]);
-      }
-      const periods = await this.$store.dispatch("amiba/getPeriods");
-      this.period = this.currentPeriod;
-      this.configed = true;
-      this.fetchListData();
-    },
-    onListRefresh(c) {
-      this.fetchListData(null, c);
-    },
-    onListScrollLoad(c) {
-      this.listPager.page++;
-      this.fetchListData(this.listPager, c);
-    },
-    onPeriodChanged(index, tab) {
-      this.period = tab;
-    },
-    fetchListData: debounce(function(pager, c) {
-      if (!this.configed || !this.purpose || !this.period) {
-        c && c();
-        this.isListFinished = true;
-        return;
-      }
-      var options = extend(
-        {
-          purpose_id: this.purpose.id,
-          period: this.period.code
-        },
-        {
-          size: 20
-        },
-        pager
-      );
-      if (!pager) {
-        this.listItems = [];
-        this.isListFinished = false;
-      }
-      this.$http("suite.cbo")
-        .post("api/amiba/reports/profit/rank", options)
-        .then(
-          res => {
-            this.listItems = this.listItems.concat(res.data.data);
-            this.listPager = res.data.pager;
-            this.isListFinished = this.listPager.items < this.listPager.size;
-            c && c();
-          },
+    }),
+    beforeRouteEnter(to, from, next) {
+      next(vm => {
+        vm.$store.dispatch("amiba/config").then(
+          () => vm.config(),
           err => {
-            c && c();
-            this.isListFinished = true;
+            vm.$tip(err);
           }
         );
-    }, 500)
-  }
-};
+      });
+    },
+    computed: {
+      ...mapGetters("amiba", ["currentPeriod", "purpose"]),
+      topChartData() {
+        return this.listItems.filter((r, i) => {
+          return i < 5 ? r : false;
+        });
+      },
+      filterKey() {
+        var k = '1';
+        if (this.selector.purpose) k += this.selector.purpose.id;
+        if (this.selector.period) k += this.selector.period.id;
+        return k;
+      }
+    },
+    watch: {
+      filterKey(n) {
+        if (this.configed) {
+          this.fetchListData();
+        }
+      },
+      topChartData() {
+        this.$refs.topChart.rerender();
+      }
+    },
+    methods: {
+      async config() {
+        const purposes = await this.$store.dispatch("amiba/getPurposes");
+        if (!this.purpose && purposes && purposes.length > 0) {
+          await this.$store.dispatch("amiba/setPurpose", purposes[0]);
+        }
+        this.selector.period = this.currentPeriod;
+        this.configed = true;
+      },
+      onListRefresh(c) {
+        this.fetchListData(null, c);
+      },
+      onListScrollLoad(c) {
+        this.listPager.page++;
+        this.fetchListData(this.listPager, c);
+      },
+      fetchListData: debounce(function (pager, c) {
+        if (!this.configed ||
+          !this.selector.purpose ||
+          !this.selector.period
+        ) {
+          c && c();
+          return;
+        }
+        var options = extend({
+            purpose_id: this.selector.purpose.id,
+            period: this.selector.period.code
+          }, {
+            size: 20
+          },
+          pager
+        );
+        if (!pager) {
+          this.listItems = [];
+          this.isListFinished = false;
+        }
+        this.$http("suite.cbo")
+          .post("api/amiba/reports/profit/rank", options)
+          .then(
+            res => {
+              this.listItems = this.listItems.concat(res.data.data);
+              this.listPager = res.data.pager;
+              c && c();
+            },
+            err => {
+              c && c();
+            }
+          );
+      }, 500)
+    }
+  };
+
 </script>
 <style lang="scss" scoped>
+  .md-app {
+    min-height: 100%;
+    max-width: 100%;
+    height: 100%;
+  }
+
+  .md-app-bottom-bar {
+    height: 50px;
+  }
+
 </style>

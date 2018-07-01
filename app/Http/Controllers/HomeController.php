@@ -7,29 +7,25 @@ use GAuth;
 use Gmf\Sys\Builder;
 use Gmf\Sys\Http\Controllers\Controller;
 use Gmf\Sys\Models as SysModels;
+use Gmf\Sys\Models\User;
 use Illuminate\Http\Request;
 use Log;
-use Gmf\Sys\Models\User;
 
-class HomeController extends Controller
-{
+class HomeController extends Controller {
   /**
    * Create a new controller instance.
    *
    * @return void
    */
-  public function __construct()
-  {
+  public function __construct() {
     //$this->middleware('visitor');
   }
-  public function demo(Request $request)
-  {
+  public function demo(Request $request) {
     $user = User::where('type', 'sys')->first();
     Auth::login($user);
     return redirect('/?demo=1');
   }
-  public function home(Request $request)
-  {
+  public function home(Request $request) {
     $isWx = false;
     if ($ua = $request->userAgent()) {
       $isWx = strpos(strtolower($ua), 'micromessenger') > 0;
@@ -41,10 +37,9 @@ class HomeController extends Controller
       return redirect('/wx/login');
     }
     $config = new Builder;
-    return view('app');
+    return view('app', ['jsWX' => $isWx]);
   }
-  public function getConfigs(Request $request)
-  {
+  public function getConfigs(Request $request) {
     $userId = GAuth::id();
     Log::error('HomeController:' . GAuth::id() . '--' . Auth::id());
     $config = new Builder;

@@ -2,7 +2,7 @@
   <md-app md-waterfall md-mode="fixed">
     <md-app-content class="layout-column">
       <md-x-dropdowns v-if="configed">
-        <app-purpose-dropdown></app-purpose-dropdown>
+        <filter-purpose-dropdown></filter-purpose-dropdown>
       </md-x-dropdowns>
       <md-content class="flex scroll">
         <md-pull-refresh @refresh="onRefresh">
@@ -22,7 +22,7 @@
 </template>
 <script>
   import extend from "lodash/extend";
-  import AppPurposeDropdown from "../../components/PurposeDropdown";
+  import FilterPurposeDropdown from "../../components/Filter/PurposeDropdown";
   import {
     mapState,
     mapGetters
@@ -30,7 +30,7 @@
   export default {
     name: "AmbGroupList",
     components: {
-      AppPurposeDropdown
+      FilterPurposeDropdown
     },
     data: () => ({
       configed: false,
@@ -61,6 +61,10 @@
     },
     methods: {
       async config() {
+        const purposes = await this.$store.dispatch("amiba/getPurposes");
+        if (!this.purpose && purposes && purposes.length > 0) {
+          await this.$store.dispatch("amiba/setPurpose", purposes[0]);
+        }
         this.configed = true;
       },
       onItemClick(item) {},

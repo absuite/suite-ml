@@ -46,6 +46,7 @@
         }
       },
       configWx() {
+        if (!window.wx) return;
         const url = window.location.href.split('#')[0];
         this.$http.get('/wx/js-sign-package', {
           params: {
@@ -53,7 +54,7 @@
           }
         }).then(response => {
           const config = response.data.data;
-          window.wx && window.wx.config({
+          window.wx.config({
             debug: false,
             appId: config.appId,
             timestamp: config.timestamp,
@@ -62,8 +63,8 @@
             jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'hideOptionMenu'] // 必填，需要使用的JS接口列表
           });
         });
-        window.wx && window.wx.ready(function () {
-          window.wx && window.wx.hideOptionMenu();
+        window.wx.ready(function () {
+          window.wx.hideOptionMenu();
         });
       }
     },

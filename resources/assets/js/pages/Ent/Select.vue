@@ -15,8 +15,8 @@
         </md-scroll-load>
       </md-pull-refresh>
     </md-app-content>
-    <md-app-bottom-bar class="md-elevation-1">
-      <md-x-button class="md-full" to="/m/ent/search" icon="add-o">加入企业</md-x-button>
+    <md-app-bottom-bar>
+      <md-x-submit-bar @submit="$go('/m/ent/search')" @back="$router.back()" show-back  button-text="加入企业" />
     </md-app-bottom-bar>
   </md-app>
 </template>

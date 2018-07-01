@@ -19,7 +19,9 @@
     <router-view></router-view>
     <md-toast ref="rootToast"></md-toast>
   </div>
+  @if($jsWX)
   <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+  @endif
   <script src="{{ mix('/js/manifest.js')}}"></script>
   <script src="{{ mix('/js/vendor.js')}}"></script>
   <script src="{{ mix('/js/app.js')}}"></script>

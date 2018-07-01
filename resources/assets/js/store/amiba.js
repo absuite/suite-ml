@@ -30,11 +30,19 @@ const getters = {
     return state.periods.find(function (r) {
       return r.from_date >= d ? r : undefined;
     });
-  }
+  },
+  purpose: state => {
+    return state.purpose;
+  },
+  yearFirstPeriod: state => {
+    return state.periods.find(function (r) {
+      return (new Date(r.from_date)).getFullYear() >= (new Date(d)).getFullYear() ? r : undefined;
+    });
+  },
 }
 // actions
 const actions = {
-  'config'({
+  'config' ({
     state,
     dispatch,
     commit
@@ -43,7 +51,11 @@ const actions = {
       if (!state.ent || !state.ent.id) {
         reject('没有可用的企业，请加入企业，并设置为主企业，再试！');
       }
-      http.packConfig({ name: "suite.cbo", entId: state.ent.id, packId: 'suite.cbo' }, replace)
+      http.packConfig({
+          name: "suite.cbo",
+          entId: state.ent.id,
+          packId: 'suite.cbo'
+        }, replace)
         .then(() => {
           resolve(true)
         })
@@ -54,18 +66,27 @@ const actions = {
     });
   },
   [mutationTypes.SET_ENT]({
+    state,
     dispatch,
     commit
   }, ent) {
     commit(mutationTypes.SET_ENT, ent);
   },
   [mutationTypes.SET_PURPOSE]({
+    state,
     dispatch,
     commit
   }, purpose) {
-    commit(mutationTypes.SET_PURPOSE, purpose);
-    dispatch(mutationTypes.GET_PERIODS, true);
-    dispatch(mutationTypes.GET_GROUPS, true);
+    if ((state.purpose && purpose && state.purpose.id != purpose.id) || (state.purpose == null || purpose == null)) {
+      commit(mutationTypes.SET_PURPOSE, purpose);
+      return new Promise((resolve, reject) => {
+        Promise.all([dispatch(mutationTypes.GET_PERIODS, true), dispatch(mutationTypes.GET_GROUPS, true)]).then(res => {
+          resolve(true);
+        }, err => {
+          reject(err);
+        })
+      });
+    }
   },
   [mutationTypes.GET_PURPOSES]({
     state,
