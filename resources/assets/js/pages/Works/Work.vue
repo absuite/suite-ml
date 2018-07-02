@@ -72,4 +72,8 @@
     height: 100%;
   }
 
+  .md-layout-grid {
+    background: white;
+  }
+
 </style>

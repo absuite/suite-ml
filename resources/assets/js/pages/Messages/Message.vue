@@ -1,6 +1,7 @@
 <template>
   <md-app md-waterfall md-mode="fixed">
     <md-app-content>
+      <md-x-search placeholder="输入您想要查找的内容" v-model="search_q" @search="onSearch" />
       <md-x-cell-group>
         <md-x-cell v-for="item in items" :key="item.id">
           <template slot="icon">

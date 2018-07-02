@@ -4,7 +4,8 @@
       <md-x-dropdowns v-if="configed">
         <filter-purpose-dropdown></filter-purpose-dropdown>
       </md-x-dropdowns>
-      <md-content class="flex scroll">
+      <md-x-search placeholder="输入您想要查找的内容" v-model="search_q" @search="onSearch" />
+      <div class="flex scroll">
         <md-pull-refresh @refresh="onRefresh">
           <md-scroll-load :md-finished="isFinished" :configed="configed" @load="onScrollLoad">
             <md-x-cell-group>
@@ -13,7 +14,7 @@
             </md-x-cell-group>
           </md-scroll-load>
         </md-pull-refresh>
-      </md-content>
+      </div>
     </md-app-content>
     <md-app-bottom-bar>
       <md-x-submit-bar button-text="" @back="$router.back()" show-back/>
@@ -66,6 +67,9 @@
           await this.$store.dispatch("amiba/setPurpose", purposes[0]);
         }
         this.configed = true;
+      },
+      onSearch(s) {
+        this.fetchData();
       },
       onItemClick(item) {},
       onRefresh(c) {

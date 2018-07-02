@@ -1,7 +1,8 @@
 <template>
   <md-app md-waterfall md-mode="fixed">
     <md-app-content class="layout-column">
-      <md-content class="flex scroll">
+      <md-x-search placeholder="输入您想要查找的内容" v-model="search_q" @search="onSearch" />
+      <div class="flex scroll">
         <md-pull-refresh @refresh="onRefresh">
           <md-scroll-load :md-finished="isFinished" :configed="configed" @load="onScrollLoad">
             <md-x-cell-group>
@@ -11,7 +12,7 @@
             </md-x-cell-group>
           </md-scroll-load>
         </md-pull-refresh>
-      </md-content>
+      </div>
     </md-app-content>
     <md-app-bottom-bar>
       <md-x-submit-bar @submit="onAddClick" @back="$router.back()" show-back speed="md:add" />
@@ -47,6 +48,9 @@
     methods: {
       async config() {
         this.configed = true;
+      },
+      onSearch(s) {
+        this.fetchData();
       },
       onItemClick(item) {
         this.$go({

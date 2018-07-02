@@ -6,7 +6,8 @@
         <filter-group-dropdown v-model="selector.group"></filter-group-dropdown>
         <filter-period-dropdown v-model="selector.period" title="期间"></filter-period-dropdown>
       </md-x-dropdowns>
-      <md-content class="flex scroll">
+      <md-x-search placeholder="输入您想要查找的内容" v-model="search_q" @search="onSearch" />
+      <div class="flex scroll">
         <md-pull-refresh @refresh="onListRefresh">
           <md-scroll-load :md-finished="isListFinished" :immediate-check="false" @load="onListScrollLoad">
             <md-x-panel v-for="item in listItems" :key="item.id" :title="item.doc_no" :status="item.use_type_enum" class="item-detail">
@@ -15,7 +16,7 @@
             </md-x-panel>
           </md-scroll-load>
         </md-pull-refresh>
-      </md-content>
+      </div>
     </md-app-content>
   </md-app>
 </template>
@@ -93,7 +94,7 @@
     watch: {
       filterKey(n) {
         if (this.configed) {
-          this.fetchListData();
+          this.fetchData();
         }
       },
     },
@@ -106,14 +107,17 @@
         this.selector.period = this.currentPeriod;
         this.configed = true;
       },
+      onSearch(s) {
+        this.fetchData();
+      },
       onListRefresh(c) {
-        this.fetchListData(null, c);
+        this.fetchData(null, c);
       },
       onListScrollLoad(c) {
         this.listPager.page++;
-        this.fetchListData(this.listPager, c);
+        this.fetchData(this.listPager, c);
       },
-      fetchListData: debounce(function (pager, c) {
+      fetchData: debounce(function (pager, c) {
         if (!this.configed ||
           !this.selector.purpose ||
           !this.selector.period ||

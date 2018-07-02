@@ -125,7 +125,7 @@ class WXController extends Controller
           $continue = '/m/works';
           break;
         case 'reports':
-          $continue = '/m/reports';
+          $continue = '/';
           break;
         case 'settings':
           $continue = '/m/settings';

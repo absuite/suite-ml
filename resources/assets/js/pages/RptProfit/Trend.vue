@@ -15,7 +15,7 @@
           <md-x-line shape="smooth" />
         </md-x-chart>
       </md-layout>
-      <md-content class="flex scroll">
+      <div class="flex scroll">
         <md-pull-refresh @refresh="onListRefresh">
           <md-table v-model="listItems">
             <md-table-row slot="md-table-row" slot-scope="{ item }">
@@ -25,7 +25,7 @@
             </md-table-row>
           </md-table>
         </md-pull-refresh>
-      </md-content>
+      </div>
     </md-app-content>
     <md-app-bottom-bar>
       <md-x-submit-bar button-text="" @back="$router.back()" show-back/>
@@ -93,7 +93,7 @@
     watch: {
       filterKey(n) {
         if (this.configed) {
-          this.fetchListData();
+          this.fetchData();
         }
       },
       topChartData() {
@@ -111,9 +111,9 @@
         this.configed = true;
       },
       onListRefresh(c) {
-        this.fetchListData(null, c);
+        this.fetchData(null, c);
       },
-      fetchListData: debounce(function (pager, c) {
+      fetchData: debounce(function (pager, c) {
         if (!this.configed ||
           !this.selector.purpose ||
           !this.selector.group ||

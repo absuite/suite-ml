@@ -5,7 +5,7 @@
         <filter-purpose-dropdown v-model="selector.purpose"></filter-purpose-dropdown>
         <filter-period-dropdown v-model="selector.period" title="期间"></filter-period-dropdown>
       </md-x-dropdowns>
-      <md-content class="flex scroll">
+      <div class="flex scroll">
         <md-pull-refresh @refresh="onListRefresh">
           <md-scroll-load :md-finished="isListFinished" :immediate-check="false" @load="onListScrollLoad">
             <md-table v-model="listItems">
@@ -20,7 +20,7 @@
             </md-table>
           </md-scroll-load>
         </md-pull-refresh>
-      </md-content>
+      </div>
     </md-app-content>
   </md-app>
 </template>
@@ -74,7 +74,7 @@
     watch: {
       filterKey(n) {
         if (this.configed) {
-          this.fetchListData();
+          this.fetchData();
         }
       },
     },
@@ -88,13 +88,13 @@
         this.configed = true;
       },
       onListRefresh(c) {
-        this.fetchListData(null, c);
+        this.fetchData(null, c);
       },
       onListScrollLoad(c) {
         this.listPager.page++;
-        this.fetchListData(this.listPager, c);
+        this.fetchData(this.listPager, c);
       },
-      fetchListData: debounce(function (pager, c) {
+      fetchData: debounce(function (pager, c) {
         if (!this.configed ||
           !this.selector.purpose ||
           !this.selector.period
