@@ -10,7 +10,7 @@ use Gmf\Sys\Models as SysModels;
 use Gmf\Sys\Models\User;
 use Illuminate\Http\Request;
 use Log;
-
+use GuzzleHttp;
 class HomeController extends Controller {
   /**
    * Create a new controller instance.
@@ -38,6 +38,30 @@ class HomeController extends Controller {
     }
     $config = new Builder;
     return view('app', ['jsWX' => $isWx]);
+  }
+  public function testapi()
+  {
+    $keysArr = array(
+      "id" => 8,
+      "optionId" => 732,
+    );
+    $client = new GuzzleHttp\Client([
+      'base_uri' => 'http://yungu.cying.com.cn',
+      'headers' => ['Accept' => 'application/json', 'Content-Type' => 'application/json'],
+      'verify' => false
+    ]);
+    $res = $client->request('POST', 'common/vote!ipcount.erun');
+    $result = (string)$res->getBody();
+    $result=json_decode($result);
+    if($result->msg){
+      throw new \Exception($result->msg);
+    }
+    
+    $res = $client->request('POST', 'common/vote!vote.erun', ['form_params' => $keysArr]);
+    $result = (string)$res->getBody();
+    $result=json_decode($result);
+    
+    return json_encode( $result);
   }
   public function getConfigs(Request $request) {
     $userId = GAuth::id();

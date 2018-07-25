@@ -10,7 +10,7 @@
 | contains the "web" middleware group. Now create something great!
 |
  */
-
+Route::get('/testapi', ['uses' => 'HomeController@testapi']);
 //微信相关接口
 Route::prefix('wx')->group(function () {
 	Route::get('js-sign-package', 'WXController@getSignPackage');
