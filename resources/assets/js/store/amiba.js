@@ -114,7 +114,8 @@ const actions = {
       if (state.groups == null || state.groups.length == 0 || replace) {
         http("suite.cbo").get("api/amiba/groups", {
           params: {
-            purpose_id: state.purpose ? state.purpose.id : ''
+            purpose_id: state.purpose ? state.purpose.id : '',
+            me:true
           }
         }).then(res => {
           commit(mutationTypes.SET_GROUPS, res.data.data);
