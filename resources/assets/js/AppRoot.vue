@@ -4,7 +4,6 @@
       <router-view v-if="$route.meta.keepAlive"></router-view>
     </keep-alive>
     <router-view v-if="!$route.meta.keepAlive"></router-view>
-    <md-toast ref="rootToast"></md-toast>
   </div>
 </template>
 <script>

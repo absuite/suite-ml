@@ -2,6 +2,10 @@
   <md-app md-waterfall md-mode="fixed">
     <md-app-content>
       <md-layout-grid :md-cols="3" :md-show-lr-borders="false">
+        <md-layout-grid-item md-link="/m/rpt/statement/ans">
+          <md-icon slot="icon">assignment</md-icon>
+          <span slot="label">损益表</span>
+        </md-layout-grid-item>
         <md-layout-grid-item md-link="/m/rpt/profit/rank">
           <md-icon slot="icon">multiline_chart</md-icon>
           <span slot="label">利润排名</span>

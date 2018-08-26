@@ -1,6 +1,7 @@
 <template>
-  <md-x-dropdown :title="playValue?playValue:title">
-    <md-picker :md-data="picker_datas" v-model="picker_value" />
+  <md-x-dropdown :title="playValue?playValue:title" :md-active.sync="isActive">
+    <md-picker :md-data="picker_datas" md-show-toolbar md-toolbar-position="bottom" v-model="picker_value" @md-confirm="onConfirm"
+      @md-cancel="isActive=false" />
   </md-x-dropdown>
 </template>
 <script>
@@ -22,7 +23,8 @@
     },
     data: () => ({
       configed: false,
-      picker_value: []
+      picker_value: [],
+      isActive: false
     }),
     computed: {
       ...mapState("amiba", ["purposes", 'purpose']),
@@ -54,7 +56,9 @@
           });
           val && this.$store.dispatch("amiba/setPurpose", val);
         }
-        this.$emit('input', val);
+        if (val && !this.value) {
+          this.$emit('input', val);
+        }
       },
       value(v) {
         this.picker_value = v && v.id ? [v.id] : [];
@@ -64,6 +68,16 @@
       async config() {
         this.configed = true;
       },
+      onConfirm(v) {
+        var val = null;
+        if (v && v.length > 0) {
+          val = this.picker_datas && this.picker_datas[0].find(function (r) {
+            return r.id == v[0];
+          });
+        }
+        this.$emit('input', val);
+        this.isActive = false;
+      }
     },
     mounted() {
       this.config();

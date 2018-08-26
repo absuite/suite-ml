@@ -4,17 +4,19 @@
       <md-x-dropdowns v-if="configed">
         <filter-purpose-dropdown v-model="selector.purpose"></filter-purpose-dropdown>
         <filter-group-dropdown v-model="selector.group"></filter-group-dropdown>
-        <filter-period-dropdown v-model="selector.period" title="期间"></filter-period-dropdown>
+        <filter-period-dropdown v-model="selector.period"></filter-period-dropdown>
       </md-x-dropdowns>
-      <md-x-search placeholder="输入您想要查找的内容" v-model="search_q" @search="onSearch" />
       <div class="flex scroll">
         <md-pull-refresh @refresh="onListRefresh">
-          <md-scroll-load :md-finished="isListFinished" :immediate-check="false" @load="onListScrollLoad">
-            <md-x-panel v-for="item in listItems" :key="item.id" :title="item.doc_no" :status="item.use_type_enum" class="item-detail">
-              <md-x-cell title="要素" :value="item.element_name" />
-              <md-x-cell title="对方巴" :value="item.to_group_name" />
-            </md-x-panel>
-          </md-scroll-load>
+          <md-table v-model="listItems" class="md-dense">
+            <md-table-row slot="md-table-row" slot-scope="{ item }">
+              <md-table-cell md-label="收支项目">
+                <span :class="['md-ellipsis','item-indent-'+item.indent]">{{ item.itemName }}</span>                
+              </md-table-cell>
+              <md-table-cell md-label="当期">{{ item.month_value }}</md-table-cell>
+              <md-table-cell md-label="年累计">{{ item.year_value }}</md-table-cell>
+            </md-table-row>
+          </md-table>
         </md-pull-refresh>
       </div>
     </md-app-content>
@@ -32,25 +34,20 @@
   } from "vuex";
 
   export default {
-    name: "RptBizTotal",
+    name: "RptIncomeAnaly",
     components: {
       FilterPurposeDropdown,
       FilterGroupDropdown,
       FilterPeriodDropdown
     },
-    created() {
-      console.log(this.$options.name);
-    },
     data: () => ({
       configed: false,
       listItems: [],
       listPager: {},
-      isListFinished: false,
-      search_q:'',
       selector: {
         purpose: null,
         group: null,
-        period: null
+        period: null,
       },
       htmlOptions: {
         position: ["50%", "50%"],
@@ -90,14 +87,14 @@
         if (this.selector.group) k += this.selector.group.id;
         if (this.selector.period) k += this.selector.period.id;
         return k;
-      }
+      },
     },
     watch: {
       filterKey(n) {
         if (this.configed) {
           this.fetchData();
         }
-      },
+      }
     },
     methods: {
       async config() {
@@ -108,30 +105,22 @@
         this.selector.period = this.currentPeriod;
         this.configed = true;
       },
-      onSearch(s) {
-        this.fetchData();
-      },
       onListRefresh(c) {
         this.fetchData(null, c);
-      },
-      onListScrollLoad(c) {
-        this.listPager.page++;
-        this.fetchData(this.listPager, c);
       },
       fetchData: debounce(function (pager, c) {
         if (!this.configed ||
           !this.selector.purpose ||
-          !this.selector.period ||
-          !this.selector.group
+          !this.selector.group ||
+          !this.selector.period
         ) {
-          this.isListFinished = true;
           c && c();
           return;
         }
         var options = extend({
             purpose_id: this.selector.purpose.id,
-            group: this.selector.group.code,
-            period: this.selector.period.code
+            group_id: this.selector.group.id,
+            period_id: this.selector.period.id
           }, {
             size: 20
           },
@@ -141,16 +130,14 @@
           this.listItems = [];
         }
         this.$http("suite.cbo")
-          .post("api/amiba/reports/biz/total", options)
+          .post("api/amiba/reports/statement/ans", options)
           .then(
             res => {
               this.listItems = this.listItems.concat(res.data.data);
               this.listPager = res.data.pager;
-              this.isListFinished = this.listPager.items < this.listPager.size;
               c && c();
             },
             err => {
-              this.isListFinished = true;
               c && c();
             }
           );
@@ -168,6 +155,24 @@
 
   .md-app-bottom-bar {
     height: 50px;
+  }
+  .item-indent-0{
+    padding-left: 0px;
+    font-weight: bold;
+    color:#1e2723;
+    font-size: 15px;
+  }
+  .item-indent-1{
+    padding-left:0px;
+  }
+  .item-indent-2{
+    padding-left: 10px;
+  }
+  .item-indent-3{
+    padding-left: 20px;
+  }
+  .item-indent-4{
+    padding-left: 30px;
   }
 
 </style>

@@ -48,4 +48,4 @@ mix.js('resources/assets/js/app.js', 'public/js')
   .extract(['axios', 'vue', 'vue-router','vuex','raf']);
 mix.sass('resources/assets/sass/app.scss', 'public/css');
 
-mix.version();
+// mix.version();

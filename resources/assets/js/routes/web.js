@@ -19,6 +19,7 @@ rs.push({ path: '/m/amb/purpose/list', name: 'amb.purpose.list', page: 'AmbPurpo
 rs.push({ path: '/m/amb/element/list', name: 'amb.element.list', page: 'AmbElement/List.vue', meta: { keepAlive: true ,title:'核算要素列表'} });
 rs.push({ path: '/m/amb/group/list', name: 'amb.group.list', page: 'AmbGroup/List.vue', meta: { keepAlive: true ,title:'阿米巴列表'} });
 
+rs.push({ path: '/m/rpt/statement/ans', name: 'rpt.statement.ans', page: 'RptStatement/Ans.vue', meta: {title:'损益表'} });
 rs.push({ path: '/m/rpt/profit/rank', name: 'rpt.profit.rank', page: 'RptProfit/Rank.vue', meta: { keepAlive: true ,title:'利润排名'} });
 rs.push({ path: '/m/rpt/profit/trend', name: 'rpt.profit.trend', page: 'RptProfit/Trend.vue', meta: { keepAlive: true ,title:'利润趋势'} });
 rs.push({ path: '/m/rpt/expend/analy', name: 'rpt.expend.analy', page: 'RptExpend/Analy.vue', meta: { keepAlive: true,title:'支出分析' } });
