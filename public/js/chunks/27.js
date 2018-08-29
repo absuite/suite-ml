@@ -1,4 +1,285 @@
-webpackJsonp([1],{
+webpackJsonp([27],{
+
+/***/ 1036:
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+  MIT License http://www.opensource.org/licenses/mit-license.php
+  Author Tobias Koppers @sokra
+  Modified by Evan You @yyx990803
+*/
+
+var hasDocument = typeof document !== 'undefined'
+
+if (typeof DEBUG !== 'undefined' && DEBUG) {
+  if (!hasDocument) {
+    throw new Error(
+    'vue-style-loader cannot be used in a non-browser environment. ' +
+    "Use { target: 'node' } in your Webpack config to indicate a server-rendering environment."
+  ) }
+}
+
+var listToStyles = __webpack_require__(343)
+
+/*
+type StyleObject = {
+  id: number;
+  parts: Array<StyleObjectPart>
+}
+
+type StyleObjectPart = {
+  css: string;
+  media: string;
+  sourceMap: ?string
+}
+*/
+
+var stylesInDom = {/*
+  [id: number]: {
+    id: number,
+    refs: number,
+    parts: Array<(obj?: StyleObjectPart) => void>
+  }
+*/}
+
+var head = hasDocument && (document.head || document.getElementsByTagName('head')[0])
+var singletonElement = null
+var singletonCounter = 0
+var isProduction = false
+var noop = function () {}
+var options = null
+var ssrIdKey = 'data-vue-ssr-id'
+
+// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+// tags it will allow on a page
+var isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\b/.test(navigator.userAgent.toLowerCase())
+
+module.exports = function (parentId, list, _isProduction, _options) {
+  isProduction = _isProduction
+
+  options = _options || {}
+
+  var styles = listToStyles(parentId, list)
+  addStylesToDom(styles)
+
+  return function update (newList) {
+    var mayRemove = []
+    for (var i = 0; i < styles.length; i++) {
+      var item = styles[i]
+      var domStyle = stylesInDom[item.id]
+      domStyle.refs--
+      mayRemove.push(domStyle)
+    }
+    if (newList) {
+      styles = listToStyles(parentId, newList)
+      addStylesToDom(styles)
+    } else {
+      styles = []
+    }
+    for (var i = 0; i < mayRemove.length; i++) {
+      var domStyle = mayRemove[i]
+      if (domStyle.refs === 0) {
+        for (var j = 0; j < domStyle.parts.length; j++) {
+          domStyle.parts[j]()
+        }
+        delete stylesInDom[domStyle.id]
+      }
+    }
+  }
+}
+
+function addStylesToDom (styles /* Array<StyleObject> */) {
+  for (var i = 0; i < styles.length; i++) {
+    var item = styles[i]
+    var domStyle = stylesInDom[item.id]
+    if (domStyle) {
+      domStyle.refs++
+      for (var j = 0; j < domStyle.parts.length; j++) {
+        domStyle.parts[j](item.parts[j])
+      }
+      for (; j < item.parts.length; j++) {
+        domStyle.parts.push(addStyle(item.parts[j]))
+      }
+      if (domStyle.parts.length > item.parts.length) {
+        domStyle.parts.length = item.parts.length
+      }
+    } else {
+      var parts = []
+      for (var j = 0; j < item.parts.length; j++) {
+        parts.push(addStyle(item.parts[j]))
+      }
+      stylesInDom[item.id] = { id: item.id, refs: 1, parts: parts }
+    }
+  }
+}
+
+function createStyleElement () {
+  var styleElement = document.createElement('style')
+  styleElement.type = 'text/css'
+  head.appendChild(styleElement)
+  return styleElement
+}
+
+function addStyle (obj /* StyleObjectPart */) {
+  var update, remove
+  var styleElement = document.querySelector('style[' + ssrIdKey + '~="' + obj.id + '"]')
+
+  if (styleElement) {
+    if (isProduction) {
+      // has SSR styles and in production mode.
+      // simply do nothing.
+      return noop
+    } else {
+      // has SSR styles but in dev mode.
+      // for some reason Chrome can't handle source map in server-rendered
+      // style tags - source maps in <style> only works if the style tag is
+      // created and inserted dynamically. So we remove the server rendered
+      // styles and inject new ones.
+      styleElement.parentNode.removeChild(styleElement)
+    }
+  }
+
+  if (isOldIE) {
+    // use singleton mode for IE9.
+    var styleIndex = singletonCounter++
+    styleElement = singletonElement || (singletonElement = createStyleElement())
+    update = applyToSingletonTag.bind(null, styleElement, styleIndex, false)
+    remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true)
+  } else {
+    // use multi-style-tag mode in all other cases
+    styleElement = createStyleElement()
+    update = applyToTag.bind(null, styleElement)
+    remove = function () {
+      styleElement.parentNode.removeChild(styleElement)
+    }
+  }
+
+  update(obj)
+
+  return function updateStyle (newObj /* StyleObjectPart */) {
+    if (newObj) {
+      if (newObj.css === obj.css &&
+          newObj.media === obj.media &&
+          newObj.sourceMap === obj.sourceMap) {
+        return
+      }
+      update(obj = newObj)
+    } else {
+      remove()
+    }
+  }
+}
+
+var replaceText = (function () {
+  var textStore = []
+
+  return function (index, replacement) {
+    textStore[index] = replacement
+    return textStore.filter(Boolean).join('\n')
+  }
+})()
+
+function applyToSingletonTag (styleElement, index, remove, obj) {
+  var css = remove ? '' : obj.css
+
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = replaceText(index, css)
+  } else {
+    var cssNode = document.createTextNode(css)
+    var childNodes = styleElement.childNodes
+    if (childNodes[index]) styleElement.removeChild(childNodes[index])
+    if (childNodes.length) {
+      styleElement.insertBefore(cssNode, childNodes[index])
+    } else {
+      styleElement.appendChild(cssNode)
+    }
+  }
+}
+
+function applyToTag (styleElement, obj) {
+  var css = obj.css
+  var media = obj.media
+  var sourceMap = obj.sourceMap
+
+  if (media) {
+    styleElement.setAttribute('media', media)
+  }
+  if (options.ssrId) {
+    styleElement.setAttribute(ssrIdKey, obj.id)
+  }
+
+  if (sourceMap) {
+    // https://developer.chrome.com/devtools/docs/javascript-debugging
+    // this makes source maps inside style tags work properly in Chrome
+    css += '\n/*# sourceURL=' + sourceMap.sources[0] + ' */'
+    // http://stackoverflow.com/a/26603875
+    css += '\n/*# sourceMappingURL=data:application/json;base64,' + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + ' */'
+  }
+
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = css
+  } else {
+    while (styleElement.firstChild) {
+      styleElement.removeChild(styleElement.firstChild)
+    }
+    styleElement.appendChild(document.createTextNode(css))
+  }
+}
+
+
+/***/ }),
+
+/***/ 1040:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(1114)
+}
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(1116)
+/* template */
+var __vue_template__ = __webpack_require__(1117)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-1cedd92c"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\vendor\\gmf-sys\\pages\\Auth\\PasswordFindSms.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-1cedd92c", Component.options)
+  } else {
+    hotAPI.reload("data-v-1cedd92c", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
 
 /***/ 1053:
 /***/ (function(module, exports, __webpack_require__) {
@@ -1382,23 +1663,23 @@ exports.default = function (max) {
 
 /***/ }),
 
-/***/ 1164:
+/***/ 1114:
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(1165);
+var content = __webpack_require__(1115);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(1036)("3e946969", content, false, {});
+var update = __webpack_require__(1036)("75fdc95a", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-5e93d3c6\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Edit.vue", function() {
-     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-5e93d3c6\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Edit.vue");
+   module.hot.accept("!!../../../../../../../node_modules/css-loader/index.js!../../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1cedd92c\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../../node_modules/sass-loader/lib/loader.js!../../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PasswordFindSms.vue", function() {
+     var newContent = require("!!../../../../../../../node_modules/css-loader/index.js!../../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1cedd92c\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../../node_modules/sass-loader/lib/loader.js!../../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PasswordFindSms.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -1409,7 +1690,7 @@ if(false) {
 
 /***/ }),
 
-/***/ 1165:
+/***/ 1115:
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(164)(false);
@@ -1417,14 +1698,14 @@ exports = module.exports = __webpack_require__(164)(false);
 
 
 // module
-exports.push([module.i, "\n.md-app[data-v-5e93d3c6] {\n  min-height: 100%;\n  max-width: 100%;\n  height: 100%;\n}\n", ""]);
+exports.push([module.i, "/**\r\n * The default transition, used when the element is visible\r\n * since the beginning of the animation\r\n * ---\r\n * @access private\r\n * @type transition\r\n * @group transition\r\n */\n/**\r\n * The enter transition, used when the element is not visible on the screen\r\n * since the beginning of the animation and become visible\r\n * ---\r\n * @access private\r\n * @type transition\r\n * @group transition\r\n */\n/**\r\n * The leave transition, used when the element is visible on the screen\r\n * since the beginning of the animation and is removed\r\n * ---\r\n * @access private\r\n * @type transition\r\n * @group transition\r\n */\n/**\r\n * The stand transition, used when the element is going to accelerate,\r\n * like movements from bottom to top\r\n * ---\r\n * @access private\r\n * @type transition\r\n * @group transition\r\n */\n/**\r\n * The out transition, used when the element is going to deaccelerate,\r\n * like movements from top to bottom\r\n * ---\r\n * @access private\r\n * @type transition\r\n * @group transition\r\n */\n/* Transitions - Based on Angular Material */\n/**\r\n*\r\n*/\n/**\r\n * Breakpoint\r\n */\n/**\r\n * Base\r\n */\n/**\r\n * Layout Item\r\n */\n/**\r\n * Hide Element\r\n */\n.md-card-actions[data-v-1cedd92c] {\n  justify-content: center;\n}\n", ""]);
 
 // exports
 
 
 /***/ }),
 
-/***/ 1166:
+/***/ 1116:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1437,12 +1718,6 @@ Object.defineProperty(exports, "__esModule", {
 var _regenerator = __webpack_require__(19);
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
-
-var _extend = __webpack_require__(81);
-
-var _extend2 = _interopRequireDefault(_extend);
-
-var _vuex = __webpack_require__(47);
 
 var _vuelidate = __webpack_require__(1055);
 
@@ -1471,102 +1746,198 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 exports.default = {
-  name: "DocTypeEdit",
+  name: 'GmfPagesAuthPasswordFindSms',
+  props: {},
+  mixins: [_vuelidate.validationMixin],
   data: function data() {
     return {
-      configed: false,
-      mainData: {}
+      mainDatas: {},
+      loading: 0,
+      sending: false,
+      isSended: false
     };
   },
-  beforeRouteEnter: function beforeRouteEnter(to, from, next) {
-    next(function (vm) {
-      vm.$store.dispatch("amiba/config").then(function () {
-        return vm.config();
-      }, function (err) {
-        vm.$tip(err);
-      });
-    });
-  },
 
-  mixins: [_vuelidate.validationMixin],
   validations: {
-    mainData: {
-      code: {
-        required: _validators.required
-      },
-      name: {
-        required: _validators.required
+    mainDatas: {
+      token: {
+        required: _validators.required,
+        minLength: (0, _validators.minLength)(6),
+        maxLength: (0, _validators.maxLength)(6)
       }
     }
   },
+  computed: {
+    routeQuery: function routeQuery() {
+      var q = {};
+      if (this.$route.query && this.$route.query.continue) q.continue = this.$route.query.continue;
+      return q;
+    },
+    disabledSendBtn: function disabledSendBtn() {
+      return this.sending || this.isSended || !!this.mainDatas.token;
+    },
+    disabledConfirmBtn: function disabledConfirmBtn() {
+      return this.sending || !this.isSended || !this.mainDatas.token;
+    },
+    tipLabel: function tipLabel() {
+      return this.$root.appName + ' 会将验证码发送到 ' + this.mainDatas.mobile;
+    }
+  },
   methods: {
-    config: function () {
-      var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
-        return _regenerator2.default.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                this.configed = true;
-                this.fetchData(this.$route && this.$route.query && this.$route.query.id);
-
-              case 2:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee, this);
-      }));
-
-      function config() {
-        return _ref.apply(this, arguments);
-      }
-
-      return config;
-    }(),
-    fetchData: function fetchData(id) {
+    onOtherClick: function onOtherClick() {
+      this.$go({ name: 'auth.password.find.mail', params: { id: this.mainDatas.id }, query: this.routeQuery });
+    },
+    onSendCode: function onSendCode() {
       var _this = this;
 
-      this.mainData = {};
-      if (!id) {
-        return;
-      }
-      this.$tip.waiting("加载中...");
-      this.$http("suite.cbo").get("api/cbo/doc-types/show", {
-        params: {
-          id: id
-        }
-      }).then(function (res) {
-        _this.mainData = res.data.data;
-        _this.$tip.clear();
-      }, function (err) {
-        _this.$tip("加载数据出错了！");
+      this.sending = true;
+      var options = { id: this.mainDatas.id, account: this.mainDatas.account, type: 'password', mode: 'sms' };
+      this.$http.post('sys/auth/vcode-create', options).then(function (response) {
+        _this.isSended = true;
+        _this.sending = false;
+        _this.$toast('验证码已发送到您的手机上，请及时查收!');
+      }).catch(function (err) {
+        _this.sending = false;
+        _this.$toast(err);
       });
     },
-    postFormData: function postFormData() {
-      var _this2 = this;
-
-      this.$tip.waiting("正在保存...");
-      this.$http("suite.cbo").post("api/cbo/doc-types", this.mainData).then(function (res) {
-        _this2.$tip.clear();
-        _this2.mainData = res.data.data;
-      }, function (err) {
-        _this2.$tip("保存出错了!");
-      });
+    getValidationClass: function getValidationClass(fieldName) {
+      var field = this.$v.mainDatas[fieldName];
+      if (field) {
+        return {
+          'md-invalid': field.$invalid && field.$dirty
+        };
+      }
     },
     validateForm: function validateForm() {
       this.$v.$touch();
       if (!this.$v.$invalid) {
-        this.postFormData();
+        this.submitPost();
       }
+    },
+    submitPost: function submitPost() {
+      var _this2 = this;
+
+      this.sending = true;
+      var options = { id: this.mainDatas.id, account: this.mainDatas.account, type: 'password', token: this.mainDatas.token };
+      this.$http.post('sys/auth/vcode-checker', options).then(function (response) {
+        _this2.sending = false;
+        _this2.$go({ name: 'auth.reset', params: { id: _this2.mainDatas.id, token: _this2.mainDatas.token }, query: _this2.routeQuery });
+      }).catch(function (err) {
+        _this2.sending = false;
+        _this2.$toast(err);
+      });
+    },
+    fetchData: function () {
+      var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
+        var thId, response;
+        return _regenerator2.default.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.prev = 0;
+
+                this.sending = true;
+                thId = this.$route.params.id;
+
+                if (!thId) {
+                  this.$go({ name: 'auth.login', query: this.routeQuery });
+                }
+                _context.next = 6;
+                return this.$http.post('sys/auth/checker', { id: thId });
+
+              case 6:
+                response = _context.sent;
+
+                this.mainDatas = response.data.data;
+                _context.next = 14;
+                break;
+
+              case 10:
+                _context.prev = 10;
+                _context.t0 = _context['catch'](0);
+
+                this.$toast(_context.t0);
+                this.$go({ name: 'auth.identifier', query: this.routeQuery });
+
+              case 14:
+                _context.prev = 14;
+
+                this.sending = false;
+                return _context.finish(14);
+
+              case 17:
+              case 'end':
+                return _context.stop();
+            }
+          }
+        }, _callee, this, [[0, 10, 14, 17]]);
+      }));
+
+      function fetchData() {
+        return _ref.apply(this, arguments);
+      }
+
+      return fetchData;
+    }()
+  },
+  mounted: function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee2() {
+      return _regenerator2.default.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.next = 2;
+              return this.fetchData();
+
+            case 2:
+            case 'end':
+              return _context2.stop();
+          }
+        }
+      }, _callee2, this);
+    }));
+
+    function mounted() {
+      return _ref2.apply(this, arguments);
     }
-  }
+
+    return mounted;
+  }()
 };
 
 /***/ }),
 
-/***/ 1167:
+/***/ 1117:
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -1574,83 +1945,162 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "md-app",
-    { attrs: { "md-waterfall": "", "md-mode": "fixed" } },
+    "md-card",
     [
       _c(
-        "md-app-content",
+        "md-card-header",
         [
-          _c("md-content", { staticClass: "layout-padding" }, [
-            _c(
-              "form",
-              {
-                attrs: { novalidate: "" },
-                on: {
-                  submit: function($event) {
-                    $event.preventDefault()
-                    return _vm.validateForm($event)
-                  }
-                }
-              },
-              [
-                _c(
-                  "md-field",
-                  [
-                    _c("label", [_vm._v("编码")]),
-                    _vm._v(" "),
-                    _c("md-input", {
-                      model: {
-                        value: _vm.mainData.code,
-                        callback: function($$v) {
-                          _vm.$set(_vm.mainData, "code", $$v)
-                        },
-                        expression: "mainData.code"
-                      }
-                    })
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c(
-                  "md-field",
-                  [
-                    _c("label", [_vm._v("名称")]),
-                    _vm._v(" "),
-                    _c("md-input", {
-                      model: {
-                        value: _vm.mainData.name,
-                        callback: function($$v) {
-                          _vm.$set(_vm.mainData, "name", $$v)
-                        },
-                        expression: "mainData.name"
-                      }
-                    })
-                  ],
-                  1
-                )
-              ],
-              1
-            )
+          _c("md-card-header-text", [
+            _c("div", { staticClass: "md-title" }, [_vm._v("帐号帮助")]),
+            _vm._v(" "),
+            _c("div", { staticClass: "md-body-1" }, [_vm._v("获取验证码")])
           ])
         ],
         1
       ),
       _vm._v(" "),
       _c(
-        "md-app-bottom-bar",
+        "md-list",
         [
-          _c("md-x-submit-bar", {
-            attrs: { disabled: _vm.$v.$invalid, "show-back": "" },
-            on: {
-              submit: _vm.postFormData,
-              back: function($event) {
-                _vm.$router.back()
-              }
-            }
-          })
+          _c(
+            "md-list-item",
+            [
+              _c(
+                "md-avatar",
+                [_c("md-image", { attrs: { "md-src": _vm.mainDatas.avatar } })],
+                1
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "md-list-item-text" }, [
+                _c("span", [_vm._v(_vm._s(_vm.mainDatas.name))]),
+                _vm._v(" "),
+                _c("span", [_vm._v(_vm._s(_vm.mainDatas.mobile))])
+              ]),
+              _vm._v(" "),
+              _c(
+                "md-button",
+                {
+                  staticClass: "md-icon-button md-list-action",
+                  attrs: { to: { name: "auth.chooser", query: _vm.routeQuery } }
+                },
+                [
+                  _c("md-icon", { staticClass: "md-primary" }, [
+                    _vm._v("expand_more")
+                  ])
+                ],
+                1
+              )
+            ],
+            1
+          )
         ],
         1
-      )
+      ),
+      _vm._v(" "),
+      _c("md-card-content", [_c("p", [_vm._v(_vm._s(_vm.tipLabel))])]),
+      _vm._v(" "),
+      _c(
+        "md-card-actions",
+        [
+          _c(
+            "md-button",
+            {
+              staticClass: "md-primary md-raised",
+              attrs: { disabled: _vm.disabledSendBtn },
+              on: { click: _vm.onSendCode }
+            },
+            [_vm._v("发送验证码")]
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "form",
+        {
+          attrs: { novalidate: "" },
+          on: {
+            submit: function($event) {
+              $event.preventDefault()
+              return _vm.validateForm($event)
+            }
+          }
+        },
+        [
+          _c(
+            "md-card-content",
+            [
+              _c(
+                "md-layout",
+                [
+                  _c(
+                    "md-field",
+                    { class: _vm.getValidationClass("token") },
+                    [
+                      _c("label", [_vm._v("验证码")]),
+                      _vm._v(" "),
+                      _c("md-input", {
+                        attrs: { autocomplete: "off", disabled: _vm.sending },
+                        model: {
+                          value: _vm.mainDatas.token,
+                          callback: function($$v) {
+                            _vm.$set(_vm.mainDatas, "token", $$v)
+                          },
+                          expression: "mainDatas.token"
+                        }
+                      }),
+                      _vm._v(" "),
+                      !_vm.$v.mainDatas.token.required
+                        ? _c("span", { staticClass: "md-error" }, [
+                            _vm._v("请输入验证码")
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      !_vm.$v.mainDatas.token.minLength ||
+                      !_vm.$v.mainDatas.token.maxLength
+                        ? _c("span", { staticClass: "md-error" }, [
+                            _vm._v("验证码格式不符合要求")
+                          ])
+                        : _vm._e()
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "md-card-actions",
+            [
+              _c(
+                "md-button",
+                { staticClass: "md-primary", on: { click: _vm.onOtherClick } },
+                [_vm._v("我没有使用手机")]
+              ),
+              _vm._v(" "),
+              _c("span", { staticClass: "flex" }),
+              _vm._v(" "),
+              _c(
+                "md-button",
+                {
+                  staticClass: "md-primary md-raised",
+                  attrs: { type: "submit", disabled: _vm.disabledConfirmBtn }
+                },
+                [_vm._v("下一步")]
+              )
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _vm.sending
+        ? _c("md-progress-bar", { attrs: { "md-mode": "indeterminate" } })
+        : _vm._e()
     ],
     1
   )
@@ -1661,60 +2111,42 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-5e93d3c6", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-1cedd92c", module.exports)
   }
 }
 
 /***/ }),
 
-/***/ 173:
-/***/ (function(module, exports, __webpack_require__) {
+/***/ 343:
+/***/ (function(module, exports) {
 
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(1164)
-}
-var normalizeComponent = __webpack_require__(0)
-/* script */
-var __vue_script__ = __webpack_require__(1166)
-/* template */
-var __vue_template__ = __webpack_require__(1167)
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = injectStyle
-/* scopeId */
-var __vue_scopeId__ = "data-v-5e93d3c6"
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "resources\\assets\\js\\pages\\CboDocType\\Edit.vue"
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-5e93d3c6", Component.options)
-  } else {
-    hotAPI.reload("data-v-5e93d3c6", Component.options)
+/**
+ * Translates the list format produced by css-loader into something
+ * easier to manipulate.
+ */
+module.exports = function listToStyles (parentId, list) {
+  var styles = []
+  var newStyles = {}
+  for (var i = 0; i < list.length; i++) {
+    var item = list[i]
+    var id = item[0]
+    var css = item[1]
+    var media = item[2]
+    var sourceMap = item[3]
+    var part = {
+      id: parentId + ':' + i,
+      css: css,
+      media: media,
+      sourceMap: sourceMap
+    }
+    if (!newStyles[id]) {
+      styles.push(newStyles[id] = { id: id, parts: [part] })
+    } else {
+      newStyles[id].parts.push(part)
+    }
   }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
+  return styles
+}
 
 
 /***/ })

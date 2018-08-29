@@ -1,53 +1,230 @@
-webpackJsonp([26],{
+webpackJsonp([0],{
 
-/***/ 1042:
+/***/ 1036:
 /***/ (function(module, exports, __webpack_require__) {
 
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(1120)
+/*
+  MIT License http://www.opensource.org/licenses/mit-license.php
+  Author Tobias Koppers @sokra
+  Modified by Evan You @yyx990803
+*/
+
+var hasDocument = typeof document !== 'undefined'
+
+if (typeof DEBUG !== 'undefined' && DEBUG) {
+  if (!hasDocument) {
+    throw new Error(
+    'vue-style-loader cannot be used in a non-browser environment. ' +
+    "Use { target: 'node' } in your Webpack config to indicate a server-rendering environment."
+  ) }
 }
-var normalizeComponent = __webpack_require__(0)
-/* script */
-var __vue_script__ = __webpack_require__(1122)
-/* template */
-var __vue_template__ = __webpack_require__(1123)
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = injectStyle
-/* scopeId */
-var __vue_scopeId__ = "data-v-4a0debc9"
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "resources\\assets\\js\\vendor\\gmf-sys\\pages\\Auth\\PasswordFindWord.vue"
 
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-4a0debc9", Component.options)
-  } else {
-    hotAPI.reload("data-v-4a0debc9", Component.options)
+var listToStyles = __webpack_require__(343)
+
+/*
+type StyleObject = {
+  id: number;
+  parts: Array<StyleObjectPart>
+}
+
+type StyleObjectPart = {
+  css: string;
+  media: string;
+  sourceMap: ?string
+}
+*/
+
+var stylesInDom = {/*
+  [id: number]: {
+    id: number,
+    refs: number,
+    parts: Array<(obj?: StyleObjectPart) => void>
   }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
+*/}
 
-module.exports = Component.exports
+var head = hasDocument && (document.head || document.getElementsByTagName('head')[0])
+var singletonElement = null
+var singletonCounter = 0
+var isProduction = false
+var noop = function () {}
+var options = null
+var ssrIdKey = 'data-vue-ssr-id'
+
+// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+// tags it will allow on a page
+var isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\b/.test(navigator.userAgent.toLowerCase())
+
+module.exports = function (parentId, list, _isProduction, _options) {
+  isProduction = _isProduction
+
+  options = _options || {}
+
+  var styles = listToStyles(parentId, list)
+  addStylesToDom(styles)
+
+  return function update (newList) {
+    var mayRemove = []
+    for (var i = 0; i < styles.length; i++) {
+      var item = styles[i]
+      var domStyle = stylesInDom[item.id]
+      domStyle.refs--
+      mayRemove.push(domStyle)
+    }
+    if (newList) {
+      styles = listToStyles(parentId, newList)
+      addStylesToDom(styles)
+    } else {
+      styles = []
+    }
+    for (var i = 0; i < mayRemove.length; i++) {
+      var domStyle = mayRemove[i]
+      if (domStyle.refs === 0) {
+        for (var j = 0; j < domStyle.parts.length; j++) {
+          domStyle.parts[j]()
+        }
+        delete stylesInDom[domStyle.id]
+      }
+    }
+  }
+}
+
+function addStylesToDom (styles /* Array<StyleObject> */) {
+  for (var i = 0; i < styles.length; i++) {
+    var item = styles[i]
+    var domStyle = stylesInDom[item.id]
+    if (domStyle) {
+      domStyle.refs++
+      for (var j = 0; j < domStyle.parts.length; j++) {
+        domStyle.parts[j](item.parts[j])
+      }
+      for (; j < item.parts.length; j++) {
+        domStyle.parts.push(addStyle(item.parts[j]))
+      }
+      if (domStyle.parts.length > item.parts.length) {
+        domStyle.parts.length = item.parts.length
+      }
+    } else {
+      var parts = []
+      for (var j = 0; j < item.parts.length; j++) {
+        parts.push(addStyle(item.parts[j]))
+      }
+      stylesInDom[item.id] = { id: item.id, refs: 1, parts: parts }
+    }
+  }
+}
+
+function createStyleElement () {
+  var styleElement = document.createElement('style')
+  styleElement.type = 'text/css'
+  head.appendChild(styleElement)
+  return styleElement
+}
+
+function addStyle (obj /* StyleObjectPart */) {
+  var update, remove
+  var styleElement = document.querySelector('style[' + ssrIdKey + '~="' + obj.id + '"]')
+
+  if (styleElement) {
+    if (isProduction) {
+      // has SSR styles and in production mode.
+      // simply do nothing.
+      return noop
+    } else {
+      // has SSR styles but in dev mode.
+      // for some reason Chrome can't handle source map in server-rendered
+      // style tags - source maps in <style> only works if the style tag is
+      // created and inserted dynamically. So we remove the server rendered
+      // styles and inject new ones.
+      styleElement.parentNode.removeChild(styleElement)
+    }
+  }
+
+  if (isOldIE) {
+    // use singleton mode for IE9.
+    var styleIndex = singletonCounter++
+    styleElement = singletonElement || (singletonElement = createStyleElement())
+    update = applyToSingletonTag.bind(null, styleElement, styleIndex, false)
+    remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true)
+  } else {
+    // use multi-style-tag mode in all other cases
+    styleElement = createStyleElement()
+    update = applyToTag.bind(null, styleElement)
+    remove = function () {
+      styleElement.parentNode.removeChild(styleElement)
+    }
+  }
+
+  update(obj)
+
+  return function updateStyle (newObj /* StyleObjectPart */) {
+    if (newObj) {
+      if (newObj.css === obj.css &&
+          newObj.media === obj.media &&
+          newObj.sourceMap === obj.sourceMap) {
+        return
+      }
+      update(obj = newObj)
+    } else {
+      remove()
+    }
+  }
+}
+
+var replaceText = (function () {
+  var textStore = []
+
+  return function (index, replacement) {
+    textStore[index] = replacement
+    return textStore.filter(Boolean).join('\n')
+  }
+})()
+
+function applyToSingletonTag (styleElement, index, remove, obj) {
+  var css = remove ? '' : obj.css
+
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = replaceText(index, css)
+  } else {
+    var cssNode = document.createTextNode(css)
+    var childNodes = styleElement.childNodes
+    if (childNodes[index]) styleElement.removeChild(childNodes[index])
+    if (childNodes.length) {
+      styleElement.insertBefore(cssNode, childNodes[index])
+    } else {
+      styleElement.appendChild(cssNode)
+    }
+  }
+}
+
+function applyToTag (styleElement, obj) {
+  var css = obj.css
+  var media = obj.media
+  var sourceMap = obj.sourceMap
+
+  if (media) {
+    styleElement.setAttribute('media', media)
+  }
+  if (options.ssrId) {
+    styleElement.setAttribute(ssrIdKey, obj.id)
+  }
+
+  if (sourceMap) {
+    // https://developer.chrome.com/devtools/docs/javascript-debugging
+    // this makes source maps inside style tags work properly in Chrome
+    css += '\n/*# sourceURL=' + sourceMap.sources[0] + ' */'
+    // http://stackoverflow.com/a/26603875
+    css += '\n/*# sourceMappingURL=data:application/json;base64,' + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + ' */'
+  }
+
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = css
+  } else {
+    while (styleElement.firstChild) {
+      styleElement.removeChild(styleElement.firstChild)
+    }
+    styleElement.appendChild(document.createTextNode(css))
+  }
+}
 
 
 /***/ }),
@@ -1434,23 +1611,23 @@ exports.default = function (max) {
 
 /***/ }),
 
-/***/ 1120:
+/***/ 1172:
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(1121);
+var content = __webpack_require__(1173);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(1036)("60332f61", content, false, {});
+var update = __webpack_require__(1036)("112dd4ea", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../../../../../node_modules/css-loader/index.js!../../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4a0debc9\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../../node_modules/sass-loader/lib/loader.js!../../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PasswordFindWord.vue", function() {
-     var newContent = require("!!../../../../../../../node_modules/css-loader/index.js!../../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4a0debc9\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../../node_modules/sass-loader/lib/loader.js!../../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PasswordFindWord.vue");
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6b2e3dba\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Edit.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6b2e3dba\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Edit.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -1461,7 +1638,7 @@ if(false) {
 
 /***/ }),
 
-/***/ 1121:
+/***/ 1173:
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(164)(false);
@@ -1469,14 +1646,14 @@ exports = module.exports = __webpack_require__(164)(false);
 
 
 // module
-exports.push([module.i, "/**\r\n * The default transition, used when the element is visible\r\n * since the beginning of the animation\r\n * ---\r\n * @access private\r\n * @type transition\r\n * @group transition\r\n */\n/**\r\n * The enter transition, used when the element is not visible on the screen\r\n * since the beginning of the animation and become visible\r\n * ---\r\n * @access private\r\n * @type transition\r\n * @group transition\r\n */\n/**\r\n * The leave transition, used when the element is visible on the screen\r\n * since the beginning of the animation and is removed\r\n * ---\r\n * @access private\r\n * @type transition\r\n * @group transition\r\n */\n/**\r\n * The stand transition, used when the element is going to accelerate,\r\n * like movements from bottom to top\r\n * ---\r\n * @access private\r\n * @type transition\r\n * @group transition\r\n */\n/**\r\n * The out transition, used when the element is going to deaccelerate,\r\n * like movements from top to bottom\r\n * ---\r\n * @access private\r\n * @type transition\r\n * @group transition\r\n */\n/* Transitions - Based on Angular Material */\n/**\r\n*\r\n*/\n/**\r\n * Breakpoint\r\n */\n/**\r\n * Base\r\n */\n/**\r\n * Layout Item\r\n */\n/**\r\n * Hide Element\r\n */\n.md-card-actions[data-v-4a0debc9] {\n  justify-content: center;\n}\n", ""]);
+exports.push([module.i, "\n.md-app[data-v-6b2e3dba] {\n  min-height: 100%;\n  max-width: 100%;\n  height: 100%;\n}\n", ""]);
 
 // exports
 
 
 /***/ }),
 
-/***/ 1122:
+/***/ 1174:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1489,6 +1666,16 @@ Object.defineProperty(exports, "__esModule", {
 var _regenerator = __webpack_require__(19);
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
+
+var _extend = __webpack_require__(81);
+
+var _extend2 = _interopRequireDefault(_extend);
+
+var _ArrowBack = __webpack_require__(1175);
+
+var _ArrowBack2 = _interopRequireDefault(_ArrowBack);
+
+var _vuex = __webpack_require__(47);
 
 var _vuelidate = __webpack_require__(1055);
 
@@ -1517,19 +1704,207 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
+exports.default = {
+  name: "ItemEdit",
+  components: {
+    AppArrowBack: _ArrowBack2.default
+  },
+  data: function data() {
+    return {
+      configed: false,
+      mainData: {}
+    };
+  },
+  beforeRouteEnter: function beforeRouteEnter(to, from, next) {
+    next(function (vm) {
+      vm.$store.dispatch("amiba/config").then(function () {
+        return vm.config();
+      }, function (err) {
+        vm.$tip(err);
+      });
+    });
+  },
+
+  mixins: [_vuelidate.validationMixin],
+  validations: {
+    mainData: {
+      code: {
+        required: _validators.required
+      },
+      name: {
+        required: _validators.required
+      }
+    }
+  },
+  methods: {
+    config: function () {
+      var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
+        return _regenerator2.default.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                this.configed = true;
+                this.fetchData(this.$route && this.$route.query && this.$route.query.id);
+
+              case 2:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function config() {
+        return _ref.apply(this, arguments);
+      }
+
+      return config;
+    }(),
+    fetchData: function fetchData(id) {
+      var _this = this;
+
+      this.mainData = {};
+      if (!id) {
+        return;
+      }
+      this.$tip.waiting("加载中...");
+      this.$http("suite.cbo").get("api/cbo/items/show", {
+        params: {
+          id: id
+        }
+      }).then(function (res) {
+        _this.mainData = res.data.data;
+        _this.$tip.clear();
+      }, function (err) {
+        _this.$tip("加载数据出错了！");
+      });
+    },
+    postFormData: function postFormData() {
+      var _this2 = this;
+
+      this.$tip.waiting("正在保存...");
+      this.$http("suite.cbo").post("api/cbo/items", this.mainData).then(function (res) {
+        _this2.$tip.clear();
+        _this2.mainData = res.data.data;
+      }, function (err) {
+        _this2.$tip("保存出错了!");
+      });
+    },
+    validateForm: function validateForm() {
+      this.$v.$touch();
+      if (!this.$v.$invalid) {
+        this.postFormData();
+      }
+    }
+  }
+};
+
+/***/ }),
+
+/***/ 1175:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(1176)
+}
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(1178)
+/* template */
+var __vue_template__ = __webpack_require__(1179)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-391874fb"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\NavBar\\ArrowBack.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-391874fb", Component.options)
+  } else {
+    hotAPI.reload("data-v-391874fb", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ 1176:
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(1177);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(1036)("dbba8632", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-391874fb\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ArrowBack.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-391874fb\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ArrowBack.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ 1177:
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(164)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.md-icon[data-v-391874fb] {\n  font-size: 30px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ 1178:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 //
 //
 //
@@ -1537,150 +1912,21 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 //
 
 exports.default = {
-  name: 'GmfPagesAuthPasswordFindWord',
-  props: {},
-  mixins: [_vuelidate.validationMixin],
-  data: function data() {
-    return {
-      mainDatas: {},
-      loading: 0,
-      sending: false
-    };
-  },
+  name: 'AppArrowBack',
 
-  validations: {
-    mainDatas: {
-      email: {
-        required: _validators.required,
-        email: _validators.email
-      }
-    }
-  },
-  computed: {
-    routeQuery: function routeQuery() {
-      var q = {};
-      if (this.$route.query && this.$route.query.continue) q.continue = this.$route.query.continue;
-      return q;
-    },
-    disabledSendBtn: function disabledSendBtn() {
-      return this.sending || !!this.mainDatas.vcode;
-    },
-    disabledConfirmBtn: function disabledConfirmBtn() {
-      return this.sending || !this.mainDatas.vcode;
-    }
+  props: {
+    title: String
   },
   methods: {
-    onSendCode: function onSendCode() {
-      this.$toast('验证码已发送到您的邮件上，请及时查收!');
-    },
-    getValidationClass: function getValidationClass(fieldName) {
-      var field = this.$v.mainDatas[fieldName];
-      if (field) {
-        return {
-          'md-invalid': field.$invalid && field.$dirty
-        };
-      }
-    },
-    validateForm: function validateForm() {
-      this.$v.$touch();
-      if (!this.$v.$invalid) {
-        this.submitPost();
-      }
-    },
-    submitPost: function submitPost() {
-      var _this = this;
-
-      this.sending = true;
-      this.$http.post('sys/auth/login', this.mainDatas).then(function (response) {
-        _this.sending = false;
-        _this.$go('/');
-      }).catch(function (err) {
-        _this.sending = false;
-        _this.$toast(err);
-      });
-    },
-    fetchData: function () {
-      var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
-        var thId, response, u;
-        return _regenerator2.default.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.prev = 0;
-
-                this.sending = true;
-                thId = this.$route.params.id;
-
-                if (!thId) {
-                  this.$go({ name: 'auth.login', query: this.routeQuery });
-                }
-                _context.next = 6;
-                return this.$http.post('sys/auth/checker', { id: thId });
-
-              case 6:
-                response = _context.sent;
-                u = response.data.data;
-
-                this.mainDatas = response.data.data;
-                _context.next = 15;
-                break;
-
-              case 11:
-                _context.prev = 11;
-                _context.t0 = _context['catch'](0);
-
-                this.$toast(_context.t0);
-                this.$go({ name: 'auth.identifier', query: this.routeQuery });
-
-              case 15:
-                _context.prev = 15;
-
-                this.sending = false;
-                return _context.finish(15);
-
-              case 18:
-              case 'end':
-                return _context.stop();
-            }
-          }
-        }, _callee, this, [[0, 11, 15, 18]]);
-      }));
-
-      function fetchData() {
-        return _ref.apply(this, arguments);
-      }
-
-      return fetchData;
-    }()
-  },
-  mounted: function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee2() {
-      return _regenerator2.default.wrap(function _callee2$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
-            case 0:
-              _context2.next = 2;
-              return this.fetchData();
-
-            case 2:
-            case 'end':
-              return _context2.stop();
-          }
-        }
-      }, _callee2, this);
-    }));
-
-    function mounted() {
-      return _ref2.apply(this, arguments);
+    goBack: function goBack() {
+      this.$router.back();
     }
-
-    return mounted;
-  }()
+  }
 };
 
 /***/ }),
 
-/***/ 1123:
+/***/ 1179:
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -1688,127 +1934,109 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "md-card",
+    "md-button",
+    { staticClass: "md-icon-button", on: { click: _vm.goBack } },
+    [_c("md-icon", [_vm._v("arrow_back")])],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-391874fb", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ 1180:
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "md-app",
+    { attrs: { "md-waterfall": "", "md-mode": "fixed" } },
     [
       _c(
-        "md-card-header",
+        "md-app-content",
         [
-          _c("md-card-header-text", [
-            _c("div", { staticClass: "md-title" }, [_vm._v("帐号帮助")]),
-            _vm._v(" "),
-            _c("div", { staticClass: "md-body-1" }, [_vm._v("获取验证码")])
+          _c("md-content", { staticClass: "layout-padding" }, [
+            _c(
+              "form",
+              {
+                attrs: { novalidate: "" },
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault()
+                    return _vm.validateForm($event)
+                  }
+                }
+              },
+              [
+                _c(
+                  "md-field",
+                  [
+                    _c("label", [_vm._v("编码")]),
+                    _vm._v(" "),
+                    _c("md-input", {
+                      model: {
+                        value: _vm.mainData.code,
+                        callback: function($$v) {
+                          _vm.$set(_vm.mainData, "code", $$v)
+                        },
+                        expression: "mainData.code"
+                      }
+                    })
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "md-field",
+                  [
+                    _c("label", [_vm._v("名称")]),
+                    _vm._v(" "),
+                    _c("md-input", {
+                      model: {
+                        value: _vm.mainData.name,
+                        callback: function($$v) {
+                          _vm.$set(_vm.mainData, "name", $$v)
+                        },
+                        expression: "mainData.name"
+                      }
+                    })
+                  ],
+                  1
+                )
+              ],
+              1
+            )
           ])
         ],
         1
       ),
       _vm._v(" "),
       _c(
-        "md-list",
+        "md-app-bottom-bar",
         [
-          _c(
-            "md-list-item",
-            [
-              _c(
-                "md-avatar",
-                [_c("md-image", { attrs: { "md-src": _vm.mainDatas.avatar } })],
-                1
-              ),
-              _vm._v(" "),
-              _c("div", { staticClass: "md-list-item-text" }, [
-                _c("span", [_vm._v(_vm._s(_vm.mainDatas.name))]),
-                _vm._v(" "),
-                _c("span", [_vm._v(_vm._s(_vm.mainDatas.account))])
-              ]),
-              _vm._v(" "),
-              _c(
-                "md-button",
-                {
-                  staticClass: "md-icon-button md-list-action",
-                  attrs: { to: { name: "auth.chooser", query: _vm.routeQuery } }
-                },
-                [
-                  _c("md-icon", { staticClass: "md-primary" }, [
-                    _vm._v("expand_more")
-                  ])
-                ],
-                1
-              )
-            ],
-            1
-          )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "form",
-        {
-          attrs: { novalidate: "" },
-          on: {
-            submit: function($event) {
-              $event.preventDefault()
-              return _vm.validateForm($event)
+          _c("md-x-submit-bar", {
+            attrs: { disabled: _vm.$v.$invalid, "show-back": "" },
+            on: {
+              submit: _vm.postFormData,
+              back: function($event) {
+                _vm.$router.back()
+              }
             }
-          }
-        },
-        [
-          _c(
-            "md-card-content",
-            [
-              _c("p", [_vm._v("请输入您可以立即查收邮件的电子邮件地址")]),
-              _vm._v(" "),
-              _c(
-                "md-field",
-                { class: _vm.getValidationClass("email") },
-                [
-                  _c("label", [_vm._v("电子邮件地址")]),
-                  _vm._v(" "),
-                  _c("md-input", {
-                    attrs: { autocomplete: "off", disabled: _vm.sending },
-                    model: {
-                      value: _vm.mainDatas.email,
-                      callback: function($$v) {
-                        _vm.$set(_vm.mainDatas, "email", $$v)
-                      },
-                      expression: "mainDatas.email"
-                    }
-                  }),
-                  _vm._v(" "),
-                  !_vm.$v.mainDatas.email.required
-                    ? _c("span", { staticClass: "md-error" }, [
-                        _vm._v("请输入电子邮件地址")
-                      ])
-                    : _vm._e()
-                ],
-                1
-              )
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "md-card-actions",
-            [
-              _c("span", { staticClass: "flex" }),
-              _vm._v(" "),
-              _c(
-                "md-button",
-                {
-                  staticClass: "md-primary md-raised",
-                  attrs: { type: "submit", disabled: _vm.disabledConfirmBtn }
-                },
-                [_vm._v("下一步")]
-              )
-            ],
-            1
-          )
+          })
         ],
         1
-      ),
-      _vm._v(" "),
-      _vm.sending
-        ? _c("md-progress-bar", { attrs: { "md-mode": "indeterminate" } })
-        : _vm._e()
+      )
     ],
     1
   )
@@ -1819,9 +2047,95 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-4a0debc9", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-6b2e3dba", module.exports)
   }
 }
+
+/***/ }),
+
+/***/ 175:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(1172)
+}
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(1174)
+/* template */
+var __vue_template__ = __webpack_require__(1180)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-6b2e3dba"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\pages\\CboItem\\Edit.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-6b2e3dba", Component.options)
+  } else {
+    hotAPI.reload("data-v-6b2e3dba", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ 343:
+/***/ (function(module, exports) {
+
+/**
+ * Translates the list format produced by css-loader into something
+ * easier to manipulate.
+ */
+module.exports = function listToStyles (parentId, list) {
+  var styles = []
+  var newStyles = {}
+  for (var i = 0; i < list.length; i++) {
+    var item = list[i]
+    var id = item[0]
+    var css = item[1]
+    var media = item[2]
+    var sourceMap = item[3]
+    var part = {
+      id: parentId + ':' + i,
+      css: css,
+      media: media,
+      sourceMap: sourceMap
+    }
+    if (!newStyles[id]) {
+      styles.push(newStyles[id] = { id: id, parts: [part] })
+    } else {
+      newStyles[id].parts.push(part)
+    }
+  }
+  return styles
+}
+
 
 /***/ })
 

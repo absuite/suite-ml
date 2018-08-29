@@ -39,7 +39,7 @@ class EntController extends Controller
     Validator::make($input, [
       'entId' => 'required',
     ])->validate();
-    $ent = Models\Ent::where('id', $input['entId'])->orWhere('openid', $input['entId'])->first();
+    $ent = Models\Ent\Ent::where('id', $input['entId'])->orWhere('openid', $input['entId'])->first();
     if (empty($ent)) {
       throw new \Exception('找不到企业！');
     }

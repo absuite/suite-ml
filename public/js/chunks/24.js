@@ -1,4 +1,281 @@
-webpackJsonp([2],{
+webpackJsonp([24],{
+
+/***/ 1036:
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+  MIT License http://www.opensource.org/licenses/mit-license.php
+  Author Tobias Koppers @sokra
+  Modified by Evan You @yyx990803
+*/
+
+var hasDocument = typeof document !== 'undefined'
+
+if (typeof DEBUG !== 'undefined' && DEBUG) {
+  if (!hasDocument) {
+    throw new Error(
+    'vue-style-loader cannot be used in a non-browser environment. ' +
+    "Use { target: 'node' } in your Webpack config to indicate a server-rendering environment."
+  ) }
+}
+
+var listToStyles = __webpack_require__(343)
+
+/*
+type StyleObject = {
+  id: number;
+  parts: Array<StyleObjectPart>
+}
+
+type StyleObjectPart = {
+  css: string;
+  media: string;
+  sourceMap: ?string
+}
+*/
+
+var stylesInDom = {/*
+  [id: number]: {
+    id: number,
+    refs: number,
+    parts: Array<(obj?: StyleObjectPart) => void>
+  }
+*/}
+
+var head = hasDocument && (document.head || document.getElementsByTagName('head')[0])
+var singletonElement = null
+var singletonCounter = 0
+var isProduction = false
+var noop = function () {}
+var options = null
+var ssrIdKey = 'data-vue-ssr-id'
+
+// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+// tags it will allow on a page
+var isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\b/.test(navigator.userAgent.toLowerCase())
+
+module.exports = function (parentId, list, _isProduction, _options) {
+  isProduction = _isProduction
+
+  options = _options || {}
+
+  var styles = listToStyles(parentId, list)
+  addStylesToDom(styles)
+
+  return function update (newList) {
+    var mayRemove = []
+    for (var i = 0; i < styles.length; i++) {
+      var item = styles[i]
+      var domStyle = stylesInDom[item.id]
+      domStyle.refs--
+      mayRemove.push(domStyle)
+    }
+    if (newList) {
+      styles = listToStyles(parentId, newList)
+      addStylesToDom(styles)
+    } else {
+      styles = []
+    }
+    for (var i = 0; i < mayRemove.length; i++) {
+      var domStyle = mayRemove[i]
+      if (domStyle.refs === 0) {
+        for (var j = 0; j < domStyle.parts.length; j++) {
+          domStyle.parts[j]()
+        }
+        delete stylesInDom[domStyle.id]
+      }
+    }
+  }
+}
+
+function addStylesToDom (styles /* Array<StyleObject> */) {
+  for (var i = 0; i < styles.length; i++) {
+    var item = styles[i]
+    var domStyle = stylesInDom[item.id]
+    if (domStyle) {
+      domStyle.refs++
+      for (var j = 0; j < domStyle.parts.length; j++) {
+        domStyle.parts[j](item.parts[j])
+      }
+      for (; j < item.parts.length; j++) {
+        domStyle.parts.push(addStyle(item.parts[j]))
+      }
+      if (domStyle.parts.length > item.parts.length) {
+        domStyle.parts.length = item.parts.length
+      }
+    } else {
+      var parts = []
+      for (var j = 0; j < item.parts.length; j++) {
+        parts.push(addStyle(item.parts[j]))
+      }
+      stylesInDom[item.id] = { id: item.id, refs: 1, parts: parts }
+    }
+  }
+}
+
+function createStyleElement () {
+  var styleElement = document.createElement('style')
+  styleElement.type = 'text/css'
+  head.appendChild(styleElement)
+  return styleElement
+}
+
+function addStyle (obj /* StyleObjectPart */) {
+  var update, remove
+  var styleElement = document.querySelector('style[' + ssrIdKey + '~="' + obj.id + '"]')
+
+  if (styleElement) {
+    if (isProduction) {
+      // has SSR styles and in production mode.
+      // simply do nothing.
+      return noop
+    } else {
+      // has SSR styles but in dev mode.
+      // for some reason Chrome can't handle source map in server-rendered
+      // style tags - source maps in <style> only works if the style tag is
+      // created and inserted dynamically. So we remove the server rendered
+      // styles and inject new ones.
+      styleElement.parentNode.removeChild(styleElement)
+    }
+  }
+
+  if (isOldIE) {
+    // use singleton mode for IE9.
+    var styleIndex = singletonCounter++
+    styleElement = singletonElement || (singletonElement = createStyleElement())
+    update = applyToSingletonTag.bind(null, styleElement, styleIndex, false)
+    remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true)
+  } else {
+    // use multi-style-tag mode in all other cases
+    styleElement = createStyleElement()
+    update = applyToTag.bind(null, styleElement)
+    remove = function () {
+      styleElement.parentNode.removeChild(styleElement)
+    }
+  }
+
+  update(obj)
+
+  return function updateStyle (newObj /* StyleObjectPart */) {
+    if (newObj) {
+      if (newObj.css === obj.css &&
+          newObj.media === obj.media &&
+          newObj.sourceMap === obj.sourceMap) {
+        return
+      }
+      update(obj = newObj)
+    } else {
+      remove()
+    }
+  }
+}
+
+var replaceText = (function () {
+  var textStore = []
+
+  return function (index, replacement) {
+    textStore[index] = replacement
+    return textStore.filter(Boolean).join('\n')
+  }
+})()
+
+function applyToSingletonTag (styleElement, index, remove, obj) {
+  var css = remove ? '' : obj.css
+
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = replaceText(index, css)
+  } else {
+    var cssNode = document.createTextNode(css)
+    var childNodes = styleElement.childNodes
+    if (childNodes[index]) styleElement.removeChild(childNodes[index])
+    if (childNodes.length) {
+      styleElement.insertBefore(cssNode, childNodes[index])
+    } else {
+      styleElement.appendChild(cssNode)
+    }
+  }
+}
+
+function applyToTag (styleElement, obj) {
+  var css = obj.css
+  var media = obj.media
+  var sourceMap = obj.sourceMap
+
+  if (media) {
+    styleElement.setAttribute('media', media)
+  }
+  if (options.ssrId) {
+    styleElement.setAttribute(ssrIdKey, obj.id)
+  }
+
+  if (sourceMap) {
+    // https://developer.chrome.com/devtools/docs/javascript-debugging
+    // this makes source maps inside style tags work properly in Chrome
+    css += '\n/*# sourceURL=' + sourceMap.sources[0] + ' */'
+    // http://stackoverflow.com/a/26603875
+    css += '\n/*# sourceMappingURL=data:application/json;base64,' + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + ' */'
+  }
+
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = css
+  } else {
+    while (styleElement.firstChild) {
+      styleElement.removeChild(styleElement.firstChild)
+    }
+    styleElement.appendChild(document.createTextNode(css))
+  }
+}
+
+
+/***/ }),
+
+/***/ 1051:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(1140)
+/* template */
+var __vue_template__ = __webpack_require__(1141)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\vendor\\gmf-sys\\pages\\Auth\\AccountJoin.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-6c9fe41c", Component.options)
+  } else {
+    hotAPI.reload("data-v-6c9fe41c", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
 
 /***/ 1053:
 /***/ (function(module, exports, __webpack_require__) {
@@ -1382,23 +1659,150 @@ exports.default = function (max) {
 
 /***/ }),
 
-/***/ 1156:
+/***/ 1086:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var AuthCache = function () {
+  function AuthCache() {
+    _classCallCheck(this, AuthCache);
+
+    this.storageKey = "gmf.sys.auth." + window.location.host;
+  }
+
+  _createClass(AuthCache, [{
+    key: "get",
+    value: function get() {
+      return JSON.parse(localStorage.getItem(this.storageKey)) || [];
+    }
+  }, {
+    key: "has",
+    value: function has(user) {
+      return false;
+    }
+  }, {
+    key: "remove",
+    value: function remove(user) {
+      if (!user) return;
+      var users = this.get();
+      var ind = -1;
+      for (var i = 0; i < users.length; i++) {
+        if (users[i].id == user.id) {
+          ind = i;
+          break;
+        }
+      }
+      if (i >= 0) {
+        users.splice(i, 1);
+        localStorage.removeItem(this.storageKey);
+        localStorage.setItem(this.storageKey, JSON.stringify(users));
+      }
+    }
+  }, {
+    key: "add",
+    value: function add(user) {
+      if (!user) return;
+      var users = this.get();
+      var isExists = false;
+      users.forEach(function (item) {
+        if (item.id == user.id) {
+          isExists = true;
+        }
+      });
+      if (!isExists) {
+        users.push(user);
+      }
+      localStorage.removeItem(this.storageKey);
+      localStorage.setItem(this.storageKey, JSON.stringify(users));
+    }
+  }]);
+
+  return AuthCache;
+}();
+
+exports.default = new AuthCache();
+
+/***/ }),
+
+/***/ 1087:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(1088)
+}
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(1090)
+/* template */
+var __vue_template__ = __webpack_require__(1091)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-d50a4dc6"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\vendor\\gmf-sys\\pages\\Auth\\Sns.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-d50a4dc6", Component.options)
+  } else {
+    hotAPI.reload("data-v-d50a4dc6", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ 1088:
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(1157);
+var content = __webpack_require__(1089);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(1036)("561c89b8", content, false, {});
+var update = __webpack_require__(1036)("e8e9ba5c", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-630c32c8\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Edit.vue", function() {
-     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-630c32c8\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Edit.vue");
+   module.hot.accept("!!../../../../../../../node_modules/css-loader/index.js!../../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-d50a4dc6\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../../node_modules/sass-loader/lib/loader.js!../../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Sns.vue", function() {
+     var newContent = require("!!../../../../../../../node_modules/css-loader/index.js!../../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-d50a4dc6\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../../node_modules/sass-loader/lib/loader.js!../../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Sns.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -1409,7 +1813,7 @@ if(false) {
 
 /***/ }),
 
-/***/ 1157:
+/***/ 1089:
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(164)(false);
@@ -1417,14 +1821,186 @@ exports = module.exports = __webpack_require__(164)(false);
 
 
 // module
-exports.push([module.i, "\n.md-app[data-v-630c32c8] {\n  min-height: 100%;\n  max-width: 100%;\n  height: 100%;\n}\n", ""]);
+exports.push([module.i, "/**\r\n * The default transition, used when the element is visible\r\n * since the beginning of the animation\r\n * ---\r\n * @access private\r\n * @type transition\r\n * @group transition\r\n */\n/**\r\n * The enter transition, used when the element is not visible on the screen\r\n * since the beginning of the animation and become visible\r\n * ---\r\n * @access private\r\n * @type transition\r\n * @group transition\r\n */\n/**\r\n * The leave transition, used when the element is visible on the screen\r\n * since the beginning of the animation and is removed\r\n * ---\r\n * @access private\r\n * @type transition\r\n * @group transition\r\n */\n/**\r\n * The stand transition, used when the element is going to accelerate,\r\n * like movements from bottom to top\r\n * ---\r\n * @access private\r\n * @type transition\r\n * @group transition\r\n */\n/**\r\n * The out transition, used when the element is going to deaccelerate,\r\n * like movements from top to bottom\r\n * ---\r\n * @access private\r\n * @type transition\r\n * @group transition\r\n */\n/* Transitions - Based on Angular Material */\n/**\r\n*\r\n*/\n/**\r\n * Breakpoint\r\n */\n/**\r\n * Base\r\n */\n/**\r\n * Layout Item\r\n */\n/**\r\n * Hide Element\r\n */\n.login-sns[data-v-d50a4dc6] {\n  text-align: center;\n}\n.login-sns .md-icon-button[data-v-d50a4dc6] {\n    margin: 20px 36px 0px 0px;\n    min-width: auto;\n    box-shadow: none;\n    width: 50px;\n    height: 50px;\n}\n.login-sns .md-icon-button .md-icon[data-v-d50a4dc6] {\n      transition: all .345s;\n      width: 30px;\n      height: 30px;\n      font-size: 30px;\n}\n.login-sns .md-icon-button:hover .md-icon[data-v-d50a4dc6] {\n      transform: scale(1.3);\n}\n", ""]);
 
 // exports
 
 
 /***/ }),
 
-/***/ 1158:
+/***/ 1090:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+exports.default = {
+  name: 'GmfPagesAuthSns',
+  props: {
+    title: {
+      type: String,
+      default: '使用合作账号登录'
+    },
+    type: {
+      type: String,
+      default: 'login'
+    }
+  },
+  data: function data() {
+    return {
+      sending: false
+    };
+  },
+
+  computed: {
+    canSns: function canSns() {
+      if (!this.$root.configs.auth || !this.$root.configs.auth.sns) return false;
+      return this.$root.configs.auth.sns;
+    },
+    snsQQ: function snsQQ() {
+      if (!this.canSns) return false;
+      return this.makeUrl(this.$root.configs.auth.sns.qq);
+    },
+    snsWeixin: function snsWeixin() {
+      if (!this.canSns) return false;
+      return this.makeUrl(this.$root.configs.auth.sns.weixin);
+    },
+    snsWeibo: function snsWeibo() {
+      if (!this.canSns) return false;
+      return this.makeUrl(this.$root.configs.auth.sns.weibo);
+    }
+  },
+  methods: {
+    fetchData: function fetchData() {},
+    makeUrl: function makeUrl(old) {
+      var url = false;
+      if (old && this.type) {
+        url = old.indexOf('?') > 0 ? old + '&type=' + this.type : old + '?type=' + this.type;
+      } else if (old) {
+        url = old;
+      }
+      if (url && this.$route.query.continue) {
+        url = url.indexOf('?') > 0 ? url + '&continue=' + this.$route.query.continue : url + '?continue=' + this.$route.query.continue;
+      }
+      return url;
+    }
+  },
+  mounted: function mounted() {
+    this.fetchData();
+  }
+};
+
+/***/ }),
+
+/***/ 1091:
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm.canSns
+    ? _c("md-card-content", { staticClass: "login-sns" }, [
+        _c("div", { staticClass: "md-subheading" }, [
+          _vm._v(_vm._s(_vm.title))
+        ]),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "layout-row layout-align-center-center" },
+          [
+            _vm.snsQQ
+              ? _c(
+                  "md-button",
+                  {
+                    staticClass: "md-icon-button md-raised md-primary",
+                    attrs: { href: _vm.snsQQ }
+                  },
+                  [
+                    _c("md-icon", {
+                      attrs: {
+                        "md-src": "/assets/vendor/gmf-sys/svg/auth-qq.svg"
+                      }
+                    })
+                  ],
+                  1
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.snsWeixin
+              ? _c(
+                  "md-button",
+                  {
+                    staticClass: "md-icon-button md-raised md-primary",
+                    attrs: { href: _vm.snsWeixin }
+                  },
+                  [
+                    _c("md-icon", {
+                      attrs: {
+                        "md-src": "/assets/vendor/gmf-sys/svg/auth-weixin.svg"
+                      }
+                    })
+                  ],
+                  1
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.snsWeibo
+              ? _c(
+                  "md-button",
+                  {
+                    staticClass: "md-icon-button md-raised md-primary",
+                    attrs: { href: _vm.snsWeibo }
+                  },
+                  [
+                    _c("md-icon", {
+                      attrs: {
+                        "md-src": "/assets/vendor/gmf-sys/svg/auth-weibo.svg"
+                      }
+                    })
+                  ],
+                  1
+                )
+              : _vm._e()
+          ],
+          1
+        )
+      ])
+    : _vm._e()
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-d50a4dc6", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ 1140:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1434,15 +2010,13 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _regenerator = __webpack_require__(19);
+var _AuthCache = __webpack_require__(1086);
 
-var _regenerator2 = _interopRequireDefault(_regenerator);
+var _AuthCache2 = _interopRequireDefault(_AuthCache);
 
-var _extend = __webpack_require__(81);
+var _Sns = __webpack_require__(1087);
 
-var _extend2 = _interopRequireDefault(_extend);
-
-var _vuex = __webpack_require__(47);
+var _Sns2 = _interopRequireDefault(_Sns);
 
 var _vuelidate = __webpack_require__(1055);
 
@@ -1450,7 +2024,23 @@ var _validators = __webpack_require__(1057);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; } //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -1473,187 +2063,236 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 //
 
 exports.default = {
-  name: "DeptEdit",
+  name: 'GmfPagesAuthAccountJoin',
+  components: {
+    AuthSns: _Sns2.default
+  },
+  mixins: [_vuelidate.validationMixin],
   data: function data() {
     return {
-      configed: false,
-      mainData: {}
+      mainDatas: {},
+      loading: 0,
+      sending: false
     };
+  },
+
+  validations: {
+    mainDatas: {
+      account: {
+        required: _validators.required,
+        minLength: (0, _validators.minLength)(3),
+        maxLength: (0, _validators.maxLength)(30)
+      },
+      password: {
+        required: _validators.required,
+        minLength: (0, _validators.minLength)(3),
+        maxLength: (0, _validators.maxLength)(30)
+      }
+    }
+  },
+  computed: {
+    routeQuery: function routeQuery() {
+      var q = {};
+      if (this.$route.query && this.$route.query.continue) q.continue = this.$route.query.continue;
+      return q;
+    }
   },
   beforeRouteEnter: function beforeRouteEnter(to, from, next) {
     next(function (vm) {
-      vm.$store.dispatch("amiba/config").then(function () {
-        return vm.config();
-      }, function (err) {
-        vm.$tip(err);
-      });
+      vm.fetchData();
     });
   },
-
-  mixins: [_vuelidate.validationMixin],
-  validations: {
-    mainData: {
-      code: {
-        required: _validators.required
-      },
-      name: {
-        required: _validators.required
-      }
-    }
+  beforeRouteUpdate: function beforeRouteUpdate(to, from, next) {
+    this.fetchData();
+    next();
   },
+
   methods: {
-    config: function () {
-      var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
-        return _regenerator2.default.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                this.configed = true;
-                this.fetchData(this.$route && this.$route.query && this.$route.query.id);
-
-              case 2:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee, this);
-      }));
-
-      function config() {
-        return _ref.apply(this, arguments);
+    getValidationClass: function getValidationClass(fieldName) {
+      var field = this.$v.mainDatas[fieldName];
+      if (field) {
+        return {
+          'md-invalid': field.$invalid && field.$dirty
+        };
       }
-
-      return config;
-    }(),
-    fetchData: function fetchData(id) {
-      var _this = this;
-
-      this.mainData = {};
-      if (!id) {
-        return;
-      }
-      this.$tip.waiting("加载中...");
-      this.$http("suite.cbo").get("api/cbo/depts/show", {
-        params: {
-          id: id
-        }
-      }).then(function (res) {
-        _this.mainData = res.data.data;
-        _this.$tip.clear();
-      }, function (err) {
-        _this.$tip("加载数据出错了！");
-      });
     },
-    postFormData: function postFormData() {
-      var _this2 = this;
-
-      this.$tip.waiting("正在保存...");
-      this.$http("suite.cbo").post("api/cbo/depts", this.mainData).then(function (res) {
-        _this2.$tip.clear();
-        _this2.mainData = res.data.data;
-      }, function (err) {
-        _this2.$tip("保存出错了!");
-      });
-    },
-    validateForm: function validateForm() {
+    validateUser: function validateUser() {
       this.$v.$touch();
       if (!this.$v.$invalid) {
-        this.postFormData();
+        this.submitPost();
       }
-    }
+    },
+    submitPost: function submitPost() {
+      var _this = this;
+
+      this.sending = true;
+      this.$http.post('sys/auth/joins', this.mainDatas).then(function (response) {
+        _this.sending = false;
+        _this.$go(_this.$route.query.continue ? _this.$route.query.continue : { name: 'auth.account.dashboard' });
+      }).catch(function (err) {
+        _this.sending = false;
+        _this.$toast(err);
+      });
+    },
+    fetchData: function fetchData() {}
   }
 };
 
 /***/ }),
 
-/***/ 1159:
+/***/ 1141:
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "md-app",
-    { attrs: { "md-waterfall": "", "md-mode": "fixed" } },
-    [
-      _c(
-        "md-app-content",
-        [
-          _c("md-content", { staticClass: "layout-padding" }, [
+  return _c("md-card", [
+    _c(
+      "form",
+      {
+        attrs: { novalidate: "" },
+        on: {
+          submit: function($event) {
+            $event.preventDefault()
+            return _vm.validateUser($event)
+          }
+        }
+      },
+      [
+        _c(
+          "md-card-header",
+          [
+            _c("md-card-header-text", [
+              _c("div", { staticClass: "md-title" }, [_vm._v("账号关联")]),
+              _vm._v(" "),
+              _c("div", { staticClass: "md-body-1" }, [_vm._v("添加更多账号")])
+            ]),
+            _vm._v(" "),
             _c(
-              "form",
+              "md-button",
               {
-                attrs: { novalidate: "" },
-                on: {
-                  submit: function($event) {
-                    $event.preventDefault()
-                    return _vm.validateForm($event)
-                  }
+                staticClass: "md-icon-button md-list-action",
+                attrs: {
+                  to: { name: "auth.account.dashboard", query: _vm.routeQuery }
                 }
               },
               [
+                _c("md-icon", { staticClass: "md-primary" }, [
+                  _vm._v("expand_more")
+                ])
+              ],
+              1
+            )
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "md-card-content",
+          [
+            _c(
+              "md-layout",
+              [
                 _c(
                   "md-field",
+                  {
+                    class: _vm.getValidationClass("account"),
+                    attrs: { "md-clearable": "" }
+                  },
                   [
-                    _c("label", [_vm._v("编码")]),
+                    _c("label", [_vm._v("电子邮件地址或电话号码")]),
                     _vm._v(" "),
                     _c("md-input", {
+                      attrs: { autocomplete: "off", disabled: _vm.sending },
                       model: {
-                        value: _vm.mainData.code,
+                        value: _vm.mainDatas.account,
                         callback: function($$v) {
-                          _vm.$set(_vm.mainData, "code", $$v)
+                          _vm.$set(_vm.mainDatas, "account", $$v)
                         },
-                        expression: "mainData.code"
+                        expression: "mainDatas.account"
                       }
-                    })
+                    }),
+                    _vm._v(" "),
+                    !_vm.$v.mainDatas.account.required
+                      ? _c("span", { staticClass: "md-error" }, [
+                          _vm._v("请输入电子邮件地址或电话号码")
+                        ])
+                      : _vm._e()
                   ],
                   1
                 ),
                 _vm._v(" "),
                 _c(
                   "md-field",
+                  { class: _vm.getValidationClass("password") },
                   [
-                    _c("label", [_vm._v("名称")]),
+                    _c("label", [_vm._v("输入您的密码")]),
                     _vm._v(" "),
                     _c("md-input", {
+                      attrs: {
+                        autocomplete: "off",
+                        type: "password",
+                        disabled: _vm.sending
+                      },
                       model: {
-                        value: _vm.mainData.name,
+                        value: _vm.mainDatas.password,
                         callback: function($$v) {
-                          _vm.$set(_vm.mainData, "name", $$v)
+                          _vm.$set(_vm.mainDatas, "password", $$v)
                         },
-                        expression: "mainData.name"
+                        expression: "mainDatas.password"
                       }
-                    })
+                    }),
+                    _vm._v(" "),
+                    !_vm.$v.mainDatas.password.required
+                      ? _c("span", { staticClass: "md-error" }, [
+                          _vm._v("请输入密码")
+                        ])
+                      : _vm._e()
                   ],
                   1
                 )
               ],
               1
             )
-          ])
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "md-app-bottom-bar",
-        [
-          _c("md-x-submit-bar", {
-            attrs: { disabled: _vm.$v.$invalid, "show-back": "" },
-            on: {
-              submit: _vm.postFormData,
-              back: function($event) {
-                _vm.$router.back()
-              }
-            }
-          })
-        ],
-        1
-      )
-    ],
-    1
-  )
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "md-card-actions",
+          [
+            _c(
+              "router-link",
+              { attrs: { to: { name: "auth.account.dashboard" } } },
+              [_vm._v("查看关联账号")]
+            ),
+            _vm._v(" "),
+            _c("span", { staticClass: "flex" }),
+            _vm._v(" "),
+            _c(
+              "md-button",
+              {
+                staticClass: "md-primary md-raised",
+                attrs: { type: "submit", disabled: _vm.sending }
+              },
+              [_vm._v("关联账号")]
+            )
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c("md-divider"),
+        _vm._v(" "),
+        _c("auth-sns", { attrs: { title: "绑定合作账号", type: "join" } }),
+        _vm._v(" "),
+        _vm.sending
+          ? _c("md-progress-bar", { attrs: { "md-mode": "indeterminate" } })
+          : _vm._e()
+      ],
+      1
+    )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -1661,60 +2300,42 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-630c32c8", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-6c9fe41c", module.exports)
   }
 }
 
 /***/ }),
 
-/***/ 171:
-/***/ (function(module, exports, __webpack_require__) {
+/***/ 343:
+/***/ (function(module, exports) {
 
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(1156)
-}
-var normalizeComponent = __webpack_require__(0)
-/* script */
-var __vue_script__ = __webpack_require__(1158)
-/* template */
-var __vue_template__ = __webpack_require__(1159)
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = injectStyle
-/* scopeId */
-var __vue_scopeId__ = "data-v-630c32c8"
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "resources\\assets\\js\\pages\\CboDept\\Edit.vue"
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-630c32c8", Component.options)
-  } else {
-    hotAPI.reload("data-v-630c32c8", Component.options)
+/**
+ * Translates the list format produced by css-loader into something
+ * easier to manipulate.
+ */
+module.exports = function listToStyles (parentId, list) {
+  var styles = []
+  var newStyles = {}
+  for (var i = 0; i < list.length; i++) {
+    var item = list[i]
+    var id = item[0]
+    var css = item[1]
+    var media = item[2]
+    var sourceMap = item[3]
+    var part = {
+      id: parentId + ':' + i,
+      css: css,
+      media: media,
+      sourceMap: sourceMap
+    }
+    if (!newStyles[id]) {
+      styles.push(newStyles[id] = { id: id, parts: [part] })
+    } else {
+      newStyles[id].parts.push(part)
+    }
   }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
+  return styles
+}
 
 
 /***/ })

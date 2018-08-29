@@ -8062,7 +8062,7 @@ exports.default = st;
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -8128,279 +8128,284 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Start = function () {
-    function Start(columnComponent) {
-        _classCallCheck(this, Start);
+  function Start(columnComponent) {
+    _classCallCheck(this, Start);
+  }
+
+  _createClass(Start, [{
+    key: 'use',
+    value: function use(component) {
+      _vue2.default.use(component);
     }
+  }, {
+    key: 'route',
+    value: function route(routes) {
+      _config2.default.route(routes);
+    }
+  }, {
+    key: 'config',
+    value: function config(fn) {
+      _config2.default.config(fn);
+    }
+  }, {
+    key: 'store',
+    value: function store(_store) {
+      _config2.default.store(_store);
+    }
+  }, {
+    key: 'i18n',
+    value: function i18n(locale, name, _i18n) {
+      _config2.default.i18n(locale, name, _i18n);
+    }
+  }, {
+    key: 'run',
+    value: function run(options, mixin) {
+      options = options || {};
+      var elID = options.elID || '#gmfApp';
+      _http2.default.config({ host: (0, _MdCombineURLs2.default)(options.host, '/api') });
+      initVue(options);
 
-    _createClass(Start, [{
-        key: 'use',
-        value: function use(component) {
-            _vue2.default.use(component);
-        }
-    }, {
-        key: 'route',
-        value: function route(routes) {
-            _config2.default.route(routes);
-        }
-    }, {
-        key: 'config',
-        value: function config(fn) {
-            _config2.default.config(fn);
-        }
-    }, {
-        key: 'store',
-        value: function store(_store) {
-            _config2.default.store(_store);
-        }
-    }, {
-        key: 'i18n',
-        value: function i18n(locale, name, _i18n) {
-            _config2.default.i18n(locale, name, _i18n);
-        }
-    }, {
-        key: 'run',
-        value: function run(options, mixin) {
-            options = options || {};
-            var elID = options.elID || '#gmfApp';
-            _http2.default.config({ host: (0, _MdCombineURLs2.default)(options.host, '/api') });
-            initVue(options);
+      var appConfig = getAppConfig();
+      /*routes*/
+      initRoute(appConfig, options);
 
-            var appConfig = getAppConfig();
-            /*routes*/
-            initRoute(appConfig, options);
+      /*store*/
+      initStore(appConfig, options);
 
-            /*store*/
-            initStore(appConfig, options);
+      //Vuei18n
+      initI18n(appConfig, options);
 
-            //Vuei18n
-            initI18n(appConfig, options);
+      if (options.app) {
+        appConfig.render = function (mount) {
+          return mount(options.app);
+        };
+      }
+      if (mixin) {
+        appConfig.mixins = [mixin];
+      }
+      document.addEventListener('DOMContentLoaded', function () {
+        initConfigs().then(function (res) {
+          (0, _extend2.default)(appConfig.data.configs, res);
+          _http2.default.config(res);
+          if (res && res.loadEnums) {
+            return loadEnums();
+          }
+          return true;
+        }).then(function (res) {
+          var app = new _vue2.default(appConfig);
+          appConfig.router.onReady(function () {
+            app.$mount(elID);
+          });
+        });
+      });
+    }
+  }]);
 
-            if (options.app) {
-                appConfig.render = function (mount) {
-                    return mount(options.app);
-                };
-            }
-            if (mixin) {
-                appConfig.mixins = [mixin];
-            }
-            document.addEventListener('DOMContentLoaded', function () {
-                initConfigs().then(function (res) {
-                    (0, _extend2.default)(appConfig.data.configs, res);
-                    _http2.default.config(res);
-                    if (res && res.loadEnums) {
-                        return loadEnums();
-                    }
-                    return true;
-                }).then(function (res) {
-                    var app = new _vue2.default(appConfig);
-                    appConfig.router.onReady(function () {
-                        app.$mount(elID);
-                    });
-                });
-            });
-        }
-    }]);
-
-    return Start;
+  return Start;
 }();
 
 exports.default = Start;
 
 
 function initConfigs() {
-    return new Promise(function (resolved, rejected) {
-        return Promise.all([_config2.default.configs.length > 0 ? _config2.default.configs[0]() : false]).then(function (res) {
-            resolved(res[0]);
-        }, function (err) {
-            rejected(err);
-        });
+  return new Promise(function (resolved, rejected) {
+    return Promise.all([_config2.default.configs.length > 0 ? _config2.default.configs[0]() : false]).then(function (res) {
+      resolved(res[0]);
+    }, function (err) {
+      rejected(err);
     });
+  });
 }
 
 function initRoute(appConfig, options) {
-    _vue2.default.use(_vueRouter2.default);
-    var router = {
-        mode: 'history',
-        routes: _config2.default.routes,
-        scrollBehavior: function scrollBehavior(to, from, savedPosition) {
-            if (savedPosition) {
-                return savedPosition;
-            } else {
-                if (from.meta.keepAlive) {
-                    from.meta.savedPosition = document.body.scrollTop;
-                }
-                return { x: 0, y: to.meta.savedPosition || 0 };
-            }
+  _vue2.default.use(_vueRouter2.default);
+  var router = {
+    mode: 'history',
+    routes: _config2.default.routes,
+    scrollBehavior: function scrollBehavior(to, from, savedPosition) {
+      if (savedPosition) {
+        return savedPosition;
+      } else {
+        if (from.meta.keepAlive) {
+          from.meta.savedPosition = document.body.scrollTop;
         }
-    };
-    var vueRouter = new _vueRouter2.default(router);
-    vueRouter.beforeEach(function (to, from, next) {
-        if (to.meta.requiresAuth && !appConfig.data.configs.user) {
-            if ((0, _isString2.default)(appConfig.data.configs.auth.route)) {
-                next(appConfig.data.configs.auth.route + "?continue=" + to.fullPath);
-            } else {
-                next((0, _extend2.default)({}, appConfig.data.configs.auth.route, { query: { continue: to.fullPath } }));
-            }
-        } else {
-            next();
-        }
-    });
-    appConfig.router = vueRouter;
+        return { x: 0, y: to.meta.savedPosition || 0 };
+      }
+    }
+  };
+  var vueRouter = new _vueRouter2.default(router);
+  vueRouter.beforeEach(function (to, from, next) {
+    if (to.meta.requiresAuth && !appConfig.data.configs.user) {
+      if ((0, _isString2.default)(appConfig.data.configs.auth.route)) {
+        window.location.href = appConfig.data.configs.auth.route + "?continue=" + to.fullPath;
+        //next();
+      } else {
+        next((0, _extend2.default)({}, appConfig.data.configs.auth.route, { query: { continue: to.fullPath } }));
+      }
+    } else {
+      next();
+    }
+  });
+  appConfig.router = vueRouter;
 }
 
 function initStore(appConfig, options) {
-    _vue2.default.use(_vuex2.default);
-    if (_config2.default.stores && _config2.default.stores.length > 0) {
-        _store3.default.modules = {};
-        _config2.default.stores.forEach(function (item) {
-            _store3.default.modules[item.name] = item;
-        });
-    }
-    var store = new _vuex2.default.Store(_store3.default);
-    appConfig.store = store;
+  _vue2.default.use(_vuex2.default);
+  if (_config2.default.stores && _config2.default.stores.length > 0) {
+    _store3.default.modules = {};
+    _config2.default.stores.forEach(function (item) {
+      _store3.default.modules[item.name] = item;
+    });
+  }
+  var store = new _vuex2.default.Store(_store3.default);
+  appConfig.store = store;
 }
 
 function initI18n(appConfig, options) {
-    _vue2.default.use(_vueI18n2.default);
-    var i18n = new _vueI18n2.default({
-        locale: options.locale || 'zh',
-        messages: _config2.default.i18ns.messages
-    });
-    appConfig.i18n = i18n;
+  _vue2.default.use(_vueI18n2.default);
+  var i18n = new _vueI18n2.default({
+    locale: options.locale || 'zh',
+    messages: _config2.default.i18ns.messages
+  });
+  appConfig.i18n = i18n;
 }
 
 function getAppConfig() {
-    return {
-        data: {
-            'appName': '',
-            'title': '',
-            'configs': { home: '/', ent: false, user: false, token: false, auth: { route: { name: 'auth.login' } } }
-        },
-        methods: {
-            $loadConfigs: function $loadConfigs() {
-                var _this = this;
+  return {
+    data: {
+      'appName': '',
+      'title': '',
+      'configs': { home: '/', ent: false, user: false, token: false, auth: { route: { name: 'auth.login' } } }
+    },
+    methods: {
+      $loadConfigs: function $loadConfigs() {
+        var _this = this;
 
-                initConfigs().then(function (res) {
-                    _this.$setConfigs(res);
-                });
-            },
-            changedConfig: function changedConfig() {
-                (0, _extend2.default)(window.gmfConfig, this.configs);
-                this.$http.config(this.configs);
-            },
-            setCacheEnum: function setCacheEnum(item) {
-                _MdEnumCache2.default.set(item);
-            },
-            getCacheEnum: function getCacheEnum(type) {
-                return _MdEnumCache2.default.get(type);
-            },
-            getCacheEnumName: function getCacheEnumName(type, item) {
-                return _MdEnumCache2.default.getEnumName(type, item);
-            },
-            issueUid: function issueUid() {
-                var _this2 = this;
+        initConfigs().then(function (res) {
+          _this.$setConfigs(res);
+        });
+      },
+      changedConfig: function changedConfig() {
+        (0, _extend2.default)(window.gmfConfig, this.configs);
+        this.$http.config(this.configs);
+      },
+      setCacheEnum: function setCacheEnum(item) {
+        _MdEnumCache2.default.set(item);
+      },
+      getCacheEnum: function getCacheEnum(type) {
+        return _MdEnumCache2.default.get(type);
+      },
+      getCacheEnumName: function getCacheEnumName(type, item) {
+        return _MdEnumCache2.default.getEnumName(type, item);
+      },
+      issueUid: function issueUid() {
+        var _this2 = this;
 
-                return new Promise(function (resolved, rejected) {
-                    _this2.$http.get('sys/datas/uid').then(function (res) {
-                        resolved(res.data.data);
-                    }, function (err) {
-                        rejected(false);
-                    });
-                });
-            },
-            issueSn: function issueSn(node, num) {
-                var _this3 = this;
+        return new Promise(function (resolved, rejected) {
+          _this2.$http.get('sys/datas/uid').then(function (res) {
+            resolved(res.data.data);
+          }, function (err) {
+            rejected(false);
+          });
+        });
+      },
+      issueSn: function issueSn(node, num) {
+        var _this3 = this;
 
-                return new Promise(function (resolved, rejected) {
-                    _this3.$http.get('sys/datas/sn', { params: { node: node, num: num } }).then(function (res) {
-                        resolved(res.data.data);
-                    }, function (err) {
-                        rejected(false);
-                    });
-                });
-            }
-        }
-    };
+        return new Promise(function (resolved, rejected) {
+          _this3.$http.get('sys/datas/sn', { params: { node: node, num: num } }).then(function (res) {
+            resolved(res.data.data);
+          }, function (err) {
+            rejected(false);
+          });
+        });
+      }
+    }
+  };
 }
 
 function initVue(options) {
-    options = options || {};
+  options = options || {};
 
-    _vue2.default.prototype.$http = _http2.default;
-    _vue2.default.prototype._ = _common2.default;
-    _vue2.default.prototype.$devicePixelRatio = 1;
+  _vue2.default.prototype.$http = _http2.default;
+  _vue2.default.prototype._ = _common2.default;
+  _vue2.default.prototype.$devicePixelRatio = 1;
 
-    _vue2.default.prototype.$setConfigs = function (configs) {
-        (0, _extend2.default)(this.$root.configs, configs);
-        this.$root.changedConfig();
-    };
-    _vue2.default.prototype.$lang = _lang2.default;
-    _vue2.default.prototype.$go = function (options, isReplace) {
-        this.$router && this.$router[isReplace ? 'replace' : 'push'](options);
-    };
-    _vue2.default.prototype.$goID = function (id, options, isReplace) {
-        var localtion = { name: 'id', params: { id: id } };
-        isReplace = !!isReplace;
-        localtion = (0, _merge2.default)(localtion, options);
-        this.$router && this.$router[isReplace ? 'replace' : 'push'](localtion);
-    };
-    _vue2.default.prototype.$goModule = function (module, options, isReplace) {
-        var localtion = { name: 'module', params: { module: module } };
-        isReplace = !!isReplace;
-        localtion = (0, _merge2.default)(localtion, options);
-        this.$router && this.$router[isReplace ? 'replace' : 'push'](localtion);
-    };
-    _vue2.default.prototype.$goApp = function (app, options, isReplace) {
-        var localtion = { name: 'app' };
-        isReplace = !!isReplace;
-        localtion = (0, _merge2.default)(localtion, options, { params: { app: app } });
-        this.$router && this.$router[isReplace ? 'replace' : 'push'](localtion);
-    };
-    _vue2.default.prototype.$hasRole = function (roles) {
-        var _this4 = this;
+  _vue2.default.prototype.$setConfigs = function (configs) {
+    (0, _extend2.default)(this.$root.configs, configs);
+    this.$root.changedConfig();
+  };
+  _vue2.default.prototype.$lang = _lang2.default;
+  _vue2.default.prototype.$go = function (options, isReplace) {
+    if ((0, _isString2.default)(options) && options.indexOf('//')) {
+      window.location.href = options;
+      return;
+    }
+    this.$router && this.$router[isReplace ? 'replace' : 'push'](options);
+  };
+  _vue2.default.prototype.$goID = function (id, options, isReplace) {
+    var localtion = { name: 'id', params: { id: id } };
+    isReplace = !!isReplace;
+    localtion = (0, _merge2.default)(localtion, options);
+    this.$router && this.$router[isReplace ? 'replace' : 'push'](localtion);
+  };
+  _vue2.default.prototype.$goModule = function (module, options, isReplace) {
+    var localtion = { name: 'module', params: { module: module } };
+    isReplace = !!isReplace;
+    localtion = (0, _merge2.default)(localtion, options);
+    this.$router && this.$router[isReplace ? 'replace' : 'push'](localtion);
+  };
+  _vue2.default.prototype.$goApp = function (app, options, isReplace) {
+    var localtion = { name: 'app' };
+    isReplace = !!isReplace;
+    localtion = (0, _merge2.default)(localtion, options, { params: { app: app } });
+    this.$router && this.$router[isReplace ? 'replace' : 'push'](localtion);
+  };
+  _vue2.default.prototype.$hasRole = function (roles) {
+    var _this4 = this;
 
-        if (!roles || !this.$root.configs || !this.$root.configs.roles) return false;
-        if ((0, _isString2.default)(roles)) {
-            roles = roles.split(',');
-        }
-        return roles.map(function (v) {
-            return _this4.$root.configs.roles.indexOf(v) >= 0;
-        }).filter(function (v) {
-            return v;
-        }).length > 0;
-    };
-    _vue2.default.prototype.$canPermit = function (permits) {
-        var _this5 = this;
+    if (!roles || !this.$root.configs || !this.$root.configs.roles) return false;
+    if ((0, _isString2.default)(roles)) {
+      roles = roles.split(',');
+    }
+    return roles.map(function (v) {
+      return _this4.$root.configs.roles.indexOf(v) >= 0;
+    }).filter(function (v) {
+      return v;
+    }).length > 0;
+  };
+  _vue2.default.prototype.$canPermit = function (permits) {
+    var _this5 = this;
 
-        if (!permits || !this.$root.configs || !this.$root.configs.permits) return false;
-        if ((0, _isString2.default)(roles)) {
-            roles = roles.split(',');
-        }
-        return permits.map(function (v) {
-            return _this5.$root.configs.permits.indexOf(v) >= 0;
-        }).filter(function (v) {
-            return v;
-        }).length > 0;
-    };
-    _vue2.default.prototype.$documentTitle = function (title) {
-        document.title = title;
-        this.$root.title = title;
-    };
+    if (!permits || !this.$root.configs || !this.$root.configs.permits) return false;
+    if ((0, _isString2.default)(roles)) {
+      roles = roles.split(',');
+    }
+    return permits.map(function (v) {
+      return _this5.$root.configs.permits.indexOf(v) >= 0;
+    }).filter(function (v) {
+      return v;
+    }).length > 0;
+  };
+  _vue2.default.prototype.$documentTitle = function (title) {
+    document.title = title;
+    this.$root.title = title;
+  };
 }
 
 function loadEnums() {
-    return new Promise(function (resolved, rejected) {
-        _http2.default.get('sys/enums/all').then(function (res) {
-            if (res && res.data && res.data.data) {
-                res.data.data.forEach(function (item) {
-                    _MdEnumCache2.default.set(item);
-                });
-            }
-            resolved();
-        }, function (err) {
-            rejected();
+  return new Promise(function (resolved, rejected) {
+    _http2.default.get('sys/enums/all').then(function (res) {
+      if (res && res.data && res.data.data) {
+        res.data.data.forEach(function (item) {
+          _MdEnumCache2.default.set(item);
         });
+      }
+      resolved();
+    }, function (err) {
+      rejected();
     });
+  });
 }
 
 /***/ }),
@@ -14785,39 +14790,7 @@ module.exports = Component.exports
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 343 */
-/***/ (function(module, exports) {
-
-/**
- * Translates the list format produced by css-loader into something
- * easier to manipulate.
- */
-module.exports = function listToStyles (parentId, list) {
-  var styles = []
-  var newStyles = {}
-  for (var i = 0; i < list.length; i++) {
-    var item = list[i]
-    var id = item[0]
-    var css = item[1]
-    var media = item[2]
-    var sourceMap = item[3]
-    var part = {
-      id: parentId + ':' + i,
-      css: css,
-      media: media,
-      sourceMap: sourceMap
-    }
-    if (!newStyles[id]) {
-      styles.push(newStyles[id] = { id: id, parts: [part] })
-    } else {
-      newStyles[id].parts.push(part)
-    }
-  }
-  return styles
-}
-
-
-/***/ }),
+/* 343 */,
 /* 344 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -69416,235 +69389,6 @@ exports.default = function (date) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 1035 */,
-/* 1036 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/*
-  MIT License http://www.opensource.org/licenses/mit-license.php
-  Author Tobias Koppers @sokra
-  Modified by Evan You @yyx990803
-*/
-
-var hasDocument = typeof document !== 'undefined'
-
-if (typeof DEBUG !== 'undefined' && DEBUG) {
-  if (!hasDocument) {
-    throw new Error(
-    'vue-style-loader cannot be used in a non-browser environment. ' +
-    "Use { target: 'node' } in your Webpack config to indicate a server-rendering environment."
-  ) }
-}
-
-var listToStyles = __webpack_require__(343)
-
-/*
-type StyleObject = {
-  id: number;
-  parts: Array<StyleObjectPart>
-}
-
-type StyleObjectPart = {
-  css: string;
-  media: string;
-  sourceMap: ?string
-}
-*/
-
-var stylesInDom = {/*
-  [id: number]: {
-    id: number,
-    refs: number,
-    parts: Array<(obj?: StyleObjectPart) => void>
-  }
-*/}
-
-var head = hasDocument && (document.head || document.getElementsByTagName('head')[0])
-var singletonElement = null
-var singletonCounter = 0
-var isProduction = false
-var noop = function () {}
-var options = null
-var ssrIdKey = 'data-vue-ssr-id'
-
-// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
-// tags it will allow on a page
-var isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\b/.test(navigator.userAgent.toLowerCase())
-
-module.exports = function (parentId, list, _isProduction, _options) {
-  isProduction = _isProduction
-
-  options = _options || {}
-
-  var styles = listToStyles(parentId, list)
-  addStylesToDom(styles)
-
-  return function update (newList) {
-    var mayRemove = []
-    for (var i = 0; i < styles.length; i++) {
-      var item = styles[i]
-      var domStyle = stylesInDom[item.id]
-      domStyle.refs--
-      mayRemove.push(domStyle)
-    }
-    if (newList) {
-      styles = listToStyles(parentId, newList)
-      addStylesToDom(styles)
-    } else {
-      styles = []
-    }
-    for (var i = 0; i < mayRemove.length; i++) {
-      var domStyle = mayRemove[i]
-      if (domStyle.refs === 0) {
-        for (var j = 0; j < domStyle.parts.length; j++) {
-          domStyle.parts[j]()
-        }
-        delete stylesInDom[domStyle.id]
-      }
-    }
-  }
-}
-
-function addStylesToDom (styles /* Array<StyleObject> */) {
-  for (var i = 0; i < styles.length; i++) {
-    var item = styles[i]
-    var domStyle = stylesInDom[item.id]
-    if (domStyle) {
-      domStyle.refs++
-      for (var j = 0; j < domStyle.parts.length; j++) {
-        domStyle.parts[j](item.parts[j])
-      }
-      for (; j < item.parts.length; j++) {
-        domStyle.parts.push(addStyle(item.parts[j]))
-      }
-      if (domStyle.parts.length > item.parts.length) {
-        domStyle.parts.length = item.parts.length
-      }
-    } else {
-      var parts = []
-      for (var j = 0; j < item.parts.length; j++) {
-        parts.push(addStyle(item.parts[j]))
-      }
-      stylesInDom[item.id] = { id: item.id, refs: 1, parts: parts }
-    }
-  }
-}
-
-function createStyleElement () {
-  var styleElement = document.createElement('style')
-  styleElement.type = 'text/css'
-  head.appendChild(styleElement)
-  return styleElement
-}
-
-function addStyle (obj /* StyleObjectPart */) {
-  var update, remove
-  var styleElement = document.querySelector('style[' + ssrIdKey + '~="' + obj.id + '"]')
-
-  if (styleElement) {
-    if (isProduction) {
-      // has SSR styles and in production mode.
-      // simply do nothing.
-      return noop
-    } else {
-      // has SSR styles but in dev mode.
-      // for some reason Chrome can't handle source map in server-rendered
-      // style tags - source maps in <style> only works if the style tag is
-      // created and inserted dynamically. So we remove the server rendered
-      // styles and inject new ones.
-      styleElement.parentNode.removeChild(styleElement)
-    }
-  }
-
-  if (isOldIE) {
-    // use singleton mode for IE9.
-    var styleIndex = singletonCounter++
-    styleElement = singletonElement || (singletonElement = createStyleElement())
-    update = applyToSingletonTag.bind(null, styleElement, styleIndex, false)
-    remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true)
-  } else {
-    // use multi-style-tag mode in all other cases
-    styleElement = createStyleElement()
-    update = applyToTag.bind(null, styleElement)
-    remove = function () {
-      styleElement.parentNode.removeChild(styleElement)
-    }
-  }
-
-  update(obj)
-
-  return function updateStyle (newObj /* StyleObjectPart */) {
-    if (newObj) {
-      if (newObj.css === obj.css &&
-          newObj.media === obj.media &&
-          newObj.sourceMap === obj.sourceMap) {
-        return
-      }
-      update(obj = newObj)
-    } else {
-      remove()
-    }
-  }
-}
-
-var replaceText = (function () {
-  var textStore = []
-
-  return function (index, replacement) {
-    textStore[index] = replacement
-    return textStore.filter(Boolean).join('\n')
-  }
-})()
-
-function applyToSingletonTag (styleElement, index, remove, obj) {
-  var css = remove ? '' : obj.css
-
-  if (styleElement.styleSheet) {
-    styleElement.styleSheet.cssText = replaceText(index, css)
-  } else {
-    var cssNode = document.createTextNode(css)
-    var childNodes = styleElement.childNodes
-    if (childNodes[index]) styleElement.removeChild(childNodes[index])
-    if (childNodes.length) {
-      styleElement.insertBefore(cssNode, childNodes[index])
-    } else {
-      styleElement.appendChild(cssNode)
-    }
-  }
-}
-
-function applyToTag (styleElement, obj) {
-  var css = obj.css
-  var media = obj.media
-  var sourceMap = obj.sourceMap
-
-  if (media) {
-    styleElement.setAttribute('media', media)
-  }
-  if (options.ssrId) {
-    styleElement.setAttribute(ssrIdKey, obj.id)
-  }
-
-  if (sourceMap) {
-    // https://developer.chrome.com/devtools/docs/javascript-debugging
-    // this makes source maps inside style tags work properly in Chrome
-    css += '\n/*# sourceURL=' + sourceMap.sources[0] + ' */'
-    // http://stackoverflow.com/a/26603875
-    css += '\n/*# sourceMappingURL=data:application/json;base64,' + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + ' */'
-  }
-
-  if (styleElement.styleSheet) {
-    styleElement.styleSheet.cssText = css
-  } else {
-    while (styleElement.firstChild) {
-      styleElement.removeChild(styleElement.firstChild)
-    }
-    styleElement.appendChild(document.createTextNode(css))
-  }
-}
-
 
 /***/ })
 ],[191]);
