@@ -2,22 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Gmf\Sys\Http\Controllers\Controller;
-use GuzzleHttp;
-use Gmf\Sys\Models;
 use GAuth;
+use Gmf\Sys\Http\Controllers\Controller;
+use Gmf\Sys\Models;
+use GuzzleHttp;
+use Illuminate\Http\Request;
 use Validator;
-class EntController extends Controller
-{
-  public function auditing(Request $request)
-  {
+
+class EntController extends Controller {
+  public function auditing(Request $request) {
     $input = $request->all();
     Validator::make($input, [
       'ent_openid' => 'required',
       'user_openid' => 'required',
       'token' => 'required',
-      'is_effective' => 'required'
+      'is_effective' => 'required',
     ])->validate();
     $ent = Models\Ent\Ent::where('id', $input['ent_openid'])->orWhere('openid', $input['ent_openid'])->first();
     if (empty($ent)) {
@@ -33,8 +32,7 @@ class EntController extends Controller
     Models\Ent\Ent::setEffective($ent->id, $user->id, $input['is_effective']);
     return $this->toJson(true);
   }
-  public function join(Request $request)
-  {
+  public function join(Request $request) {
     $input = $request->all();
     Validator::make($input, [
       'entId' => 'required',
@@ -46,7 +44,7 @@ class EntController extends Controller
     $gateway = $ent->gateway;
     $user = GAuth::user();
     if (!empty($gateway)) {
-      $params = [        
+      $params = [
         "user" => [
           "openid" => $user->openid,
           "name" => $user->name,
@@ -62,7 +60,7 @@ class EntController extends Controller
       ];
       $client = new GuzzleHttp\Client(['base_uri' => $gateway]);
       $res = $client->post('api/cbo/ents/injection', ['json' => $params]);
-      $body = (String)$res->getBody();
+      $body = (String) $res->getBody();
       if ($body) {
         $body = json_decode($body);
         $token = $body && $body->data ? $body->data : false;
