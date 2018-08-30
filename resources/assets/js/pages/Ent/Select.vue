@@ -1,9 +1,9 @@
 <template>
   <md-app md-waterfall md-mode="fixed">
-    <md-app-content>
+    <md-app-content class="layout-column">
       <md-subheader>我的账号加入了
         <span>{{pager.total||0}}</span>个团队/企业</md-subheader>
-      <md-pull-refresh @refresh="onRefresh">
+      <md-pull-refresh @refresh="onRefresh" class="flex">
         <md-scroll-load :md-finished="isFinished" @load="onScrollLoad">
           <md-x-cell-group>
             <md-x-cell :title="item.name" icon="location" :label="item.code" v-for="item in items" :key="item.id">

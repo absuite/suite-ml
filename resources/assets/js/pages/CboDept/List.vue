@@ -2,17 +2,15 @@
   <md-app md-waterfall md-mode="fixed">
     <md-app-content class="layout-column">
       <md-x-search placeholder="输入您想要查找的内容" v-model="search_q" @search="onSearch" />
-      <div class="flex scroll">
-        <md-pull-refresh @refresh="onRefresh">
-          <md-scroll-load :md-finished="isFinished" :configed="configed" @load="onScrollLoad">
-            <md-x-cell-group>
-              <md-x-cell icon="md:settings_input_svideo" is-link v-for="item in items" :key="item.id" @click="onItemClick(item)" :title="item.name"
-                :label="item.code" :tag="item.org?item.org.name:''">
-              </md-x-cell>
-            </md-x-cell-group>
-          </md-scroll-load>
-        </md-pull-refresh>
-      </div>
+      <md-pull-refresh @refresh="onRefresh" class="flex">
+        <md-scroll-load :md-finished="isFinished" :configed="configed" @load="onScrollLoad">
+          <md-x-cell-group>
+            <md-x-cell icon="md:settings_input_svideo" is-link v-for="item in items" :key="item.id" @click="onItemClick(item)"
+              :title="item.name" :label="item.code" :tag="item.org?item.org.name:''">
+            </md-x-cell>
+          </md-x-cell-group>
+        </md-scroll-load>
+      </md-pull-refresh>
     </md-app-content>
     <md-app-bottom-bar>
       <md-x-submit-bar @submit="onAddClick" @back="$router.back()" show-back speed="md:add" />
