@@ -1,21 +1,23 @@
 <template>
   <md-app md-waterfall md-mode="fixed">
-    <md-app-content  class="layout-column">
+    <md-app-content class="layout-column">
       <md-subheader>我的账号加入了
         <span>{{pager.total||0}}</span>个团队/企业
       </md-subheader>
-      <md-pull-refresh @refresh="onRefresh" class="flex">
-        <md-scroll-load :md-finished="isFinished" @load="onScrollLoad">
-          <md-x-cell-group>
-            <md-x-cell :title="item.name" icon="location" :label="item.code" v-for="item in items" :key="item.id">
-              <span slot="extra">
-                <md-x-button size="small" v-if="item.is_default" disabled>默认</md-x-button>
-                <md-x-button v-else size="small" @click="onItemClick(item)">设为默认</md-x-button>
-              </span>
-            </md-x-cell>
-          </md-x-cell-group>
-        </md-scroll-load>
-      </md-pull-refresh>
+      <div class="flex scroll">
+        <md-pull-refresh @refresh="onRefresh">
+          <md-scroll-load :md-finished="isFinished" @load="onScrollLoad">
+            <md-x-cell-group>
+              <md-x-cell :title="item.name" icon="location" :label="item.code" v-for="item in items" :key="item.id">
+                <span slot="extra">
+                  <md-x-button size="small" v-if="item.is_default" disabled>默认</md-x-button>
+                  <md-x-button v-else size="small" @click="onItemClick(item)">设为默认</md-x-button>
+                </span>
+              </md-x-cell>
+            </md-x-cell-group>
+          </md-scroll-load>
+        </md-pull-refresh>
+      </div>
     </md-app-content>
     <md-app-bottom-bar>
       <md-x-submit-bar @submit="$go('/m/ent/search')" @back="$router.back()" show-back button-text="加入企业" />
