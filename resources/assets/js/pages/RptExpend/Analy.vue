@@ -20,8 +20,8 @@
           <md-table v-model="listItems">
             <md-table-row slot="md-table-row" slot-scope="{ item }">
               <md-table-cell md-label="项目">{{ item.element_name }}</md-table-cell>
-              <md-table-cell md-label="利润">{{ item.value }}</md-table-cell>
-              <md-table-cell md-label="利润率">{{ item.rate }}</md-table-cell>
+              <md-table-cell md-label="利润" md-numeric>{{ item.value |mdThousand}}</md-table-cell>
+              <md-table-cell md-label="利润率" md-numeric>{{ item.rate }}</md-table-cell>
             </md-table-row>
           </md-table>
         </md-pull-refresh>
@@ -35,6 +35,7 @@
   import FilterPeriodDropdown from "../../components/Filter/PeriodDropdown";
   import extend from "lodash/extend";
   import debounce from "gmf/core/utils/MdDebounce";
+  import mdThousand from 'gmf/filters/mdThousand';
   import {
     mapState,
     mapGetters
@@ -85,6 +86,9 @@
           }
         );
       });
+    },
+    filters: {
+      mdThousand: mdThousand
     },
     computed: {
       ...mapGetters("amiba", ["currentPeriod", "purpose"]),

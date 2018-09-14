@@ -47,6 +47,7 @@ class HomeController extends Controller {
     Log::error('HomeController:' . GAuth::id() . '--' . Auth::id());
     $config = new Builder;
     $config->user(GAuth::user());
+    $config->token($this->issueToken($request));
     $entId = $request->session()->get(config('gmf.ent.session'));
     if (!empty($entId)) {
       $entId = SysModels\Ent\EntUser::where('user_id', $userId)->where('ent_id', $entId)->where('is_effective', '1')->where('revoked', '0')->value('ent_id');
@@ -62,6 +63,32 @@ class HomeController extends Controller {
       }
     }
     return $this->toJson($config);
+  }
+  private function issueToken(Request $request) {
+    $user = GAuth::user();
+    if (empty($user)) {
+      $pk = config('gmf.client.id') . config('gmf.client.secret');
+      $pv = SysModels\Profile::getValue($pk);
+      if ($pv) {
+        $pv = json_decode($pv);
+      }
+      if (empty($pv)) {
+        $params = [
+          "type" => "client_credentials",
+          "client_id" => config('gmf.client.id'),
+          "client_secret" => config('gmf.client.secret'),
+        ];
+        $pv = app('Gmf\Sys\Bp\Auth\Token')->issueClientToken($params);
+        SysModels\Profile::setValue($pk, json_encode($pv));
+      }
+      return $pv;
+    }
+    $token = false;
+    $token = $user->createToken($user->type);
+    $data = new Builder();
+    $data->expires_in(time($token->token->expires_at));
+    $data->access_token($token->accessToken);
+    return $data;
   }
 
 }

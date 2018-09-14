@@ -20,15 +20,16 @@
           <md-table v-model="listItems">
             <md-table-row slot="md-table-row" slot-scope="{ item }">
               <md-table-cell md-label="期间">{{ item.period_name }}</md-table-cell>
-              <md-table-cell md-label="利润">{{ item.this_profit }}</md-table-cell>
-              <md-table-cell md-label="利润率">{{ item.this_profit_rate>0?Math.round(item.this_profit_rate * 100) / 100:'-' }}</md-table-cell>
+              <md-table-cell md-label="利润" md-numeric>{{ item.this_profit|mdThousand }}</md-table-cell>
+              <md-table-cell md-label="利润率"  md-numeric>{{ item.this_profit_rate>0?Math.round(item.this_profit_rate * 100) /
+                100:'-' }}</md-table-cell>
             </md-table-row>
           </md-table>
         </md-pull-refresh>
       </div>
     </md-app-content>
     <md-app-bottom-bar>
-      <md-x-submit-bar button-text="" @back="$router.back()" show-back/>
+      <md-x-submit-bar button-text="" @back="$router.back()" show-back />
     </md-app-bottom-bar>
   </md-app>
 </template>
@@ -38,6 +39,7 @@
   import FilterPeriodDropdown from "../../components/Filter/PeriodDropdown";
   import extend from "lodash/extend";
   import debounce from "gmf/core/utils/MdDebounce";
+  import mdThousand from 'gmf/filters/mdThousand';
   import {
     mapState,
     mapGetters
@@ -73,6 +75,9 @@
           }
         );
       });
+    },
+    filters: {
+      mdThousand: mdThousand
     },
     computed: {
       ...mapGetters("amiba", ["yearFirstPeriod", "currentPeriod", "purpose"]),

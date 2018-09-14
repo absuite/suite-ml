@@ -12,10 +12,10 @@
               <md-table-row slot="md-table-row" slot-scope="{ item }">
                 <md-table-cell md-label="阿米巴">{{ item.group_name }}</md-table-cell>
                 <md-table-cell md-label="收/支">
-                  <div>收:{{ item.this_income }}</div>
-                  <div>支:{{ item.this_cost }}</div>
+                  <div>收:{{ item.this_income|mdThousand }}</div>
+                  <div>支:{{ item.this_cost|mdThousand }}</div>
                 </md-table-cell>
-                <md-table-cell md-label="利润">{{ item.this_profit }}</md-table-cell>
+                <md-table-cell md-label="利润"  md-numeric>{{ item.this_profit }}</md-table-cell>
               </md-table-row>
             </md-table>
           </md-scroll-load>
@@ -30,6 +30,7 @@
   import FilterPeriodDropdown from "../../components/Filter/PeriodDropdown";
   import extend from "lodash/extend";
   import debounce from "gmf/core/utils/MdDebounce";
+  import mdThousand from 'gmf/filters/mdThousand';
   import {
     mapState,
     mapGetters
@@ -61,6 +62,9 @@
           }
         );
       });
+    },
+    filters: {
+      mdThousand: mdThousand
     },
     computed: {
       ...mapGetters("amiba", ["currentPeriod", "purpose"]),

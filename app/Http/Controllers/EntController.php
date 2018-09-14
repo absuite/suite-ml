@@ -58,12 +58,17 @@ class EntController extends Controller {
         "app_openid" => '',
         'token' => $ent->token,
       ];
-      $client = new GuzzleHttp\Client(['base_uri' => $gateway]);
-      $res = $client->post('api/cbo/ents/injection', ['json' => $params]);
-      $body = (String) $res->getBody();
-      if ($body) {
-        $body = json_decode($body);
-        $token = $body && $body->data ? $body->data : false;
+      try {
+        $client = new GuzzleHttp\Client(['base_uri' => $gateway]);
+        $res = $client->post('api/cbo/ents/injection', ['json' => $params]);
+        $body = (String) $res->getBody();
+        if ($body) {
+          $body = json_decode($body);
+          $token = $body && $body->data ? $body->data : false;
+        }
+      } catch (\GuzzleHttp\Exception\ClientException $exception) {
+        $error = $exception->getResponse()->getBody()->getContents();
+        throw new \Exception(json_decode($error)->msg);
       }
     }
     if (!$ent->hasUser($user->id)) {

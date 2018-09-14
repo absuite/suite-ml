@@ -11,10 +11,10 @@
           <md-table v-model="listItems" class="md-dense">
             <md-table-row slot="md-table-row" slot-scope="{ item }">
               <md-table-cell md-label="收支项目">
-                <span :class="['md-ellipsis','item-indent-'+item.indent]">{{ item.itemName }}</span>                
+                <span :class="['md-ellipsis','item-indent-'+item.indent]">{{ item.itemName }}</span>
               </md-table-cell>
-              <md-table-cell md-label="当期">{{ item.month_value }}</md-table-cell>
-              <md-table-cell md-label="年累计">{{ item.year_value }}</md-table-cell>
+              <md-table-cell md-label="当期" md-numeric>{{ item.month_value|mdThousand }}</md-table-cell>
+              <md-table-cell md-label="年累计" md-numeric>{{ item.year_value|mdThousand }}</md-table-cell>
             </md-table-row>
           </md-table>
         </md-pull-refresh>
@@ -28,6 +28,7 @@
   import FilterPeriodDropdown from "../../components/Filter/PeriodDropdown";
   import extend from "lodash/extend";
   import debounce from "gmf/core/utils/MdDebounce";
+  import mdThousand from 'gmf/filters/mdThousand';
   import {
     mapState,
     mapGetters
@@ -78,6 +79,9 @@
           }
         );
       });
+    },
+    filters: {
+      mdThousand: mdThousand
     },
     computed: {
       ...mapGetters("amiba", ["currentPeriod", "purpose"]),
@@ -156,22 +160,27 @@
   .md-app-bottom-bar {
     height: 50px;
   }
-  .item-indent-0{
+
+  .item-indent-0 {
     padding-left: 0px;
     font-weight: bold;
-    color:#1e2723;
+    color: #1e2723;
     font-size: 15px;
   }
-  .item-indent-1{
-    padding-left:0px;
+
+  .item-indent-1 {
+    padding-left: 0px;
   }
-  .item-indent-2{
+
+  .item-indent-2 {
     padding-left: 10px;
   }
-  .item-indent-3{
+
+  .item-indent-3 {
     padding-left: 20px;
   }
-  .item-indent-4{
+
+  .item-indent-4 {
     padding-left: 30px;
   }
 
